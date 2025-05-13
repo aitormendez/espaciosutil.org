@@ -1,0 +1,47 @@
+# .github/workflows/update-readme.yml
+##
+# Update readme to reflect repository name
+##
+
+name: 📝 Update README
+run-name: update-readme
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+
+      #Checkout the repo
+      - uses: actions/checkout@v3
+
+      # Replace repository slug
+      - name: Replace repository slug
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "MWDelaney/example.com"
+          replace: "${{ github.repository_owner }}/${{ github.event.repository.name }}"
+          include: ".github/README.template.md"
+          regex: false
+
+      # Replace repository title
+      - name: Replace repository title
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "# example.com"
+          replace: "# ${{ github.event.repository.name }}"
+          include: ".github/README.template.md"
+          regex: false
+
+      # Change the filename to .README
+      - name: Rename README
+        shell: bash
+        run: mv .github/README.template.md .github/README.md
+
+      # Commit changes
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "Update README"

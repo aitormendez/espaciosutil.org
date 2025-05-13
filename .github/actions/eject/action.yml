@@ -1,0 +1,119 @@
+name: 'Eject site for delivery'
+description: 'Eject Trellis site for delivery to traditional WordPress environments'
+
+inputs:
+  from:
+    description: 'The environment to sync from'
+    required: true
+
+  trellis_deploy_ssh_private_key:
+    description: 'The SSH private key to use for deployment'
+    required: true
+
+  trellis_deploy_ssh_known_hosts:
+    description: 'The SSH known hosts to use for deployment'
+    required: true
+
+  trellis_site_slug:
+    description: 'The Trellis site slug'
+    required: true
+
+  github_token:
+    description: 'The GitHub token to use'
+    required: true
+
+  working_directory:
+    description: 'The working directory to use'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+
+    # Get the current date and time in both human-readable and machine-readable formats
+    - name: Get the date and time
+      shell: bash
+      id: get_date
+      run: |
+        echo "human_date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+        echo "machine_date=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
+    # Set up known hosts
+    - uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ inputs.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+        known_hosts: ${{ inputs.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
+
+    # Set up SSH agent
+    - uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ inputs.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+
+    # Install WP-CLI
+    - name: Setup WP-CLI
+      uses: godaddy-wordpress/setup-wp-cli@1
+
+    # Use WP CLI to the "FROM" site info
+    - name: Get "from" site info
+      shell: bash
+      id: from_site
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        echo "url=$(wp @"${{ inputs.from }}" option get home)" >> $GITHUB_OUTPUT
+        echo "domain=$(wp @${{ inputs.from }} option get home | sed 's/https\?:\/\///')" >> $GITHUB_OUTPUT
+        echo "dir=/srv/www/${{ inputs.TRELLIS_SITE_SLUG }}/current/web/app" >> $GITHUB_OUTPUT
+        echo "ssh_user=web" >> $GITHUB_OUTPUT
+
+    # If this is the production environment, export the database using wp-cli and pipe it to a local file.
+    - name: 🗃️ Export database
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        wp @"${{ inputs.from }}" search-replace app/uploads wp-content/uploads --export > ./"${{ inputs.from }}-${{ steps.get_date.outputs.machine_date }}".sql
+
+    # Check that the database export file exists
+    - uses: andstor/file-existence-action@v2
+      if: ${{ inputs.environment == 'production' }}
+      id: check_db_file
+      with:
+        files: "site/${{ inputs.environment }}-*.sql"
+        fail: true
+
+    # Download the app directory from the production environment using rsync
+    - name: 📥 Download production wp-content directory
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        rsync -Laz --progress --delete -e "ssh -o StrictHostKeyChecking=no" "${{ steps.from_site.outputs.ssh_user }}"@"${{ steps.from_site.outputs.domain }}":"${{ steps.from_site.outputs.dir }}"/ ./wp-content
+
+    # Zip the wp-content directory
+    - name: 🗜️ Compress wp-content directory
+      shell: bash
+      working-directory: ${{ inputs.working_directory }}
+      run: |
+        zip -r wp-content.zip wp-content
+
+    # Create a Git tag with the environment name and machine-readable date
+    - name: 🏷️ Tag version
+      id: tag_version
+      uses: mathieudutour/github-tag-action@v6.1
+      with:
+        github_token: ${{ inputs.github_token }}
+        custom_tag: "${{ inputs.from }}-${{ steps.get_date.outputs.machine_date }}-eject"
+        tag_prefix: ''
+
+    # If this is the production environment, create a release with the database export as an asset
+    - name: 📦 Create release
+      uses: ncipollo/release-action@v1
+      with:
+        tag: "${{ steps.tag_version.outputs.new_tag }}"
+        artifacts: "site/*.sql,site/wp-content.zip"
+        token: ${{ inputs.github_token }}
+        makeLatest: true
+        name: "${{ inputs.trellis_site_slug }} - ${{ steps.get_date.outputs.human_date }} eject"
+        body: |
+          # ${{ inputs.from }} eject
+
+          An export of the site's database and wp-content directory from the ${{ inputs.from }} environment.
+
+          * 📅 ${{ steps.get_date.outputs.human_date }}
