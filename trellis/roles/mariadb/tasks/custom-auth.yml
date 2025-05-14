@@ -1,0 +1,10 @@
+# trellis/roles/mariadb/tasks/custom-auth.yml
+- name: Force mysql_native_password for MariaDB root user
+  mysql_user:
+    name: root
+    host_all: yes
+    password: "{{ vault_mysql_root_password }}"
+    login_unix_socket: /run/mysqld/mysqld.sock
+    plugin: mysql_native_password
+  become: true
+  tags: mariadb

@@ -51,6 +51,8 @@
         mode: "0644"
       notify: restart mysql server
 
+    - import_tasks: custom-auth.yml
+
     - name: Set root user password
       mysql_user:
         name: root
