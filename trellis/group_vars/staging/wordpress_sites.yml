@@ -4,12 +4,11 @@
 wordpress_sites:
   espaciosutil.org:
     site_hosts:
-    - canonical: espaciosutil.org
-      redirects:
-      - www.espaciosutil.org
+      - canonical: espaciosutil.org
     local_path: ../site
     branch: master
     repo: git@github.com:example/example.com.git
+    repo_accepts_https: true
     repo_subtree_path: site
     multisite:
       enabled: false

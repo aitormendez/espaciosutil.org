@@ -8,6 +8,20 @@ ntp_timezone: Etc/UTC
 ntp_manage_config: true
 www_root: /srv/www
 max_journal_size: 512M
+php_memory_limit: 768M
+php_upload_max_filesize: 64M
+php_post_max_size: 100M
+php_max_execution_time: 120
+php_max_input_time: 120
+letsencrypt_contact_emails:
+  - admin@e451.net
+php_extensions_custom:
+  php8.2-soap: "{{ apt_package_state }}"
+apt_packages:
+  mailutils: present
+  python3-pymysql: present
+repo_subtree: false
+clone_submodules: true
 
 # Values of raw_vars will be wrapped in `{% raw %}` to avoid templating problems if values include `{%` and `{{`.
 # Will recurse dicts/lists. `*` is wildcard for one or more dict keys, list indices, or strings. Example:
