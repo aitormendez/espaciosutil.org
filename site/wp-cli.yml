@@ -1,3 +1,13 @@
 path: web/wp
 server:
   docroot: web
+
+"@development":
+  ssh: "espaciosutil.test"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
+"@production":
+  ssh: "web@134.209.21.17:22"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
+"@staging":
+  ssh: "web@167.99.95.143:22"
+  path: "/srv/www/stage.espaciosutil.org/current/web/wp"
