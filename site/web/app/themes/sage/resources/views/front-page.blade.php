@@ -2,30 +2,29 @@
 
 @section('content')
     <div id="cosmos" class="hidden lg:block"></div>
-    <div
-        class="hidden lg:flex loading-label absolute top-0 left-0 justify-center w-full h-screen items-center p-6 items-center">
+    <div class="loading-label absolute left-0 top-0 hidden h-screen w-full items-center justify-center p-6 lg:flex">
         <div
-            class="top-1/2 mx-auto md:text-3xl text-2xl p-6 bg-negro/80 border border-blanco rounded text-center relative top-32 md:top-40 font-thin">
+            class="bg-negro/80 border-blanco relative top-32 mx-auto rounded border p-6 text-center text-2xl font-thin md:top-40 md:text-3xl">
             Construyendo Sistema Sutil
         </div>
     </div>
 
     <div id="solapa"
-        class="solapa absolute left-0 top-40 bg-negro/80 p-10 border border-blanco/50 ml-12 transition-opacity opacity-0 duration-1000">
+        class="solapa bg-negro/80 border-blanco/50 absolute left-0 top-40 ml-12 border p-10 opacity-0 transition-opacity duration-1000">
         <div id="epig" class="text-gris2">uno</div>
         <div id="nomb" class="text-3xl"></div>
     </div>
 
-    <section class="px-6 md:px-0 py-12 w-full border-t">
+    <section class="w-full border-t px-6 py-12 md:px-0">
         <div
-            class="page-content max-w-4xl mx-auto prose prose-sutil prose-xl md:prose-2xl !leading-tight prose-h2:font-thin prose-h2:leading-tight prose-a:font-thint">
+            class="page-content prose prose-sutil prose-xl md:prose-2xl prose-h2:font-thin prose-h2:leading-tight prose-a:font-thint mx-auto max-w-4xl !leading-tight">
             @php(the_content())</div>
     </section>
 
 
-    <section class="px-6 w-full mb-12 border-t">
-        <h2 class="font-sans py-6 text-center">Últimas noticias publicadas</h2>
-        <div class="noticias flex flex-wrap justify-center w-full">
+    <section class="mb-12 w-full border-t px-6">
+        <h2 class="py-6 text-center font-sans">Últimas noticias publicadas</h2>
+        <div class="noticias flex w-full flex-wrap justify-center">
             @query([
                 'post_type' => 'noticia',
                 'posts_per_page' => 4,
@@ -44,8 +43,8 @@
         </div>
     </section>
 
-    <section class="px-6 border-t mb-12">
-        <h2 class="font-sans py-6 text-center">Últimos vídeos publicados</h2>
+    <section class="mb-12 border-t px-6">
+        <h2 class="py-6 text-center font-sans">Últimos vídeos publicados</h2>
         <div id="ultimos-videos" class="flex flex-wrap"></div>
     </section>
 @endsection
