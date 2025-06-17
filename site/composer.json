@@ -52,7 +52,9 @@
     "roots/wordpress": "6.8.1",
     "roots/wp-config": "1.0.0",
     "wpackagist-theme/twentytwentyfive": "^1.0",
-    "wpengine/advanced-custom-fields": "*"
+    "wpackagist-plugin/woocommerce": "*",
+    "wpengine/advanced-custom-fields": "*",
+    "generoi/sage-woocommerce": "^1.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
