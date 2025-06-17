@@ -1,0 +1,32 @@
+.lista-enlaces {
+  list-style-type: none;
+  padding-left: 0% !important;
+
+  li {
+    border-bottom: 1px solid white;
+    padding-left: 0%;
+    margin: 0;
+
+    &:first-child {
+      border-top: 1px solid white;
+    }
+
+    a {
+      display: block;
+      color: var(--morado2);
+      padding: 0.3em 0.2em;
+    }
+  }
+}
+
+.wp-block-columns {
+  .wp-block-column {
+    p {
+      @apply my-2 leading-tight;
+    }
+  }
+}
+
+/* #toc {
+  @apply mb-0 justify-center gap-0 border-b border-blanco md:gap-4;
+} */
