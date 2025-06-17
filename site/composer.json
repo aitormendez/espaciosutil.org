@@ -54,7 +54,8 @@
     "wpackagist-theme/twentytwentyfive": "^1.0",
     "wpackagist-plugin/woocommerce": "*",
     "wpengine/advanced-custom-fields": "*",
-    "generoi/sage-woocommerce": "^1.1"
+    "generoi/sage-woocommerce": "^1.1",
+    "log1x/navi": "^3.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

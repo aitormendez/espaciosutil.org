@@ -1,6 +1,11 @@
 <?php
 
 use Roots\Acorn\Application;
+use Illuminate\Support\Facades\Facade;
+
+Facade::setFacadeApplication(Application::getInstance());
+
+class_alias(\Log1x\Navi\Facades\Navi::class, 'Navi');
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +18,7 @@ use Roots\Acorn\Application;
 |
 */
 
-if (! file_exists($composer = __DIR__.'/vendor/autoload.php')) {
+if (! file_exists($composer = __DIR__ . '/vendor/autoload.php')) {
     wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'sage'));
 }
 
@@ -34,6 +39,7 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
+        NaviServiceProvider::class,
     ])
     ->boot();
 
