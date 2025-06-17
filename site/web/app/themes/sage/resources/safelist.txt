@@ -1,0 +1,7 @@
+font-sans
+not-prose
+mix-blend-luminosity
+mb-4
+mb-12
+rounded
+max-w-1/4
