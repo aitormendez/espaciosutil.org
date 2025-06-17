@@ -17,6 +17,7 @@ class Post extends Composer
         'partials.content-*',
     ];
 
+
     /**
      * Data to be passed to view before rendering, but after merging.
      *
@@ -29,6 +30,7 @@ class Post extends Composer
             'thumb' => $this->thumb(),
             'revelador' => $this->revelador(),
             'autor' => $this->autor(),
+            'pagination' => $this->pagination(),
             'loop_thumb' => function () {
                 $thumb['url'] = get_the_post_thumbnail_url();
                 $thumb['id'] = get_post_thumbnail_id();
