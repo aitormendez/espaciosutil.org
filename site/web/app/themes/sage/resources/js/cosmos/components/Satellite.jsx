@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Html, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { Orbiter } from './utils/Orbiter';
+import { Orbiter } from './utils/orbiter.js';
 import { calculateSatelliteOrbitalPeriod } from './utils/calculateSatelliteOrbitalPeriod.js';
 import barba from '@barba/core';
 import { solapaContentAbrir, solapaContentCerrar } from './utils/Solapa.js';

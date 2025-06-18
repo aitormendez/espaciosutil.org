@@ -8,7 +8,7 @@ import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import { Sol } from './Sol.jsx';
 import { Planet } from './Planet.jsx';
 import { Satellite } from './Satellite.jsx';
-import { Orbiter } from './utils/Orbiter.js';
+import { Orbiter } from './utils/orbiter.js';
 import { calculateOrbitalPeriod } from './utils/calculateOrbitalPeriod.js';
 import { getReveladores } from './utils/getReveladores.js';
 import { getNoticias } from './utils/getNoticias.js';
