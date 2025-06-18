@@ -9,6 +9,20 @@ class_alias(\Log1x\Navi\Facades\Navi::class, 'Navi');
 
 require_once __DIR__ . '/app/helpers.php';
 
+/**
+ * [Patch] Suppress false-positive notice for `_load_textdomain_just_in_time`
+ *
+ * When using log1x/crumb with Acorn, the CrumbServiceProvider triggers
+ * a doing_it_wrong warning too early. This filter disables that specific warning
+ * before Acorn initializes its service providers.
+ */
+add_filter('doing_it_wrong_trigger_error', function ($trigger_error, $function_name) {
+    if ($function_name === '_load_textdomain_just_in_time') {
+        return false;
+    }
+    return $trigger_error;
+}, 10, 2);
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
