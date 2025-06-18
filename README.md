@@ -57,7 +57,22 @@ npm run dev
 
 ## 🔒 Variables sensibles y despliegue
 
-Todas las variables sensibles se gestionan con `ansible-vault` y están documentadas en los archivos `vault.yml`. El despliegue se realizará mediante GitHub Actions (en preparación).
+Todas las variables sensibles se gestionan con `ansible-vault` y están documentadas en los archivos `vault.yml`.
+
+El despliegue se realiza automáticamente mediante GitHub Actions, utilizando un `Makefile` ubicado en el directorio `trellis/`.
+
+### Despliegue manual desde local
+
+Asegúrate de tener configurado `gh` (GitHub CLI) con acceso a los secretos necesarios. Luego, ejecuta los siguientes comandos desde el directorio `trellis/`:
+
+```bash
+cd trellis
+
+# Despliega al entorno de staging
+make deploy-staging
+
+# Despliega al entorno de producción
+make deploy-production
 
 ---
 
@@ -69,3 +84,4 @@ Todas las variables sensibles se gestionan con `ansible-vault` y están document
 ---
 
 Para más detalles, consulta los `README.md` específicos de cada componente.
+```

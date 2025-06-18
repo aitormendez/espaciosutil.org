@@ -1,51 +1,65 @@
-<p align="center">
-  <a href="https://roots.io/trellis/">
-    <img alt="Trellis" src="https://cdn.roots.io/app/uploads/logo-trellis.svg" height="100">
-  </a>
-</p>
+# Trellis – Espacio Sutil
 
-<p align="center">  
-  <a href="https://github.com/roots/trellis/actions/workflows/ci.yml">
-    <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/roots/trellis/ci.yml?branch=master&logo=github&label=CI&style=flat-square">
-  </a>
+Trellis es un conjunto de playbooks de Ansible que facilita la configuración y gestión de entornos de desarrollo y producción para WordPress, utilizando una arquitectura moderna basada en el stack Roots: Trellis + Bedrock + Sage.
 
-  <a href="https://twitter.com/rootswp">
-    <img alt="Follow Roots" src="https://img.shields.io/badge/follow%20@rootswp-1da1f2?logo=twitter&logoColor=ffffff&message=&style=flat-square">
-  </a>
-</p>
+## Estructura del proyecto
 
-<p align="center">Ansible-powered LEMP stack for WordPress</strong></p>
+Este repositorio forma parte del proyecto Espacio Sutil y se organiza de la siguiente manera:
 
-<p align="center">
-  <a href="https://roots.io/trellis/">Website</a> &nbsp;&nbsp; <a href="https://roots.io/trellis/docs/installation/">Documentation</a> &nbsp;&nbsp; <a href="https://github.com/roots/trellis/releases">Releases</a> &nbsp;&nbsp; <a href="https://discourse.roots.io/">Community</a>
-</p>
+- `trellis/` → contiene la infraestructura y automatización con Ansible.
+- `site/` → contiene el sitio WordPress estructurado con Bedrock.
+- `site/web/app/themes/sage/` → contiene el tema personalizado basado en Sage 11.
 
+## Requisitos
 
-## Sponsors
+- [Trellis CLI](https://github.com/roots/trellis-cli)
+- [Ansible](https://docs.ansible.com/)
+- Acceso SSH al servidor de staging/producción
+- Acceso a GitHub (claves configuradas)
 
-Trellis is an open source project and completely free to use. If you've benefited from our projects and would like to support our future endeavors, please consider [sponsoring Roots](https://github.com/sponsors/roots).
+## Flujo de trabajo
 
-<div align="center">
-<a href="https://carrot.com/"><img src="https://cdn.roots.io/app/uploads/carrot.svg" alt="Carrot" width="120" height="90"></a> <a href="https://wordpress.com/"><img src="https://cdn.roots.io/app/uploads/wordpress.svg" alt="WordPress.com" width="120" height="90"></a> <a href="https://worksitesafety.ca/careers/"><img src="https://cdn.roots.io/app/uploads/worksite-safety.svg" alt="Worksite Safety" width="120" height="90"></a> <a href="https://www.itineris.co.uk/"><img src="https://cdn.roots.io/app/uploads/itineris.svg" alt="Itineris" width="120" height="90"></a> <a href="https://bonsai.so/"><img src="https://cdn.roots.io/app/uploads/bonsai.svg" alt="Bonsai" width="120" height="90"></a>
-</div>
+### 1. Aprovisionar el servidor
 
-## Overview
+Antes del primer despliegue, asegúrate de haber aprovisionado el servidor. Esto instalará y configurará automáticamente todas las dependencias necesarias (PHP, Nginx, MariaDB, etc.).
 
-Trellis is a collection of Ansible playbooks for setting up a LEMP stack for WordPress.
+```bash
+cd trellis
+trellis provision staging
+```
 
-- Local development environment with Vagrant
-- High-performance production servers
-- Zero-downtime deploys for your [Bedrock](https://roots.io/bedrock/)-based WordPress sites
-- [trellis-cli](https://github.com/roots/trellis-cli) for easier management
+### 2. Despliegue automático con GitHub Actions
 
-## Getting Started
+El proyecto está configurado para realizar despliegues automáticos a través de GitHub Actions, usando un Makefile para facilitar su ejecución.
 
-See the [Trellis installation documentation](https://roots.io/trellis/docs/installation/).
+#### Variables de entorno necesarias
 
-## Stay Connected
+Asegúrate de que los siguientes secretos estén definidos en `Settings → Secrets and variables → Actions` en GitHub:
 
-- Join us on Discord by [sponsoring us on GitHub](https://github.com/sponsors/roots)
-- Participate on [Roots Discourse](https://discourse.roots.io/)
-- Follow [@rootswp on Twitter](https://twitter.com/rootswp)
-- Read the [Roots Blog](https://roots.io/blog/)
-- Subscribe to the [Roots Newsletter](https://roots.io/newsletter/)
+- `TRELLIS_DEPLOY_SSH_PRIVATE_KEY`
+- `TRELLIS_DEPLOY_SSH_KNOWN_HOSTS`
+- `ANSIBLE_VAULT_PASSWORD`
+
+#### Desplegar a staging
+
+```bash
+cd trellis
+make deploy-staging
+```
+
+#### Desplegar a producción
+
+```bash
+cd trellis
+make deploy-production
+```
+
+El sistema compila los assets en GitHub Actions antes de hacer `rsync` al servidor.
+
+### 3. Sincronización de base de datos
+
+Pendiente de implementar (por ahora, la sincronización se realiza manualmente mediante WP-CLI o herramientas gráficas).
+
+## Contacto
+
+Este repositorio es parte del desarrollo del sitio [espaciosutil.org](https://espaciosutil.org/).
