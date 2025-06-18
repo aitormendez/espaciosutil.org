@@ -41,7 +41,6 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
-        App\Providers\RegisterContentProvider::class,
         NaviServiceProvider::class,
     ])
     ->boot();

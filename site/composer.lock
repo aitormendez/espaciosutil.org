@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad3ebfacf73232b125f271cbd112f796",
+    "content-hash": "f7821ec580799b52d4b82755ca2750d0",
     "packages": [
         {
             "name": "brick/math",
@@ -4543,6 +4543,64 @@
                 }
             ],
             "time": "2025-05-28T00:15:05+00:00"
+        },
+        {
+            "name": "roots/acorn-post-types",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/roots/acorn-post-types.git",
+                "reference": "79ee2b9ec6357eef3cb4b81dfb00b3a515b0869a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/roots/acorn-post-types/zipball/79ee2b9ec6357eef3cb4b81dfb00b3a515b0869a",
+                "reference": "79ee2b9ec6357eef3cb4b81dfb00b3a515b0869a",
+                "shasum": ""
+            },
+            "require": {
+                "johnbillion/extended-cpts": "^5.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "roots/acorn": "^4.0"
+            },
+            "type": "package",
+            "extra": {
+                "acorn": {
+                    "providers": [
+                        "Roots\\AcornPostTypes\\AcornPostTypesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Roots\\AcornPostTypes\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roots",
+                    "email": "team@roots.io"
+                }
+            ],
+            "description": "Simple post types and taxonomies using Extended CPTs for Acorn.",
+            "support": {
+                "issues": "https://github.com/roots/acorn-post-types/issues",
+                "source": "https://github.com/roots/acorn-post-types/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/roots",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-06-01T21:17:10+00:00"
         },
         {
             "name": "roots/bedrock-autoloader",

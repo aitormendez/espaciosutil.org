@@ -6,6 +6,7 @@ Este es el tema personalizado para el sitio web de **Espacio Sutil**, basado en 
 - ⚡️ [Vite](https://vitejs.dev) para desarrollo front-end con recarga instantánea
 - 🧠 [Laravel Blade](https://laravel.com/docs/10.x/blade) como sistema de plantillas
 - 🌱 [Acorn](https://github.com/roots/acorn) para acceso a herramientas de Laravel en WordPress
+- 🧩 [Acorn Post Types](https://github.com/roots/acorn-post-types) para registrar post types y taxonomías desde configuración
 
 ## Requisitos
 
@@ -19,6 +20,7 @@ Este es el tema personalizado para el sitio web de **Espacio Sutil**, basado en 
 ## Instalación
 
 1. Clona el repositorio del proyecto (o navega al directorio del tema dentro del stack Bedrock).
+
 2. Ejecuta la instalación de dependencias:
 
    ```bash

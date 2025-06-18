@@ -56,7 +56,8 @@
     "wpengine/advanced-custom-fields": "*",
     "generoi/sage-woocommerce": "^1.1",
     "log1x/navi": "^3.1",
-    "johnbillion/extended-cpts": "^5.0"
+    "johnbillion/extended-cpts": "^5.0",
+    "roots/acorn-post-types": "^1.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
