@@ -10,7 +10,7 @@
     </div>
 
     <div id="solapa"
-        class="solapa bg-negro/80 border-blanco/50 absolute left-0 top-40 ml-12 border p-10 opacity-0 transition-opacity duration-1000">
+        class="solapa bg-negro/80 border-blanco/50 absolute left-0 top-40 z-[9999999] ml-12 border p-10 transition-opacity duration-1000">
         <div id="epig" class="text-gris2">uno</div>
         <div id="nomb" class="text-3xl"></div>
     </div>

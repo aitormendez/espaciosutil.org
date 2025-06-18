@@ -1,10 +1,12 @@
 @import 'tailwindcss';
 @source "../views/";
 @source "../../app/";
+@source "../safelist.txt";
 
 @import './fonts/asap.css';
 @import './fonts/crimson-pro.css';
 @import './commons/global.css';
+@import './commons/theme.css';
 @import './commons/components.css';
 @import './commons/variables.css';
 @import './blocks/responsive-cols.css';
