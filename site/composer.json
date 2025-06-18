@@ -57,7 +57,18 @@
     "generoi/sage-woocommerce": "^1.1",
     "log1x/navi": "^3.1",
     "johnbillion/extended-cpts": "^5.0",
-    "roots/acorn-post-types": "^1.0"
+    "roots/acorn-post-types": "^1.0",
+    "log1x/crumb": "^1.1",
+    "blade-ui-kit/blade-heroicons": "^2.1",
+    "log1x/sage-html-forms": "^1.0",
+    "wpackagist-plugin/taxonomy-terms-order": "*",
+    "wpackagist-plugin/html-forms": "*",
+    "wpackagist-plugin/mammoth-docx-converter": "*",
+    "wpackagist-plugin/post-types-order": "*",
+    "wpackagist-plugin/favicon-by-realfavicongenerator": "*",
+    "wpackagist-plugin/query-monitor": "*",
+    "wpackagist-plugin/gdpr-cookie-compliance": "*",
+    "wpackagist-plugin/autodescription": "*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
