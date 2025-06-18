@@ -6,7 +6,7 @@ import { useFrame } from '@react-three/fiber';
 import { Orbiter } from './utils/orbiter.js';
 import { calculateSatelliteOrbitalPeriod } from './utils/calculateSatelliteOrbitalPeriod.js';
 import barba from '@barba/core';
-import { solapaContentAbrir, solapaContentCerrar } from './utils/Solapa.js';
+import { solapaContentAbrir, solapaContentCerrar } from './utils/solapa.js';
 import { planets } from './utils/arrayTexturas.js';
 
 // Define un objeto que mapea los tipos de textura a las rutas de los archivos de textura.

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import barba from '@barba/core';
-import { solapaContentAbrir, solapaContentCerrar } from './utils/Solapa.js';
+import { solapaContentAbrir, solapaContentCerrar } from './utils/solapa.js';
 import { planets } from './utils/arrayTexturas.js';
 
 // Define un objeto que mapea los tipos de textura a las rutas de los archivos de textura.
