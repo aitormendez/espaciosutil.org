@@ -1,0 +1,34 @@
+name: 🚀 Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 💾 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: ⚖️ Install SSH key and known_hosts
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
+          if_key_exists: replace
+
+      - name: 🗝️ Add SSH key to agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: 🚧 Setup Trellis CLI
+        uses: roots/setup-trellis-cli@v1
+        with:
+          ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Deploy to production
+        run: trellis deploy production
