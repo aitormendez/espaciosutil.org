@@ -19,6 +19,11 @@ jobs:
           known_hosts: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
           if_key_exists: replace
 
+      - name: 🗝️ Add SSH key to agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+
       - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
         with:
