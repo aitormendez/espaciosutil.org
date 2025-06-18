@@ -7,6 +7,8 @@ Facade::setFacadeApplication(Application::getInstance());
 
 class_alias(\Log1x\Navi\Facades\Navi::class, 'Navi');
 
+require_once __DIR__ . '/app/helpers.php';
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -39,6 +41,7 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
+        App\Providers\RegisterContentProvider::class,
         NaviServiceProvider::class,
     ])
     ->boot();
