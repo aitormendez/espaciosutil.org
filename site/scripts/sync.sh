@@ -10,7 +10,7 @@ DEVSITE="http://espaciosutil.test"
 PRODDIR="web@espaciosutil.org:/srv/www/espaciosutil.org/shared/uploads/"
 PRODSITE="https://espaciosutil.org"
 
-STAGDIR="web@stage.espaciosutil.org:/srv/www/stage.espaciosutil.org/shared/uploads/"
+STAGDIR="web@stage.espaciosutil.org:/srv/www/espaciosutil.org/shared/uploads/"
 STAGSITE="https://stage.espaciosutil.org"
 
 LOCAL=false

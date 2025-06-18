@@ -9,36 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo (with submodules)
+      - name: 💾 Checkout repo
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
 
-      - name: Install SSH key and known_hosts
+      - name: ⚖️ Install SSH key and known_hosts
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
           if_key_exists: replace
 
-      - name: Setup Trellis CLI
+      - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
         with:
           ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build Sage 11 Theme
-        run: |
-          cd site/web/app/themes/sage
-          corepack enable
-          yarn
-          yarn build
-
-      - name: Build FB Blocks Plugin
-        run: |
-          cd site/web/app/plugins/fb-blocks
-          yarn
-          yarn build
-
-      - name: Deploy to staging
+      - name: 🚀 Deploy to staging
         run: trellis deploy staging

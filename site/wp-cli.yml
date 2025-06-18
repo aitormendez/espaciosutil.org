@@ -10,4 +10,4 @@ server:
   path: "/srv/www/espaciosutil.org/current/web/wp"
 "@staging":
   ssh: "web@167.99.95.143:22"
-  path: "/srv/www/stage.espaciosutil.org/current/web/wp"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
