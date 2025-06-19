@@ -55,3 +55,9 @@
     group: no
     owner: no
     rsync_opts: --chmod=Du=rwx,--chmod=Dg=rx,--chmod=Do=rx,--chmod=Fu=rw,--chmod=Fg=r,--chmod=Fo=r
+
+- name: Build Espacio Sutil blocks plugin
+  command: npm ci && npm run build
+  delegate_to: localhost
+  args:
+    chdir: "{{ project_local_path }}/web/app/plugins/espacio-sutil-blocks"
