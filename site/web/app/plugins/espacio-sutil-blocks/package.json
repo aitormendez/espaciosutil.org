@@ -1,0 +1,33 @@
+{
+	"name": "fb-blocks",
+	"version": "0.1.0",
+	"description": "Example block scaffolded with Create Block tool.",
+	"author": "The WordPress Contributors",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build && wp-scripts build-blocks-manifest",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start && wp-scripts build-blocks-manifest"
+	},
+	"devDependencies": {
+		"@tailwindcss/postcss": "^4.0.14",
+		"@wordpress/scripts": "^30.13.0",
+		"autoprefixer": "^10.4.21"
+	},
+	"dependencies": {
+		"@radix-ui/react-dropdown-menu": "^2.1.7",
+		"@radix-ui/react-tooltip": "^1.2.0",
+		"@vidstack/player": "^1.6.5",
+		"@vidstack/react": "^1.12.13",
+		"gsap": "^3.12.7",
+		"hls.js": "^1.6.2",
+		"lucide-react": "^0.487.0",
+		"react-feather": "^2.0.10",
+		"vidstack": "^1.12.13"
+	}
+}
