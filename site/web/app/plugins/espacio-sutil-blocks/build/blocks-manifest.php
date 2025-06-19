@@ -19,7 +19,7 @@ return array(
 		'attributes' => array(
 			'libraryId' => array(
 				'type' => 'string',
-				'default' => '457097'
+				'default' => '265348'
 			),
 			'videoId' => array(
 				'type' => 'string',

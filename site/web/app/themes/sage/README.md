@@ -58,4 +58,15 @@ Este es el tema personalizado para el sitio web de **Espacio Sutil**, basado en 
 
 ## Créditos
 
-Basado en el starter theme [Sage](https://roots.io/sage/) mantenido por [Roots](https://roots.io).
+## Bloque de video con Bunny.net
+
+El tema utiliza un plugin personalizado llamado `espacio-sutil-blocks` para añadir bloques reutilizables, entre ellos un bloque de video integrado con Bunny.net.
+
+- El bloque permite insertar un video de una Video Library de Bunny.net mediante su `libraryId` y `videoId`.
+- Se utiliza la API de Bunny.net para obtener dinámicamente las resoluciones disponibles y la miniatura (`thumbnailUrl`) mediante un endpoint personalizado de la REST API de WordPress.
+- Los datos de autenticación (clave API y pull zone) se configuran en el archivo `.env`, gestionado desde los `vault.yml` de Trellis:
+  - `BUNNY_KEY`
+  - `BUNNY_PULL_ZONE`
+- El plugin se compila automáticamente durante el despliegue, gracias a un hook definido en `trellis/deploy-hooks/build-before.yml`.
+
+> Este bloque ha sido migrado y adaptado desde un proyecto previo, y validado tanto en el editor como en el frontend.
