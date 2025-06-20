@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Facades\Vite @endphp
+<?php use Illuminate\Support\Facades\Vite; ?>
 
 <header id="banner" class="absolute z-40 w-full text-white xl:fixed">
     <div class="bg-negro absolute left-0 top-0 hidden h-full w-full opacity-80 md:block"></div>
