@@ -8,7 +8,7 @@
     <div id="submenu-bg" class="border-gris3 relative hidden w-screen border-t xl:block"></div>
 
     <nav id="nav"
-        class="bg-negro text-blanco fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:top-8 xl:min-h-0 xl:w-auto xl:bg-transparent">
+        class="bg-negro text-blanco fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:top-[66px] xl:min-h-0 xl:w-auto xl:bg-transparent">
         <ul class="my-menu flex flex-wrap items-center p-6 text-2xl xl:px-0 xl:pb-[32px] xl:pt-0">
             @foreach ($menu->all() as $item)
                 <li
@@ -20,7 +20,7 @@
 
                     @if ($item->children)
                         <ul
-                            class="my-child-menu my-2 h-0 overflow-hidden xl:fixed xl:top-32 xl:my-0 xl:hidden xl:h-auto">
+                            class="my-child-menu my-2 h-0 overflow-hidden xl:fixed xl:top-40 xl:my-0 xl:hidden xl:h-auto">
                             @foreach ($item->children as $child)
                                 <li
                                     class="text-gris2 xl:text-blanco my-child-item {{ $child->classes ?? '' }} {{ $child->active ? 'active' : '' }} border-b border-zinc-800 pb-1 font-thin first:border-t xl:border-none xl:pb-0 xl:opacity-0">

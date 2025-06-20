@@ -2,6 +2,8 @@
 
 <header id="banner" class="absolute z-40 w-full text-white xl:fixed">
     <div class="bg-negro absolute left-0 top-0 hidden h-full w-full opacity-80 md:block"></div>
+    @include('partials.top-bar')
+
 
     <a id="brand" class="brand relative flex flex-col items-center p-6 font-bold md:flex-row"
         href="{{ home_url('/') }}">

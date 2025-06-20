@@ -1,4 +1,4 @@
-import {gsap} from 'gsap';
+import { gsap } from 'gsap';
 const particlesContainer = document.getElementById('tsparticles');
 const menus = gsap.utils.toArray('.my-menu-item');
 
@@ -45,13 +45,18 @@ export function navegacion() {
       }
     });
 
-    if (menu.classList.contains('active-ancestor') || menu.classList.contains('active')) {
+    if (
+      menu.classList.contains('active-ancestor') ||
+      menu.classList.contains('active')
+    ) {
       setTimeout(() => {
         setLinea(menu);
       }, 100);
     }
 
-    menu.addEventListener('click', () => (menu === openMenu ? menuClose(menu) : menuOpen(menu)));
+    menu.addEventListener('click', () =>
+      menu === openMenu ? menuClose(menu) : menuOpen(menu)
+    );
   });
 
   brand.addEventListener('click', () => {
@@ -219,7 +224,7 @@ export function navegacionMovil() {
     if (box) {
       let items = box.querySelectorAll('li');
 
-      gsap.set(items, {y: -30});
+      gsap.set(items, { y: -30 });
 
       menu.open = () => {
         if (!isOpen) {
@@ -249,11 +254,13 @@ export function navegacionMovil() {
           gsap.to(box, {
             height: 0,
             overwrite: true,
-            onComplete: () => gsap.set(items, {y: -30, overwrite: true}),
+            onComplete: () => gsap.set(items, { y: -30, overwrite: true }),
           });
         }
       };
-      menu.addEventListener('click', () => (isOpen ? menu.close() : menu.open()));
+      menu.addEventListener('click', () =>
+        isOpen ? menu.close() : menu.open()
+      );
 
       // cerrar nav en movil cuando clicas submenús
       items.forEach((item) => {
@@ -285,12 +292,16 @@ export function setBgColorAtLoadPage() {
   if (body.classList.contains('home')) {
     colorFondo = '#000000';
   } else if (body.classList.contains('single-noticia')) {
-    const itemNoticiasLink = document.querySelector('.menu-item-object-noticia a');
-    colorFondo = itemNoticiasLink.dataset.color
+    const itemNoticiasLink = document.querySelector(
+      '.menu-item-object-noticia a'
+    );
+    colorFondo = itemNoticiasLink.dataset.color;
   } else if (document.querySelector('.active-ancestor')) {
-    colorFondo = document.querySelector('.active-ancestor').querySelector('a').dataset.color;
+    colorFondo = document.querySelector('.active-ancestor').querySelector('a')
+      .dataset.color;
   } else if (document.querySelector('.active')) {
-    colorFondo = document.querySelector('.active').querySelector('a').dataset.color;
+    colorFondo = document.querySelector('.active').querySelector('a')
+      .dataset.color;
   } else {
     colorFondo = '#000';
   }
