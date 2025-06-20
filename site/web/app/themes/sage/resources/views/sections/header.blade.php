@@ -17,7 +17,7 @@
 
     <x-navigation name="primary_navigation" class="hidden xl:flex" id="nav-principal" />
 
-    <button id="burguer" class="hamburger hamburger--squeeze fixed right-0 top-6 z-50 xl:hidden"
+    <button id="burguer" class="hamburger hamburger--squeeze fixed right-0 top-6 z-50 xl:!hidden"
         aria-label="Abrir menú">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
