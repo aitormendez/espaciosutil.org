@@ -55,6 +55,7 @@ Este es el tema personalizado para el sitio web de **Espacio Sutil**, basado en 
 - Este tema es parte del stack Roots (Trellis + Bedrock + Sage).
 - El despliegue se realizará mediante GitHub Actions (configuración pendiente).
 - Se recomienda mantener el uso de `npm` para garantizar compatibilidad con el editor de bloques y herramientas nativas de WordPress.
+- Se ha implementado desde cero una clase `prose` en `resources/css/common/typography.css`, basada en unidades relativas (`em`) para permitir un escalado proporcional de la tipografía mediante clases como `prose-xl` y `prose-2xl`. Este enfoque replica el comportamiento del plugin `@tailwindcss/typography`, pero sin depender de él, ya que dicho plugin requiere `tailwind.config.js` o `.cjs`, archivos no utilizados en Tailwind 4.1. También se ha definido la clase `not-prose` para eliminar todos los estilos enriquecidos mediante `all: unset` y `display: revert`.
 
 ## Créditos
 
