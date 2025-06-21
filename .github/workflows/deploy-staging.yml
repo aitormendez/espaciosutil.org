@@ -12,12 +12,13 @@ jobs:
       - name: 💾 Checkout repo
         uses: actions/checkout@v3
 
-      - name: ⚖️ Install SSH key and known_hosts
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
-          if_key_exists: replace
+      - name: 🧹 Remove old SSH host key
+        run: ssh-keygen -R 167.99.95.143 || true
+
+      - name: 🔐 Add updated host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
 
       - name: 🗝️ Add SSH key to agent
         uses: webfactory/ssh-agent@v0.5.4
