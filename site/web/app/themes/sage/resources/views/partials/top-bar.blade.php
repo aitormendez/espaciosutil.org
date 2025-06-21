@@ -5,6 +5,20 @@
         @if (function_exists('wc_get_page_permalink'))
             <a href="{{ wc_get_page_permalink('shop') }}" class="transition hover:text-gray-300">Tienda</a>
         @endif
-        <a href="{{ wp_login_url() }}" class="transition hover:text-gray-300">Acceso</a>
+        @if (!is_user_logged_in())
+            <a href="{{ home_url('/login') }}" class="transition hover:text-gray-300">Acceso</a>
+        @else
+            <form method="POST" action="{{ site_url('wp-login.php?action=logout') }}" class="inline">
+                @php
+                    $logout_nonce = wp_create_nonce('log-out');
+                @endphp
+                <input type="hidden" name="_wpnonce" value="{{ $logout_nonce }}">
+                <input type="hidden" name="redirect_to" value="{{ home_url('/') }}">
+                <button type="submit"
+                    class="m-0 cursor-pointer border-none bg-transparent p-0 transition hover:text-gray-300">
+                    Salir
+                </button>
+            </form>
+        @endif
     </div>
 </div>

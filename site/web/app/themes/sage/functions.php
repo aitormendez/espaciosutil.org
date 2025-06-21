@@ -2,6 +2,8 @@
 
 use Roots\Acorn\Application;
 use Illuminate\Support\Facades\Facade;
+use Genero\Sage\WooCommerce\WooCommerceServiceProvider;
+use Log1x\Navi\NaviServiceProvider;
 
 Facade::setFacadeApplication(Application::getInstance());
 
@@ -55,6 +57,8 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
+        WooCommerceServiceProvider::class,
+        App\Providers\LoginServiceProvider::class,
         NaviServiceProvider::class,
     ])
     ->boot();

@@ -32,9 +32,9 @@
 @endphp
 
 @section('content')
-    <div class="flex min-h-screen items-center justify-center bg-gray-950 text-white">
-        <div class="w-full max-w-md rounded-xl bg-gray-900 px-6 py-8 shadow-xl">
-            <h1 class="mb-6 text-center text-2xl font-semibold">Iniciar sesión</h1>
+    <div class="relative -top-10 flex min-h-screen items-center justify-center bg-gray-950 font-sans text-white">
+        <div class="w-full max-w-md rounded-sm bg-gray-900 px-6 py-8 shadow-xl">
+            <h1 class="mb-6 text-center text-2xl">Iniciar sesión</h1>
 
             @if ($error_message)
                 <div class="mb-4 rounded bg-red-500 p-3 text-white">{{ $error_message }}</div>
@@ -45,14 +45,14 @@
                 <input type="hidden" name="login_nonce" value="{{ wp_create_nonce('custom_login') }}">
 
                 <div>
-                    <label for="username" class="mb-1 block text-sm font-medium">Usuario o correo</label>
+                    <label for="username" class="mb-1 block text-sm">Usuario o correo</label>
                     <input type="text" id="username" name="username"
                         class="w-full rounded border border-gray-700 bg-gray-800 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
                 </div>
 
                 <div>
-                    <label for="password" class="mb-1 block text-sm font-medium">Contraseña</label>
+                    <label for="password" class="mb-1 block text-sm">Contraseña</label>
                     <input type="password" id="password" name="password"
                         class="w-full rounded border border-gray-700 bg-gray-800 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required>
