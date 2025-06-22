@@ -20,38 +20,12 @@
             'remember' => isset($_POST['remember']),
         ];
 
-        $user = wp_signon($creds, false);
+        $user = wp_signon($creds);
 
         if (is_wp_error($user)) {
             $error_message = $user->get_error_message();
         } else {
             echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso (bloque 1)</div>';
-            // wp_redirect(home_url('/'));
-            // exit();
-        }
-    }
-@endphp
-
-@php
-    if (
-        $_SERVER['REQUEST_METHOD'] === 'POST' &&
-        isset($_POST['login_nonce']) &&
-        wp_verify_nonce($_POST['login_nonce'], 'custom_login')
-    ) {
-        $creds = [
-            'user_login' => sanitize_user($_POST['username']),
-            'user_password' => $_POST['password'],
-            'remember' => isset($_POST['remember']),
-        ];
-
-        $user = wp_signon($creds, false);
-
-        if (is_wp_error($user)) {
-            $error_message = $user->get_error_message();
-        } else {
-            echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso: ' .
-                $user->user_login .
-                '</div>';
             // wp_redirect(home_url('/'));
             // exit();
         }
