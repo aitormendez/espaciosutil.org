@@ -101,4 +101,19 @@
             </form>
         </div>
     </div>
+    <div style="background:red;color:white;padding:1rem;">DEBUG BLOCK FINAL</div>
+
+    @php
+        echo '<div style="background:#111;color:#0f0;padding:1rem;font-family:monospace;">';
+        echo '<h2>Diagnóstico de Login</h2>';
+        echo '<h3>$_COOKIE:</h3><pre>';
+        print_r($_COOKIE);
+        echo '</pre>';
+        echo '<h3>Headers enviados:</h3><pre>';
+        foreach (headers_list() as $header) {
+            echo htmlspecialchars($header) . "\n";
+        }
+        echo '</pre>';
+        echo '</div>';
+    @endphp
 @endsection
