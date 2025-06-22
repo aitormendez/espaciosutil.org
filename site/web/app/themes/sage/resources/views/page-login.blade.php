@@ -3,8 +3,8 @@
 @php
     // Redirige si ya está logueado
     if (is_user_logged_in()) {
-        // wp_redirect(home_url());
-        // exit();
+        wp_redirect(home_url());
+        exit();
     }
 
     $error_message = null;
@@ -26,8 +26,8 @@
             $error_message = $user->get_error_message();
         } else {
             echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso (bloque 1)</div>';
-            // wp_redirect(home_url('/'));
-            // exit();
+            wp_redirect(home_url('/'));
+            exit();
         }
     }
 @endphp
