@@ -3,8 +3,8 @@
 @php
     // Redirige si ya está logueado
     if (is_user_logged_in()) {
-        wp_redirect(home_url());
-        exit();
+        // wp_redirect(home_url());
+        // exit();
     }
 
     $error_message = null;
@@ -25,8 +25,9 @@
         if (is_wp_error($user)) {
             $error_message = $user->get_error_message();
         } else {
-            wp_redirect(home_url('/')); // O redirige a /account, etc.
-            exit();
+            echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso (bloque 1)</div>';
+            // wp_redirect(home_url('/'));
+            // exit();
         }
     }
 @endphp
@@ -51,8 +52,8 @@
             echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso: ' .
                 $user->user_login .
                 '</div>';
-            wp_redirect(home_url('/'));
-            exit();
+            // wp_redirect(home_url('/'));
+            // exit();
         }
     }
 @endphp
@@ -127,6 +128,7 @@
             </form>
         </div>
     </div>
+
     <div style="background:red;color:white;padding:1rem;">DEBUG BLOCK FINAL</div>
 
     @php
