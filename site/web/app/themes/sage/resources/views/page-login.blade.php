@@ -32,35 +32,6 @@
     }
 @endphp
 
-@php
-    // Diagnóstico temporal — SIEMPRE visible
-    echo '<div style="background:#111;color:#0f0;padding:1rem;font-family:monospace;">';
-    echo '<h2>Diagnóstico de Login (SIEMPRE visible)</h2>';
-
-    echo '<h3>Headers enviados:</h3>';
-    foreach (headers_list() as $header) {
-        echo htmlspecialchars($header) . '<br>';
-    }
-
-    echo '<h3>$_COOKIE:</h3><pre>';
-    print_r($_COOKIE);
-    echo '</pre>';
-
-    echo '<h3>COOKIE_DOMAIN:</h3><pre>';
-    echo defined('COOKIE_DOMAIN') ? COOKIE_DOMAIN : 'no definido';
-    echo '</pre>';
-
-    echo '<h3>session.cookie_path (PHP):</h3><pre>';
-    echo ini_get('session.cookie_path');
-    echo '</pre>';
-
-    echo '<h3>Dominio detectado:</h3><pre>';
-    echo $_SERVER['HTTP_HOST'] ?? 'No detectado';
-    echo '</pre>';
-
-    echo '</div>';
-@endphp
-
 @section('content')
     <div class="relative -top-10 flex min-h-screen items-center justify-center bg-gray-950 font-sans text-white">
         <div class="w-full max-w-md rounded-sm bg-gray-900 px-6 py-8 shadow-xl">
@@ -102,20 +73,4 @@
             </form>
         </div>
     </div>
-
-    <div style="background:red;color:white;padding:1rem;">DEBUG BLOCK FINAL</div>
-
-    @php
-        echo '<div style="background:#111;color:#0f0;padding:1rem;font-family:monospace;">';
-        echo '<h2>Diagnóstico de Login</h2>';
-        echo '<h3>$_COOKIE:</h3><pre>';
-        print_r($_COOKIE);
-        echo '</pre>';
-        echo '<h3>Headers enviados:</h3><pre>';
-        foreach (headers_list() as $header) {
-            echo htmlspecialchars($header) . "\n";
-        }
-        echo '</pre>';
-        echo '</div>';
-    @endphp
 @endsection

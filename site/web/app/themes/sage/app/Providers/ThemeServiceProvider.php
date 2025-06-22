@@ -24,16 +24,5 @@ class ThemeServiceProvider extends SageServiceProvider
     public function boot()
     {
         parent::boot();
-
-        // Forzar uso de path '/' en las cookies de sesión
-        add_action('init', function () {
-            if (defined('COOKIEPATH') && COOKIEPATH !== '/') {
-                define('COOKIEPATH', '/');
-            }
-
-            if (defined('SITECOOKIEPATH') && SITECOOKIEPATH !== '/') {
-                define('SITECOOKIEPATH', '/');
-            }
-        });
     }
 }
