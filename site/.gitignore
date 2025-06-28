@@ -2,6 +2,8 @@
 web/app/plugins/*
 !web/app/plugins/.gitkeep
 !web/app/plugins/espacio-sutil-blocks
+!web/app/plugins/paid-memberships-pro
+!web/app/plugins/pmpro-update-manager
 web/app/mu-plugins/*/
 web/app/themes/twentytwentyfive/
 web/app/upgrade
