@@ -1,8 +1,24 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our theme. We will simply require it into the script here so that we
+| don't have to worry about manually loading any of our classes later on.
+|
+*/
+
+if (! file_exists($composer = __DIR__ . '/vendor/autoload.php')) {
+    wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'sage'));
+}
+
+require $composer;
+
 use Roots\Acorn\Application;
 use Illuminate\Support\Facades\Facade;
-use Genero\Sage\WooCommerce\WooCommerceServiceProvider;
 use Log1x\Navi\NaviServiceProvider;
 
 Facade::setFacadeApplication(Application::getInstance());
@@ -27,23 +43,6 @@ add_filter('doing_it_wrong_trigger_error', function ($trigger_error, $function_n
 
 /*
 |--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| our theme. We will simply require it into the script here so that we
-| don't have to worry about manually loading any of our classes later on.
-|
-*/
-
-if (! file_exists($composer = __DIR__ . '/vendor/autoload.php')) {
-    wp_die(__('Error locating autoloader. Please run <code>composer install</code>.', 'sage'));
-}
-
-require $composer;
-
-/*
-|--------------------------------------------------------------------------
 | Register The Bootloader
 |--------------------------------------------------------------------------
 |
@@ -57,7 +56,6 @@ require $composer;
 Application::configure()
     ->withProviders([
         App\Providers\ThemeServiceProvider::class,
-        WooCommerceServiceProvider::class,
         App\Providers\LoginServiceProvider::class,
         NaviServiceProvider::class,
     ])
