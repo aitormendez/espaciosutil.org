@@ -25,8 +25,8 @@
         if (is_wp_error($user)) {
             $error_message = $user->get_error_message();
         } else {
-            echo '<div style="background: green; color: white; padding: 1rem;">Login exitoso (bloque 1)</div>';
-            wp_redirect(home_url('/'));
+            $redirect_url = $_POST['redirect_to'] ?? home_url('/');
+            wp_safe_redirect($redirect_url);
             exit();
         }
     }
@@ -44,6 +44,7 @@
             <form method="POST" action="{{ esc_url(home_url('/login')) }}" class="space-y-6">
                 @csrf
                 <input type="hidden" name="login_nonce" value="{{ wp_create_nonce('custom_login') }}">
+                <input type="hidden" name="redirect_to" value="{{ esc_url($_GET['redirect_to'] ?? home_url()) }}">
 
                 <div>
                     <label for="username" class="mb-1 block text-sm">Usuario o correo</label>
