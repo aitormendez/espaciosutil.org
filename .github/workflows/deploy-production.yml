@@ -1,16 +1,24 @@
-name: 🚀 Deploy to Production
+name: 🚀 Deploy to Staging
 
 on:
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy to Production
+    name: Deploy to Staging
     runs-on: ubuntu-latest
 
     steps:
       - name: 💾 Checkout repo
         uses: actions/checkout@v3
+
+      - name: 🧹 Remove previous host key
+        run: ssh-keygen -R 167.99.95.143 || true
+
+      - name: ➕ Add new host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
 
       - name: ⚖️ Install SSH key and known_hosts
         uses: shimataro/ssh-key-action@v2
@@ -30,5 +38,5 @@ jobs:
           ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🚀 Deploy to production
-        run: trellis deploy production
+      - name: 🚀 Deploy to staging
+        run: trellis deploy staging
