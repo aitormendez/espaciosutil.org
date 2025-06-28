@@ -65,6 +65,18 @@ return [
                 'plural' => 'areas',
             ],
         ],
+
+        'cde' => [
+            'enter_title_here' => 'Título del contenido del curso',
+            'menu_icon' => 'dashicons-book-alt',
+            'supports' => ['title', 'editor', 'thumbnail', 'revisions'],
+            'show_in_rest' => true,
+            'has_archive' => true,
+            'names' => [
+                'singular' => 'Contenido del CDE',
+                'plural' => 'Contenidos del CDE',
+            ],
+        ],
     ],
 
     /*
@@ -136,6 +148,17 @@ return [
             'names' => [
                 'singular' => 'noticia',
                 'plural' => 'noticias',
+            ],
+        ],
+
+        'nivel_cde' => [
+            'post_types' => ['cde'],
+            'meta_box' => 'simple',
+            'hierarchical' => true,
+            'show_in_rest' => true,
+            'names' => [
+                'singular' => 'Nivel del curso',
+                'plural' => 'Niveles del curso',
             ],
         ],
     ],
