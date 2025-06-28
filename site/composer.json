@@ -68,7 +68,6 @@
     "wpackagist-plugin/favicon-by-realfavicongenerator": "*",
     "wpackagist-plugin/query-monitor": "*",
     "wpackagist-plugin/gdpr-cookie-compliance": "*",
-    "wpackagist-plugin/members": "*",
     "wpackagist-plugin/autodescription": "*"
   },
   "require-dev": {
