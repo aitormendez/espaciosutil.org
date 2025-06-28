@@ -16,8 +16,6 @@ the readme will list any important changes.
 
 @extends('layouts.app')
 
-{{ logger('🟢 archive-product.blade.php cargado') }}
-
 @section('content')
     @php
         do_action('get_header', 'shop');
