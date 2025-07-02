@@ -2,12 +2,11 @@
     <div class="mx-auto flex justify-center space-x-6 xl:!justify-end">
         <a href="{{ get_permalink(get_page_by_path('curso-online')) }}" class="transition hover:text-gray-300">Curso
             online</a>
-        @if (function_exists('wc_get_page_permalink'))
-            <a href="{{ wc_get_page_permalink('shop') }}" class="transition hover:text-gray-300">Tienda</a>
-        @endif
         @if (!is_user_logged_in())
-            <a href="{{ home_url('/login') }}" class="transition hover:text-gray-300">Acceso</a>
+            <a href="{{ get_permalink(get_page_by_path('login')) }}" class="transition hover:text-gray-300">Acceso</a>
         @else
+            <a href="{{ home_url('/cuenta-de-membresia/tu-perfil/') }}" class="transition hover:text-gray-300">Mi
+                perfil</a>
             <form method="POST" action="{{ site_url('wp-login.php?action=logout') }}" class="inline">
                 @php
                     $logout_nonce = wp_create_nonce('log-out');

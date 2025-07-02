@@ -24,4 +24,7 @@
 
   /* Breakpoints */
   --screen-2xl: 1536px;
+
+  /* Text shadow */
+  --text-shadow-xl: 0 0 40px var(--tw-text-shadow-color);
 }
