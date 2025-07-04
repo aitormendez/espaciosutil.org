@@ -23,8 +23,7 @@ espaciosutil.org/
 
 - WordPress (vía Bedrock)
 - Sage 11 (Blade, Vite, Tailwind 4.1, Acorn)
-- WooCommerce (para la tienda)
-- Plugin Members (gestión de acceso)
+- Paid Memberships Pro (gestión de membresías)
 - Bunny.net + Vidstack (para academia de videos)
 - Trellis (Ansible + Nginx + MariaDB + Let's Encrypt)
 
