@@ -77,6 +77,7 @@ add_action('after_setup_theme', function () {
      */
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'sage'),
+        'membresia_navigation' => __('Membresía Navigation', 'sage'),
     ]);
 
     /**

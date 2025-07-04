@@ -16,13 +16,11 @@
         <h1 class="text-center text-5xl font-thin md:text-7xl">{!! $title !!}</h1>
     </div>
 
-    @if (in_array(get_the_ID(), [
-            pmpro_getOption('account_page_id'),
-            pmpro_getOption('member_profile_edit_page_id'),
-            pmpro_getOption('billing_page_id'),
-            pmpro_getOption('invoice_page_id'),
-            pmpro_getOption('cancel_page_id'),
-        ]))
-        @include('partials.membresia-tabs')
-    @endif
+    <nav class="mb-6 hidden w-full justify-center font-sans text-2xl xl:flex">
+        <ul class="flex flex-wrap gap-12">
+            <x-navigation name="membresia_navigation"
+                class="membresia-tabs flex flex-wrap justify-center gap-x-4 text-lg font-light md:gap-x-8"
+                id="nav-membresia-desktop" />
+        </ul>
+    </nav>
 </div>
