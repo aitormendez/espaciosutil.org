@@ -22,6 +22,14 @@ Este archivo proporciona el contexto necesario para que Gemini pueda asistir efi
 
 ## 3. Instrucciones para Gemini
 
+### Idioma de Respuesta
+
+Siempre debes responder en español.
+
+### Sintaxis Blade
+
+Debido a que el símbolo `@` tiene un significado especial en la interfaz de `gemini-cli`, al proporcionar fragmentos de código Blade que contengan directivas (como `@if`, `@foreach`, `@include`), es recomendable omitir el símbolo `@` para evitar conflictos. Por ejemplo, en lugar de `@if`, se puede usar `if`. Por tanto, al leer fragmentos de Blade que omiten la arroba, debo interpretarlos como si tuvieran la arroba.
+
 ### Ejecución de Comandos `wp-cli`
 
 Para ejecutar comandos `wp-cli`, se deben seguir las siguientes reglas:
