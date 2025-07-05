@@ -16,6 +16,11 @@
         <h1 class="text-center text-5xl font-thin md:text-7xl">{!! $title !!}</h1>
     </div>
 
+    @php
+    $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
+@endphp
+
+@if (is_page($pmp_page_ids))
     <nav class="mb-6 hidden w-full justify-center font-sans text-2xl xl:flex">
         <ul class="flex flex-wrap gap-12">
             <x-navigation name="membresia_navigation"
@@ -23,4 +28,5 @@
                 id="nav-membresia-desktop" />
         </ul>
     </nav>
+@endif
 </div>

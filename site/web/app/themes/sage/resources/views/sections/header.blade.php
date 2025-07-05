@@ -21,7 +21,13 @@
         class="bg-negro text-blanco fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:top-[66px] xl:min-h-0 xl:w-auto xl:bg-transparent">
         <ul class="my-menu flex flex-wrap items-center p-6 text-2xl xl:px-0 xl:pb-[32px] xl:pt-0">
             <x-navigation name="primary_navigation" class="flex" />
-            <x-navigation name="membresia_navigation" class="flex xl:hidden" />
+            @php
+                $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
+            @endphp
+
+            @if (is_page($pmp_page_ids))
+                <x-navigation name="membresia_navigation" class="flex xl:hidden" />
+            @endif
         </ul>
         <div id="linea" class="bg-gris3 absolute bottom-0 left-0 hidden h-1 w-0 xl:block"></div>
     </nav>
