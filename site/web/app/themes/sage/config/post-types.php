@@ -69,7 +69,7 @@ return [
         'cde' => [
             'enter_title_here' => 'Título del contenido del curso',
             'menu_icon' => 'dashicons-book-alt',
-            'supports' => ['title', 'editor', 'thumbnail', 'revisions'],
+            'supports' => ['title', 'editor', 'thumbnail', 'revisions', 'excerpt'],
             'show_in_rest' => true,
             'has_archive' => true,
             'names' => [
