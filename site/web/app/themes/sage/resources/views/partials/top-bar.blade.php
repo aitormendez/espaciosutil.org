@@ -1,6 +1,7 @@
 <div class="border-gris3 relative border-b py-1 font-sans font-light text-white xl:pr-12">
     <div class="mx-auto flex justify-center space-x-6 xl:!justify-end">
-        <a href="{{ get_permalink(get_page_by_path('curso-online')) }}" class="transition hover:text-gray-300">
+        <a href="{{ get_permalink(get_page_by_path('curso-de-desarrollo-espiritual')) }}"
+            class="transition hover:text-gray-300">
             Curso Desarrollo Espiritual
         </a>
         @if (!is_user_logged_in())
