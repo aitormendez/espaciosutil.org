@@ -41,3 +41,7 @@ default_api.run_shell_command(
 ### Nota sobre la Base de Datos
 
 El archivo `.env` en el directorio `site/` ha sido configurado con `DB_HOST='127.0.0.1'` para permitir la conexión a la base de datos desde el anfitrión. No se debe cambiar a `localhost`.
+
+### Gestión de Versiones (Git)
+
+Se ha verificado que Gemini puede ejecutar el flujo completo de Git (add, commit, push) en este repositorio. Todos los mensajes de commit deben seguir las convenciones de [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
