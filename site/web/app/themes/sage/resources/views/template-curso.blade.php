@@ -9,7 +9,7 @@
         @php(the_post())
         @include('partials.page-header')
 
-        <div class="border-blanco bg-morado5/90 prose flex justify-center border-t py-12 text-lg">
+        <div class="border-blanco bg-morado5/90 prose md:prose-2xl flex justify-center border-t py-12 text-lg">
             <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
                 <div class="">
                     @php(the_content())
