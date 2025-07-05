@@ -7,7 +7,7 @@
         <div
             class="contenido prose prose-sutil prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
             {{-- Parte 1: Extracto (visible para todos) --}}
-            @php(the_excerpt())
+            @php(the_field('rich_excerpt'))
 
             {{-- Parte 2: Contenido completo (visible solo para miembros logueados con membresía activa) --}}
             @if (is_user_logged_in() && function_exists('pmpro_hasMembershipLevel') && pmpro_hasMembershipLevel())
