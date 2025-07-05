@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
-import laravel from 'laravel-vite-plugin'
+import laravel from 'laravel-vite-plugin';
 import { wordpressPlugin, wordpressThemeJson } from '@roots/vite-plugin';
+import path from 'path';
 
 export default defineConfig({
   base: '/app/themes/sage/public/build/',
@@ -29,10 +30,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@scripts': '/resources/js',
-      '@styles': '/resources/css',
-      '@fonts': '/resources/fonts',
-      '@images': '/resources/images',
+      '@scripts': path.resolve(__dirname, 'resources/js'),
+      '@styles': path.resolve(__dirname, 'resources/css'),
+      '@fonts': path.resolve(__dirname, 'resources/fonts'),
+      '@images': path.resolve(__dirname, 'resources/images'),
     },
   },
-})
+});

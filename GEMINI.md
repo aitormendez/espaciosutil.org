@@ -30,6 +30,8 @@ Siempre debes responder en español.
 
 Debido a que el símbolo `@` tiene un significado especial en la interfaz de `gemini-cli`, al proporcionar fragmentos de código Blade que contengan directivas (como `@if`, `@foreach`, `@include`), es recomendable omitir el símbolo `@` para evitar conflictos. Por ejemplo, en lugar de `@if`, se puede usar `if`. Por tanto, al leer fragmentos de Blade que omiten la arroba, debo interpretarlos como si tuvieran la arroba.
 
+El mismo problema ocurra con las directivas con `@`en CSS.
+
 ### Ejecución de Comandos `wp-cli`
 
 Para ejecutar comandos `wp-cli`, se deben seguir las siguientes reglas:
@@ -39,6 +41,7 @@ Para ejecutar comandos `wp-cli`, se deben seguir las siguientes reglas:
 3.  La ruta relativa correcta para el parámetro `directory` es: `Documents/Sites/espaciosutil.org/site`.
 
 **Ejemplo de uso correcto:**
+
 ```python
 default_api.run_shell_command(
     command="wp post list --post_type=page",
