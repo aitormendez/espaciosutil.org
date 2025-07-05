@@ -56,3 +56,4 @@ El archivo `.env` en el directorio `site/` ha sido configurado con `DB_HOST='127
 ### Gestión de Versiones (Git)
 
 Se ha verificado que Gemini puede ejecutar el flujo completo de Git (add, commit, push) en este repositorio. Todos los mensajes de commit deben seguir las convenciones de [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+- **Mensajes de Commit:** Debido a limitaciones técnicas, los mensajes de commit deben ser de una sola línea.
