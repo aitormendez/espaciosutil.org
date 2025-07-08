@@ -77,6 +77,7 @@ add_action('after_setup_theme', function () {
      */
     register_nav_menus([
         'primary_navigation' => __('Primary Navigation', 'sage'),
+        'membresia_navigation' => __('Membresía Navigation', 'sage'),
     ]);
 
     /**
@@ -129,6 +130,36 @@ add_action('after_setup_theme', function () {
      */
     add_theme_support('customize-selective-refresh-widgets');
 }, 20);
+
+use App\Api\VideoProgress;
+
+/**
+ * Register REST API endpoints.
+ *
+ * @return void
+ */
+add_action('rest_api_init', function () {
+    $video_progress_api = new VideoProgress();
+    $video_progress_api->register_routes();
+});
+
+/**
+ * Enqueue theme scripts and localize data.
+ *
+ * @return void
+ */
+add_action('wp_enqueue_scripts', function () {
+    wp_enqueue_script('sage/app.js', Vite::asset('resources/js/app.js'), ['jquery'], null, true);
+
+    wp_localize_script(
+        'sage/app.js',
+        'wpApiSettings',
+        [
+            'root' => esc_url_raw(rest_url()),
+            'nonce' => wp_create_nonce('wp_rest'),
+        ]
+    );
+});
 
 /**
  * Register the theme sidebars.
