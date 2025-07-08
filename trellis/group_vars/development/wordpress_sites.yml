@@ -1,0 +1,21 @@
+# Created by trellis-cli v1.14.0
+# Documentation: https://roots.io/trellis/docs/wordpress-sites/
+
+wordpress_sites:
+  espaciosutil.org:
+    site_hosts:
+    - canonical: espaciosutil.test
+      redirects:
+      - www.espaciosutil.test
+    local_path: ../site
+    admin_email: admin@espaciosutil.test
+    db_host: 127.0.0.1
+    multisite:
+      enabled: false
+    ssl:
+      enabled: false
+      provider: self-signed
+    cache:
+      enabled: false
+    env:
+      db_host: 127.0.0.1
