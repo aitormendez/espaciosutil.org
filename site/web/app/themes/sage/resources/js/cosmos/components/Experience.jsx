@@ -14,6 +14,7 @@ import { getReveladores } from './utils/getReveladores.js';
 import { getNoticias } from './utils/getNoticias.js';
 import { getFormaciones } from './utils/getFormaciones.js';
 import { getTerapias } from './utils/getTerapias.js';
+import * as THREE from 'three';
 
 export default function Experience() {
   let running = true;
@@ -289,8 +290,12 @@ export default function Experience() {
 
   return (
     <>
-      <EffectComposer>
-        <Bloom luminanceSmoothing={0.5} intensity={1} luminanceThreshold={1} />
+      <EffectComposer multisampling={8} frameBufferType={THREE.HalfFloatType}>
+        <Bloom
+          luminanceSmoothing={0.7}
+          intensity={0.4}
+          luminanceThreshold={1}
+        />
       </EffectComposer>
       {/* <Perf position="bottom-right" /> */}
       {/* <OrbitControls makeDefault /> */}

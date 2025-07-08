@@ -7,6 +7,7 @@ import { Loading } from './components/Loading.jsx';
 import { RunningProvider } from './components/utils/RunningContext.jsx';
 import { InitialPositionsProvider } from './components/utils/InitialPositionsContext.jsx';
 import { PlanetRefsProvider } from './components/utils/PlanetRefsContext.jsx';
+import { ConfiguracionRenderer } from './components/ConfiguracionRenderer';
 
 export function cosmos() {
   console.log('🚀 Ejecutando cosmos()');
