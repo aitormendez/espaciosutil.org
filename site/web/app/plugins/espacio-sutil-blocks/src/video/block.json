@@ -1,0 +1,78 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "espacio-sutil-blocks/video",
+	"version": "0.1.0",
+	"title": "Bunny.net Video",
+	"category": "espacio-sutil",
+	"icon": "video-alt3",
+	"description": "Bloque de video personalizado con integración Bunny.net para Espacio Sutil.",
+	"textdomain": "espacio-sutil-blocks",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php",
+	"attributes": {
+		"libraryId": {
+			"type": "string",
+			"default": "457097"
+		},
+		"videoId": {
+			"type": "string",
+			"default": ""
+		},
+		"videoSrc": {
+			"type": "string",
+			"default": ""
+		},
+		"thumbnailUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"align": {
+			"type": "string",
+			"default": "none"
+		},
+		"autoplay": {
+			"type": "boolean",
+			"default": false
+		},
+		"loop": {
+			"type": "boolean",
+			"default": false
+		},
+		"muted": {
+			"type": "boolean",
+			"default": false
+		},
+		"controls": {
+			"type": "boolean",
+			"default": true
+		},
+		"playsInline": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": false,
+			"padding": false
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
+		},
+		"html": false
+	}
+}

@@ -1,0 +1,38 @@
+@import "vidstack/player/styles/default/theme.css";
+@import "vidstack/player/styles/default/layouts/video.css";
+
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.fb-post-layout1-title {
+	font-family: ArialBlack, Helvetica, sans-serif;
+	font-weight: 900;
+}
+
+.fb-video-player {
+	width: 100%;
+	display: block;
+	position: relative;
+
+	media-player {
+		width: 100%;
+		height: auto;
+		display: block;
+
+		media-provider {
+			width: 100%;
+			display: block;
+
+			video {
+				width: 100%;
+				height: auto;
+				display: block;
+				object-fit: contain;
+			}
+		}
+	}
+}

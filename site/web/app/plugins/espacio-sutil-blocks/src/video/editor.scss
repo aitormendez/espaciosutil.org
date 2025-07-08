@@ -1,0 +1,12 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+@import "vidstack/player/styles/default/theme.css";
+@import "vidstack/player/styles/default/layouts/video.css";
+
+.wp-block-espacio-sutil-blocks-video [data-media-player] {
+	border-radius: 0 !important;
+	border: none !important;
+}
