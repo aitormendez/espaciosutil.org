@@ -3,3 +3,13 @@ server:
   docroot: web
 db:
   host: 127.0.0.1
+
+"@development":
+  ssh: "espaciosutil.test"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
+"@production":
+  ssh: "web@134.209.21.17:22"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
+"@staging":
+  ssh: "web@167.99.95.143:22"
+  path: "/srv/www/espaciosutil.org/current/web/wp"
