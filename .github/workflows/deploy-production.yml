@@ -1,0 +1,42 @@
+name: 🚀 Deploy to Staging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 💾 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🧹 Remove previous host key
+        run: ssh-keygen -R 167.99.95.143 || true
+
+      - name: ➕ Add new host key to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
+
+      - name: ⚖️ Install SSH key and known_hosts
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
+          if_key_exists: replace
+
+      - name: 🗝️ Add SSH key to agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: 🚧 Setup Trellis CLI
+        uses: roots/setup-trellis-cli@v1
+        with:
+          ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🚀 Deploy to staging
+        run: trellis deploy staging
