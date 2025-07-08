@@ -1,0 +1,46 @@
+<mjml>
+  <mj-head>
+    <mj-title>Espacio Sutil</mj-title>
+    <mj-style>
+      @font-face {
+        font-family: CrimsonPro;
+        font-style: normal;
+        font-weight: 300;
+        src: url('https://fonts.gstatic.com/s/crimsonpro/v24/q5uDsoa5M_tv7IihmnkabARboYF6CsKj.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: CrimsonPro;
+        font-style: italic;
+        font-weight: 300;
+        src: url('https://fonts.gstatic.com/s/crimsonpro/v24/q5uBsoa5M_tv7IihmnkabARekYNwDeChrlU.woff2') format('woff2');
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#000000">
+    <mj-section>
+      <mj-column>
+      <mj-spacer height="30px" />
+        <mj-image href="https://espaciosutil.org" width="200px" src="https://espaciosutil.org/app/uploads/2023/10/espacio-sutil-logotipo.jpg" alt="Espacio Sutil logo" />
+        <mj-spacer height="50px" />
+        <mj-divider border-width="3px" border-color="lightgrey" />
+        <mj-text font-family="CrimsonPro" color="#ffffff" font-size="24px" font-weight="300">
+          Gracias por contactar. Tu mensaje se envió correctamente. Te responderemos lo antes posible.
+        </mj-text>
+        <mj-divider border-width="3px" border-color="lightgrey" />
+        <mj-text font-family="CrimsonPro" color="#ffffff" font-size="24px" font-weight="300">
+        De: [NAME]</br>
+        Tema: [TEMA]</br>
+        Email: [EMAIL]</br>
+        </mj-text>
+        <mj-divider border-width="3px" border-color="lightgrey" />
+        <mj-text font-family="Crimson Pro" color="#ffffff" font-size="24px" font-weight="300">
+        [MESSAGE]
+        </mj-text>
+        <mj-divider border-width="3px" border-color="lightgrey" />
+        <mj-spacer height="50px" />
+        <mj-button href="https://espaciosutil.org" font-family="Crimson Pro" background-color="#000000" color="white">Espacio Sutil</mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
