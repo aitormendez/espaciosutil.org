@@ -65,11 +65,16 @@ Antes de añadir archivos `vault.yml` al área de preparación (`git add`) o de 
 
 ## 4. Estado Actual de la Situación
 
-### Problemas Persistentes
+### Problemas Persistentes (Estado Anterior)
 
-- **Login de WordPress no funciona:** El usuario no puede iniciar sesión en el panel de administración. Se produce un bucle de redirección.
-- **Editor de WordPress no accesible:** Incluso si el login funcionara, el editor del panel de administración no se carga correctamente (solo se ve la `wpadminbar`).
-- **Comandos `wp-cli` fallan:** Los comandos `wp-cli` ejecutados desde el anfitrión fallan consistentemente con errores de conexión a la base de datos (`No such file or directory`).
+- **Login de WordPress no funcionaba:** El usuario no podía iniciar sesión en el panel de administración. Se producía un bucle de redirección.
+- **Editor de WordPress no accesible:** Incluso si el login funcionara, el editor del panel de administración no se cargaba correctamente (solo se veía la `wpadminbar`).
+- **Comandos `wp-cli` fallaban:** Los comandos `wp-cli` ejecutados desde el anfitrión fallaban consistentemente con errores de conexión a la base de datos (`No such file or directory`).
+
+### Estado Actual de los Problemas
+
+- **Login de WordPress y Editor:** El login de WordPress y el acceso al editor funcionan correctamente en esta nueva instalación.
+- **Comandos `wp-cli`:** Los comandos `wp-cli` se ejecutan correctamente desde el anfitrión.
 
 ### Diagnóstico Realizado
 
@@ -81,18 +86,18 @@ Antes de añadir archivos `vault.yml` al área de preparación (`git add`) o de 
 - Se ha intentado forzar la configuración de la base de datos en `site/wp-cli.yml` sin éxito.
 - El problema parece ser una desconexión fundamental entre el host (donde se ejecuta el navegador y `wp-cli`) y la base de datos dentro de la VM de Lima, a pesar de que la configuración parece ser correcta.
 
-## 5. Plan de Restauración (Fuerza Bruta)
+## 5. Plan de Restauración (Fuerza Bruta) - Completado
 
-Dada la persistencia de los problemas y la dificultad para diagnosticarlos en el entorno actual, se ha decidido proceder con una **instalación limpia** de Trellis, Bedrock y Sage.
+Dada la persistencia de los problemas y la dificultad para diagnosticarlos en el entorno anterior, se decidió proceder con una **instalación limpia** de Trellis, Bedrock y Sage.
 
-### Objetivo
+### Objetivo Cumplido
 
-Establecer un entorno de desarrollo completamente funcional y por defecto, donde el login de WordPress y los comandos `wp-cli` operen sin problemas.
+Se ha establecido un entorno de desarrollo completamente funcional y por defecto, donde el login de WordPress y los comandos `wp-cli` operan sin problemas.
 
-### Próximos Pasos
+### Pasos Realizados
 
-1.  **Crear un nuevo proyecto Trellis:** Se guiará al usuario para iniciar un nuevo proyecto Trellis desde cero.
-2.  **Configurar el nuevo sitio de WordPress:** Se definirá la configuración básica del sitio.
-3.  **Aprovisionar la nueva VM:** Se ejecutará el aprovisionamiento para configurar el servidor y la base de datos.
-4.  **Instalar el tema Sage:** Se añadirá y configurará el tema Sage en la nueva instalación.
-5.  **Traslado de Funcionalidad:** Una vez que la instalación limpia esté operativa, se procederá a migrar la funcionalidad y el contenido del proyecto actual de forma controlada.
+1.  **Creación de un nuevo proyecto Trellis:** Se inició un nuevo proyecto Trellis desde cero.
+2.  **Configuración del nuevo sitio de WordPress:** Se definió la configuración básica del sitio, incluyendo la correcta configuración de `DB_HOST` a través de Ansible.
+3.  **Aprovisionamiento de la nueva VM:** Se ejecutó el aprovisionamiento para configurar el servidor y la base de datos, resolviendo los problemas de conexión.
+4.  **Instalación y configuración del tema Sage:** Se añadió y configuró el tema Sage, incluyendo la migración de assets, dependencias y configuraciones personalizadas.
+5.  **Traslado de Funcionalidad y Contenido:** Se han trasladado los plugins no gestionados por Composer, los scripts de sincronización de base de datos, los view composers, las rutas de API personalizadas, los campos ACF y los nuevos proveedores de servicios. La base de datos ha sido sincronizada con éxito.
