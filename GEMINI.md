@@ -18,7 +18,7 @@ Este archivo proporciona el contexto necesario para que Gemini pueda asistir efi
 - **Host:** macOS
 - **Máquina Virtual:** Gestionada por **Trellis** con el proveedor **Lima**.
 - **Directorio Raíz del Proyecto (Host):** `/Users/aitor/Documents/Sites/espaciosutil.org`
-- **Directorio del Sitio WordPress (Host):** `/Users/aitor/Documents/Sites/espaciosutil.org/site`
+- **Directorio del Sitio WordPress (Host)::** `/Users/aitor/Documents/Sites/espaciosutil.org/site`
 
 ## 3. Instrucciones para Gemini
 
@@ -61,7 +61,7 @@ Se ha verificado que Gemini puede ejecutar el flujo completo de Git (status, dif
 
 ### Gestión de Archivos Vault
 
-Antes de añadir archivos `vault.yml` al área de preparación (`git add`) o de realizar un commit que los incluya, Gemini debe verificar su estado. Si los archivos `vault.yml` tienen modificaciones y están desencriptados, Gemini debe encriptarlos utilizando el comando `trellis vault encrypt <entorno>` (por ejemplo, `trellis vault encrypt development`) antes de proceder. Esto asegura que nunca se suban al repositorio desencriptados.
+Antes de añadir archivos `vault.yml` al área de preparación (`git add`) o de realizar un commit que los incluya, Gemini debe verificar su estado. Si los archivos `vault.yml` tienen modificaciones y están desencriptados, Gemini debe encriptarlos utilizando el comando `trellis vault encrypt <entorno>` (por ejemplo, `trellis vault encrypt development`, `trellis vault encrypt staging`, `trellis vault encrypt production`) antes de proceder. Esto asegura que nunca se suban al repositorio desencriptados.
 
 ## 4. Estado Actual de la Situación
 
