@@ -59,6 +59,10 @@ Se ha verificado que Gemini puede ejecutar el flujo completo de Git (status, dif
 
 - **Mensajes de Commit:** Debido a limitaciones técnicas, los mensajes de commit deben ser de una sola línea.
 
+### Gestión de Archivos Vault
+
+Antes de añadir archivos `vault.yml` al área de preparación (`git add`) o de realizar un commit que los incluya, Gemini debe verificar su estado. Si los archivos `vault.yml` tienen modificaciones y están desencriptados, Gemini debe encriptarlos utilizando el comando `trellis vault encrypt <entorno>` (por ejemplo, `trellis vault encrypt development`) antes de proceder. Esto asegura que nunca se suban al repositorio desencriptados.
+
 ## 4. Estado Actual de la Situación
 
 ### Problemas Persistentes
