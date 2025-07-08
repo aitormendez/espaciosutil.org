@@ -1,1 +1,46 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import '@styles/fonts/crimson-pro.css';
+
+/* Estilos básicos para el editor de bloques */
+.editor-styles-wrapper {
+  font-family: 'CrimsonPro', serif;
+  color: #222; /* Gris oscuro, legible sobre fondo claro */
+  line-height: 1.6;
+  font-size: 16px;
+
+  h1 {
+    font-size: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    margin-top: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  p,
+  li {
+    margin-bottom: 1rem;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5rem;
+    list-style: disc;
+  }
+
+  blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1rem;
+    color: #666;
+    font-style: italic;
+  }
+}

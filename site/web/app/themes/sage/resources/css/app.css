@@ -1,3 +1,82 @@
-@import "tailwindcss" theme(static);
+@import 'tailwindcss';
 @source "../views/";
 @source "../../app/";
+@source "../safelist.txt";
+@import 'hamburgers/dist/hamburgers.css';
+
+/* Vidstack styles */
+@import '@vidstack/react/player/styles/base.css';
+@import '@vidstack/react/player/styles/default/theme.css';
+@import '@vidstack/react/player/styles/default/layouts/video.css';
+
+@import './fonts/asap.css';
+@import './fonts/crimson-pro.css';
+@import './commons/global.css';
+@import './commons/theme.css';
+@import './commons/typography.css';
+@import './commons/components.css';
+@import './commons/variables.css';
+@import './blocks/responsive-cols.css';
+@import './pmp.css';
+
+.toc {
+  overflow-y: auto;
+}
+
+.toc > .toc-list {
+  overflow: hidden;
+  position: relative;
+}
+
+.toc > .toc-list li {
+  list-style: none;
+}
+
+.js-toc {
+  overflow-y: hidden;
+}
+
+.toc-list {
+  margin: 0;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+a.toc-link {
+  color: currentcolor;
+  height: 100%;
+}
+
+.is-collapsible {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: all 300ms ease-in-out;
+}
+
+.is-collapsed {
+  max-height: 0;
+}
+
+.is-position-fixed {
+  position: fixed !important;
+  top: 0;
+}
+
+.is-active-link {
+  font-weight: 700;
+}
+
+.toc-link::before {
+  background-color: #737373;
+  content: ' ';
+  display: inline-block;
+  height: inherit;
+  left: 0;
+  margin-top: -1px;
+  position: absolute;
+  width: 5px;
+}
+
+.is-active-link::before {
+  background-color: #fff;
+}

@@ -1,0 +1,30 @@
+@theme {
+  /* Colores personalizados */
+  --color-morado1: #ebe6ed;
+  --color-morado2: #b29cb8;
+  --color-morado3: #5c2e68;
+  --color-morado4: #371c3e;
+  --color-morado5: #150b17;
+  --color-gris1: #e6e6e6;
+  --color-gris2: #9a9a9a;
+  --color-gris3: #535353;
+  --color-gris4: #353535;
+  --color-gris5: #101010;
+  --color-negro: #000000;
+  --color-blanco: #ffffff;
+  --color-transparent: #ffffff00;
+
+  /* Tipografías */
+  --font-serif: 'CrimsonPro', serif;
+  --font-sans: 'Asap', sans-serif;
+
+  /* Anchos máximos */
+  --max-w-1\/2: 50%;
+  --max-w-1\/4: 25%;
+
+  /* Breakpoints */
+  --screen-2xl: 1536px;
+
+  /* Text shadow */
+  --text-shadow-xl: 0 0 40px var(--tw-text-shadow-color);
+}
