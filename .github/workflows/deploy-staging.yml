@@ -13,6 +13,12 @@ jobs:
       - name: 💾 Checkout repo
         uses: actions/checkout@v3
 
+      - name: 🔑 Write SSH private key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
       - name: 🧹 Remove old SSH host key
         run: ssh-keygen -R 167.99.95.143 || true
 
@@ -20,11 +26,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
-
-      - name: 🗝️ Add SSH key to agent
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
