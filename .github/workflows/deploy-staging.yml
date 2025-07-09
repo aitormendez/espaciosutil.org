@@ -19,6 +19,11 @@ jobs:
           echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
+      - name: 🕵️ Debug SSH key fingerprint
+        run: |
+          ssh-keygen -lf ~/.ssh/id_ed25519
+          ls -l ~/.ssh/id_ed25519
+
       - name: 🧹 Remove old SSH host key
         run: ssh-keygen -R 167.99.95.143 || true
 
@@ -26,6 +31,9 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
+
+      - name: 🕵️ Debug known_hosts
+        run: cat ~/.ssh/known_hosts
 
       - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
