@@ -25,21 +25,22 @@
     <section class="mb-12 w-full border-t px-6">
         <h2 class="py-6 text-center font-sans">Últimas noticias publicadas</h2>
         <div class="noticias flex w-full flex-wrap justify-center">
-            @query([
+            <?php
+            $query = new WP_Query([
                 'post_type' => 'noticia',
                 'posts_per_page' => 4,
                 'orderby' => 'date',
                 'order' => 'DESC',
-            ])
-
-            @posts
+            ]);
+            if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
+            ?>
                 <div class="noticia w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-                    <a href="@permalink" class="hover:text-morado3 mb-4 block">
-                        <h2 class="entry-title text-2xl">@title</h2>
+                    <a href="{{ get_permalink() }}" class="hover:text-morado3 mb-4 block">
+                        <h2 class="entry-title text-2xl">{{ get_the_title() }}</h2>
                     </a>
-                    @thumbnail('large')
+                    {{ get_the_post_thumbnail(null, 'large') }}
                 </div>
-            @endposts
+            <?php endwhile; endif; wp_reset_postdata(); ?>
         </div>
     </section>
 

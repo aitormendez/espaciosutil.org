@@ -8,7 +8,7 @@
     </header>
 
     <div class="thumnail mx-auto max-w-2xl">
-        @thumbnail('full')
+        {{ get_the_post_thumbnail(null, 'full') }}
     </div>
 
 
