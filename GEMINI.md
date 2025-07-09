@@ -101,3 +101,9 @@ Se ha establecido un entorno de desarrollo completamente funcional y por defecto
 3.  **Aprovisionamiento de la nueva VM:** Se ejecutó el aprovisionamiento para configurar el servidor y la base de datos, resolviendo los problemas de conexión.
 4.  **Instalación y configuración del tema Sage:** Se añadió y configuró el tema Sage, incluyendo la migración de assets, dependencias y configuraciones personalizadas.
 5.  **Traslado de Funcionalidad y Contenido:** Se han trasladado los plugins no gestionados por Composer, los scripts de sincronización de base de datos, los view composers, las rutas de API personalizadas, los campos ACF y los nuevos proveedores de servicios. La base de datos ha sido sincronizada con éxito.
+
+## 6. Despliegue con GitHub Actions
+
+Los flujos de trabajo de despliegue (`deploy-staging.yml` y `deploy-production.yml`) ahora utilizan entornos de GitHub Actions (`staging` y `production` respectivamente).
+
+Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEPLOY_SSH_KNOWN_HOSTS` en el repositorio de GitHub. Este secreto debe contener las claves SSH conocidas del servidor de producción para permitir la conexión segura durante el despliegue.
