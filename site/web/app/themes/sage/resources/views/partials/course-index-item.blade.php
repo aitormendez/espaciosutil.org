@@ -2,9 +2,9 @@
     @php
         $currentLevel = isset($level) ? $level : 0;
     @endphp
-    <ul class="">
-        <li class="course-index-item">
-            <a href="{{ $item->permalink }}" class="text-lg">
+    <ul class="!pl-0">
+        <li class="course-index-item list-none">
+            <a href="{{ $item->permalink }}" class="block text-lg">
                 {{ $item->title }}
             </a>
 

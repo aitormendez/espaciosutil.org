@@ -26,7 +26,8 @@
                     {{ $item->label }}
                 </a>
                 @if ($item->children)
-                    <ul class="my-child-menu h-0 overflow-hidden xl:fixed xl:{{ is_admin_bar_showing() ? 'top-48' : 'top-40' }} xl:hidden xl:h-auto">
+                    <ul
+                        class="my-child-menu {{ is_admin_bar_showing() ? 'xl:top-48' : 'xl:top-40' }} h-0 overflow-hidden xl:fixed xl:hidden xl:h-auto">
                         @foreach ($item->children as $child)
                             <li
                                 class="text-gris2 xl:text-blanco my-child-item {{ $child->classes ?? '' }} {{ $child->active ? 'active' : '' }} border-b border-zinc-800 pb-1 font-thin first:border-t xl:border-none xl:pb-0 xl:opacity-0">
