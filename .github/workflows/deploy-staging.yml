@@ -16,17 +16,17 @@ jobs:
       - name: 🔑 Write SSH private key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
       - name: 🪪 Debug SSH public key
         run: |
-          ssh-keygen -y -f ~/.ssh/id_ed25519
+          ssh-keygen -y -f ~/.ssh/id_rsa
 
       - name: 🕵️ Debug SSH key fingerprint
         run: |
-          ssh-keygen -lf ~/.ssh/id_ed25519
-          ls -l ~/.ssh/id_ed25519
+          ssh-keygen -lf ~/.ssh/id_rsa
+          ls -l ~/.ssh/id_rsa
 
       - name: 🧹 Remove old SSH host key
         run: ssh-keygen -R 167.99.95.143 || true
@@ -46,4 +46,4 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Deploy to staging
-        run: trellis deploy --extra-vars "ansible_ssh_private_key_file=~/.ssh/id_ed25519" staging espaciosutil.org
+        run: trellis deploy --extra-vars "ansible_ssh_private_key_file=~/.ssh/id_rsa" staging espaciosutil.org
