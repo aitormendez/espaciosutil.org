@@ -48,12 +48,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (document.body.classList.contains('page-template-template-curso')) {
-    import('./course-index.js');
+    await import('./courses/course-index.js');
   }
 
-  // Lógica para el video destacado en entradas de tipo 'cde'
   if (document.body.classList.contains('single-cde')) {
-    const initFeaturedVideoPlayerModule = await import('./initFeaturedVideoPlayer.jsx');
+    const initFeaturedVideoPlayerModule = await import(
+      './initFeaturedVideoPlayer.jsx'
+    );
     initFeaturedVideoPlayerModule.default();
+
+    const markCompleteModule = await import('./courses/mark-complete.js');
+    markCompleteModule.default();
   }
 });

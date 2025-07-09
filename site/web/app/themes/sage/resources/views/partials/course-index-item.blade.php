@@ -6,6 +6,9 @@
         <li class="course-index-item list-none">
             <a href="{{ $item->permalink }}" class="block text-lg">
                 {{ $item->title }}
+                @if (in_array($item->id, $completed_lessons ?? []))
+                    <span class="ml-2 text-green-500">✔️</span>
+                @endif
             </a>
 
             @if (!empty($item->children))

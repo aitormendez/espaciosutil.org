@@ -75,7 +75,13 @@ class RouteServiceProvider extends ServiceProvider
                         return response()->json(['html' => '<p>No se encontraron lecciones para este revelador.</p>']);
                     }
 
-                    $html = view('partials.course-index-item', ['items' => $course_tree, 'level' => 0])->render();
+                    $completed_lessons = get_user_meta(get_current_user_id(), 'cde_completed_lessons', true) ?: [];
+
+                    $html = view('partials.course-index-item', [
+                        'items' => $course_tree,
+                        'level' => 0,
+                        'completed_lessons' => $completed_lessons,
+                    ])->render();
 
                     return response()->json(['html' => $html]);
                 });

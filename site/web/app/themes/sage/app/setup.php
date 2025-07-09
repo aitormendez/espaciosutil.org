@@ -7,6 +7,8 @@
 namespace App;
 
 use Illuminate\Support\Facades\Vite;
+use App\Api\VideoProgress;
+use App\Api\CompletedLessons;
 
 /**
  * Inject styles into the block editor.
@@ -131,8 +133,6 @@ add_action('after_setup_theme', function () {
     add_theme_support('customize-selective-refresh-widgets');
 }, 20);
 
-use App\Api\VideoProgress;
-
 /**
  * Register REST API endpoints.
  *
@@ -141,6 +141,9 @@ use App\Api\VideoProgress;
 add_action('rest_api_init', function () {
     $video_progress_api = new VideoProgress();
     $video_progress_api->register_routes();
+
+    $completed_lessons_api = new CompletedLessons();
+    $completed_lessons_api->register_routes();
 });
 
 /**

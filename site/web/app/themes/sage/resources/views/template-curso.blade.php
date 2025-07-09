@@ -24,14 +24,15 @@
                     <ul class="space-y-2">
                         @foreach ($revelador_lessons as $lesson)
                             <li>
-                                <button data-post-id="{{ $lesson->ID }}" class="revelador-button w-full rounded-md bg-morado3 p-3 text-left text-white hover:bg-morado2">
+                                <button data-post-id="{{ $lesson->ID }}"
+                                    class="revelador-button bg-morado3 hover:bg-morado2 w-full rounded-md p-3 text-left text-white">
                                     {{ get_the_terms($lesson->ID, 'revelador')[0]->name }}
                                 </button>
                             </li>
                         @endforeach
                     </ul>
                 </aside>
-                <main class="md:w-2/3 mt-12 md:mt-0">
+                <main class="mt-12 md:mt-0 md:w-2/3">
                     <h2 class="mb-6 font-sans text-2xl">Lecciones</h2>
                     <div id="indice-ajax-container" class="course-index prose font-sans">
                         <p>Selecciona un revelador para ver sus lecciones.</p>
