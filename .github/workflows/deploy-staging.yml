@@ -13,21 +13,10 @@ jobs:
       - name: 💾 Checkout repo
         uses: actions/checkout@v3
 
-      - name: 🔑 Write SSH private key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
       - name: 🔑 Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
-
-      - name: 🕵️ Debug SSH key fingerprint
-        run: |
-          ssh-keygen -lf ~/.ssh/id_rsa
-          ls -l ~/.ssh/id_rsa
 
       - name: 🧹 Remove old SSH host key
         run: ssh-keygen -R 167.99.95.143 || true
