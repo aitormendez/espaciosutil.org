@@ -34,12 +34,12 @@
             ]);
             if ($query->have_posts()) : while ($query->have_posts()) : $query->the_post();
             ?>
-                <div class="noticia w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
-                    <a href="{{ get_permalink() }}" class="hover:text-morado3 mb-4 block">
-                        <h2 class="entry-title text-2xl">{{ get_the_title() }}</h2>
-                    </a>
-                    {{ get_the_post_thumbnail(null, 'large') }}
-                </div>
+            <div class="noticia w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
+                <a href="{{ get_permalink() }}" class="hover:text-morado3 mb-4 block">
+                    <h2 class="entry-title text-2xl">{{ get_the_title() }}</h2>
+                </a>
+                {!! get_the_post_thumbnail(null, 'large') !!}
+            </div>
             <?php endwhile; endif; wp_reset_postdata(); ?>
         </div>
     </section>

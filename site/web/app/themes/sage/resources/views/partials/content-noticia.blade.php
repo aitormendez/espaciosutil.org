@@ -8,11 +8,11 @@
     </header>
 
     <div class="thumnail mx-auto max-w-2xl">
-        {{ get_the_post_thumbnail(null, 'full') }}
+        {!! get_the_post_thumbnail(null, 'full') !!}
     </div>
 
 
-    <div class="entry-summary w-full mx-auto max-w-2xl prose-xl md:prose-2xl leading-snug pb-12">
+    <div class="entry-summary prose-xl md:prose-2xl mx-auto w-full max-w-2xl pb-12 leading-snug">
         @php(the_excerpt())
     </div>
 </article>
