@@ -19,6 +19,10 @@ jobs:
           echo "${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
+      - name: 🪪 Debug SSH public key
+        run: |
+          ssh-keygen -y -f ~/.ssh/id_ed25519
+
       - name: 🕵️ Debug SSH key fingerprint
         run: |
           ssh-keygen -lf ~/.ssh/id_ed25519
