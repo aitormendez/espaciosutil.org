@@ -118,3 +118,23 @@ Este tema incluye un sistema para que los usuarios registrados puedan marcar lec
 ### Resumen
 
 Este sistema permite que los estudiantes lleven un control visual y funcional de su progreso en el curso, sin necesidad de plugins adicionales, integrándose perfectamente con la arquitectura del tema.
+
+## Sección de Lecciones Relacionadas
+
+El tema incluye una sección para mostrar lecciones relacionadas al final de cada entrada del CPT `cde`.
+
+### Funcionalidad
+
+- Muestra un mosaico de "tarjetas" con la imagen de póster del video destacado y el título de otras lecciones.
+- Cada tarjeta enlaza directamente a la lección relacionada correspondiente.
+- La selección de lecciones relacionadas es manual, permitiendo un control editorial completo.
+
+### Implementación Técnica
+
+- **Campo de Relación ACF:** La relación se gestiona a través de un campo `relationship` de ACF llamado `cde_related_lessons`. Este campo está definido en `app/Fields/RelatedLessons.php` mediante `AcfComposer` y está restringido para mostrar únicamente posts del tipo `cde`.
+- **View Composer:** El composer `app/View/Composers/SingleCde.php` se encarga de:
+  1.  Obtener los objetos de post de las lecciones relacionadas a través del campo ACF.
+  2.  Iterar sobre cada lección relacionada para obtener su título, enlace permanente y el `featured_video_id`.
+  3.  Construir la URL del póster (`thumbnail.jpg`) utilizando el `featured_video_id` y la variable de entorno `BUNNY_PULL_ZONE`.
+  4.  Pasar un array con todos estos datos a la vista.
+- **Plantilla Blade:** El archivo `resources/views/partials/videos-realacionados-cde.blade.php` recibe los datos del composer y renderiza el mosaico de tarjetas. Si una lección relacionada no tiene un póster, se muestra un recuadro gris como placeholder.

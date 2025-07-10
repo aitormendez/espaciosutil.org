@@ -107,3 +107,12 @@ Se ha establecido un entorno de desarrollo completamente funcional y por defecto
 Los flujos de trabajo de despliegue (`deploy-staging.yml` y `deploy-production.yml`) ahora utilizan entornos de GitHub Actions (`staging` y `production` respectivamente).
 
 Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEPLOY_SSH_KNOWN_HOSTS` en el repositorio de GitHub. Este secreto debe contener las claves SSH conocidas del servidor de producción para permitir la conexión segura durante el despliegue.
+
+## 7. Notas de Arquitectura y Frontend
+
+### Reproductor de Vídeo (Bunny.net y React)
+
+- La funcionalidad del reproductor de vídeo no se gestiona con JavaScript simple o directamente en Blade, sino a través de **componentes de React (JSX)**.
+- El componente principal que controla el reproductor de vídeo de Bunny.net es `resources/js/components/FeaturedVideo.jsx`.
+- Este componente utiliza la librería `@vidstack/react` para renderizar el reproductor.
+- **URL del Póster:** La URL correcta para la imagen del póster (miniatura) de un vídeo en Bunny.net no es `poster.jpg`, sino `thumbnail.jpg`. La estructura es: `https://{PULL_ZONE}.b-cdn.net/{VIDEO_ID}/thumbnail.jpg`.

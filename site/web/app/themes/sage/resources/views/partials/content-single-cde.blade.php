@@ -30,6 +30,9 @@
                 @php(the_content())
             </div>
         </div>
+
+        @include('partials.videos-realacionados-cde')
+
         @php(comments_template())
     @else
         <div class="prose prose-sutil prose-xl md:prose-2xl mb-8 w-full !p-6 md:px-0">
