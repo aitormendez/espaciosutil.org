@@ -11,13 +11,18 @@
                 Area
             </div>
         @endif
+
         <h1 class="text-center text-5xl font-thin md:text-7xl">{!! $title !!}</h1>
 
         @if (is_singular('cde') && is_user_logged_in())
             <button
-                class="{{ $is_completed ? 'bg-sol text-gris5 completed' : 'bg-morado3 text-gris1 uncompleted' }} mt-6 inline-flex cursor-pointer items-center rounded px-4 py-2 font-sans text-base transition"
+                class="border-gris3 {{ $is_completed ? 'bg-sol' : 'bg-morado2' }} hover:bg-blanco text-gris5 mt-6 cursor-pointer rounded border px-4 py-2 font-sans text-base transition"
                 id="mark-complete" data-post-id="{{ get_the_ID() }}">
-                {{ $is_completed ? 'Vista' : 'Marcar como vista' }}
+                <div class="flex flex-col items-center">
+                    <div class="btn-text">{{ $is_completed ? 'Vista' : 'Marcar como vista' }}</div>
+                    <x-coolicon-show class="icon-show {{ $is_completed ? '' : 'hidden' }} text-gris5 block h-8 w-8" />
+                    <x-coolicon-hide class="icon-hide {{ $is_completed ? 'hidden' : '' }} text-morado1 block h-8 w-8" />
+                </div>
             </button>
         @endif
     </div>

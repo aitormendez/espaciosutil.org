@@ -4,77 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60f46c7d6c642b93602a1a377dacb83d",
+    "content-hash": "194ddba0d12b3ad6ca1965455333b59d",
     "packages": [
-        {
-            "name": "blade-ui-kit/blade-heroicons",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/driesvints/blade-heroicons.git",
-                "reference": "4553b2a1f6c76f0ac7f3bc0de4c0cfa06a097d19"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/driesvints/blade-heroicons/zipball/4553b2a1f6c76f0ac7f3bc0de4c0cfa06a097d19",
-                "reference": "4553b2a1f6c76f0ac7f3bc0de4c0cfa06a097d19",
-                "shasum": ""
-            },
-            "require": {
-                "blade-ui-kit/blade-icons": "^1.6",
-                "illuminate/support": "^9.0|^10.0|^11.0|^12.0",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
-                "phpunit/phpunit": "^9.0|^10.5|^11.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "BladeUI\\Heroicons\\BladeHeroiconsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "BladeUI\\Heroicons\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dries Vints",
-                    "homepage": "https://driesvints.com"
-                }
-            ],
-            "description": "A package to easily make use of Heroicons in your Laravel Blade views.",
-            "homepage": "https://github.com/blade-ui-kit/blade-heroicons",
-            "keywords": [
-                "Heroicons",
-                "blade",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/driesvints/blade-heroicons/issues",
-                "source": "https://github.com/driesvints/blade-heroicons/tree/2.6.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/sponsors/driesvints",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.paypal.com/paypalme/driesvints",
-                    "type": "paypal"
-                }
-            ],
-            "time": "2025-02-13T20:53:33+00:00"
-        },
         {
             "name": "blade-ui-kit/blade-icons",
             "version": "1.8.0",
@@ -224,6 +155,78 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
+        },
+        {
+            "name": "codeat3/blade-coolicons",
+            "version": "1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeat3/blade-coolicons.git",
+                "reference": "62888f5ab7571ea9c63991c5935e9986a4fc534e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeat3/blade-coolicons/zipball/62888f5ab7571ea9c63991c5935e9986a4fc534e",
+                "reference": "62888f5ab7571ea9c63991c5935e9986a4fc534e",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.1",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "codeat3/blade-icon-generation-helpers": "^0.10",
+                "codeat3/phpcs-styles": "^1.0",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.5|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Codeat3\\BladeCoolicons\\BladeCooliconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Codeat3\\BladeCoolicons\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Swapnil Sarwe",
+                    "homepage": "https://swapnilsarwe.com"
+                },
+                {
+                    "name": "Dries Vints",
+                    "homepage": "https://driesvints.com"
+                }
+            ],
+            "description": "A package to easily make use of Coolicons in your Laravel Blade views.",
+            "homepage": "https://github.com/codeat3/blade-coolicons",
+            "keywords": [
+                "blade",
+                "coolicons",
+                "icons",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/codeat3/blade-coolicons/issues",
+                "source": "https://github.com/codeat3/blade-coolicons/tree/1.6.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/swapnilsarwe",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-26T08:52:40+00:00"
         },
         {
             "name": "composer/installers",
@@ -526,16 +529,16 @@
         },
         {
             "name": "illuminate/bus",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/bus.git",
-                "reference": "60da78ea881c539ce56c5b66321be73755c5918c"
+                "reference": "418ff290171b6da159c36f1c658284b055ff670f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/bus/zipball/60da78ea881c539ce56c5b66321be73755c5918c",
-                "reference": "60da78ea881c539ce56c5b66321be73755c5918c",
+                "url": "https://api.github.com/repos/illuminate/bus/zipball/418ff290171b6da159c36f1c658284b055ff670f",
+                "reference": "418ff290171b6da159c36f1c658284b055ff670f",
                 "shasum": ""
             },
             "require": {
@@ -575,20 +578,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-05-13T15:08:45+00:00"
+            "time": "2025-06-19T17:20:18+00:00"
         },
         {
             "name": "illuminate/collections",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
-                "reference": "21a206b2b2297e838c181b482b5f8bbe7ac48f61"
+                "reference": "25cf57b8c994eb8193c2a8bdf6e9eb99d343a8b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/collections/zipball/21a206b2b2297e838c181b482b5f8bbe7ac48f61",
-                "reference": "21a206b2b2297e838c181b482b5f8bbe7ac48f61",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/25cf57b8c994eb8193c2a8bdf6e9eb99d343a8b7",
+                "reference": "25cf57b8c994eb8193c2a8bdf6e9eb99d343a8b7",
                 "shasum": ""
             },
             "require": {
@@ -632,11 +635,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T14:21:37+00:00"
+            "time": "2025-07-01T16:49:44+00:00"
         },
         {
             "name": "illuminate/conditionable",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/conditionable.git",
@@ -682,7 +685,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -733,16 +736,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "ad1d16d827927455d3b7e39fabac66b1afb82582"
+                "reference": "e0fe87237da006e7d26e1167b6241786d68923e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/ad1d16d827927455d3b7e39fabac66b1afb82582",
-                "reference": "ad1d16d827927455d3b7e39fabac66b1afb82582",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/e0fe87237da006e7d26e1167b6241786d68923e8",
+                "reference": "e0fe87237da006e7d26e1167b6241786d68923e8",
                 "shasum": ""
             },
             "require": {
@@ -777,11 +780,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T15:07:31+00:00"
+            "time": "2025-07-01T15:59:53+00:00"
         },
         {
             "name": "illuminate/events",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
@@ -836,7 +839,7 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
@@ -903,7 +906,7 @@
         },
         {
             "name": "illuminate/macroable",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -949,7 +952,7 @@
         },
         {
             "name": "illuminate/pipeline",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pipeline.git",
@@ -997,16 +1000,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "4e5d098d1cdbf5cabff09c1903a141bd9747ae75"
+                "reference": "d538550b5136b1ecb8be9aa73a9044a9e4971546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/4e5d098d1cdbf5cabff09c1903a141bd9747ae75",
-                "reference": "4e5d098d1cdbf5cabff09c1903a141bd9747ae75",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/d538550b5136b1ecb8be9aa73a9044a9e4971546",
+                "reference": "d538550b5136b1ecb8be9aa73a9044a9e4971546",
                 "shasum": ""
             },
             "require": {
@@ -1070,20 +1073,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-06-12T15:07:56+00:00"
+            "time": "2025-07-08T13:53:21+00:00"
         },
         {
             "name": "illuminate/view",
-            "version": "v12.19.3",
+            "version": "v12.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/view.git",
-                "reference": "97d9b586718ec60a54c197751c0c408a5258a917"
+                "reference": "0b5e72f87f00f790360ce00233d39487b17d4792"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/view/zipball/97d9b586718ec60a54c197751c0c408a5258a917",
-                "reference": "97d9b586718ec60a54c197751c0c408a5258a917",
+                "url": "https://api.github.com/repos/illuminate/view/zipball/0b5e72f87f00f790360ce00233d39487b17d4792",
+                "reference": "0b5e72f87f00f790360ce00233d39487b17d4792",
                 "shasum": ""
             },
             "require": {
@@ -1124,7 +1127,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-05-27T22:29:35+00:00"
+            "time": "2025-07-07T14:41:01+00:00"
         },
         {
             "name": "johnbillion/args",
@@ -1501,16 +1504,16 @@
         },
         {
             "name": "laravel/prompts",
-            "version": "v0.3.5",
+            "version": "v0.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/prompts.git",
-                "reference": "57b8f7efe40333cdb925700891c7d7465325d3b1"
+                "reference": "86a8b692e8661d0fb308cec64f3d176821323077"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/prompts/zipball/57b8f7efe40333cdb925700891c7d7465325d3b1",
-                "reference": "57b8f7efe40333cdb925700891c7d7465325d3b1",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/86a8b692e8661d0fb308cec64f3d176821323077",
+                "reference": "86a8b692e8661d0fb308cec64f3d176821323077",
                 "shasum": ""
             },
             "require": {
@@ -1554,9 +1557,9 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
-                "source": "https://github.com/laravel/prompts/tree/v0.3.5"
+                "source": "https://github.com/laravel/prompts/tree/v0.3.6"
             },
-            "time": "2025-02-11T13:34:40+00:00"
+            "time": "2025-07-07T14:17:42+00:00"
         },
         {
             "name": "log1x/acf-composer",
@@ -4195,12 +4198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200"
+                "reference": "c4ed86478b4c2004245ec9d3a470dbe1790586a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a76f62e135c8b583602bd99df737b5c20f4d7200",
-                "reference": "a76f62e135c8b583602bd99df737b5c20f4d7200",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/c4ed86478b4c2004245ec9d3a470dbe1790586a3",
+                "reference": "c4ed86478b4c2004245ec9d3a470dbe1790586a3",
                 "shasum": ""
             },
             "conflict": {
@@ -4640,7 +4643,7 @@
                 "microsoft/microsoft-graph": ">=1.16,<1.109.1|>=2,<2.0.1",
                 "microsoft/microsoft-graph-beta": "<2.0.1",
                 "microsoft/microsoft-graph-core": "<2.0.2",
-                "microweber/microweber": "<=2.0.16",
+                "microweber/microweber": "<=2.0.19",
                 "mikehaertl/php-shellcommand": "<1.6.1",
                 "miniorange/miniorange-saml": "<1.4.3",
                 "mittwald/typo3_forum": "<1.2.1",
@@ -5142,7 +5145,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-04T13:13:44+00:00"
+            "time": "2025-07-09T19:05:36+00:00"
         }
     ],
     "aliases": [],

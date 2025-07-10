@@ -20,23 +20,23 @@ export default function initMarkComplete() {
       });
 
       if (res.ok) {
-        // Ahora actualizas el estado según la acción previa
+        const container = btn.querySelector('div');
+        const iconShow = container.querySelector('.icon-show');
+        const iconHide = container.querySelector('.icon-hide');
+        const text = container.querySelector('.btn-text');
+
         if (isCurrentlyCompleted) {
-          btn.textContent = 'Marcar como vista';
-          btn.classList.remove('completed');
-          btn.classList.remove('bg-sol');
-          btn.classList.remove('text-gris5');
-          btn.classList.add('uncompleted');
-          btn.classList.add('bg-morado3');
-          btn.classList.add('text-gris1');
+          text.textContent = 'Marcar como vista';
+          iconShow.classList.add('hidden');
+          iconHide.classList.remove('hidden');
+          btn.classList.remove('completed', 'bg-sol');
+          btn.classList.add('bg-morado2');
         } else {
-          btn.textContent = 'Vista';
-          btn.classList.remove('uncompleted');
-          btn.classList.remove('bg-morado3');
-          btn.classList.remove('text-gris5');
-          btn.classList.add('completed');
-          btn.classList.add('bg-sol');
-          btn.classList.add('text-gris5');
+          text.textContent = 'Vista';
+          iconShow.classList.remove('hidden');
+          iconHide.classList.add('hidden');
+          btn.classList.add('completed', 'bg-sol');
+          btn.classList.remove('bg-morado2');
         }
       }
     });
