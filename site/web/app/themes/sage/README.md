@@ -90,3 +90,31 @@ El tema utiliza un plugin personalizado llamado `espacio-sutil-blocks` para aña
 - El plugin se compila automáticamente durante el despliegue, gracias a un hook definido en `trellis/deploy-hooks/build-before.yml`.
 
 > Este bloque ha sido migrado y adaptado desde un proyecto previo, y validado tanto en el editor como en el frontend.
+
+# Sistema de Marcación de Lecciones
+
+Este tema incluye un sistema para que los usuarios registrados puedan marcar lecciones del curso como "vistos".
+
+### Funcionalidad
+
+- Cada usuario puede marcar o desmarcar cualquier lección del CPT `cde` como completada.
+- Esta información se guarda como un array de IDs en la meta `user_meta` de WordPress (`cde_completed_lessons`).
+- El estado se conserva entre sesiones y es totalmente individual para cada usuario.
+
+### Implementación Técnica
+
+- **Backend:** Se utiliza un endpoint personalizado de la REST API (`/wp-json/cde/v1/complete/`) que permite registrar o eliminar una lección como completada mediante una petición `POST`.
+- **Composer:** El View Composer del partial `content-single-cde` calcula si la lección actual está completada y expone la variable booleana `$is_completed` para las vistas.
+- **Frontend:** Un botón con iconos permite marcar o desmarcar la lección directamente desde la vista de la lección. Los iconos se gestionan con [Blade Icons](https://blade-ui-kit.com/blade-icons) y cambian dinámicamente mediante JavaScript.
+- **Persistencia Dinámica:** El botón actualiza su estado mediante una petición AJAX sin necesidad de recargar la página, modificando las clases de forma coherente con el diseño de Tailwind CSS.
+
+### Integración en el Índice del Curso
+
+- El índice de lecciones también muestra el estado de cada lección:
+  - Icono de "visto" (`<x-coolicon-show />`) si la lección ya fue completada.
+  - Icono de "no visto" (`<x-coolicon-hide />`) si la lección no ha sido completada.
+- Estos iconos se renderizan directamente en Blade al generar el índice, respetando el estado guardado para cada usuario.
+
+### Resumen
+
+Este sistema permite que los estudiantes lleven un control visual y funcional de su progreso en el curso, sin necesidad de plugins adicionales, integrándose perfectamente con la arquitectura del tema.
