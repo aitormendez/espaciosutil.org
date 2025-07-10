@@ -12,7 +12,7 @@
     </div>
 
     {{-- Parte 2: Contenido completo (visible solo para miembros logueados con membresía activa) --}}
-    @if (is_user_logged_in() && function_exists('pmpro_hasMembershipLevel') && pmpro_hasMembershipLevel())
+    @if ($has_access)
         @php($featured_video_id = get_field('featured_video_id'))
         @php($featured_video_library_id = get_field('featured_video_library_id'))
         @php($featured_video_name = get_field('featured_video_name'))
@@ -30,6 +30,7 @@
                 @php(the_content())
             </div>
         </div>
+        @php(comments_template())
     @else
         <div class="prose prose-sutil prose-xl md:prose-2xl mb-8 w-full !p-6 md:px-0">
             <div class="bg-morado3 mx-auto mt-8 max-w-4xl rounded p-4 text-white">
@@ -41,5 +42,4 @@
         </div>
 
     @endif
-    @php(comments_template())
 </article>

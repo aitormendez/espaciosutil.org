@@ -17,6 +17,7 @@
 @import './commons/components.css';
 @import './commons/variables.css';
 @import './blocks/responsive-cols.css';
+@import './comments.css';
 @import './pmp.css';
 
 .toc {
