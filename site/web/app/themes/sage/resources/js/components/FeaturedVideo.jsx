@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import { MediaPlayer, MediaProvider, Poster } from '@vidstack/react';
+import {
+  MediaPlayer,
+  MediaProvider,
+  Poster,
+  Captions,
+  Track,
+} from '@vidstack/react';
 import '@vidstack/react/player/styles/base.css';
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
@@ -56,7 +62,8 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
               'X-WP-Nonce': window.wpApiSettings?.nonce,
             },
             credentials: 'include',
-          });
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           if (data.progress > 0) {
@@ -108,14 +115,34 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
   return (
     <MediaPlayer
       className="w-full h-full rounded-md overflow-hidden"
-      title={videoName || "Video Destacado"}
+      title={videoName || 'Video Destacado'}
       src={hlsUrl}
       aspectRatio="16/9"
       crossOrigin
       playsInline
       ref={playerRef}
     >
-      <MediaProvider />
+      <MediaProvider>
+        {[
+          { lang: 'es', label: 'Español' },
+          { lang: 'en', label: 'English' },
+          { lang: 'fr', label: 'Français' },
+          { lang: 'de', label: 'Deutsch' },
+          { lang: 'it', label: 'Italiano' },
+          { lang: 'ru', label: 'Русский' },
+          { lang: 'zh', label: '中文（简体）' },
+        ].map(({ lang, label }, i) => (
+          <Track
+            key={lang}
+            kind="subtitles"
+            src={`https://${pullZone}.b-cdn.net/${videoId}/captions/${lang}.vtt`}
+            label={label}
+            lang={lang}
+            default={i === 0}
+          />
+        ))}
+      </MediaProvider>
+      <Captions className="vds-captions" />
       <Poster
         className="absolute inset-0 block h-full w-full bg-black rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
         src={thumbnailUrl}
