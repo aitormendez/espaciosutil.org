@@ -1,0 +1,50 @@
+@font-face {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/Rubik-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Rubik;
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/Rubik-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/Rubik-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: Rubik;
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/Rubik-BoldItalic.ttf') format('truetype');
+}
+
+@supports (font-variation-settings: normal) {
+  @font-face {
+    font-family: Rubik;
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../../fonts/Rubik-VariableFont_wght.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: Rubik;
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('../../fonts/Rubik-Italic-VariableFont_wght.ttf')
+      format('truetype');
+  }
+}

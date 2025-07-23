@@ -1,3 +1,35 @@
+@font-face {
+  font-family: CrimsonPro;
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/CrimsonPro-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: CrimsonPro;
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../fonts/CrimsonPro-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: CrimsonPro;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/CrimsonPro-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: CrimsonPro;
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../fonts/CrimsonPro-BoldItalic.ttf') format('truetype');
+}
+
 @supports (font-variation-settings: normal) {
   @font-face {
     font-family: CrimsonPro;
