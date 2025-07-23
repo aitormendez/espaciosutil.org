@@ -6,11 +6,12 @@ console.log('coures-index.js loaded');
 buttons.forEach((button) => {
   button.addEventListener('click', async () => {
     const postId = button.dataset.postId;
+    const reveladorName = encodeURIComponent(button.textContent.trim());
     container.innerHTML = '<p>Cargando...</p>';
 
     try {
       const response = await fetch(
-        `/espaciosutil/v1/indice-revelador/${postId}`
+        `/espaciosutil/v1/indice-revelador/${postId}?revelador_name=${reveladorName}`
       );
       if (!response.ok) {
         throw new Error('Network response was not ok.');

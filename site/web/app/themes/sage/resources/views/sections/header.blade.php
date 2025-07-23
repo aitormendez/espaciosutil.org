@@ -20,7 +20,7 @@
     <nav id="nav"
         class="bg-negro text-blanco {{ is_admin_bar_showing() ? 'xl:top-[88px]' : 'xl:top-[57px]' }} fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:min-h-0 xl:w-auto xl:bg-transparent">
         <ul class="my-menu flex flex-wrap items-center p-6 text-2xl xl:px-0 xl:pb-[25px] xl:pt-0">
-            <x-navigation name="primary_navigation" class="flex" />
+            <x-navigation name="primary_navigation" class="flex font-extralight" />
             @php
                 $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
             @endphp

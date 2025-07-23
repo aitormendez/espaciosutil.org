@@ -1,10 +1,13 @@
+@if (!empty($revelador_name) && ($level ?? 0) === 0)
+    <h3 class="!mt-0 mb-4 text-2xl font-semibold">{{ $revelador_name }}</h3>
+@endif
 @foreach ($items as $item)
     @php
         $currentLevel = isset($level) ? $level : 0;
     @endphp
     <ul class="!mb-0 !pl-0">
         <li class="course-index-item list-none">
-            <a href="{{ $item->permalink }}" class="bg-blanco/5 flex justify-between rounded-sm p-2 text-lg">
+            <a href="{{ $item->permalink }}" class="bg-blanco/5 rounded-xs flex justify-between p-2 text-lg">
                 {{ $item->title }}
                 @if (is_user_logged_in())
                     @if (in_array($item->id, $completed_lessons ?? []))

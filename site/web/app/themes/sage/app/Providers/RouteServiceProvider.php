@@ -77,10 +77,13 @@ class RouteServiceProvider extends ServiceProvider
 
                     $completed_lessons = get_user_meta(get_current_user_id(), 'cde_completed_lessons', true) ?: [];
 
+                    $revelador_name = isset($_GET['revelador_name']) ? sanitize_text_field($_GET['revelador_name']) : '';
+
                     $html = view('partials.course-index-item', [
                         'items' => $course_tree,
                         'level' => 0,
                         'completed_lessons' => $completed_lessons,
+                        'revelador_name' => $revelador_name,
                     ])->render();
 
                     return response()->json(['html' => $html]);

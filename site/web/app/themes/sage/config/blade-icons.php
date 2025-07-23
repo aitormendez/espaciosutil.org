@@ -15,6 +15,11 @@ return [
 
     'sets' => [
 
+        'es' => [
+            'path' => 'resources/images/icons/espaciosutil',
+            'prefix' => 'es',
+        ],
+
         // 'default' => [
         //
         //     /*
