@@ -5,7 +5,7 @@
 @php($menu = \Log1x\Navi\Navi::make()->build($name))
 
 @if ($menu->isNotEmpty())
-    <ul id="nav" class="flex gap-12">
+    <ul id="nav" class="flex flex-col items-start lg:flex-row lg:gap-12">
         @foreach ($menu->all() as $item)
             <li @class([
                 '',
