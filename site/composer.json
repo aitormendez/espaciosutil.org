@@ -31,15 +31,15 @@
   "repositories": [
     {
       "type": "composer",
+      "url": "https://composer.advancedcustomfields.com"
+    },
+    {
+      "type": "composer",
       "url": "https://wpackagist.org",
       "only": [
         "wpackagist-plugin/*",
         "wpackagist-theme/*"
       ]
-    },
-    {
-      "type": "composer",
-      "url": "https://composer.advancedcustomfields.com"
     }
   ],
   "require": {
@@ -52,7 +52,7 @@
     "roots/wordpress": "6.8.1",
     "roots/wp-config": "1.0.0",
     "wpackagist-theme/twentytwentyfive": "^1.0",
-    "wpengine/advanced-custom-fields": "*",
+    "wpengine/advanced-custom-fields-pro": "*",
     "log1x/navi": "^3.1",
     "johnbillion/extended-cpts": "^5.0",
     "roots/acorn-post-types": "^1.0",
