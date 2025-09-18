@@ -18,6 +18,12 @@ web/.htaccess
 # Logs
 *.log
 
+# Screenshots
+*.png
+*.jpg
+*.jpeg
+*.gif
+
 # Dotenv
 .env
 .env.*
