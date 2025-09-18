@@ -51,7 +51,7 @@ Application::configure()
         App\Providers\ThemeServiceProvider::class,
         App\Providers\LoginServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        NaviServiceProvider::class,
+        // NaviServiceProvider::class,
     ])
     ->boot();
 
