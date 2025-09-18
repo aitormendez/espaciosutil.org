@@ -124,6 +124,37 @@ El tema integra el sistema de membresías [Paid Memberships Pro (PMP)](https://w
 - La navegación de las secciones privadas se gestiona mediante la librería [Log1x/Navi](https://github.com/Log1x/Navi), que permite administrar los menús desde el editor de WordPress.
 - Los menús de membresía se renderizan con condicionales según el estado de la cuenta (sesión iniciada, membresía activa) mediante un único componente de Blade, compartido por las versiones de escritorio y móvil, con clases unificadas de Tailwind CSS.
 
+### Página de Suscripciones Personalizada
+
+El tema incluye una página personalizada de suscripciones que reemplaza el listado estándar de niveles de Paid Memberships Pro. Esta página utiliza un sistema de tarjetas configurables desde ACF para mostrar cada **serie de contenidos** disponible en formato de suscripción.
+
+#### Características de la implementación
+
+- **Agrupación por serie**: Cada tarjeta representa una serie de contenidos con múltiples planes disponibles (mensual, semestral y anual).
+- **Gestión centralizada desde ACF**: Se utiliza un campo `Repeater` en la página de opciones (`Opciones`) con los siguientes campos:
+  - `monthly_level_id`: ID del nivel de suscripción mensual
+  - `semiannual_level_id`: ID del nivel semestral (opcional)
+  - `yearly_level_id`: ID del nivel anual
+  - `display_name`: Nombre de la serie que se muestra en la tarjeta
+  - `short_description`: Descripción breve de la serie
+  - `image`: Imagen ilustrativa de la serie
+  - `order`: Campo numérico para ordenar la visualización
+
+#### Funcionalidad en el Frontend
+
+- Cada tarjeta muestra los precios mensuales, semestrales y anuales si están disponibles.
+- Se calcula automáticamente el ahorro (%) de los planes más largos respecto al mensual.
+- Los botones de suscripción cambian de estado si el usuario ya está suscrito:
+  - Muestran el texto **"Suscrito"**
+  - Enlazan a la página de cuenta (`pmpro_url('account')`)
+- Los datos de estado de suscripción se gestionan mediante la función `pmpro_hasMembershipLevel()` y se pasan como props a los componentes Blade.
+- Se utilizan atributos `data-subscribed` y `data-state` en los botones para permitir estilos condicionales en CSS/JS.
+
+#### Accesibilidad y compatibilidad
+
+- Todos los botones de suscripción tienen atributos `aria-label` dinámicos.
+- La maquetación de las tarjetas está basada en Tailwind CSS y responde al diseño móvil-escritorio con `flex-wrap` y breakpoints (`sm:`).
+
 ## Desarrollo y Configuración
 
 - Este tema es parte del stack Roots (Trellis + Bedrock + Sage).
