@@ -116,3 +116,15 @@ Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEP
 - El componente principal que controla el reproductor de vídeo de Bunny.net es `resources/js/components/FeaturedVideo.jsx`.
 - Este componente utiliza la librería `@vidstack/react` para renderizar el reproductor.
 - **URL del Póster:** La URL correcta para la imagen del póster (miniatura) de un vídeo en Bunny.net no es `poster.jpg`, sino `thumbnail.jpg`. La estructura es: `https://{PULL_ZONE}.b-cdn.net/{VIDEO_ID}/thumbnail.jpg`.
+
+## 8. Implementación de Tabla de Precios de Suscripciones
+
+Se ha iniciado la implementación de una tabla de precios para las suscripciones basada en campos ACF repetidos en la página "suscripcion-cde". Se han creado:
+
+1. Un campo ACF repetidor `SubscriptionPricing.php` en `site/web/app/themes/sage/app/Fields/`.
+2. Componentes Blade para mostrar los paquetes de precios:
+   - `pricing-package.blade.php` - Componente para un paquete individual
+   - `pricing-table.blade.php` - Componente para la tabla completa
+3. Una plantilla específica para la página `page-suscripcion-cde.blade.php`.
+
+**Estado actual:** La implementación está en pausa debido a un problema con la licencia del plugin ACF PRO, que es requerida para el funcionamiento de campos repetidores. Se ha abierto un ticket de soporte para resolver este problema. Una vez activada la licencia, se podrá completar la implementación.
