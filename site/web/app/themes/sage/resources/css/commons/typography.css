@@ -6,7 +6,7 @@
     margin-top: 1.5em;
   }
 
-  h1 {
+  h1:not(:where(.not-prose, .not-prose *)) {
     font-size: 2.25em;
     font-weight: 300;
     line-height: 1.1;
@@ -14,7 +14,7 @@
     margin-bottom: 1em;
   }
 
-  h2 {
+  h2:not(:where(.not-prose, .not-prose *)) {
     font-size: 1.75em;
     font-weight: 300;
     line-height: 1.2;
@@ -22,7 +22,7 @@
     margin-bottom: 1em;
   }
 
-  h3 {
+  h3:not(:where(.not-prose, .not-prose *)) {
     font-size: 1.5em;
     font-weight: 300;
     line-height: 1.3;
@@ -30,46 +30,46 @@
     margin-bottom: 0.75em;
   }
 
-  h4 {
+  h4:not(:where(.not-prose, .not-prose *)) {
     font-size: 1.25em;
     font-weight: 300;
     margin-top: 1em;
     margin-bottom: 0.5em;
   }
 
-  p {
+  p:not(:where(.not-prose, .not-prose *)) {
     font-size: 1em;
     line-height: 1.7;
     margin-bottom: 1em;
   }
 
-  ul {
+  ul:not(:where(.not-prose, .not-prose *)) {
     list-style-type: disc;
     padding-left: 1.5em;
     margin-bottom: 1em;
   }
 
-  ol {
+  ol:not(:where(.not-prose, .not-prose *)) {
     list-style-type: decimal;
     padding-left: 1.5em;
     margin-bottom: 1em;
   }
 
-  li {
+  li:not(:where(.not-prose, .not-prose *)) {
     margin-top: 0.5em;
   }
 
-  a {
+  a:not(:where(.not-prose, .not-prose *)) {
     text-decoration: none;
     color: theme('colors.morado2');
     transition: color 0.2s;
   }
 
-  a:hover {
+  a:not(:where(.not-prose, .not-prose *)):hover {
     color: theme('colors.blanco');
   }
 
-  blockquote {
+  blockquote:not(:where(.not-prose, .not-prose *)) {
     border-left: 0.25em solid theme('colors.blanco / 0.5');
     padding-left: 1em;
     font-style: italic;
@@ -77,13 +77,13 @@
     margin: 1.5em 0;
   }
 
-  img {
+  img:not(:where(.not-prose, .not-prose *)) {
     margin: 1.5em 0;
     max-width: 100%;
     height: auto;
   }
 
-  pre {
+  pre:not(:where(.not-prose, .not-prose *)) {
     background-color: theme('colors.blanco / 0.1');
     color: theme('colors.blanco');
     padding: 1em;
@@ -93,7 +93,7 @@
     font-family: theme('fontFamily.mono');
   }
 
-  code {
+  code:not(:where(.not-prose, .not-prose *)) {
     background-color: theme('colors.blanco / 0.1');
     padding: 0.125em 0.25em;
     border-radius: 0.25em;
@@ -102,35 +102,35 @@
     color: theme('colors.blanco');
   }
 
-  hr {
+  hr:not(:where(.not-prose, .not-prose *)) {
     margin: 2.5em 0;
     border-top: 1px solid theme('colors.blanco / 0.3');
   }
 
-  strong {
+  strong:not(:where(.not-prose, .not-prose *)) {
     font-weight: 600;
     color: theme('colors.blanco');
   }
 
-  em {
+  em:not(:where(.not-prose, .not-prose *)) {
     font-style: italic;
   }
 
-  table {
+  table:not(:where(.not-prose, .not-prose *)) {
     width: 100%;
     border-collapse: collapse;
     margin: 1.5em 0;
     color: theme('colors.blanco');
   }
 
-  th {
+  th:not(:where(.not-prose, .not-prose *)) {
     border-bottom: 1px solid theme('colors.blanco / 0.5');
     font-weight: 600;
     text-align: left;
     padding: 0.5em 0;
   }
 
-  td {
+  td:not(:where(.not-prose, .not-prose *)) {
     border-bottom: 1px solid theme('colors.blanco / 0.3');
     padding: 0.5em 0;
   }
@@ -145,6 +145,5 @@
 }
 
 @utility not-prose {
-  all: unset;
-  display: revert;
+  background-color: none;
 }

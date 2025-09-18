@@ -188,3 +188,12 @@ add_action('widgets_init', function () {
         'id' => 'sidebar-footer',
     ] + $config);
 });
+
+add_action('admin_notices', function () {
+    echo '<div class="notice notice-warning"><p>TEST: admin_notices hook está funcionando.</p></div>';
+    $page = isset($_GET['page']) ? $_GET['page'] : '(sin page)';
+    $edit = isset($_GET['edit']) ? $_GET['edit'] : '(sin edit)';
+    $level = isset($_GET['level']) ? $_GET['level'] : '(sin level)';
+    $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '(sin REQUEST_URI)';
+    echo '<div class="notice notice-info"><p>GET page=' . htmlspecialchars($page) . ' | edit=' . htmlspecialchars((string)$edit) . ' | level=' . htmlspecialchars((string)$level) . '<br/>URI=' . htmlspecialchars($uri) . '</p></div>';
+});

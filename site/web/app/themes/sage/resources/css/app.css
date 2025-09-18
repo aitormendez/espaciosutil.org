@@ -19,6 +19,7 @@
 @import './blocks/responsive-cols.css';
 @import './comments.css';
 @import './pmp.css';
+@import './layouts/niveles-membresia.css';
 
 .toc {
   overflow-y: auto;

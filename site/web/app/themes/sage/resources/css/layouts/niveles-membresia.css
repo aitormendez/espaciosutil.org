@@ -1,0 +1,33 @@
+#pmpro_levels {
+  p {
+    margin-bottom: 0;
+  }
+
+  a {
+    display: block;
+    padding: 0.5em 0.7em;
+    border-radius: 3px;
+    background-color: var(--color-morado3);
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: smaller;
+
+    &:hover {
+      background-color: var(--color-morado4);
+      color: white;
+    }
+  }
+
+  .pmpro_level-current {
+    a {
+      background-color: var(--color-morado2);
+      color: black;
+
+      &:hover {
+        background-color: var(--color-morado4);
+        color: white;
+      }
+    }
+  }
+}

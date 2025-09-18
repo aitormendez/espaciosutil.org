@@ -25,7 +25,7 @@
             @else
                 <div class="flex justify-center">
                     <div
-                        class="prose prose-sutil prose-xl lg:prose-2xl relative w-full max-w-4xl px-6 pt-20 !leading-tight md:px-0">
+                        class="prose prose-sutil prose-xl lg:prose-2xl relative w-full max-w-4xl px-6 py-20 !leading-tight md:px-0">
                         @includeFirst(['partials.content-page', 'partials.content'])
                     </div>
                 </div>

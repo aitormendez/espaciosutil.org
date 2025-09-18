@@ -130,7 +130,33 @@ El tema integra el sistema de membresías [Paid Memberships Pro (PMP)](https://w
 - El despliegue se realizará mediante GitHub Actions (configuración pendiente).
 - Se recomienda mantener el uso de `npm` para garantizar compatibilidad con el editor de bloques y herramientas nativas de WordPress.
 - **Gestión de Campos ACF con ACF Composer:** Las definiciones de los campos de Advanced Custom Fields (ACF) se gestionan directamente en el código del tema, ubicadas en `app/Fields/`, utilizando la librería [Log1x/AcfComposer](https://github.com/Log1x/AcfComposer). Esto permite un control de versiones y una gestión más robusta de los campos personalizados.
-- Se ha implementado desde cero una clase `prose` en `resources/css/common/typography.css`, basada en unidades relativas (`em`) para permitir un escalado proporcional de la tipografía mediante clases como `prose-xl` y `prose-2xl`. Este enfoque replica el comportamiento del plugin `@tailwindcss/typography`, pero sin depender de él, ya que dicho plugin requiere `tailwind.config.js` o `.cjs`, archivos no utilizados en Tailwind 4.1. También se ha definido la clase `not-prose` para eliminar todos los estilos enriquecidos mediante `all: unset` y `display: revert`.
+
+* **Tipografía enriquecida (`prose`) desde cero:** Implementada en `resources/css/commons/typography.css` con tamaños relativos (`em`) para escalado proporcional. Se incluyen variantes `prose-xl` y `prose-2xl`, utilizables con prefijos responsivos (`md:prose-xl`, `lg:prose-2xl`).
+
+  - **Exclusión selectiva con `.not-prose` (marcador, no utilidad):** No existe una clase Tailwind `not-prose` con estilos. En su lugar, `.not-prose` actúa como **marcador** para desactivar el alcance de `.prose` mediante selectores negativos en el propio stylesheet, p. ej.:
+
+    ```css
+    .prose p:not(:where(.not-prose, .not-prose *)) {
+      /* … */
+    }
+    ```
+
+    De este modo, cualquier subárbol marcado con `class="not-prose"` queda fuera de las reglas de `.prose`, incluso estando anidado dentro de un contenedor `.prose`.
+
+  - **Ejemplo de uso** (contenido con tipografía enriquecida y bloque de plugin sin estilizar):
+
+    ```blade
+    <article class="prose md:prose-xl lg:prose-2xl">
+      <h1>Título</h1>
+      <p>Texto del cuerpo…</p>
+
+      <div id="pmpro_levels" class="not-prose">
+        {!! do_shortcode('[pmpro_levels]') !!}
+      </div>
+    </article>
+    ```
+
+  - **Motivación:** Evitar dependencia del plugin `@tailwindcss/typography` (que requiere `tailwind.config.{js,cjs}`) y controlar la especificidad: el sistema usa selectores de baja especificidad y escalado relativo para mantener consistencia visual y facilitar overrides.
 
 ## Bloque de video con Bunny.net
 

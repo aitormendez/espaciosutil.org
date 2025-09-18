@@ -1,6 +1,6 @@
     @php
         $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
-        $curso_page_ids = [2347, 2288, 2271];
+        $curso_page_ids = [2347, 2288, 2271, 2242];
     @endphp
 
     <div class="page-header flex w-full flex-col items-center px-6 text-center">
@@ -33,7 +33,7 @@
         @endif
 
         @if (is_page($curso_page_ids))
-            <div id="arbol" class="w-50 relative order-1 lg:order-none">
+            <div id="arbol" class="w-50 relative z-10 order-1 lg:order-none">
                 <x-es-cde-arbol-peq class="relative top-[120px] lg:hidden" />
                 <x-es-cde-arbol-grande class="relative top-[170px] hidden lg:block" />
             </div>
