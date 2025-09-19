@@ -24,6 +24,9 @@
     $hasYearly = !is_null($priceYearly) && $priceYearly !== '';
     $hasSemi = !is_null($priceSemi) && $priceSemi !== '';
 
+    $anchoMd = 'md:w-[calc(33%-1rem)]';
+    $anchoXl = 'xl:w-[calc(20%-1.2rem)]';
+
     $format = function ($n) {
         return number_format((float) $n, 2);
     };
@@ -69,56 +72,68 @@
     <div class="flex flex-col flex-wrap gap-6 sm:flex-row">
         {{-- Bloque visual (opcional) --}}
         @if ($image)
-            <div class="w-full shrink-0 sm:w-[calc(50%-0.75rem)]">
-                <img src="{{ $image }}" alt="{{ $name }}" class="rounded-xs w-full object-cover"
+            <div class="{{ $anchoXl }} w-full shrink-0 sm:w-[calc(50%-0.75rem)]">
+                <img src="{{ $image }}" alt="{{ $name }}" class="rounded-xs h-full w-full object-cover"
                     @if ($imageSrcset) srcset="{{ $imageSrcset }}"
-                        sizes="{{ $imageSizes ? $imageSizes : '(min-width: 640px) 20vw, 100vw' }}" @endif>
+                        sizes="{{ $imageSizes ? $imageSizes : '(min-width: 1280px) 20vw, (min-width: 1024px) 50vw, 100vw' }}" @endif>
             </div>
         @endif
 
         {{-- Identidad y descripción --}}
-        <div class="w-full sm:w-[calc(50%-0.75rem)]">
+        <div class="{{ $anchoXl }} w-full sm:w-[calc(50%-0.75rem)]">
             <h3 class="mb-1 text-xl font-semibold">{{ $name }}</h3>
             @if ($description)
-                <p class="text-gray-600">{!! $description !!}</p>
+                <p class="text-gris3">{!! $description !!}</p>
             @endif
         </div>
 
         {{-- Bloque Mensual --}}
         @if ($hasMonthly)
-            <div class="my-10 flex flex-col items-center sm:w-[calc(33%-1rem)]">
-                <div class="">
-                    <div class="text-lg font-bold">€{{ $format($priceMonthly) }} <span
-                            class="font-normal text-gray-600">/mes</span></div>
+            <div class="bg-negro {{ $anchoMd }} {{ $anchoXl }} flex w-full flex-col justify-between pb-4">
+                <h4 class="border-gris4 text-gris2 w-full border-b p-2 pb-1 text-center font-thin">
+                    <span>{{ $name }}</span> plan
+                    mensual
+                </h4>
+
+                <div class="mt-8 w-full text-center text-lg font-bold">{{ $format($priceMonthly) }}<span
+                        class="text-gris3 font-normal"> €/mes</span>
                 </div>
 
                 @if ($checkoutMonthlyUrl)
                     <a href="{{ $checkoutMonthlyUrl }}"
-                        class="hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $monthlyIsSubscribed ? ' bg-morado2 text-morado5' : ' bg-morado3 text-white' }} mt-4 inline-flex cursor-pointer items-center justify-center border border-transparent px-4 py-2 hover:border-white hover:text-white focus:outline-none focus-visible:ring-2"
-                        aria-label="{{ $monthlyAria }}" data-subscribed="{{ $monthlyIsSubscribed ? 'true' : 'false' }}"
+                        class="hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $monthlyIsSubscribed ? ' bg-morado2 text-morado5' : ' bg-morado3 text-white' }} mx-4 mt-4 inline-flex cursor-pointer items-center justify-center border border-transparent px-4 py-2 text-center hover:border-white hover:text-white focus:outline-none focus-visible:ring-2"
+                        aria-label="{{ $monthlyAria }}"
+                        data-subscribed="{{ $monthlyIsSubscribed ? 'true' : 'false' }}"
                         data-state="{{ $monthlyState }}">
                         {{ $monthlyText }}
                     </a>
                 @endif
+
             </div>
         @endif
 
         {{-- Bloque Semestral --}}
         @if ($hasSemi)
-            <div class="my-10 flex flex-col items-center sm:w-[calc(33%-1rem)]">
-                <div class="text-center">
-                    <div class="text-lg font-bold">€{{ $format($priceSemi) }} <span
-                            class="font-normal text-gray-600">/6&nbsp;meses</span>
-                        @if (!is_null($semiSavingsPercent) && $semiSavingsPercent > 0)
-                            <span class="rounded-sm border border-red-600 px-3 font-thin text-red-600">Ahorra
-                                {{ $semiSavingsPercent }}%</span>
-                        @endif
+            <div
+                class="bg-negro {{ $anchoMd }} {{ $anchoXl }} flex w-full flex-col items-center justify-between pb-4">
+                <h4 class="border-gris4 text-gris2 w-full border-b p-2 pb-1 text-center font-thin">
+                    <span>{{ $name }}</span> plan
+                    semestral
+                </h4>
+                <div class="mt-8 w-full text-center text-lg font-bold">
+                    <div>{{ $format($priceSemi) }}<span class="text-gris3 font-normal">
+                            €/6 meses</span>
                     </div>
+                    @if (!is_null($semiSavingsPercent) && $semiSavingsPercent > 0)
+                        <div class="mt-2 inline-block rounded-sm border border-red-600 px-3 font-thin text-red-600">
+                            Ahorra
+                            {{ $semiSavingsPercent }}%</div>
+                    @endif
                 </div>
 
                 @if ($checkoutSemiUrl)
                     <a href="{{ $checkoutSemiUrl }}"
-                        class="hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $semiIsSubscribed ? ' bg-morado2 text-morado5' : ' bg-morado3 text-white' }} mt-4 inline-flex cursor-pointer items-center justify-center border border-transparent px-4 py-2 hover:border-white hover:text-white focus:outline-none focus-visible:ring-2"
+                        class="hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $semiIsSubscribed ? ' bg-morado2 text-morado5' : ' bg-morado3 text-white' }} mx-4 mt-4 inline-flex cursor-pointer items-center justify-center border border-transparent px-4 py-2 text-center hover:border-white hover:text-white focus:outline-none focus-visible:ring-2"
                         aria-label="{{ $semiAria }}" data-subscribed="{{ $semiIsSubscribed ? 'true' : 'false' }}"
                         data-state="{{ $semiState }}">
                         {{ $semiText }}
@@ -129,26 +144,34 @@
 
         {{-- Bloque Anual --}}
         @if ($hasYearly)
-            <div class="my-10 flex flex-col items-center sm:w-[calc(33%-1rem)]">
-                <div class="text-center">
-                    <div class="flex text-lg font-bold">€{{ $format($priceYearly) }} <span
-                            class="mr-3 font-normal text-gray-600">/año</span>
-                        @if (!is_null($savingsPercent) && $savingsPercent > 0)
-                            <span class="rounded-sm border border-red-600 px-3 font-thin text-red-600">Ahorra
-                                {{ $savingsPercent }}%</span>
-                        @endif
+            <div
+                class="bg-negro {{ $anchoMd }} {{ $anchoXl }} flex w-full flex-col items-center justify-between pb-4">
+                <h4 class="border-gris4 text-gris2 w-full border-b p-2 pb-1 text-center font-thin">
+                    <span>{{ $name }}</span> plan
+                    anual
+                </h4>
+
+                <div class="mt-8 w-full text-center text-lg font-bold">
+                    <div>{{ $format($priceYearly) }}
+                        <span class="text-gris3 mr-3 font-normal">€/año</span>
                     </div>
+                    @if (!is_null($savingsPercent) && $savingsPercent > 0)
+                        <div class="mt-2 inline-block rounded-sm border border-red-600 px-3 font-thin text-red-600">
+                            Ahorra
+                            {{ $savingsPercent }}%</div>
+                    @endif
                 </div>
 
                 @if ($checkoutYearlyUrl)
                     <a href="{{ $checkoutYearlyUrl }}"
-                        class="bg-morado3 hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $yearlyIsSubscribed ? ' is-subscribed bg-morado2 text-morado5' : ' is-available' }} mt-4 inline-flex items-center justify-center border border-transparent px-4 py-2 text-white hover:border-white focus:outline-none focus-visible:ring-2"
+                        class="bg-morado3 hover:bg-morado5 rounded-xs focus-visible:ring-gray-700{{ $yearlyIsSubscribed ? ' is-subscribed bg-morado2 text-morado5' : ' is-available' }} mx-4 mt-4 inline-flex items-center justify-center border border-transparent px-4 py-2 text-center text-white hover:border-white focus:outline-none focus-visible:ring-2"
                         aria-label="{{ $yearlyAria }}"
                         data-subscribed="{{ $yearlyIsSubscribed ? 'true' : 'false' }}"
                         data-state="{{ $yearlyState }}">
                         {{ $yearlyText }}
                     </a>
                 @endif
+
             </div>
         @endif
 
