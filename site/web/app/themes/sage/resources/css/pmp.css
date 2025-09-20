@@ -32,11 +32,193 @@
 }
 
 @layer components {
-  .pmpro {
+  .pmpro,
+  .prose .pmpro {
     @apply font-sans leading-[1.2em];
   }
 
   .pmpro_btn-cancel:hover {
     @apply !bg-negro;
   }
+
+  .pmpro_card {
+    @apply bg-morado4 p-4 text-base rounded-md text-gray-200;
+
+    .pmpro_card_title,
+    .pmpro_form_heading {
+      @apply !mt-0;
+    }
+
+    .pmpro_card_content {
+      @apply border-y py-6 mb-2 border-gray-700;
+
+      #pmpro_account-orders & {
+        @apply border-none;
+      }
+    }
+  }
+
+  /* celdas (incluye el <th> de la 1ª columna del tbody) */
+  .pmpro_table th,
+  .pmpro_table td {
+    @apply py-3 px-4 !border-white/40;
+  }
+
+  /* ——— Perfil: inputs y botones ——— */
+  #member-profile-edit {
+    /* grid de campos (respeta pmpro_cols-2 del HTML) */
+    .pmpro_form_fields {
+      @apply grid gap-6 md:grid-cols-2;
+    }
+
+    .pmpro_form_field {
+      @apply space-y-2;
+    }
+    .pmpro_form_label {
+      @apply block text-sm text-white/70;
+    }
+    .pmpro_form_hint {
+      @apply text-sm text-white/60 mt-1;
+    }
+
+    /* inputs base */
+    .pmpro_form_input,
+    input[type='text'],
+    input[type='email'],
+    input[type='password'],
+    input[type='tel'],
+    input[type='url'],
+    input[type='number'],
+    select,
+    textarea {
+      @apply w-full rounded-md border bg-transparent px-3 py-2 text-base
+             placeholder-white/40 outline-none transition
+             focus:ring-2 focus:ring-morado2/40;
+      border-color: var(--pmpro--color--border);
+      color: var(--pmpro--color--contrast);
+    }
+
+    /* readonly (email en admin) */
+    input[readonly] {
+      @apply opacity-80 cursor-not-allowed;
+      background: color-mix(
+        in oklab,
+        var(--pmpro--color--base) 6%,
+        transparent
+      );
+    }
+
+    /* contenedor de botones */
+    .pmpro_form_submit {
+      @apply mt-6 flex flex-wrap items-center gap-3;
+    }
+
+    /* botón base */
+    .pmpro_btn {
+      @apply inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium
+             border transition focus:outline-none focus:ring-2 focus:ring-morado2/40;
+      border-color: var(--pmpro--color--border);
+      color: var(--pmpro--color--contrast);
+      background: color-mix(
+        in oklab,
+        var(--pmpro--color--base) 10%,
+        transparent
+      );
+    }
+    .pmpro_btn:hover {
+      @apply bg-black/30;
+    }
+
+    /* primario (enviar) */
+    .pmpro_btn-submit-update-profile {
+      @apply border-morado2 bg-morado2 text-morado4;
+    }
+    .pmpro_btn-submit-update-profile:hover {
+      @apply bg-morado2/90;
+    }
+
+    /* cancelar (outline) */
+    .pmpro_btn-cancel {
+      @apply bg-transparent;
+    }
+    .pmpro_btn-cancel:hover {
+      @apply bg-white/10;
+    }
+  }
+
+  #pmpro_cancel {
+    .pmpro_card_content {
+      @apply border-none;
+    }
+  }
+
+  #pmpro_order_list {
+    /* quita el borde superior/inf de la card que se mezclaba con la tabla */
+    .pmpro_card_content {
+      @apply border-none;
+    }
+
+    /* tabla base */
+    .pmpro_table {
+      @apply text-sm;
+    }
+
+    /* cabecera */
+    .pmpro_table thead th {
+      @apply text-white/80;
+    }
+  }
+
+  .pmpro_actions_nav {
+    @apply py-2 text-base;
+  }
+
+  /* Cancelación de membresía */
+  #pmpro_cancel {
+    /* separación y layout del área de acciones */
+    .pmpro_form_submit {
+      @apply mt-4 flex flex-wrap items-center gap-3;
+    }
+
+    /* botón base (sólo en esta página) */
+    .pmpro_btn {
+      @apply inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium
+             border no-underline transition;
+      border-color: var(--pmpro--color--border);
+      color: var(--pmpro--color--contrast);
+      background: color-mix(
+        in oklab,
+        var(--pmpro--color--base) 8%,
+        transparent
+      );
+    }
+    .pmpro_btn:hover {
+      @apply bg-black/30;
+    }
+
+    /* primario/destructivo: “Yes, cancel this membership” */
+    .pmpro_btn-submit {
+      @apply border-red-600 bg-red-600 text-white;
+    }
+    .pmpro_btn-submit:hover {
+      @apply bg-red-500;
+    }
+
+    /* secundario: “No, keep this membership” */
+    .pmpro_btn-cancel {
+      @apply bg-transparent;
+    }
+    /* hay un !important global: forzamos el hover aquí */
+    .pmpro_btn-cancel:hover {
+      @apply !bg-white/10;
+    }
+  }
 }
+
+/* @layer utilities {
+  .pmpro {
+    h2 {
+      @apply text-5xl;
+    }
+  }
+} */
