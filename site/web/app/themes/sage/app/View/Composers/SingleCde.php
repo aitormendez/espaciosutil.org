@@ -25,7 +25,17 @@ class SingleCde extends Composer
     {
         $user_id = get_current_user_id();
         $completed_lessons = $user_id ? (get_user_meta($user_id, 'cde_completed_lessons', true) ?: []) : [];
-        $has_access = is_user_logged_in() && function_exists('pmpro_hasMembershipLevel') && pmpro_hasMembershipLevel();
+        // Respetar las restricciones por entrada de PMPro (metabox/taxonomías).
+        // Fallback: si no existe PMPro, no conceder acceso por defecto.
+        $has_access = false;
+        if (function_exists('pmpro_has_membership_access')) {
+            $post_id = get_the_ID();
+
+            if ($post_id) {
+                [$access] = pmpro_has_membership_access($post_id, $user_id, true);
+                $has_access = (bool) $access;
+            }
+        }
 
         $related_lessons_posts = get_field('cde_related_lessons');
         $related_lessons = [];
