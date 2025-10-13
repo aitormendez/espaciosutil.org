@@ -174,6 +174,24 @@ add_filter('script_loader_tag', function ($tag, $handle, $src) {
 }, 10, 3);
 
 /**
+ * Permite que Paid Memberships Pro muestre el metabox de niveles
+ * en las lecciones del CPT `cde` y respete sus restricciones en búsquedas.
+ */
+add_filter('pmpro_restrictable_post_types', function ($postTypes) {
+    $postTypes = is_array($postTypes) ? $postTypes : (array) $postTypes;
+    $postTypes[] = 'cde';
+
+    return array_values(array_unique($postTypes));
+});
+
+add_filter('pmpro_search_filter_post_types', function ($postTypes) {
+    $postTypes = is_array($postTypes) ? $postTypes : (array) $postTypes;
+    $postTypes[] = 'cde';
+
+    return array_values(array_unique($postTypes));
+});
+
+/**
  * Register the theme sidebars.
  *
  * @return void
