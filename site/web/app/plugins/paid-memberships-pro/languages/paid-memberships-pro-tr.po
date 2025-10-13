@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Paid Memberships Pro plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Paid Memberships Pro 3.5.1\n"
+"Project-Id-Version: Paid Memberships Pro 3.5.6\n"
 "Report-Msgid-Bugs-To: info@paidmembershipspro.com\n"
 "Last-Translator: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "Language-Team: Paid Memberships Pro <info@paidmembershipspro.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-09T17:37:14+00:00\n"
+"POT-Creation-Date: 2025-09-09T17:53:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: paid-memberships-pro\n"
@@ -118,6 +118,7 @@ msgid ""
 msgstr ""
 
 #: includes/email-templates.php:379
+#: classes/email-templates/class-pmpro-email-template-membership-recurring.php:41
 msgid "Recurring Payment Reminder"
 msgstr ""
 
@@ -406,56 +407,67 @@ msgstr ""
 
 #: adminpages/advancedsettings.php:372
 #: adminpages/advancedsettings.php:379
+#: adminpages/advancedsettings.php:373
 msgid "Business Phone"
 msgstr ""
 
 #: adminpages/advancedsettings.php:358
 #: adminpages/advancedsettings.php:365
+#: adminpages/advancedsettings.php:359
 msgid "-- Select a Country --"
 msgstr ""
 
 #: adminpages/advancedsettings.php:354
 #: adminpages/advancedsettings.php:361
+#: adminpages/advancedsettings.php:355
 msgid "Business Country"
 msgstr ""
 
 #: adminpages/advancedsettings.php:346
 #: adminpages/advancedsettings.php:353
+#: adminpages/advancedsettings.php:347
 msgid "Business Postal Code"
 msgstr ""
 
 #: adminpages/advancedsettings.php:338
 #: adminpages/advancedsettings.php:345
+#: adminpages/advancedsettings.php:339
 msgid "Business State"
 msgstr ""
 
 #: adminpages/advancedsettings.php:330
 #: adminpages/advancedsettings.php:337
+#: adminpages/advancedsettings.php:331
 msgid "Business City"
 msgstr ""
 
 #: adminpages/advancedsettings.php:323
 #: adminpages/advancedsettings.php:330
+#: adminpages/advancedsettings.php:324
 msgid "Business Street 2"
 msgstr ""
 
 #: adminpages/advancedsettings.php:315
 #: adminpages/advancedsettings.php:322
+#: adminpages/advancedsettings.php:316
 msgid "Business Street"
 msgstr ""
 
 #: adminpages/advancedsettings.php:307
 #: adminpages/advancedsettings.php:314
+#: adminpages/advancedsettings.php:308
 msgid "Business Name"
 msgstr ""
 
 #: adminpages/advancedsettings.php:301
 #: adminpages/advancedsettings.php:308
+#: adminpages/advancedsettings.php:302
 msgid "Enter your business name and address. This information will be shown to members on the Membership Orders page and Orders print view."
 msgstr ""
 
 #: adminpages/advancedsettings.php:296
 #: adminpages/advancedsettings.php:303
+#: adminpages/advancedsettings.php:297
 msgid "Business Settings"
 msgstr ""
 
@@ -792,10 +804,12 @@ msgstr ""
 
 #: classes/class-pmpro-site-health.php:576
 #: classes/class-pmpro-site-health.php:580
+#: classes/class-pmpro-site-health.php:588
 msgid "No add ons with incorrect folder names detected."
 msgstr ""
 
 #: classes/class-pmpro-site-health.php:117
+#: classes/class-pmpro-site-health.php:121
 msgid "Incorrect Add On Folder Names"
 msgstr ""
 
@@ -977,6 +991,7 @@ msgstr ""
 
 #: adminpages/securitysettings.php:97
 #: adminpages/securitysettings.php:102
+#: adminpages/securitysettings.php:158
 msgid "Spam Protection"
 msgstr ""
 
@@ -1163,41 +1178,49 @@ msgstr ""
 
 #: adminpages/advancedsettings.php:218
 #: adminpages/advancedsettings.php:225
+#: adminpages/advancedsettings.php:219
 msgid "This is a legacy option that will be removed in a future version of PMPro. This message is shown in place of the post content for non-members. Available variables"
 msgstr ""
 
 #: adminpages/advancedsettings.php:214
 #: adminpages/advancedsettings.php:221
+#: adminpages/advancedsettings.php:215
 msgid "Custom Membership Required Message (Legacy)"
 msgstr ""
 
 #: adminpages/advancedsettings.php:208
 #: adminpages/advancedsettings.php:215
+#: adminpages/advancedsettings.php:209
 msgid "We recommend updating to allow PMPro to generate a smart message for protected content. This message is fully compatible with all of your PMPro Add Ons and includes a link to the checkout or levels page, based on whether the content is protected for a single level or multiple levels."
 msgstr ""
 
 #: adminpages/advancedsettings.php:207
 #: adminpages/advancedsettings.php:214
+#: adminpages/advancedsettings.php:208
 msgid "Warning: Saving these settings will permanently delete your custom message. This change is irreversible."
 msgstr ""
 
 #: adminpages/advancedsettings.php:204
 #: adminpages/advancedsettings.php:211
+#: adminpages/advancedsettings.php:205
 msgid "We recommend that you allow Paid Memberships Pro to generate the message for protected content."
 msgstr ""
 
 #: adminpages/advancedsettings.php:202
 #: adminpages/advancedsettings.php:209
+#: adminpages/advancedsettings.php:203
 msgid "Let Paid Memberships Pro generate the message."
 msgstr ""
 
 #: adminpages/advancedsettings.php:201
 #: adminpages/advancedsettings.php:208
+#: adminpages/advancedsettings.php:202
 msgid "Use my custom membership required message. (Legacy)"
 msgstr ""
 
 #: adminpages/advancedsettings.php:197
 #: adminpages/advancedsettings.php:204
+#: adminpages/advancedsettings.php:198
 msgid "Membership Required Message"
 msgstr ""
 
@@ -1237,6 +1260,7 @@ msgstr "ID: %d"
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:203
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:207
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:217
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:215
 msgid "test"
 msgstr "test"
 
@@ -1281,10 +1305,12 @@ msgid "Outdated Page Templates Detected"
 msgstr "Eski Sayfa Şablonları Tespit Edildi"
 
 #: classes/class-pmpro-site-health.php:180
+#: classes/class-pmpro-site-health.php:184
 msgid "No Level Groups Found"
 msgstr "Seviye Grubu Bulunamadı"
 
 #: classes/class-pmpro-site-health.php:93
+#: classes/class-pmpro-site-health.php:97
 msgid "Level Groups"
 msgstr "Seviye Grupları"
 
@@ -2986,6 +3012,7 @@ msgstr "Hizmet Koşulları"
 #: classes/class-pmpro-subscriptions-list-table.php:397
 #: adminpages/subscriptions.php:485
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:161
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:159
 msgid "Sync Error"
 msgstr "Senkronizasyon Hatası"
 
@@ -2995,6 +3022,7 @@ msgstr "Senkronizasyon Hatası"
 #: classes/class-pmpro-subscriptions-list-table.php:534
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:143
 #: classes/class-pmpro-subscriptions-list-table.php:535
+#: classes/class-pmpro-subscriptions-list-table.php:525
 msgid "Membership Ended"
 msgstr "Üyelik Sona Erdi"
 
@@ -3004,6 +3032,7 @@ msgstr "Üyelik Sona Erdi"
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:128
 #: adminpages/subscriptions.php:313
 #: adminpages/subscriptions.php:328
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:126
 #, php-format
 msgid "Level ID: %d [deleted]"
 msgstr "Seviye Kimliği: %d [silindi]"
@@ -3011,6 +3040,7 @@ msgstr "Seviye Kimliği: %d [silindi]"
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:104
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:108
 #: classes/class-pmpro-subscriptions-list-table.php:151
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:106
 msgid "Next Payment"
 msgstr "Sonraki Ödeme"
 
@@ -3021,22 +3051,26 @@ msgstr "Sonraki Ödeme"
 #: classes/class-pmpro-subscriptions-list-table.php:150
 #: adminpages/subscriptions.php:490
 #: adminpages/subscriptions.php:493
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:103
 msgid "Created"
 msgstr "Oluşturuldu"
 
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:70
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:74
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:72
 msgid "This user does not have any subscriptions."
 msgstr "Bu kullanıcının herhangi bir aboneliği yok."
 
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:45
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:49
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:47
 #, php-format
 msgid "Cancelled Subscriptions (%d)"
 msgstr "İptal Edilen Abonelikler (%d)"
 
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:26
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:30
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:28
 #, php-format
 msgid "Active Subscriptions (%d)"
 msgstr "Aktif Abonelikler (%d)"
@@ -3721,6 +3755,7 @@ msgstr "burada WordPress içeriğini kısıtlama"
 #: adminpages/paymentsettings.php:175
 #: adminpages/securitysettings.php:96
 #: adminpages/securitysettings.php:198
+#: adminpages/advancedsettings.php:128
 #, php-format
 msgid "Learn more about %s."
 msgstr "%s hakkında daha fazla bilgi edinin."
@@ -4385,6 +4420,7 @@ msgstr "Web Kancası Durumu"
 #: classes/class-pmpro-site-health.php:670
 #: adminpages/emailtemplates-edit.php:108
 #: adminpages/emailtemplates-edit.php:113
+#: classes/class-pmpro-site-health.php:678
 msgid "Disabled"
 msgstr "Devre dışı"
 
@@ -4394,18 +4430,22 @@ msgstr "Devre dışı"
 #: classes/class-pmpro-site-health.php:667
 #: adminpages/emailtemplates-edit.php:110
 #: adminpages/emailtemplates-edit.php:115
+#: classes/class-pmpro-site-health.php:675
 msgid "Enabled"
 msgstr "Etkinleştirildi"
 
 #: classes/class-pmpro-site-health.php:129
+#: classes/class-pmpro-site-health.php:133
 msgid "Pause Mode"
 msgstr "Duraklatma Modu"
 
 #: classes/class-pmpro-site-health.php:125
+#: classes/class-pmpro-site-health.php:129
 msgid "Last Known Site URL"
 msgstr "Bilinen Son Site URL'si"
 
 #: classes/class-pmpro-site-health.php:121
+#: classes/class-pmpro-site-health.php:125
 msgid "Current Site URL"
 msgstr "Güncel Site URL'si"
 
@@ -4535,16 +4575,19 @@ msgstr "Evet, benim için gerekli eklenti sayfalarını oluşturun. (Önerilen)"
 
 #: adminpages/wizard/general.php:35
 #: adminpages/advancedsettings.php:405
+#: adminpages/advancedsettings.php:399
 msgid "-- Select --"
 msgstr "-- Seç---"
 
 #: adminpages/wizard/general.php:33
 #: adminpages/advancedsettings.php:415
+#: adminpages/advancedsettings.php:409
 msgid "Choose the answer that best fits the primary value of your membership site."
 msgstr "Üyelik sitenizin birincil değerine en uygun yanıtı seçin."
 
 #: adminpages/wizard/general.php:31
 #: adminpages/advancedsettings.php:401
+#: adminpages/advancedsettings.php:395
 msgid "What type of membership site are you creating?"
 msgstr "Ne tür bir üyelik sitesi oluşturuyorsunuz?"
 
@@ -5092,6 +5135,7 @@ msgid "More Information"
 msgstr "Daha Fazla Bilgi"
 
 #: classes/class-pmpro-site-health.php:85
+#: classes/class-pmpro-site-health.php:89
 msgid "PHP Sessions"
 msgstr "PHP Oturumları"
 
@@ -5593,6 +5637,8 @@ msgstr ""
 #: classes/gateways/class.pmprogateway_stripe.php:3883
 #: classes/gateways/class.pmprogateway_stripe.php:4535
 #: classes/gateways/class.pmprogateway_stripe.php:4537
+#: classes/gateways/class.pmprogateway_stripe.php:4529
+#: classes/gateways/class.pmprogateway_stripe.php:4531
 msgid "Admin: There was a problem processing the refund"
 msgstr "Yönetici: Geri ödemenin işlenmesinde bir sorun oluştu"
 
@@ -5602,6 +5648,7 @@ msgstr "Yönetici: Geri ödemenin işlenmesinde bir sorun oluştu"
 #: classes/gateways/class.pmprogateway_stripe.php:3876
 #: classes/gateways/class.pmprogateway_stripe.php:3877
 #: classes/gateways/class.pmprogateway_stripe.php:4531
+#: classes/gateways/class.pmprogateway_stripe.php:4525
 msgid "Admin: An error occurred while attempting to process this refund."
 msgstr "Yönetici: Bu para iadesi işlenmeye çalışılırken bir hata oluştu."
 
@@ -5782,10 +5829,12 @@ msgid "Payment Flow"
 msgstr "Ödeme Akışı"
 
 #. translators: %1$s is the Transaction ID. %1$s is the Gateway Error
+#. translators: %1$s is the Transaction ID. %2$s is the Gateway Error.
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1299
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1300
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1291
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1411
+#: classes/gateways/class.pmprogateway_paypalexpress.php:1416
 #, php-format
 msgid "Admin: There was a problem processing a refund for transaction ID %1$s. Gateway Error: %2$s."
 msgstr "Yönetici: İşlem kimliği %1$s için geri ödeme işleminde bir sorun oluştu. Ağ Geçidi Hatası: %2$s."
@@ -5793,6 +5842,8 @@ msgstr "Yönetici: İşlem kimliği %1$s için geri ödeme işleminde bir sorun 
 #. translators: %1$s is the Transaction ID. %2$s is the user display name that
 #. initiated the refund.
 #. translators: %1$s is the Transaction ID. %2$s is the user display name that initiated the refund.
+#. translators: %1$s is the date, %2$s is the Transaction ID. %3$s is the user display name that initiated the refund.
+#. translators: %1$s is the date. %2$s is the Transaction ID. %3$s is the user display name that initiated the refund.
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1284
 #: classes/gateways/class.pmprogateway_stripe.php:3860
 #: classes/gateways/class.pmprogateway_stripe.php:3878
@@ -5803,6 +5854,8 @@ msgstr "Yönetici: İşlem kimliği %1$s için geri ödeme işleminde bir sorun 
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1276
 #: classes/gateways/class.pmprogateway_paypalexpress.php:1396
 #: classes/gateways/class.pmprogateway_stripe.php:4519
+#: classes/gateways/class.pmprogateway_stripe.php:4513
+#: classes/gateways/class.pmprogateway_paypalexpress.php:1401
 #, php-format
 msgid "Admin: Order successfully refunded on %1$s for transaction ID %2$s by %3$s."
 msgstr "Yönetici: Sipariş, %3$s tarafından %2$s işlem kimliği için %1$s tarihinde başarıyla iade edildi."
@@ -5823,109 +5876,130 @@ msgstr "Kullanıcılar PayPal'dan döndükten sonra ekstra bir onay isteyin."
 
 #: classes/class-pmpro-wisdom-tracker.php:1050
 #: classes/class-pmpro-wisdom-tracker.php:1041
+#: classes/class-pmpro-wisdom-tracker.php:1027
 msgid "Just Deactivate"
 msgstr "Sadece Devre Dışı Bırak"
 
 #: classes/class-pmpro-wisdom-tracker.php:1050
 #: classes/class-pmpro-wisdom-tracker.php:1041
+#: classes/class-pmpro-wisdom-tracker.php:1027
 msgid "Submit and Deactivate"
 msgstr "Gönder ve Devre Dışı Bırak"
 
 #: classes/class-pmpro-wisdom-tracker.php:981
 #: classes/class-pmpro-wisdom-tracker.php:972
+#: classes/class-pmpro-wisdom-tracker.php:958
 msgid "Submitting form"
 msgstr "Form gönderiliyor"
 
 #: classes/class-pmpro-wisdom-tracker.php:938
 #: classes/class-pmpro-wisdom-tracker.php:929
+#: classes/class-pmpro-wisdom-tracker.php:915
 msgid "Details (optional)"
 msgstr "Ayrıntılar (isteğe bağlı)"
 
 #: classes/class-pmpro-wisdom-tracker.php:936
 #: classes/class-pmpro-wisdom-tracker.php:927
+#: classes/class-pmpro-wisdom-tracker.php:913
 msgid "Didn't work"
 msgstr "İşe yaramadı."
 
 #: classes/class-pmpro-wisdom-tracker.php:935
 #: classes/class-pmpro-wisdom-tracker.php:926
+#: classes/class-pmpro-wisdom-tracker.php:912
 msgid "Only required temporarily"
 msgstr "Sadece geçici olarak gerekli"
 
 #: classes/class-pmpro-wisdom-tracker.php:934
 #: classes/class-pmpro-wisdom-tracker.php:925
+#: classes/class-pmpro-wisdom-tracker.php:911
 msgid "Installed by mistake"
 msgstr "Yanlışlıkla yükledim"
 
 #: classes/class-pmpro-wisdom-tracker.php:933
 #: classes/class-pmpro-wisdom-tracker.php:924
+#: classes/class-pmpro-wisdom-tracker.php:910
 msgid "Found a better plugin"
 msgstr "Daha iyi bir eklenti buldum"
 
 #: classes/class-pmpro-wisdom-tracker.php:932
 #: classes/class-pmpro-wisdom-tracker.php:923
+#: classes/class-pmpro-wisdom-tracker.php:909
 msgid "Not the features I wanted"
 msgstr "İstediğim özellikler yok"
 
 #: classes/class-pmpro-wisdom-tracker.php:931
 #: classes/class-pmpro-wisdom-tracker.php:922
+#: classes/class-pmpro-wisdom-tracker.php:908
 msgid "Lack of documentation"
 msgstr "Belge eksikliği"
 
 #: classes/class-pmpro-wisdom-tracker.php:930
 #: classes/class-pmpro-wisdom-tracker.php:921
+#: classes/class-pmpro-wisdom-tracker.php:907
 msgid "Set up is too difficult"
 msgstr "Kurmak çok zor"
 
 #: classes/class-pmpro-wisdom-tracker.php:928
 #: classes/class-pmpro-wisdom-tracker.php:919
+#: classes/class-pmpro-wisdom-tracker.php:905
 msgid "Before you deactivate the plugin, would you quickly give us your reason for doing so?"
 msgstr "Eklentiyi devre dışı bırakmadan önce, hızlıca ayrılma nedeninizi iletebilir misiniz?"
 
 #: classes/class-pmpro-wisdom-tracker.php:927
 #: classes/class-pmpro-wisdom-tracker.php:918
+#: classes/class-pmpro-wisdom-tracker.php:904
 msgid "Sorry to see you go"
 msgstr "Gittiğinizi görmek üzücü"
 
 #: classes/class-pmpro-wisdom-tracker.php:894
 #: classes/class-pmpro-wisdom-tracker.php:885
+#: classes/class-pmpro-wisdom-tracker.php:871
 msgid "No Thank You"
 msgstr "Hayır Teşekkürler"
 
 #: classes/class-pmpro-wisdom-tracker.php:893
 #: classes/class-pmpro-wisdom-tracker.php:884
+#: classes/class-pmpro-wisdom-tracker.php:870
 msgid "Yes Please"
 msgstr "Evet Lütfen"
 
 #: classes/class-pmpro-wisdom-tracker.php:886
 #: classes/class-pmpro-wisdom-tracker.php:877
+#: classes/class-pmpro-wisdom-tracker.php:863
 #, php-format
 msgid "Thank you for opting in to tracking. Would you like to receive occasional news about this %s, including details of new features and special offers?"
 msgstr "İzlemeyi kabul ettiğiniz için teşekkür ederiz. Yeni özelliklerin ve özel tekliflerin ayrıntıları da dahil olmak üzere bu %s hakkında ara sıra haber almak ister misiniz?"
 
 #: classes/class-pmpro-wisdom-tracker.php:851
 #: classes/class-pmpro-wisdom-tracker.php:842
+#: classes/class-pmpro-wisdom-tracker.php:828
 msgid "Do Not Allow"
 msgstr "İzin Vermeyin"
 
 #: classes/class-pmpro-wisdom-tracker.php:850
 #: classes/class-pmpro-wisdom-tracker.php:841
+#: classes/class-pmpro-wisdom-tracker.php:827
 msgid "Allow"
 msgstr "İzin ver"
 
 #: classes/class-pmpro-wisdom-tracker.php:841
 #: classes/class-pmpro-wisdom-tracker.php:832
+#: classes/class-pmpro-wisdom-tracker.php:818
 #, php-format
 msgid "Thank you for installing our %1$s. We'd like your permission to track its usage on your site and subscribe you to our newsletter. We won\\'t record any sensitive data, only information regarding the WordPress environment and %1$s settings, which we will use to help us make improvements to the %1$s. Tracking is completely optional."
 msgstr "%1$s'ımızı yüklediğiniz için teşekkür ederiz. Sitenizdeki kullanımını izlemek ve sizi bültenimize abone yapmak için izninizi istiyoruz. Herhangi bir hassas veri kaydetmeyeceğiz, yalnızca WordPress ortamı ve %1$s ayarları ile ilgili bilgileri %1$s'de iyileştirmeler yapmamıza yardımcı olması için kullanacağız. İzleme tamamen isteğe bağlıdır."
 
 #: classes/class-pmpro-wisdom-tracker.php:838
 #: classes/class-pmpro-wisdom-tracker.php:829
+#: classes/class-pmpro-wisdom-tracker.php:815
 #, php-format
 msgid "Thank you for installing our %1$s. We would like to track its usage on your site. We don't record any sensitive data, only information regarding the WordPress environment and %1$s settings, which we will use to help us make improvements to the %1$s. Tracking is completely optional."
 msgstr "%1$s'ımızı yüklediğiniz için teşekkür ederiz. Sitenizdeki kullanımını izlemek istiyoruz. Herhangi bir hassas veri kaydetmiyoruz, yalnızca WordPress ortamı ve %1$s ayarları ile ilgili bilgileri kaydediyoruz ve bunları %1$s'de iyileştirmeler yapmamıza yardımcı olması için kullanacağız. İzleme tamamen isteğe bağlıdır."
 
 #: classes/class-pmpro-wisdom-tracker.php:313
 #: classes/class-pmpro-wisdom-tracker.php:304
+#: classes/class-pmpro-wisdom-tracker.php:290
 msgid "We can't detect any product information. This is most probably because you have not included the code snippet."
 msgstr "Herhangi bir ürün bilgisi tespit edemiyoruz. Bunun nedeni büyük olasılıkla kod parçacığını eklememiş olmanızdır."
 
@@ -5947,10 +6021,12 @@ msgstr "Paid Memberships Pro'yu geliştirmemize yardımcı olması için kullan�
 
 #: classes/class-pmpro-site-health.php:548
 #: classes/class-pmpro-site-health.php:552
+#: classes/class-pmpro-site-health.php:560
 msgid "No library conflicts detected."
 msgstr "Kütüphane çakışması tespit edilmedi."
 
 #: classes/class-pmpro-site-health.php:113
+#: classes/class-pmpro-site-health.php:117
 msgid "Library Conflicts"
 msgstr "Kütüphane Çatışmaları"
 
@@ -6037,6 +6113,8 @@ msgstr "Ücretli Üyelikler Pro - Ödeme Geçidi Ayarları"
 #: classes/class-pmpro-subscriptions-list-table.php:617
 #: classes/class-pmpro-subscriptions-list-table.php:637
 #: classes/class-pmpro-subscriptions-list-table.php:661
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:194
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:233
 #, php-format
 msgid "%1$s at %2$s"
 msgstr "%1$s, %2$s'de"
@@ -6058,6 +6136,7 @@ msgstr "Ek Sipariş Bilgileri"
 #: adminpages/subscriptions.php:546
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:250
 #: classes/class-pmpro-orders-list-table.php:1286
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:248
 msgid "View all orders for this subscription"
 msgstr "Bu abonelik için tüm siparişleri görüntüle"
 
@@ -6164,16 +6243,19 @@ msgstr "Kod Kaydet"
 
 #: adminpages/advancedsettings.php:563
 #: adminpages/advancedsettings.php:589
+#: adminpages/advancedsettings.php:583
 msgid "Paid Memberships Pro Usage Tracking"
 msgstr "Ücretli Üyelikler Pro Kullanım Takibi"
 
 #: adminpages/advancedsettings.php:563
 #: adminpages/advancedsettings.php:589
+#: adminpages/advancedsettings.php:583
 msgid "PaidMembershipsPro.com Usage Tracking"
 msgstr "PaidMembershipsPro.com Kullanım Takibi"
 
 #: adminpages/advancedsettings.php:562
 #: adminpages/advancedsettings.php:588
+#: adminpages/advancedsettings.php:582
 msgid "Sharing non-sensitive membership site data helps us analyze how our plugin is meeting your needs and identify opportunities to improve. Read about what usage data is tracked:"
 msgstr "Hassas olmayan üyelik sitesi verilerinin paylaşılması, eklentimizin ihtiyaçlarınızı nasıl karşıladığını analiz etmemize ve iyileştirme fırsatlarını belirlememize yardımcı olur. Hangi kullanım verilerinin izlendiği hakkında bilgi edinin:"
 
@@ -6270,6 +6352,7 @@ msgstr "Stripe ile müşteri kaydı güncellenirken hata oluştu."
 #: includes/spam.php:187
 #: includes/spam.php:195
 #: includes/spam.php:218
+#: includes/spam.php:270
 msgid "Suspicious activity detected. Try again in a few minutes."
 msgstr "Şüpheli etkinlik algılandı. Birkaç dakika sonra tekrar deneyin."
 
@@ -6338,10 +6421,12 @@ msgstr "Stripe'ta müşteri düzenleme"
 
 #: classes/class-pmpro-site-health.php:449
 #: classes/class-pmpro-site-health.php:453
+#: classes/class-pmpro-site-health.php:461
 msgid "No Membership Pages Found"
 msgstr "Üyelik Sayfası Bulunamadı"
 
 #: classes/class-pmpro-site-health.php:109
+#: classes/class-pmpro-site-health.php:113
 msgid "Membership Pages"
 msgstr "Üyelik Sayfaları"
 
@@ -6367,11 +6452,13 @@ msgstr "Evet - Spam Korumasını Etkinleştir"
 
 #: classes/class-pmpro-site-health.php:613
 #: classes/class-pmpro-site-health.php:617
+#: classes/class-pmpro-site-health.php:625
 msgid "2Checkout INS Debug Mode"
 msgstr "2Checkout INS Hata Ayıklama Modu"
 
 #: classes/class-pmpro-site-health.php:610
 #: classes/class-pmpro-site-health.php:614
+#: classes/class-pmpro-site-health.php:622
 msgid "Stripe Webhook Debug Mode"
 msgstr "Stripe Webhook Hata Ayıklama Modu"
 
@@ -6381,46 +6468,57 @@ msgstr "Stripe Webhook Hata Ayıklama Modu"
 #: classes/class-pmpro-site-health.php:605
 #: classes/class-pmpro-site-health.php:608
 #: classes/class-pmpro-site-health.php:611
+#: classes/class-pmpro-site-health.php:613
+#: classes/class-pmpro-site-health.php:616
+#: classes/class-pmpro-site-health.php:619
 msgid "PayPal IPN Debug Mode"
 msgstr "PayPal IPN Hata Ayıklama Modu"
 
 #: classes/class-pmpro-site-health.php:598
 #: classes/class-pmpro-site-health.php:602
+#: classes/class-pmpro-site-health.php:610
 msgid "Braintree Webhook Debug Mode"
 msgstr "Braintree Webhook Hata Ayıklama Modu"
 
 #: classes/class-pmpro-site-health.php:595
 #: classes/class-pmpro-site-health.php:599
+#: classes/class-pmpro-site-health.php:607
 msgid "Authorize.net Silent Post Debug Mode"
 msgstr "Authorize.net Sessiz Gönderi Hata Ayıklama Modu"
 
 #: classes/class-pmpro-site-health.php:590
 #: classes/class-pmpro-site-health.php:594
+#: classes/class-pmpro-site-health.php:602
 msgid "Use Sessions"
 msgstr "Oturumları Kullanın"
 
 #: classes/class-pmpro-site-health.php:589
 #: classes/class-pmpro-site-health.php:593
+#: classes/class-pmpro-site-health.php:601
 msgid "Default Membership Level"
 msgstr "Varsayılan Üyelik Seviyesi"
 
 #: classes/class-pmpro-site-health.php:588
 #: classes/class-pmpro-site-health.php:592
+#: classes/class-pmpro-site-health.php:600
 msgid "Cron Limit"
 msgstr "Cron Sınırı"
 
 #: classes/class-pmpro-site-health.php:529
 #: classes/class-pmpro-site-health.php:533
+#: classes/class-pmpro-site-health.php:541
 msgid "On - Browser cache enabled for HTML (ExpiresDefault), this may interfere with Content Restriction after Login. Remove that line from your .htaccess to resolve this problem."
 msgstr "Açık - HTML için tarayıcı önbelleği etkinleştirildi (ExpiresDefault), bu Girişten Sonra İçerik Kısıtlamasını engelleyebilir. Bu sorunu çözmek için .htaccess dosyanızdan bu satırı kaldırın."
 
 #: classes/class-pmpro-site-health.php:527
 #: classes/class-pmpro-site-health.php:531
+#: classes/class-pmpro-site-health.php:539
 msgid "On - Browser cache enabled for HTML (ExpiresByType text/html), this may interfere with Content Restriction after Login. Remove that line from your .htaccess to resolve this problem."
 msgstr "Açık - Tarayıcı önbelleği HTML için etkinleştirildi (ExpiresByType text/html), bu Girişten Sonra İçerik Kısıtlamasını engelleyebilir. Bu sorunu çözmek için bu satırı .htaccess dosyanızdan kaldırın."
 
 #: classes/class-pmpro-site-health.php:496
 #: classes/class-pmpro-site-health.php:500
+#: classes/class-pmpro-site-health.php:508
 msgid "On - .htaccess contains services/getfile.php usage"
 msgstr "Açık - .htaccess services/getfile.php kullanımını içerir"
 
@@ -6428,6 +6526,8 @@ msgstr "Açık - .htaccess services/getfile.php kullanımını içerir"
 #: classes/class-pmpro-site-health.php:532
 #: classes/class-pmpro-site-health.php:497
 #: classes/class-pmpro-site-health.php:536
+#: classes/class-pmpro-site-health.php:505
+#: classes/class-pmpro-site-health.php:544
 msgid "Off"
 msgstr "Kapalı"
 
@@ -6435,6 +6535,8 @@ msgstr "Kapalı"
 #: classes/class-pmpro-site-health.php:521
 #: classes/class-pmpro-site-health.php:491
 #: classes/class-pmpro-site-health.php:525
+#: classes/class-pmpro-site-health.php:499
+#: classes/class-pmpro-site-health.php:533
 msgid "Off - No .htaccess file"
 msgstr "Kapalı - .htaccess dosyası yok"
 
@@ -6442,24 +6544,30 @@ msgstr "Kapalı - .htaccess dosyası yok"
 #: classes/class-pmpro-site-health.php:517
 #: classes/class-pmpro-site-health.php:487
 #: classes/class-pmpro-site-health.php:521
+#: classes/class-pmpro-site-health.php:495
+#: classes/class-pmpro-site-health.php:529
 msgid "Unable to access .htaccess file"
 msgstr ".htaccess dosyasına erişilemiyor"
 
 #: classes/class-pmpro-site-health.php:470
 #: classes/class-pmpro-site-health.php:474
+#: classes/class-pmpro-site-health.php:482
 msgid "PMPRO_GETFILE_ENABLED is off"
 msgstr "PMPRO_GETFILE_ENABLED kapalı"
 
 #: classes/class-pmpro-site-health.php:466
 #: classes/class-pmpro-site-health.php:470
+#: classes/class-pmpro-site-health.php:478
 msgid "PMPRO_GETFILE_ENABLED is not set"
 msgstr "PMPRO_GETFILE_ENABLED ayarlanmamış"
 
 #: classes/class-pmpro-site-health.php:105
+#: classes/class-pmpro-site-health.php:109
 msgid ".htaccess Cache Usage"
 msgstr ".htaccess Önbellek Kullanımı"
 
 #: classes/class-pmpro-site-health.php:101
+#: classes/class-pmpro-site-health.php:105
 msgid "getfile.php Usage"
 msgstr "getfile.php Kullanımı"
 
@@ -6488,12 +6596,14 @@ msgstr "Yukarıdaki düğme aracılığıyla bağlanmakta sorun mu yaşıyorsunu
 
 #: classes/class-pmpro-site-health.php:409
 #: classes/class-pmpro-site-health.php:413
+#: classes/class-pmpro-site-health.php:417
 msgid "missing"
 msgstr "kayıp"
 
 #. translators: %s: The environment name that is not registered.
 #: classes/class-pmpro-site-health.php:287
 #: classes/class-pmpro-site-health.php:291
+#: classes/class-pmpro-site-health.php:295
 #, php-format
 msgid "%s (environment not registered)"
 msgstr "%s (ortam kayıtlı değil)"
@@ -6501,23 +6611,27 @@ msgstr "%s (ortam kayıtlı değil)"
 #: classes/class-pmpro-site-health.php:261
 #: classes/class-pmpro-wisdom-integration.php:411
 #: classes/class-pmpro-site-health.php:265
+#: classes/class-pmpro-site-health.php:269
 msgid "Stripe Connect"
 msgstr "Stripe Bağlantısı"
 
 #: classes/class-pmpro-site-health.php:251
 #: classes/class-pmpro-wisdom-integration.php:402
 #: classes/class-pmpro-site-health.php:255
+#: classes/class-pmpro-site-health.php:259
 msgid "Legacy Keys"
 msgstr "Eski Anahtarlar"
 
 #. translators: %s: The gateway name that is not registered.
 #: classes/class-pmpro-site-health.php:237
+#: classes/class-pmpro-site-health.php:241
 #, php-format
 msgid "%s (gateway not registered)"
 msgstr "%s (ağ geçidi kayıtlı değil)"
 
 #. translators: %d: The total count of orders.
 #: classes/class-pmpro-site-health.php:220
+#: classes/class-pmpro-site-health.php:224
 #, php-format
 msgid "%d order"
 msgid_plural "%d orders"
@@ -6526,6 +6640,7 @@ msgstr[1] ""
 
 #. translators: %d: The total count of discount codes.
 #: classes/class-pmpro-site-health.php:204
+#: classes/class-pmpro-site-health.php:208
 #, php-format
 msgid "%d discount code"
 msgid_plural "%d discount codes"
@@ -6533,14 +6648,17 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: classes/class-pmpro-site-health.php:157
+#: classes/class-pmpro-site-health.php:161
 msgid "No Levels Found"
 msgstr "Seviye Bulunamadı"
 
 #: classes/class-pmpro-site-health.php:97
+#: classes/class-pmpro-site-health.php:101
 msgid "Custom Templates"
 msgstr "Özel Şablonlar"
 
 #: classes/class-pmpro-site-health.php:73
+#: classes/class-pmpro-site-health.php:77
 msgid "Payment Gateway Environment"
 msgstr "Ödeme Geçidi Ortamı"
 
@@ -7760,6 +7878,7 @@ msgstr "Bot olmadığınızı onaylamak için lütfen ReCAPTCHA kutusunu işaret
 #: includes/currencies.php:103
 #: includes/currencies.php:108
 #: includes/currencies.php:116
+#: includes/currencies.php:123
 msgid "Ukrainian Hryvnia (&#8372;)"
 msgstr "Ukrayna Grivnası (&#8372;)"
 
@@ -7875,6 +7994,7 @@ msgstr "İndirim kodlarınızdan bazılarının fatura bilgileri ağ geçidiniz 
 #: includes/currencies.php:68
 #: includes/currencies.php:73
 #: includes/currencies.php:81
+#: includes/currencies.php:88
 msgid "Romanian Leu"
 msgstr "Romanya Leyi"
 
@@ -8034,16 +8154,19 @@ msgstr " Toplam Üye Sayısı"
 
 #: adminpages/advancedsettings.php:576
 #: adminpages/advancedsettings.php:602
+#: adminpages/advancedsettings.php:596
 msgid "To delete all PMPro data from the database, set to Yes, deactivate PMPro, and then click to delete PMPro from the plugins page."
 msgstr "Tüm PMPro verilerini veritabanından silmek için Evet olarak ayarlayın, PMPro'yu devre dışı bırakın ve ardından PMPro'yu eklentiler sayfasından silmek için tıklayın."
 
 #: adminpages/advancedsettings.php:574
 #: adminpages/advancedsettings.php:600
+#: adminpages/advancedsettings.php:594
 msgid "Yes - Delete all PMPro Data."
 msgstr "Evet - Tüm PMPro Verilerini silin."
 
 #: adminpages/advancedsettings.php:569
 #: adminpages/advancedsettings.php:595
+#: adminpages/advancedsettings.php:589
 msgid "Uninstall PMPro on deletion?"
 msgstr "PMPro silindiğinde kaldırılsın mı?"
 
@@ -8286,21 +8409,25 @@ msgstr "Profiliniz"
 
 #: adminpages/advancedsettings.php:285
 #: adminpages/advancedsettings.php:292
+#: adminpages/advancedsettings.php:286
 msgid "Send periodic sales and revenue updates from this site to the administration email address."
 msgstr "Bu sitedeki periyodik satış ve gelir güncellemelerini yönetim e-posta adresine gönderin."
 
 #: adminpages/advancedsettings.php:275
 #: adminpages/advancedsettings.php:282
+#: adminpages/advancedsettings.php:276
 msgid "Weekly"
 msgstr "Haftalık"
 
 #: adminpages/advancedsettings.php:267
 #: adminpages/advancedsettings.php:274
+#: adminpages/advancedsettings.php:268
 msgid "Activity Email Frequency"
 msgstr "Faaliyet E-posta Sıklığı"
 
 #: adminpages/advancedsettings.php:245
 #: adminpages/advancedsettings.php:252
+#: adminpages/advancedsettings.php:246
 msgid "Communication Settings"
 msgstr "İletişim Ayarları"
 
@@ -8308,11 +8435,13 @@ msgstr "İletişim Ayarları"
 #: adminpages/wizard/advanced.php:39
 #: adminpages/advancedsettings.php:159
 #: adminpages/wizard/advanced.php:49
+#: adminpages/advancedsettings.php:153
 msgid "Hide the Toolbar from all users with the Subscriber role."
 msgstr "Araç Çubuğunu Abone rolüne sahip tüm kullanıcılardan gizleyin."
 
 #: adminpages/advancedsettings.php:149
 #: adminpages/advancedsettings.php:156
+#: adminpages/advancedsettings.php:150
 msgid "WordPress Toolbar"
 msgstr "WordPress Araç Çubuğu"
 
@@ -8320,16 +8449,19 @@ msgstr "WordPress Araç Çubuğu"
 #: adminpages/wizard/advanced.php:35
 #: adminpages/advancedsettings.php:151
 #: adminpages/wizard/advanced.php:45
+#: adminpages/advancedsettings.php:145
 msgid "Block all users with the Subscriber role from accessing the Dashboard."
 msgstr "Abone rolüne sahip tüm kullanıcıların Gösterge Tablosuna erişimini engelleyin."
 
 #: adminpages/advancedsettings.php:141
 #: adminpages/advancedsettings.php:148
+#: adminpages/advancedsettings.php:142
 msgid "WordPress Dashboard"
 msgstr "WordPress Paneli"
 
 #: adminpages/advancedsettings.php:133
 #: adminpages/advancedsettings.php:140
+#: adminpages/advancedsettings.php:134
 msgid "Restrict Dashboard Access"
 msgstr "Gösterge Tablosu Erişimini Kısıtlama"
 
@@ -8647,6 +8779,7 @@ msgstr "Gana Cedi (&#8373;)"
 #: includes/compatibility/beaver-builder.php:29
 #: includes/compatibility/beaver-builder.php:126
 #: includes/compatibility/elementor.php:36
+#: includes/compatibility/elementor.php:37
 msgid "Non-members"
 msgstr "Üye olmayanlar"
 
@@ -8741,26 +8874,33 @@ msgstr "Hata"
 #: classes/class-pmpro-subscriptions-list-table.php:667
 #: classes/class-pmpro-subscriptions-list-table.php:684
 #: classes/gateways/class.pmprogateway.php:337
+#: classes/gateways/class.pmprogateway.php:344
+#: classes/class-pmpro-subscriptions-list-table.php:514
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:130
 msgid "&#8212;"
 msgstr "&#8212;"
 
 #: adminpages/advancedsettings.php:262
 #: adminpages/advancedsettings.php:269
+#: adminpages/advancedsettings.php:263
 msgid "Notifications are occasionally shown on the Paid Memberships Pro settings pages."
 msgstr "Bildirimler zaman zaman Ücretli Üyelikler Pro ayarları sayfalarında gösterilir."
 
 #: adminpages/advancedsettings.php:258
 #: adminpages/advancedsettings.php:265
+#: adminpages/advancedsettings.php:259
 msgid "Show only security notifications."
 msgstr "Yalnızca güvenlik bildirimlerini göster."
 
 #: adminpages/advancedsettings.php:255
 #: adminpages/advancedsettings.php:262
+#: adminpages/advancedsettings.php:256
 msgid "Show all notifications."
 msgstr "Tüm bildirimleri göster."
 
 #: adminpages/advancedsettings.php:251
 #: adminpages/advancedsettings.php:258
+#: adminpages/advancedsettings.php:252
 msgid "Notifications"
 msgstr "Bildirimler"
 
@@ -8913,6 +9053,7 @@ msgstr "Aboneliğinizi ayarlamayı tamamlamak için müşteri kimlik doğrulamas
 #: classes/gateways/class.pmprogateway_stripe.php:3489
 #: classes/gateways/class.pmprogateway_stripe.php:3490
 #: classes/gateways/class.pmprogateway_stripe.php:4143
+#: classes/gateways/class.pmprogateway_stripe.php:4137
 msgid "Customer authentication is required to complete this transaction. Please complete the verification steps issued by your payment provider."
 msgstr "Bu işlemi tamamlamak için müşteri kimlik doğrulaması gereklidir. Lütfen ödeme sağlayıcınız tarafından verilen doğrulama adımlarını tamamlayın."
 
@@ -9898,6 +10039,7 @@ msgstr "Seviye Kimliği"
 #: adminpages/reports/logins.php:265
 #: adminpages/reports/logins.php:264
 #: adminpages/advancedsettings.php:288
+#: adminpages/advancedsettings.php:282
 msgid "Never"
 msgstr "Asla"
 
@@ -9958,6 +10100,7 @@ msgstr "TOS Onayı"
 #: adminpages/metaboxes/recent-orders.php:61
 #: adminpages/metaboxes/recent-orders.php:76
 #: classes/class-pmpro-orders-list-table.php:1112
+#: classes/class-pmpro-subscriptions-list-table.php:495
 msgid "none"
 msgstr "Hiç"
 
@@ -10033,6 +10176,7 @@ msgstr "Bu e-posta adresi zaten kullanılıyor. Lütfen giriş yapın veya farkl
 #: includes/currencies.php:76
 #: includes/currencies.php:81
 #: includes/currencies.php:89
+#: includes/currencies.php:96
 msgid "Russian Ruble (&#8381;)"
 msgstr "Rus Rublesi (&#8381;)"
 
@@ -11469,27 +11613,32 @@ msgstr "Üyelik bitiş bilgileri %s adresine gönderildi."
 
 #: preheaders/checkout.php:676
 #: preheaders/checkout.php:691
+#: preheaders/checkout.php:694
 msgid "A Payment Gateway must be set up before any payments will be processed."
 msgstr "Herhangi bir ödemenin işleme alınabilmesi için önce bir Ödeme Geçidi kurulmalıdır."
 
 #: preheaders/checkout.php:674
 #: preheaders/checkout.php:689
+#: preheaders/checkout.php:692
 #, php-format
 msgid "You must <a href=\"%s\">set up a Payment Gateway</a> before any payments will be processed."
 msgstr "Herhangi bir ödemenin işleme alınabilmesi için <a href=\"%s\">bir Ödeme Geçidi</a> kurmanız gerekmektedir."
 
 #: preheaders/checkout.php:666
 #: preheaders/checkout.php:681
+#: preheaders/checkout.php:684
 msgid "IMPORTANT: Something went wrong while processing your checkout. Your credit card was charged, but we couldn't assign your membership. You should not submit this form again. Please contact the site owner to fix this issue."
 msgstr ""
 
 #: preheaders/checkout.php:663
 #: preheaders/checkout.php:678
+#: preheaders/checkout.php:681
 msgid "IMPORTANT: Something went wrong while processing your checkout. Your credit card authorized, but we cancelled the order immediately. You should not try to submit this form again. Please contact the site owner to fix this issue."
 msgstr ""
 
 #: preheaders/checkout.php:621
 #: preheaders/checkout.php:636
+#: preheaders/checkout.php:639
 msgid "Unknown error generating account. Please contact us to set up your membership."
 msgstr "Hesap oluşturulurken bilinmeyen hata. Üyeliğinizi ayarlamak için lütfen bizimle iletişime geçin."
 
@@ -11984,6 +12133,7 @@ msgstr ""
 #: shortcodes/pmpro_account.php:380
 #: adminpages/metaboxes/recent-members.php:60
 #: adminpages/metaboxes/recent-orders.php:32
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:102
 msgid "Level"
 msgstr "Seviye"
 
@@ -12360,60 +12510,70 @@ msgstr "Üyelik ücreti<strong>%s</strong>"
 #: includes/currencies.php:111
 #: includes/currencies.php:116
 #: includes/currencies.php:124
+#: includes/currencies.php:131
 msgid "Vietnamese Dong"
 msgstr "Vietnam Dong"
 
 #: includes/currencies.php:101
 #: includes/currencies.php:106
 #: includes/currencies.php:114
+#: includes/currencies.php:121
 msgid "Turkish Lira"
 msgstr "Türk Lirası"
 
 #: includes/currencies.php:100
 #: includes/currencies.php:105
 #: includes/currencies.php:113
+#: includes/currencies.php:120
 msgid "Thai Baht"
 msgstr "Tayland Bahtı"
 
 #: includes/currencies.php:99
 #: includes/currencies.php:104
 #: includes/currencies.php:112
+#: includes/currencies.php:119
 msgid "Taiwan New Dollars"
 msgstr "Tayvan Yeni Doları"
 
 #: includes/currencies.php:98
 #: includes/currencies.php:103
 #: includes/currencies.php:111
+#: includes/currencies.php:118
 msgid "Swiss Franc"
 msgstr "İsviçre Frangı"
 
 #: includes/currencies.php:97
 #: includes/currencies.php:102
 #: includes/currencies.php:110
+#: includes/currencies.php:117
 msgid "Swedish Krona"
 msgstr "İsveç Kronu"
 
 #: includes/currencies.php:94
 #: includes/currencies.php:99
 #: includes/currencies.php:107
+#: includes/currencies.php:114
 msgid "South Korean Won"
 msgstr "Güney Kore Wonu"
 
 #: includes/currencies.php:89
 #: includes/currencies.php:94
 #: includes/currencies.php:102
+#: includes/currencies.php:109
 msgid "South African Rand (R)"
 msgstr "Güney Afrika Randı (R)"
 
 #: includes/currencies.php:84
 #: includes/currencies.php:89
 #: includes/currencies.php:97
+#: includes/currencies.php:104
 msgid "Singapore Dollar (&#36;)"
 msgstr "Singapur Doları (&#36;)"
 
 #: includes/currencies.php:66
 #: includes/currencies.php:71
 #: includes/currencies.php:79
+#: includes/currencies.php:80
 msgid "Polish Zloty"
 msgstr "Polonya Zlotisi"
 
@@ -12513,6 +12673,7 @@ msgstr "Çin Yuanı"
 #: includes/currencies.php:127
 #: includes/currencies.php:38
 #: includes/currencies.php:135
+#: includes/currencies.php:142
 msgid "Canadian Dollars (&#36;)"
 msgstr "Kanada Doları (&#36;)"
 
@@ -12536,6 +12697,7 @@ msgstr "Arjantin Pesosu (&#36;)"
 #: includes/currencies.php:123
 #: includes/currencies.php:128
 #: includes/currencies.php:136
+#: includes/currencies.php:143
 msgid "Pounds Sterling (&pound;)"
 msgstr "İngiliz sterlini (&pound;)"
 
@@ -12543,6 +12705,7 @@ msgstr "İngiliz sterlini (&pound;)"
 #: includes/currencies.php:124
 #: includes/currencies.php:129
 #: includes/currencies.php:137
+#: includes/currencies.php:144
 msgid "Euros (&euro;)"
 msgstr "Euro"
 
@@ -12553,6 +12716,8 @@ msgstr "Euro"
 #: includes/currencies.php:153
 #: includes/currencies.php:134
 #: includes/currencies.php:161
+#: includes/currencies.php:141
+#: includes/currencies.php:168
 msgid "US Dollars (&#36;)"
 msgstr "Amerikan Doları"
 
@@ -12597,6 +12762,7 @@ msgstr "Gerekli Güncellemeler"
 #: adminpages/discountcodes.php:744
 #: includes/adminpages.php:75
 #: adminpages/admin_header.php:278
+#: classes/class-pmpro-site-health.php:85
 msgid "Discount Codes"
 msgstr "İndirim Kodu"
 
@@ -12640,12 +12806,14 @@ msgstr "Bu eklentiyi güncellemek için Ayarlar > PMPro Lisansı altında geçer
 #: includes/addons.php:492
 #: includes/addons.php:500
 #: includes/addons.php:523
+#: includes/addons.php:522
 msgid "Return to the PMPro Add Ons page"
 msgstr "PMPro Eklentileri sayfasına geri dönün"
 
 #: includes/addons.php:489
 #: includes/addons.php:497
 #: includes/addons.php:520
+#: includes/addons.php:519
 #, php-format
 msgid "You must have a <a href=\"https://www.paidmembershipspro.com/pricing/?utm_source=wp-admin&utm_pluginlink=addon_update\">valid PMPro %s License Key</a> to update PMPro %s add ons."
 msgstr "PMPro %s eklentilerini güncellemek için <a href=\"https://www.paidmembershipspro.com/pricing/?utm_source=wp-admin&utm_pluginlink=addon_update\">geçerli bir PMPro %s Lisans Anahtarınız</a> olmalıdır."
@@ -12657,6 +12825,7 @@ msgstr "Eklentiyi Güncelle"
 #: includes/addons.php:466
 #: includes/addons.php:474
 #: includes/addons.php:497
+#: includes/addons.php:496
 #, php-format
 msgid "You must have a <a target=\"_blank\" href=\"https://www.paidmembershipspro.com/pricing/?utm_source=wp-admin&utm_pluginlink=bulkupdate\">valid PMPro %s License Key</a> to update PMPro %s add ons. The following plugins will not be updated:"
 msgstr "PMPro %s eklentilerini güncellemek için <a target=\"_blank\" href=\"https://www.paidmembershipspro.com/pricing/?utm_source=wp-admin&utm_pluginlink=bulkupdate\">geçerli bir PMPro %s Lisans Anahtarınız</a> olmalıdır. Aşağıdaki eklentiler güncellenmeyecektir:"
@@ -12664,6 +12833,7 @@ msgstr "PMPro %s eklentilerini güncellemek için <a target=\"_blank\" href=\"ht
 #: includes/addons.php:402
 #: includes/addons.php:410
 #: includes/addons.php:432
+#: includes/addons.php:431
 #, php-format
 msgid "Important: This plugin requires a valid PMPro %s license key to update."
 msgstr "Önemli: Bu eklentinin güncellenmesi için geçerli bir PMPro %s lisans anahtarı gerekir."
@@ -13553,6 +13723,7 @@ msgstr "Yıllık"
 #: adminpages/reports/sales.php:632
 #: adminpages/reports/memberships.php:352
 #: adminpages/advancedsettings.php:285
+#: adminpages/advancedsettings.php:279
 msgid "Monthly"
 msgstr "Aylık"
 
@@ -13565,6 +13736,7 @@ msgstr "Aylık"
 #: adminpages/reports/sales.php:631
 #: adminpages/reports/memberships.php:351
 #: adminpages/advancedsettings.php:279
+#: adminpages/advancedsettings.php:273
 msgid "Daily"
 msgstr "Günlük"
 
@@ -13791,6 +13963,7 @@ msgstr "Para Birimi ve Vergi Ayarları"
 #: classes/class-pmpro-site-health.php:69
 #: adminpages/admin_header.php:285
 #: adminpages/paymentsettings.php:121
+#: classes/class-pmpro-site-health.php:73
 msgid "Payment Gateway"
 msgstr "Ödeme kanalı"
 
@@ -13971,6 +14144,8 @@ msgstr "Abonelik"
 #: classes/class-pmpro-orders-list-table.php:1110
 #: classes/class-pmpro-orders-list-table.php:1129
 #: classes/class-pmpro-subscriptions-list-table.php:522
+#: classes/class-pmpro-subscriptions-list-table.php:493
+#: classes/class-pmpro-subscriptions-list-table.php:512
 msgid "deleted"
 msgstr "silindi"
 
@@ -14080,6 +14255,8 @@ msgstr "Yeni sipariş ekle"
 #: adminpages/subscriptions.php:540
 #: classes/class-pmpro-admin-activity-email.php:222
 #: adminpages/admin_header.php:240
+#: classes/class-pmpro-site-health.php:81
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:107
 msgid "Orders"
 msgstr "Siparişler"
 
@@ -14170,6 +14347,7 @@ msgstr "Ödeme Dönüşüm Numarası"
 #: classes/class-pmpro-site-health.php:285
 #: adminpages/orders.php:825
 #: adminpages/paymentsettings.php:143
+#: classes/class-pmpro-site-health.php:289
 msgid "Live/Production"
 msgstr "Canlı/Üretim"
 
@@ -14179,6 +14357,7 @@ msgstr "Canlı/Üretim"
 #: classes/class-pmpro-site-health.php:284
 #: adminpages/orders.php:824
 #: adminpages/paymentsettings.php:142
+#: classes/class-pmpro-site-health.php:288
 msgid "Sandbox/Testing"
 msgstr "Sandbox/Test"
 
@@ -14218,6 +14397,7 @@ msgstr "Ödeme Kanalı Türü"
 #: adminpages/subscriptions.php:570
 #: adminpages/paymentsettings.php:182
 #: classes/class-pmpro-subscription.php:1224
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:105
 msgid "Gateway"
 msgstr "Ödeme geçidi"
 
@@ -14463,6 +14643,7 @@ msgstr "Hiçbir üye bulunamadı."
 #: classes/class-pmpro-subscriptions-list-table.php:152
 #: adminpages/subscriptions.php:516
 #: adminpages/subscriptions.php:519
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:106
 msgid "Ended"
 msgstr "Sona erdi"
 
@@ -14485,6 +14666,7 @@ msgstr "Kayıt tarihi"
 #: classes/class-pmpro-subscriptions-list-table.php:147
 #: adminpages/subscriptions.php:531
 #: adminpages/subscriptions.php:534
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:104
 msgid "Fee"
 msgstr "Ücretsiz"
 
@@ -14558,6 +14740,7 @@ msgstr "İptal Edilen Üyeler"
 #: classes/email-templates/class-pmpro-email-template-cancel-admin.php:160
 #: classes/email-templates/class-pmpro-email-template-cancel.php:153
 #: classes/class-pmpro-members-list-table.php:791
+#: classes/email-templates/class-pmpro-email-template-cancel.php:154
 msgid "All Levels"
 msgstr "Tüm Seviyeler"
 
@@ -14662,6 +14845,7 @@ msgstr "Kategoriler"
 #: adminpages/levels/edit-level.php:600
 #: adminpages/levels/edit-level.php:619
 #: adminpages/advancedsettings.php:170
+#: adminpages/advancedsettings.php:164
 msgid "Content Settings"
 msgstr "İçerik Ayarları"
 
@@ -14682,6 +14866,7 @@ msgstr "Yeni Kayıtları Devre Dışı Bırak"
 #: adminpages/advancedsettings.php:393
 #: adminpages/metaboxes/welcome.php:67
 #: adminpages/paymentsettings.php:261
+#: adminpages/advancedsettings.php:387
 msgid "Other Settings"
 msgstr "Diğer Ayarlar"
 
@@ -15210,6 +15395,7 @@ msgstr "İndirim kuponu başarıyla eklendi."
 #: adminpages/designsettings.php:145
 #: adminpages/paymentsettings.php:363
 #: adminpages/securitysettings.php:433
+#: adminpages/advancedsettings.php:628
 msgid "Save Settings"
 msgstr "Ayarları Kaydet"
 
@@ -15273,36 +15459,43 @@ msgstr "reCAPTCHA kullanılsın mı?"
 #: classes/gateways/class.pmprogateway_stripe.php:577
 #: classes/gateways/class.pmprogateway_stripe.php:932
 #: classes/gateways/class.pmprogateway_stripe.php:980
+#: adminpages/advancedsettings.php:478
 msgid "Yes"
 msgstr "Evet"
 
 #: adminpages/advancedsettings.php:453
 #: adminpages/advancedsettings.php:479
+#: adminpages/advancedsettings.php:473
 msgid "multisite only"
 msgstr "sadece çoklu üye"
 
 #: adminpages/advancedsettings.php:453
 #: adminpages/advancedsettings.php:479
+#: adminpages/advancedsettings.php:473
 msgid "Redirect all traffic from registration page to /subscription/?"
 msgstr "Kayıt sayfasından gelen tüm trafiği /subscription/?"
 
 #: adminpages/advancedsettings.php:416
 #: adminpages/advancedsettings.php:442
+#: adminpages/advancedsettings.php:436
 msgid "Choose Levels to Hide Ads From"
 msgstr "Reklamları Gizleyeceğiniz Düzeyleri Seçin"
 
 #: adminpages/advancedsettings.php:407
 #: adminpages/advancedsettings.php:433
+#: adminpages/advancedsettings.php:427
 msgid "To hide ads in your template code, use code like the following"
 msgstr "Şablon kodunda reklamları gizlemek için, aşağıdaki gibi bir kod kullanabilirsiniz"
 
 #: adminpages/advancedsettings.php:400
 #: adminpages/advancedsettings.php:426
+#: adminpages/advancedsettings.php:420
 msgid "Hide Ads From Certain Members"
 msgstr "Belirli Üyelere Reklamları Gizle"
 
 #: adminpages/advancedsettings.php:399
 #: adminpages/advancedsettings.php:425
+#: adminpages/advancedsettings.php:419
 msgid "Hide Ads From All Members"
 msgstr "Tüm Üyelere Reklamları Gizle"
 
@@ -15347,11 +15540,15 @@ msgstr "Tüm Üyelere Reklamları Gizle"
 #: classes/gateways/class.pmprogateway_stripe.php:575
 #: classes/gateways/class.pmprogateway_stripe.php:930
 #: classes/gateways/class.pmprogateway_stripe.php:978
+#: adminpages/advancedsettings.php:418
+#: adminpages/advancedsettings.php:477
+#: adminpages/advancedsettings.php:593
 msgid "No"
 msgstr "Hayır"
 
 #: adminpages/advancedsettings.php:394
 #: adminpages/advancedsettings.php:420
+#: adminpages/advancedsettings.php:414
 msgid "Hide Ads From Members?"
 msgstr "Üyelerden Reklamları Gizle?"
 
@@ -15359,6 +15556,7 @@ msgstr "Üyelerden Reklamları Gizle?"
 #: adminpages/wizard/advanced.php:29
 #: adminpages/advancedsettings.php:194
 #: adminpages/wizard/advanced.php:39
+#: adminpages/advancedsettings.php:188
 msgid "Yes - Show excerpts."
 msgstr "Evet - Özet göster"
 
@@ -15366,11 +15564,13 @@ msgstr "Evet - Özet göster"
 #: adminpages/wizard/advanced.php:28
 #: adminpages/advancedsettings.php:193
 #: adminpages/wizard/advanced.php:38
+#: adminpages/advancedsettings.php:187
 msgid "No - Hide excerpts."
 msgstr "Hayır - Özet gizde"
 
 #: adminpages/advancedsettings.php:182
 #: adminpages/advancedsettings.php:189
+#: adminpages/advancedsettings.php:183
 msgid "Show Excerpts to Non-Members?"
 msgstr "Üye olmayanlara özet gösterilsin mi?"
 
@@ -15378,6 +15578,7 @@ msgstr "Üye olmayanlara özet gösterilsin mi?"
 #: adminpages/wizard/advanced.php:22
 #: adminpages/advancedsettings.php:183
 #: adminpages/wizard/advanced.php:32
+#: adminpages/advancedsettings.php:177
 msgid "Yes - Only members will see restricted posts/pages in searches and archives."
 msgstr "Evet - Aramalarda ve arşivlerde kısıtlanmış gönderileri/sayfaları yalnızca üyeler görecektir."
 
@@ -15385,6 +15586,7 @@ msgstr "Evet - Aramalarda ve arşivlerde kısıtlanmış gönderileri/sayfaları
 #: adminpages/wizard/advanced.php:21
 #: adminpages/advancedsettings.php:182
 #: adminpages/wizard/advanced.php:31
+#: adminpages/advancedsettings.php:176
 msgid "No - Non-members will see restricted posts/pages in searches and archives."
 msgstr "Hayır - Üye olmayanlar aramalarda ve arşivlerde kısıtlanmış gönderileri/sayfaları görecektir."
 
@@ -15392,6 +15594,7 @@ msgstr "Hayır - Üye olmayanlar aramalarda ve arşivlerde kısıtlanmış gönd
 #: adminpages/wizard/advanced.php:18
 #: adminpages/advancedsettings.php:178
 #: adminpages/wizard/advanced.php:28
+#: adminpages/advancedsettings.php:172
 msgid "Filter searches and archives?"
 msgstr "Aramaları ve arşivleri filtreleyin?"
 
@@ -15401,6 +15604,8 @@ msgstr "Aramaları ve arşivleri filtreleyin?"
 #: includes/adminpages.php:83
 #: adminpages/advancedsettings.php:130
 #: adminpages/advancedsettings.php:132
+#: adminpages/advancedsettings.php:124
+#: adminpages/advancedsettings.php:126
 msgid "Advanced Settings"
 msgstr "Gelişmiş Ayarlar"
 
@@ -15414,6 +15619,7 @@ msgstr "Bu içerik sadece üyeler içindir. Siteyi ziyaret edin ve okumak için 
 
 #: adminpages/advancedsettings.php:76
 #: adminpages/advancedsettings.php:77
+#: adminpages/advancedsettings.php:71
 msgid "Your advanced settings have been updated."
 msgstr "Gelişmiş ayarlarınız güncellendi."
 
@@ -15463,6 +15669,7 @@ msgstr "Sayfalar"
 #: blocks/src/sidebar/index.js:230
 #: adminpages/membershiplevels.php:224
 #: includes/compatibility/elementor/class-pmpro-elementor-content-restriction.php:76
+#: classes/class-pmpro-site-health.php:93
 msgid "Membership Levels"
 msgstr "Üyelik Seviyeleri"
 
@@ -15554,6 +15761,8 @@ msgstr "Üyelik seviyesi eklemeye başla."
 #: classes/class-pmpro-subscriptions-list-table.php:469
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:172
 #: classes/class-pmpro-members-list-table.php:707
+#: classes/class-pmpro-subscriptions-list-table.php:449
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:170
 msgid "View Details"
 msgstr "Detayları göster"
 
@@ -15588,6 +15797,7 @@ msgstr "%s tarafından"
 #: adminpages/memberslist-csv.php:439
 #: classes/gateways/class.pmprogateway_stripe.php:495
 #: classes/gateways/class.pmprogateway_stripe.php:844
+#: adminpages/memberslist-csv.php:433
 msgid "N/A"
 msgstr "Mevcut Değil"
 
@@ -15651,6 +15861,7 @@ msgstr "Yüklü Değil"
 #: adminpages/addons.php:236
 #: adminpages/securitysettings.php:136
 #: adminpages/securitysettings.php:388
+#: classes/class-pmpro-site-health.php:317
 msgid "Inactive"
 msgstr "Pasif"
 
@@ -15673,6 +15884,8 @@ msgstr "Pasif"
 #: adminpages/securitysettings.php:304
 #: adminpages/securitysettings.php:422
 #: classes/class-pmpro-subscriptions-list-table.php:589
+#: classes/class-pmpro-site-health.php:315
+#: classes/class-pmpro-site-health.php:321
 msgid "Active"
 msgstr "Etkin"
 
@@ -15788,6 +16001,7 @@ msgstr ""
 #: adminpages/subscriptions.php:589
 #: adminpages/subscriptions.php:590
 #: adminpages/subscriptions.php:592
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:11
 msgid "Link Subscription"
 msgstr ""
 
@@ -15880,6 +16094,7 @@ msgid "You have already used the discount code provided."
 msgstr ""
 
 #: classes/class-pmpro-site-health.php:251
+#: classes/class-pmpro-site-health.php:255
 msgid "API Version"
 msgstr ""
 
@@ -15912,12 +16127,14 @@ msgstr ""
 #: classes/gateways/class.pmprogateway_stripe.php:3899
 #: classes/gateways/class.pmprogateway_stripe.php:3900
 #: classes/gateways/class.pmprogateway_stripe.php:4554
+#: classes/gateways/class.pmprogateway_stripe.php:4548
 msgid "This is not a token order."
 msgstr ""
 
 #: classes/gateways/class.pmprogateway_stripe.php:3905
 #: classes/gateways/class.pmprogateway_stripe.php:3906
 #: classes/gateways/class.pmprogateway_stripe.php:4560
+#: classes/gateways/class.pmprogateway_stripe.php:4554
 msgid "No checkout session ID found."
 msgstr ""
 
@@ -15930,18 +16147,23 @@ msgstr ""
 #: classes/gateways/class.pmprogateway_stripe.php:4567
 #: classes/gateways/class.pmprogateway_stripe.php:4569
 #: classes/gateways/class.pmprogateway_stripe.php:4571
+#: classes/gateways/class.pmprogateway_stripe.php:4561
+#: classes/gateways/class.pmprogateway_stripe.php:4563
+#: classes/gateways/class.pmprogateway_stripe.php:4565
 msgid "Could not retrieve checkout session: "
 msgstr ""
 
 #: classes/gateways/class.pmprogateway_stripe.php:3921
 #: classes/gateways/class.pmprogateway_stripe.php:3922
 #: classes/gateways/class.pmprogateway_stripe.php:4576
+#: classes/gateways/class.pmprogateway_stripe.php:4570
 msgid "Payment is still pending."
 msgstr ""
 
 #: classes/gateways/class.pmprogateway_stripe.php:3926
 #: classes/gateways/class.pmprogateway_stripe.php:3927
 #: classes/gateways/class.pmprogateway_stripe.php:4581
+#: classes/gateways/class.pmprogateway_stripe.php:4575
 msgid "Checkout session has not yet been completed."
 msgstr ""
 
@@ -17995,6 +18217,7 @@ msgid "Are you sure you want to delete membership level %s? All payment subscrip
 msgstr ""
 
 #: includes/addons.php:542
+#: includes/addons.php:541
 #, php-format
 msgid "You must enter a valid PMPro %s License Key in the PMPro Settings to update this Add On."
 msgstr ""
@@ -18066,19 +18289,23 @@ msgid "Dismiss this Notice"
 msgstr ""
 
 #: adminpages/advancedsettings.php:132
+#: adminpages/advancedsettings.php:126
 msgid "Paid Memberships Pro - Advanced Settings"
 msgstr ""
 
 #: adminpages/advancedsettings.php:571
 #: adminpages/wizard/advanced.php:54
+#: adminpages/advancedsettings.php:565
 msgid "Enable Plugin Usage Data Sharing"
 msgstr ""
 
 #: adminpages/advancedsettings.php:578
+#: adminpages/advancedsettings.php:572
 msgid "Allow usage of Paid Memberships Pro to be shared with us."
 msgstr ""
 
 #: adminpages/advancedsettings.php:584
+#: adminpages/advancedsettings.php:578
 msgid "Do not share usage of Paid Memberships Pro on my site."
 msgstr ""
 
@@ -18140,6 +18367,8 @@ msgstr ""
 
 #: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:150
 #: classes/class-pmpro-subscriptions-list-table.php:542
+#: classes/class-pmpro-subscriptions-list-table.php:532
+#: adminpages/member-edit/pmpro-class-member-edit-panel-subscriptions.php:148
 msgid "No Level"
 msgstr ""
 
@@ -18407,21 +18636,29 @@ msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:118
 #: classes/class-pmpro-action-scheduler.php:174
+#: classes/class-pmpro-action-scheduler.php:177
+#: classes/class-pmpro-action-scheduler.php:181
 msgid "Action Scheduler instance cannot be cloned"
 msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:130
 #: classes/class-pmpro-action-scheduler.php:186
+#: classes/class-pmpro-action-scheduler.php:189
+#: classes/class-pmpro-action-scheduler.php:193
 msgid "Action Scheduler instance cannot be unserialized"
 msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:254
 #: classes/class-pmpro-action-scheduler.php:310
+#: classes/class-pmpro-action-scheduler.php:313
+#: classes/class-pmpro-action-scheduler.php:317
 msgid "An interval is required to queue an Action Scheduler recurring task."
 msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:308
 #: classes/class-pmpro-action-scheduler.php:364
+#: classes/class-pmpro-action-scheduler.php:367
+#: classes/class-pmpro-action-scheduler.php:371
 msgid "You must provide either a group or a hook to list tasks."
 msgstr ""
 
@@ -18578,6 +18815,8 @@ msgid "Do not fill this field out. Leave this blank."
 msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:125
+#: classes/class-pmpro-action-scheduler.php:128
+#: classes/class-pmpro-action-scheduler.php:132
 msgid "Important Notice: An Outdated Version of Action Scheduler is Loaded"
 msgstr ""
 
@@ -18587,6 +18826,66 @@ msgid "An outdated version of Action Scheduler (version %s) is being loaded by %
 msgstr ""
 
 #: classes/class-pmpro-action-scheduler.php:141
+#: classes/class-pmpro-action-scheduler.php:144
+#: classes/class-pmpro-action-scheduler.php:148
 #, php-format
 msgid "For more information, please <a href=\"%s\" target=\"_blank\">review our documentation</a> on how to resolve library conflicts."
+msgstr ""
+
+#: adminpages/securitysettings.php:166
+#, php-format
+msgid "Block IPs from checkout and login if there are more than %d failures within %d minutes."
+msgstr ""
+
+#: classes/class-pmpro-action-scheduler.php:133
+#: classes/class-pmpro-action-scheduler.php:137
+#, php-format
+msgid "An outdated version of Action Scheduler (version %1$s) is being loaded by %2$s which may affect Paid Memberships Pro functionalilty on this website."
+msgstr ""
+
+#: classes/class-pmpro-action-scheduler.php:810
+#: classes/class-pmpro-action-scheduler.php:819
+#, php-format
+msgid "Missing table: %s"
+msgstr ""
+
+#: classes/class-pmpro-action-scheduler.php:834
+#: classes/class-pmpro-action-scheduler.php:843
+msgid "Missing priority column in actionscheduler_actions table (required for Action Scheduler 3.6+)"
+msgstr ""
+
+#: classes/class-pmpro-site-health.php:69
+msgid "Action Scheduler Health"
+msgstr ""
+
+#: classes/class-pmpro-site-health.php:426
+msgid "No cron jobs scheduled"
+msgstr ""
+
+#: classes/class-pmpro-site-health.php:694
+msgid "No issues found with the Action Scheduler tables."
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-cancel.php:109
+msgid "The URL of the Membership Checkout page for the cancelled level."
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-membership-expired.php:129
+msgid "The URL of the Membership Checkout page for the expired level."
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-membership-expiring.php:130
+msgid "The URL of the Membership Checkout page for the expiring level."
+msgstr ""
+
+#: classes/class-pmpro-action-scheduler.php:675
+msgid "Paid Memberships Pro services are currently paused. Scheduled actions will not be run automatically until services are resumed."
+msgstr ""
+
+#: classes/class-pmpro-action-scheduler.php:677
+msgid "Paid Memberships Pro has temporarily halted scheduled actions while additional tasks are added. Actions will resume automatically once this process is complete."
+msgstr ""
+
+#: classes/email-templates/class-pmpro-email-template-credit-card-expiring.php:61
+msgid "Legacy email that was sent when a member's payment method was be expiring soon. This email is no longer sent by default and will be removed in a future version of PMPro."
 msgstr ""

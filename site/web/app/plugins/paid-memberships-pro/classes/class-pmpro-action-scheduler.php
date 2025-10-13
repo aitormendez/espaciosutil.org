@@ -74,6 +74,9 @@ class PMPro_Action_Scheduler {
 		// Add custom hooks for quarter-hourly, hourly, daily and weekly tasks.
 		add_action( 'action_scheduler_init', array( $this, 'add_recurring_hooks' ) );
 
+		// Remove recurring hooks if PMPro is deactivated.
+		add_action( 'pmpro_deactivation', array( $this, 'remove_recurring_hooks' ) );
+
 		// Handle the monthly
 		add_action( 'pmpro_trigger_monthly', array( $this, 'handle_monthly_tasks' ) );
 
@@ -84,6 +87,10 @@ class PMPro_Action_Scheduler {
 		// which is intentional since some of our tasks can be heavy and we want to ensure they run smoothly and don't slow down a site.
 		add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'modify_batch_size' ), 999 );
 		add_filter( 'action_scheduler_queue_runner_time_limit', array( $this, 'modify_batch_time_limit' ), 999 );
+
+		// If PMPro is paused or the halt() method was called, don't allow async requests.
+		add_filter( 'action_scheduler_allow_async_request_runner', array( $this, 'action_scheduler_allow_async_request_runner' ), 999 );
+		add_action( 'admin_notices', array( $this, 'show_async_requests_paused_notice' ) );
 	}
 
 	/**
@@ -94,7 +101,7 @@ class PMPro_Action_Scheduler {
 	private static function track_library_conflicts() {
 		// Get the version of Action Scheduler that is currently loaded and the plugin file it was loaded from.
 		$action_scheduler_version = ActionScheduler_Versions::instance()->latest_version(); // This is only available after plugins_loaded priority 0 which is why we do this here.
-		$previously_loaded_class = self::get_active_source_path();
+		$previously_loaded_class  = self::get_active_source_path();
 
 		// If we loaded Action Scheduler, this will do nothing.
 		pmpro_track_library_conflict( 'action-scheduler', $previously_loaded_class, $action_scheduler_version );
@@ -110,7 +117,7 @@ class PMPro_Action_Scheduler {
 		if ( empty( $_REQUEST['page'] ) || strpos( $_REQUEST['page'], 'pmpro' ) === false ) {
 			return;
 		}
-	
+
 		// Get the loaded version of Action Scheduler.
 		$action_scheduler_version = ActionScheduler_Versions::instance()->latest_version();
 
@@ -127,7 +134,7 @@ class PMPro_Action_Scheduler {
 				<?php
 				echo wp_kses_post(
 					sprintf(
-						__( 'An outdated version of Action Scheduler (version %s) is being loaded by %s which may affect Paid Memberships Pro functionalilty on this website.', 'paid-memberships-pro' ),
+						__( 'An outdated version of Action Scheduler (version %1$s) is being loaded by %2$s which may affect Paid Memberships Pro functionalilty on this website.', 'paid-memberships-pro' ),
 						$action_scheduler_version,
 						'<code>' . self::get_active_source_path() . '</code>'
 					)
@@ -305,7 +312,7 @@ class PMPro_Action_Scheduler {
 			$first_run_datetime = $first_run_datetime ?: self::as_strtotime( 'now +5 minutes' );
 			// Schedule this task in the future, and make it recurring.
 			if ( ! empty( $interval_in_seconds ) ) {
-				return as_schedule_recurring_action( $first_run_datetime, $interval_in_seconds, $hook, array(), $group );
+				return as_schedule_recurring_action( $first_run_datetime, $interval_in_seconds, $hook, array(), $group, true );
 			} else {
 				throw new WP_Error( 'pmpro_action_scheduler_warning', __( 'An interval is required to queue an Action Scheduler recurring task.', 'paid-memberships-pro' ) );
 			}
@@ -473,7 +480,7 @@ class PMPro_Action_Scheduler {
 				$this->maybe_add_recurring_task(
 					$schedule['hook'],
 					$schedule['interval'],
-					! empty( $schedule['start'] ) ? $schedule['start'] : null,
+					$schedule['start'],
 					'pmpro_recurring_tasks'
 				);
 			}
@@ -483,6 +490,32 @@ class PMPro_Action_Scheduler {
 		if ( ! $this->has_existing_task( 'pmpro_trigger_monthly', array(), 'pmpro_recurring_tasks' ) ) {
 			$first = self::as_strtotime( 'first day of next month 8:00am' );
 			as_schedule_single_action( $first, 'pmpro_trigger_monthly', array(), 'pmpro_recurring_tasks' );
+		}
+	}
+
+	/**
+	 * Remove all recurring hooks from Action Scheduler.
+	 *
+	 * This method unschedules all recurring tasks that were registered by PMPro.
+	 *
+	 * @access public
+	 * @since 3.5.3
+	 */
+	public function remove_recurring_hooks() {
+		// Find all hooks that belong to the group 'pmpro_recurring_tasks'.
+		$hooks = as_get_scheduled_actions(
+			array(
+				'group' => 'pmpro_recurring_tasks',
+				'status' => ActionScheduler_Store::STATUS_PENDING,
+			),
+			ARRAY_A
+		);
+		// If no hooks are found, we can exit early.
+		if ( empty( $hooks ) ) {
+			return;
+		}
+		foreach ( $hooks as $hook ) {
+			as_unschedule_all_actions( $hook['hook'], array(), 'pmpro_recurring_tasks' );
 		}
 	}
 
@@ -518,18 +551,16 @@ class PMPro_Action_Scheduler {
 				add_action(
 					$schedule['hook'],
 					function () use ( $schedule ) {
-						PMPro_Action_Scheduler::add_task_log( $schedule['hook'], 'info', 'PMPro: Dummy callback executed for ' . $schedule['hook'] . ' scheduled hook.' );
 						return;
 					}
 				);
 			}
 		}
 
-		// Ensure our custom monthly task also has a fallback callback.
+		// Ensure our custom monthly task also has a dummy callback.
 		add_action(
 			'pmpro_trigger_monthly',
 			function () {
-				PMPro_Action_Scheduler::add_task_log( 'pmpro_trigger_monthly', 'info', 'PMPro: Dummy callback executed for monthly scheduled hook.' );
 				return;
 			}
 		);
@@ -546,7 +577,7 @@ class PMPro_Action_Scheduler {
 		// Run any logic needed for monthly jobs here.
 		do_action( 'pmpro_schedule_monthly' );
 
-		// Schedule the next run for exactly one calendar month from now.
+		// Schedule the next run for the first day of next month.
 		$next_month = self::as_strtotime( 'first day of next month 8:00am' );
 		as_schedule_single_action( $next_month, 'pmpro_trigger_monthly', array(), 'pmpro_recurring_tasks' );
 	}
@@ -559,8 +590,6 @@ class PMPro_Action_Scheduler {
 	 * overall queue processing time due to latency in requests and the minimum 1 minute between each
 	 * queue being processed.
 	 *
-	 * This method also sets the batch size to 0 if PMPro is paused or the Action Scheduler is halted.
-	 *
 	 * You can also set this to a different value using the pmpro_action_scheduler_batch_size filter.
 	 *
 	 * For more details on Action Scheduler batch sizes, see: https://actionscheduler.org/perf/#increasing-batch-size
@@ -571,25 +600,6 @@ class PMPro_Action_Scheduler {
 	 * @return int Modified batch size.
 	 */
 	public function modify_batch_size( $batch_size ) {
-
-		// If we are on Pantheon, we can set it to 50.
-		if ( defined( 'PANTHEON_ENVIRONMENT' ) ) {
-			$batch_size = 50;
-			// If we are on WP Engine, we should set it to 20.
-		} elseif ( defined( 'WP_ENGINE' ) ) {
-			$batch_size = 20;
-		}
-
-		// If PMPro is paused, we set the batch size to 0.
-		if ( pmpro_is_paused() ) {
-			$batch_size = 0;
-		}
-
-		// If the action scheduler is halted, we set the batch size to 0.
-		if ( get_option( 'pmpro_as_halted', false ) ) {
-			$batch_size = 0;
-		}
-
 		/**
 		 * Public filter for adjusting the batch size in Action Scheduler.
 		 *
@@ -605,9 +615,6 @@ class PMPro_Action_Scheduler {
 	 * Modify the default time limit for processing a batch of actions.
 	 *
 	 * Action Scheduler provides a default of 30 seconds in which to process actions.
-	 * We can increase this for hosts like Pantheon and WP Engine.
-	 *
-	 * This method also sets the time limit to 0 if PMPro is paused or the Action Scheduler is halted.
 	 *
 	 * You can also set this to a different value using the pmpro_action_scheduler_time_limit_seconds filter.
 	 *
@@ -619,26 +626,6 @@ class PMPro_Action_Scheduler {
 	 * @return int Modified time limit in seconds.
 	 */
 	public function modify_batch_time_limit( $time_limit ) {
-
-		// Set sensible defaults based on known environment limits.
-		// If we are on Pantheon, we can set it to 120.
-		if ( defined( 'PANTHEON_ENVIRONMENT' ) ) {
-			$time_limit = 120;
-			// If we are on WP Engine, we can set it to 60.
-		} elseif ( defined( 'WP_ENGINE' ) ) {
-			$time_limit = 60;
-		}
-
-		// If PMPro is paused, we set the time limit to 0.
-		if ( pmpro_is_paused() ) {
-			$time_limit = 0;
-		}
-
-		// If the action scheduler is halted, we set the time limit to 0.
-		if ( get_option( 'pmpro_as_halted', false ) ) {
-			$time_limit = 0;
-		}
-
 		/**
 		 * Public filter for adjusting the time limit for Action Scheduler batches.
 		 *
@@ -647,6 +634,52 @@ class PMPro_Action_Scheduler {
 		$time_limit = apply_filters( 'pmpro_action_scheduler_time_limit_seconds', $time_limit );
 
 		return $time_limit;
+	}
+
+	/**
+	 * Halt Action Scheduler if PMPro is paused or if our halt() method was called.
+	 *
+	 * @access public
+	 * @since 3.5.5
+	 *
+	 * @param bool $allow Whether to allow Action Scheduler to run asynchronously.
+	 * @return bool
+	 */
+	public function action_scheduler_allow_async_request_runner( $allow ) {
+		// If PMPro is paused, don't allow async requests.
+		if ( pmpro_is_paused() ) {
+			return false;
+		}
+
+		// If the halt() method was called, don't allow async requests.
+		if ( get_option( 'pmpro_as_halted', false ) ) {
+			return false;
+		}
+
+		return $allow;
+	}
+
+	/**
+	 * Show a notice on the Action Scheduler page if PMPro is preventing async requests.
+	 *
+	 * @access public
+	 * @since 3.5.5
+	 */
+	public function show_async_requests_paused_notice() {
+		// If this is not the action-scheduler page in the admin area, bail.
+		if ( ! is_admin() || empty( $_REQUEST['page'] ) || 'action-scheduler' !== $_REQUEST['page'] ) {
+			return;
+		}
+
+		if ( pmpro_is_paused() ) {
+			$message = __( 'Paid Memberships Pro services are currently paused. Scheduled actions will not be run automatically until services are resumed.', 'paid-memberships-pro' );
+		} elseif ( get_option( 'pmpro_as_halted', false ) ) {
+			$message = __( 'Paid Memberships Pro has temporarily halted scheduled actions while additional tasks are added. Actions will resume automatically once this process is complete.', 'paid-memberships-pro' );
+		}
+
+		if ( ! empty( $message ) ) {
+			echo '<div class="notice notice-warning"><p>' . esc_html( $message ) . '</p></div>';
+		}
 	}
 
 	/**
@@ -737,5 +770,83 @@ class PMPro_Action_Scheduler {
 			// This was deprecated in Action Scheduler v3.9,2 when the SystemInformation class was introduced.
 			return ActionScheduler_Versions::instance()->active_source_path();
 		}
+	}
+
+	/**
+	 * Clear scheduled recurring tasks.
+	 *
+	 * This method is used to clear any previously scheduled recurring tasks, typically when the plugin is updated.
+	 *
+	 * @access public
+	 * @since 3.5.3
+	 */
+	public static function clear_recurring_tasks() {
+		self::remove_actions( null, array(), 'pmpro_recurring_tasks', 'pending' );
+	}
+
+	/**
+	 * Check if Action Scheduler has any health issues.
+	 *
+	 * @since 3.5.3
+	 * @return array Array of issues found, empty if no issues.
+	 */
+	public static function check_action_scheduler_table_health() {
+		global $wpdb;
+
+		$issues = array();
+
+		// List of required Action Scheduler tables
+		$required_tables = array(
+			'actionscheduler_actions',
+			'actionscheduler_claims',
+			'actionscheduler_groups',
+			'actionscheduler_logs',
+		);
+
+		// Check if each table exists
+		foreach ( $required_tables as $table ) {
+			$full_table_name    = $wpdb->prefix . $table;
+			$escaped_table_name = $wpdb->esc_like( $full_table_name );
+
+			$table_exists = $wpdb->get_var(
+				$wpdb->prepare(
+					'SHOW TABLES LIKE %s',
+					$escaped_table_name
+				)
+			);
+
+			if ( $table_exists !== $full_table_name ) {
+				$issues[] = sprintf( __( 'Missing table: %s', 'paid-memberships-pro' ), $full_table_name );
+			}
+		}
+
+		// Check for 'priority' column in 'actionscheduler_actions' table (3.6+ requirement)
+		$actions_table         = $wpdb->prefix . 'actionscheduler_actions';
+		$escaped_actions_table = $wpdb->esc_like( $actions_table );
+
+		$actions_table_exists = $wpdb->get_var(
+			$wpdb->prepare(
+				'SHOW TABLES LIKE %s',
+				$escaped_actions_table
+			)
+		);
+
+		if ( $actions_table_exists === $actions_table ) {
+			$priority_column = $wpdb->get_results(
+				$wpdb->prepare(
+					"SHOW COLUMNS FROM `{$actions_table}` LIKE %s",
+					'priority'
+				)
+			);
+
+			if ( empty( $priority_column ) ) {
+				$issues[] = __( 'Missing priority column in actionscheduler_actions table (required for Action Scheduler 3.6+)', 'paid-memberships-pro' );
+			}
+		} else {
+			// Already flagged as missing earlier, but could be handled separately if needed
+			// $issues[] = __( 'actionscheduler_actions table does not exist.', 'paid-memberships-pro' );
+		}
+
+		return $issues;
 	}
 }

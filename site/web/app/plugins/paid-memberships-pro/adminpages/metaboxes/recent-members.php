@@ -33,15 +33,15 @@ function pmpro_dashboard_report_recent_members_callback() {
 			UNIX_TIMESTAMP(CONVERT_TZ(mu.startdate, '+00:00', @@global.time_zone)) as startdate,
 			UNIX_TIMESTAMP(CONVERT_TZ(mu.enddate, '+00:00', @@global.time_zone)) as enddate,
 			m.name as membership
-		FROM wp_users u
-		INNER JOIN wp_pmpro_memberships_users mu
+		FROM $wpdb->users u
+		INNER JOIN $wpdb->pmpro_memberships_users mu
 			ON u.ID = mu.user_id
 			AND mu.status = 'active'
-		INNER JOIN wp_pmpro_membership_levels m
+		INNER JOIN $wpdb->pmpro_membership_levels m
 			ON mu.membership_id = m.id
 		INNER JOIN (
 			SELECT user_id, MAX(startdate) AS max_startdate
-			FROM wp_pmpro_memberships_users
+			FROM $wpdb->pmpro_memberships_users
 			WHERE status = 'active'
 			GROUP BY user_id
 		) mu2 ON mu.user_id = mu2.user_id AND mu.startdate = mu2.max_startdate

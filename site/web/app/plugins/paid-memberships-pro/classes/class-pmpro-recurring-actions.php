@@ -65,7 +65,7 @@ class PMPro_Recurring_Actions {
 		$this->conditionally_hook_admin_activity_email();
 
 		// Register recurring payment reminders.
-		add_action( 'pmpro_schedule_daily', array( $this, 'recurring_payment_reminders' ), );
+		add_action( 'pmpro_schedule_daily', array( $this, 'recurring_payment_reminders' ) );
 		add_action( 'pmpro_recurring_payment_reminder_email', array( $this, 'send_recurring_payment_reminder_email' ), 10, 3 );
 
 		// Temporary file cleanup (Daily)
@@ -388,14 +388,7 @@ class PMPro_Recurring_Actions {
 	 * @return void
 	 */
 	public function send_admin_activity_email() {
-
-		// Check if the admin activity email is enabled.
-		if ( ! get_option( 'pmpro_activity_email_enabled' ) ) {
-			return;
-		}
-
-		$pmproemail = new PMPro_Admin_Activity_Email();
-		$pmproemail->sendAdminActivity();
+		(new PMPro_Admin_Activity_Email())->sendAdminActivity();
 	}
 
 	/**
@@ -451,6 +444,7 @@ class PMPro_Recurring_Actions {
 		ksort( $emails, SORT_NUMERIC );
 
 		$previous_days = 0;
+
 		foreach ( $emails as $days => $template ) {
 			$sqlQuery = $wpdb->prepare(
 				"SELECT subscription.*
@@ -514,10 +508,10 @@ class PMPro_Recurring_Actions {
 		$user             = get_userdata( $subscription_obj->get_user_id() );
 
 		// Calculate the days until the next payment.
-		$days = floor( ( strtotime( $subscription_obj->get_next_payment_date() ) - current_time( 'timestamp' ) ) / DAY_IN_SECONDS );
+		$days = floor( ( $subscription_obj->get_next_payment_date() - current_time( 'timestamp' ) ) / DAY_IN_SECONDS );
 
 		if ( empty( $user ) ) {
-			update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_next_payment_date', $subscription_obj->get_next_payment_date( 'Y-m-d' ) );
+			update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_next_payment_date', $subscription_obj->get_next_payment_date( 'Y-m-d', false ) );
 			update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_days', $days );
 			return;
 		}
@@ -552,7 +546,7 @@ class PMPro_Recurring_Actions {
 			$pmproemail->sendEmail();
 		}
 
-		update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_next_payment_date', $subscription_obj->get_next_payment_date( 'Y-m-d' ) );
+		update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_next_payment_date', $subscription_obj->get_next_payment_date( 'Y-m-d', false ) );
 		update_pmpro_subscription_meta( $subscription_id, 'pmprorm_last_days', $days );
 	}
 

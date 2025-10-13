@@ -117,29 +117,25 @@
 				//no? create it
 				if(empty($order->id))
 				{				
-					$old_order = new MemberOrder();
-					$old_order->getLastMemberOrderBySubscriptionTransactionID($invoice->subscription);
-					
-					//still can't find the order
-					if(empty($old_order) || empty($old_order->id))
-					{
+					// Get the subscription from the invoice.
+					$subscription = PMPro_Subscription::get_subscription_from_subscription_transaction_id( $invoice->subscription, 'stripe', $livemode ? 'live' : 'sandbox' );
+					if ( empty( $subscription ) ) {
 						$logstr .= "Couldn't find the original subscription.";
 						pmpro_stripeWebhookExit();
 					}
 
-					$user_id = $old_order->user_id;
+					$user_id = $subscription->get_user_id();
 					$user = get_userdata($user_id);
 
 					if ( empty( $user ) ) {
-						$logstr .= "Couldn't find the old order's user. Order ID = " . $old_order->id . ".";
+						$logstr .= "Couldn't find the subscription's user. Subscription ID = " . $subscription->get_id() . ".";
 						pmpro_stripeWebhookExit();
 					}
-					$user->membership_level = pmpro_getMembershipLevelForUser($user_id);
 
 					//alright. create a new order
 					$morder = new MemberOrder();
-					$morder->user_id = $old_order->user_id;
-					$morder->membership_id = $old_order->membership_id;
+					$morder->user_id = $user_id;
+					$morder->membership_id = $subscription->get_membership_level_id();
 					$morder->timestamp = $invoice->created;
 					
 					global $pmpro_currency;
@@ -164,10 +160,9 @@
 					}
 
 					$morder->payment_transaction_id = $invoice->id;
-					$morder->subscription_transaction_id = $invoice->subscription;
-
-					$morder->gateway = $old_order->gateway;
-					$morder->gateway_environment = $old_order->gateway_environment;
+					$morder->subscription_transaction_id = $subscription->get_subscription_transaction_id();
+					$morder->gateway = $subscription->get_gateway();
+					$morder->gateway_environment = $subscription->get_gateway_environment();
 
 					// Find the payment intent.
 					$payment_intent_args = array(
@@ -223,17 +218,13 @@
 			// Make sure we have the invoice in the desired API version.
 			$invoice = Stripe_Invoice::retrieve( $pmpro_stripe_event->data->object->id );
 
-			// Get the last order for this invoice's subscription.
-			if ( ! empty( $invoice->subscription ) ) {
-				$old_order = new MemberOrder();
-				$old_order->getLastMemberOrderBySubscriptionTransactionID( $invoice->subscription );
-			}
-
-			if( ! empty( $old_order ) && ! empty( $old_order->id ) ) {
-				$user_id = $old_order->user_id;
+			// Get the subscription from the invoice.
+			$subscription = PMPro_Subscription::get_subscription_from_subscription_transaction_id( $invoice->subscription, 'stripe', $livemode ? 'live' : 'sandbox' );
+			if( ! empty( $subscription ) ) {
+				$user_id = $subscription->get_user_id();
 				$user = get_userdata($user_id);
 				if ( empty( $user ) ) {
-					$logstr .= "Couldn't find the old order's user. Order ID = " . $old_order->id . ".";
+					$logstr .= "Couldn't find the subscription's user. Subscription ID = " . $subscription->get_id() . ".";
 					pmpro_stripeWebhookExit();
 				}
 
@@ -276,7 +267,7 @@
 				$pmproemail = new PMProEmail();
 				$pmproemail->sendPaymentActionRequiredAdminEmail($user, $morder);
 
-				$logstr .= "Subscription payment for order ID #" . $old_order->id . " requires customer authentication. Sent email to the member and site admin.";
+				$logstr .= "Payment for subscription ID #" . $subscription->get_id() . " requires customer authentication. Sent email to the member and site admin.";
 				pmpro_stripeWebhookExit();
 			}
 			else
@@ -302,33 +293,33 @@
 
 			// If we have an invoice, try to get the subscription ID from it.
 			if ( ! empty( $invoice ) ) {
-				$subscription_id = $invoice->subscription;
+				$subscription = PMPro_Subscription::get_subscription_from_subscription_transaction_id( $invoice->subscription, 'stripe', $livemode ? 'live' : 'sandbox' );
 			} else {
-				$subscription_id = null;
-			}
-
-			// If we have a subscription ID, get the last order for that subscription.
-			if ( ! empty( $subscription_id ) ) {
-				$old_order = new MemberOrder();
-				$old_order->getLastMemberOrderBySubscriptionTransactionID( $subscription_id );
+				$subscription = null;
 			}
 
 			// If we have an old order, email the user that their payment failed.
-			if( ! empty( $old_order ) && ! empty( $old_order->id ) )
+			if( ! empty( $subscription ) )
 			{
+				// Get the old order to pass to the legacy filter.
+				$old_orders = $subscription->get_orders( array(
+					'status' => 'success',
+					'limit'  => 1,
+				) );
+				$old_order = ! empty( $old_orders ) ? reset( $old_orders ) : null;
 				do_action("pmpro_subscription_payment_failed", $old_order);
 
-				$user_id = $old_order->user_id;
+				$user_id = $subscription->get_user_id();
 				$user = get_userdata($user_id);
 				if ( empty( $user ) ) {
-					$logstr .= "Couldn't find the old order's user. Order ID = " . $old_order->id . ".";
+					$logstr .= "Couldn't find the subscription's user. Subscription ID = " . $subscription->get_id() . ".";
 					pmpro_stripeWebhookExit();
 				}
 
 				//prep this order for the failure emails
 				$morder = new MemberOrder();
 				$morder->user_id = $user_id;
-				$morder->membership_id = $old_order->membership_id;
+				$morder->membership_id = $subscription->get_membership_level_id();
 				
 				// Find the payment intent.
 				$payment_intent_args = array(
@@ -362,7 +353,7 @@
 				$pmproemail = new PMProEmail();
 				$pmproemail->sendBillingFailureAdminEmail(get_bloginfo("admin_email"), $morder);
 
-				$logstr .= "Subscription payment failed on order ID #" . $old_order->id . ". Sent email to the member and site admin.";
+				$logstr .= "Subscription payment failed on subscription ID #" . $subscription->get_id() . ". Sent email to the member and site admin.";
 				pmpro_stripeWebhookExit();
 			}
 			else
@@ -404,7 +395,12 @@
 				// Handle partial refunds. Only updating the log and notes for now.
 				if ( $pmpro_stripe_event->data->object->amount_refunded < $pmpro_stripe_event->data->object->amount ) {
 					$logstr .= sprintf( 'Webhook: Order ID %1$s with transaction ID %2$s was partially refunded. The order will need to be updated in the WP dashboard.', $morder->id, $payment_transaction_id );
-					$morder->notes = trim( $morder->notes . ' ' . sprintf( 'Webhook: Order ID %1$s was partially refunded on %2$s for transaction ID %3$s at the gateway.', $morder->id, date_i18n('Y-m-d H:i:s'), $payment_transaction_id ) );
+
+					// Add new lines to order notes if not empty.
+					if ( ! empty( $morder->notes ) ) {
+						$morder->notes .= "\n\n";
+					}
+					$morder->notes = trim( $morder->notes . sprintf( 'Webhook: Order ID %1$s was partially refunded on %2$s for transaction ID %3$s at the gateway.', $morder->id, date_i18n('Y-m-d H:i:s'), $payment_transaction_id ) );
 					$morder->SaveOrder();
 					pmpro_stripeWebhookExit();
 				}
@@ -414,8 +410,13 @@
 				
 				$logstr .= sprintf( 'Webhook: Order ID %1$s successfully refunded on %2$s for transaction ID %3$s at the gateway.', $morder->id, date_i18n('Y-m-d H:i:s'), $payment_transaction_id );
 
+				// Add new lines to order notes if not empty.
+				if ( ! empty( $morder->notes ) ) {
+					$morder->notes .= "\n\n";
+				}
+
 				// Add to order notes.
-				$morder->notes = trim( $morder->notes . ' ' . sprintf( 'Webhook: Order ID %1$s successfully refunded on %2$s for transaction ID %3$s at the gateway.', $morder->id, date_i18n('Y-m-d H:i:s'), $payment_transaction_id ) );
+				$morder->notes = trim( $morder->notes . sprintf( 'Webhook: Order ID %1$s successfully refunded on %2$s for transaction ID %3$s at the gateway.', $morder->id, date_i18n('Y-m-d H:i:s'), $payment_transaction_id ) );
 
 				$morder->SaveOrder();
 
@@ -519,7 +520,7 @@
 			}
 
 			// Was the checkout session successful?
-			if ( $checkout_session->payment_status == "paid" ) {
+			if ( $checkout_session->payment_status == "paid" || $checkout_session->payment_status == "no_payment_required" ) {
 				// Yes. But did we already process this order?
 				if ( ! in_array( $order->status , array( 'token', 'pending' ) ) ) {
 					$logstr .= "Order #" . $order->id . " for Checkout Session " . $checkout_session->id . " has already been processed. Ignoring.";
@@ -610,6 +611,20 @@
 			// Make sure we have the invoice in the desired API version.
 			$invoice = Stripe_Invoice::retrieve( $pmpro_stripe_event->data->object->id );
 
+			// Check if a subscription ID exists on the invoice. If not, this is not a PMPro recurring payment.
+			$subscription_id = empty( $invoice->subscription ) ? null : $invoice->subscription;
+			if ( empty( $subscription_id ) ) {
+				$logstr .= "Invoice " . $invoice->id . " is not for a subscription and is therefore not a PMPro recurring payment. No action taken.";
+				pmpro_stripeWebhookExit();
+			}
+
+			// We have a subscription ID. Let's make sure that this is a PMPro subscription.
+			$subscription = PMPro_Subscription::get_subscription_from_subscription_transaction_id( $subscription_id, 'stripe', $livemode ? 'live' : 'sandbox' );
+			if ( empty( $subscription ) ) {
+				$logstr .= "Could not find a PMPro subscription with transaction ID " . $subscription_id . ". No action taken.";
+				pmpro_stripeWebhookExit();
+			}
+
 			// If the invoice is not in draft status, we don't need to do anything.
 			if ( $invoice->status !== 'draft' ) {
 				$logstr .= "Invoice " . $invoice->id . " is not in draft status. No action taken.";
@@ -622,7 +637,7 @@
 				pmpro_stripeWebhookExit();
 			}
 
-			// Update the application fee.
+			// Update the application fee on the invoice.
 			$application_fee = $stripe->get_application_fee_percentage();
 			try {
 				Stripe_Invoice::update(
@@ -636,19 +651,17 @@
 				$logstr .= "Could not update application fee for invoice " . $invoice->id . ". " . $e->getMessage();
 			}
 
-			// If we have a subscription, update the application fee.
-			if ( ! empty( $invoice->subscription ) ) {
-				try {
-					Stripe_Subscription::update(
-						$invoice->subscription,
-						array(
-							'application_fee_percent' => $application_fee,
-						)
-					);
-					$logstr .= "Updated application fee for subscription " . $invoice->subscription . " to " . $application_fee . "%.";
-				} catch ( Exception $e ) {
-					$logstr .= "Could not update application fee for subscription " . $invoice->subscription . ". " . $e->getMessage();
-				}
+			// Update the application fee on the subscription.
+			try {
+				Stripe_Subscription::update(
+					$subscription_id,
+					array(
+						'application_fee_percent' => $application_fee,
+					)
+				);
+				$logstr .= "Updated application fee for subscription " . $subscription_id . " to " . $application_fee . "%.";
+			} catch ( Exception $e ) {
+				$logstr .= "Could not update application fee for subscription " . $subscription_id . ". " . $e->getMessage();
 			}
 			pmpro_stripeWebhookExit();
 		}
