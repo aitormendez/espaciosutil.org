@@ -184,12 +184,8 @@ add_filter('pmpro_restrictable_post_types', function ($postTypes) {
     return array_values(array_unique($postTypes));
 });
 
-add_filter('pmpro_search_filter_post_types', function ($postTypes) {
-    $postTypes = is_array($postTypes) ? $postTypes : (array) $postTypes;
-    $postTypes[] = 'cde';
-
-    return array_values(array_unique($postTypes));
-});
+// Nota: no añadimos 'cde' a 'pmpro_search_filter_post_types' para que
+// los listados/índices del curso muestren todas las lecciones.
 
 /**
  * Register the theme sidebars.
