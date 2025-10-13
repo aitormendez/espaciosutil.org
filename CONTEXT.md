@@ -119,12 +119,44 @@ Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEP
 
 ## 8. Implementación de Tabla de Precios de Suscripciones
 
-Se ha iniciado la implementación de una tabla de precios para las suscripciones basada en campos ACF repetidos en la página "suscripcion-cde". Se han creado:
+La página de suscripciones del sitio ha sido completamente rediseñada para mostrar una tabla de precios personalizada basada en campos ACF, integrados mediante `acf-composer`.
 
-1. Un campo ACF repetidor `SubscriptionPricing.php` en `site/web/app/themes/sage/app/Fields/`.
-2. Componentes Blade para mostrar los paquetes de precios:
-   - `pricing-package.blade.php` - Componente para un paquete individual
-   - `pricing-table.blade.php` - Componente para la tabla completa
-3. Una plantilla específica para la página `page-suscripcion-cde.blade.php`.
+### Estructura de datos
 
-**Estado actual:** La implementación está en pausa debido a un problema con la licencia del plugin ACF PRO, que es requerida para el funcionamiento de campos repetidores. Se ha abierto un ticket de soporte para resolver este problema. Una vez activada la licencia, se podrá completar la implementación.
+Se ha creado un campo de opciones ACF llamado `series_membresia` de tipo **repeater**, accesible desde la página de opciones `Opciones`. Cada fila representa una **serie de contenidos** y permite configurar varios planes de pago asociados a esa serie. Los campos incluidos son:
+
+- `monthly_level_id`: ID del nivel mensual de PMP (requerido)
+- `semiannual_level_id`: ID del nivel semestral (opcional)
+- `yearly_level_id`: ID del nivel anual de PMP (requerido)
+- `display_name`: Nombre público mostrado en la tarjeta
+- `short_description`: Descripción corta de la serie (opcional)
+- `image`: Imagen ilustrativa de la serie (opcional)
+- `order`: Número entero usado para ordenar las tarjetas
+
+La relación entre estos niveles no se define en los niveles de PMP sino únicamente en este campo de opciones, evitando metaboxes y garantizando una implementación mantenible.
+
+### Componentes y renderizado
+
+Los datos se renderizan mediante dos componentes Blade:
+
+1. `pricing-table.blade.php`: Controlador de la tabla que itera por el repeater y pasa los datos a cada tarjeta como props.
+2. `pricing-package.blade.php`: Componente de tarjeta individual que muestra nombre, descripción, imagen y los planes disponibles (mensual, semestral, anual).
+
+Cada tarjeta muestra los planes disponibles con:
+
+- Precio
+- Periodicidad (`/mes`, `/semestre`, `/año`)
+- Ahorro calculado dinámicamente (comparado con el plan mensual)
+- Botón de suscripción o estado "Suscrito" si el usuario ya tiene ese plan activo
+
+### Comportamiento del botón de suscripción
+
+- Los botones usan la función `pmpro_url('checkout', '?level=X')` para generar la URL de compra.
+- Si el usuario ya tiene ese nivel activo (`pmpro_hasMembershipLevel(X)`), se muestra el botón como "Suscrito" y enlaza a la página de cuenta (`pmpro_url('account')`).
+- Los botones incluyen atributos `aria-label` dinámicos y `data-subscribed`, `data-state` para su estilado condicional.
+
+### Consideraciones de diseño
+
+- Layout flexible con Tailwind (`flex-wrap`) que muestra las tarjetas en filas responsivas.
+- Imágenes optimizadas con `srcset` y `sizes` para carga adaptable.
+- No se utiliza ningún shortcode nativo de PMP para esta vista, aunque el shortcode puede coexistir en la misma página para comparación o fallback.

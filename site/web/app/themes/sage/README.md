@@ -119,8 +119,15 @@ Este sistema permite que los estudiantes lleven un control visual y funcional de
 #### Organización por series
 
 - Las lecciones raíz del curso se clasifican mediante la taxonomía personalizada `serie_cde`.
+- **Solo la lección raíz de cada serie debe llevar asignado el término `serie_cde`**; las lecciones hijas permanecen sin término y cuelgan jerárquicamente de la raíz.
 - La plantilla `template-curso` usa esa taxonomía para construir el listado de series y cargar el índice jerárquico de cada una vía AJAX.
 - Las antiguas entradas de `revelador` se mantienen para el resto de contenidos del sitio, pero ya no se utilizan para el CPT `cde`.
+
+#### Control de acceso por membresía (Paid Memberships Pro)
+
+- Cada lección del `cde` respeta las restricciones definidas en el metabox **«Requerir membresía»** de Paid Memberships Pro.
+- Al editar una lección, selecciona los niveles que deben tener acceso; si no se marca ninguno, la lección queda abierta para todos los usuarios.
+- Los usuarios con vistas previas de PMPro (selector de la admin bar) también se rigen por ese metabox, por lo que puedes comprobar el comportamiento con «Ver con acceso de membresía» o «Ver sin acceso».
 
 ### Membresías y Navegación (Paid Memberships Pro)
 
