@@ -6,13 +6,17 @@
 
 @section('content')
     @while (have_posts())
-        @php(the_post())
+        @php
+            the_post();
+        @endphp
         @include('partials.page-header')
 
         <div class="border-blanco bg-morado5/90 prose md:prose-2xl flex justify-center border-t pb-12 pt-44 text-lg">
             <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
                 <div class="">
-                    @php(the_content())
+                    @php
+                        the_content();
+                    @endphp
                 </div>
             </div>
         </div>
