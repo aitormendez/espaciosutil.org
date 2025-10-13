@@ -153,7 +153,8 @@ add_action('rest_api_init', function () {
  * @return void
  */
 add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_script('sage/app.js', Vite::asset('resources/js/app.js'), ['jquery'], null, true);
+    wp_enqueue_script('sage/app.js', Vite::asset('resources/js/app.js'), [], null, true);
+    wp_script_add_data('sage/app.js', 'type', 'module');
 
     wp_localize_script(
         'sage/app.js',
