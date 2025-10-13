@@ -13,14 +13,6 @@
             <option>Autorerapia en grupo</option>
             <option>Autoterapia individual</option>
             <option>Sesiones de sanación energética</option>
-            <option>Sesiones de lectura de aura</option>
-            <option>Sesiones de gestación y crianza</option>
-            <option>Orientación terapéutica</option>
-            <option>Colaboración con el “Curso de desarrollo espiritual”</option>
-            <option>Curso básico de limpieza y protección energéticas</option>
-            <option>Curso básico de iniciación al Eneagrama</option>
-            <option>Práctica de divulgación a través de Nuevas Voces</option>
-            <option>Mensaje para algún miembro del equipo de Espacio Sutil</option>
             <option>Otro motivo de contacto</option>
         </select>
     </div>
