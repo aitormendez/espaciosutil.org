@@ -92,12 +92,23 @@ return [
 
     'taxonomies' => [
         'revelador' => [
-            'post_types' => ['serie', 'cde'],
+            'post_types' => ['serie'],
             'meta_box' => 'simple',
             'show_in_rest' => true,
             'names' => [
                 'singular' => 'revelador',
                 'plural' => 'reveladores',
+            ],
+        ],
+
+        'serie_cde' => [
+            'post_types' => ['cde'],
+            'meta_box' => 'simple',
+            'hierarchical' => true,
+            'show_in_rest' => true,
+            'names' => [
+                'singular' => 'serie del CDE',
+                'plural' => 'series del CDE',
             ],
         ],
 

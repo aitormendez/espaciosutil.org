@@ -1,17 +1,17 @@
-const buttons = document.querySelectorAll('.revelador-button');
+const buttons = document.querySelectorAll('.serie-cde-button');
 const container = document.getElementById('indice-ajax-container');
 
-console.log('coures-index.js loaded');
+console.log('course-index.js loaded');
 
 buttons.forEach((button) => {
   button.addEventListener('click', async () => {
     const postId = button.dataset.postId;
-    const reveladorName = encodeURIComponent(button.textContent.trim());
+    const serieName = encodeURIComponent(button.textContent.trim());
     container.innerHTML = '<p>Cargando...</p>';
 
     try {
       const response = await fetch(
-        `/espaciosutil/v1/indice-revelador/${postId}?revelador_name=${reveladorName}`
+        `/espaciosutil/v1/indice-revelador/${postId}?serie_name=${serieName}`
       );
       if (!response.ok) {
         throw new Error('Network response was not ok.');

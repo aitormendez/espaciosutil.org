@@ -1,5 +1,5 @@
-@if (!empty($revelador_name) && ($level ?? 0) === 0)
-    <h3 class="!mt-0 mb-4 text-2xl font-semibold">{{ $revelador_name }}</h3>
+@if (!empty($serie_name) && ($level ?? 0) === 0)
+    <h3 class="!mt-0 mb-4 text-2xl font-semibold">{{ $serie_name }}</h3>
 @endif
 @foreach ($items as $item)
     @php

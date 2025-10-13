@@ -116,6 +116,12 @@ Este tema incluye un sistema para que los usuarios registrados puedan marcar lec
 
 Este sistema permite que los estudiantes lleven un control visual y funcional de su progreso en el curso, sin necesidad de plugins adicionales, integrándose perfectamente con la arquitectura del tema.
 
+#### Organización por series
+
+- Las lecciones raíz del curso se clasifican mediante la taxonomía personalizada `serie_cde`.
+- La plantilla `template-curso` usa esa taxonomía para construir el listado de series y cargar el índice jerárquico de cada una vía AJAX.
+- Las antiguas entradas de `revelador` se mantienen para el resto de contenidos del sitio, pero ya no se utilizan para el CPT `cde`.
+
 ### Membresías y Navegación (Paid Memberships Pro)
 
 El tema integra el sistema de membresías [Paid Memberships Pro (PMP)](https://www.paidmembershipspro.com/) para gestionar el acceso a contenido restringido.

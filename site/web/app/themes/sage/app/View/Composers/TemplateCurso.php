@@ -23,7 +23,7 @@ class TemplateCurso extends Composer
     public function with()
     {
         return [
-            'revelador_lessons' => $this->get_revelador_lessons(),
+            'series_cde_lessons' => $this->get_series_lessons(),
         ];
     }
 
@@ -32,17 +32,17 @@ class TemplateCurso extends Composer
      *
      * @return array
      */
-    public function get_revelador_lessons()
+    public function get_series_lessons()
     {
         $args = [
             'post_type' => 'cde',
             'posts_per_page' => -1,
             'tax_query' => [
                 [
-                    'taxonomy' => 'revelador',
+                    'taxonomy' => 'serie_cde',
                     'field'    => 'term_id',
                     'terms'    => get_terms([
-                        'taxonomy' => 'revelador',
+                        'taxonomy' => 'serie_cde',
                         'fields'   => 'ids',
                     ]),
                 ],
