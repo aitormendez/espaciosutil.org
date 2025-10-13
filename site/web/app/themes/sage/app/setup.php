@@ -154,7 +154,6 @@ add_action('rest_api_init', function () {
  */
 add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('sage/app.js', Vite::asset('resources/js/app.js'), [], null, true);
-    wp_script_add_data('sage/app.js', 'type', 'module');
 
     wp_localize_script(
         'sage/app.js',
@@ -165,6 +164,14 @@ add_action('wp_enqueue_scripts', function () {
         ]
     );
 });
+
+add_filter('script_loader_tag', function ($tag, $handle, $src) {
+    if ($handle === 'sage/app.js' && ! str_contains($tag, 'type=')) {
+        $tag = str_replace('<script ', '<script type="module" ', $tag);
+    }
+
+    return $tag;
+}, 10, 3);
 
 /**
  * Register the theme sidebars.
