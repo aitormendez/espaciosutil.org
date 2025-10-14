@@ -60,12 +60,37 @@ function es_blocks_fetch_video_details($video_id, $library_id)
     $body = wp_remote_retrieve_body($response);
     $data = json_decode($body, true);
 
-    if (isset($data['availableResolutions'])) {
-        return [
-            'hlsUrl'       => "https://{$pull_zone}.b-cdn.net/{$video_id}/playlist.m3u8",
-            'thumbnailUrl' => "https://{$pull_zone}.b-cdn.net/{$video_id}/thumbnail.jpg",
-        ];
+    if (!isset($data['availableResolutions'])) {
+        return [];
     }
 
-    return [];
+    $captions = [];
+
+    if (!empty($data['captions']) && is_array($data['captions'])) {
+        foreach ($data['captions'] as $caption) {
+            $lang = isset($caption['srclang']) ? sanitize_key($caption['srclang']) : '';
+
+            if (!$lang) {
+                continue;
+            }
+
+            $label = isset($caption['label']) ? sanitize_text_field($caption['label']) : strtoupper($lang);
+            $file  = isset($caption['file']) ? ltrim(sanitize_text_field($caption['file']), '/') : "captions/{$lang}.vtt";
+            $file  = str_replace(['..', '\\'], '', $file);
+            $src   = "https://{$pull_zone}.b-cdn.net/{$video_id}/{$file}";
+
+            $captions[] = [
+                'lang'    => $lang,
+                'label'   => $label,
+                'src'     => esc_url_raw($src),
+                'default' => !empty($caption['isDefault']),
+            ];
+        }
+    }
+
+    return [
+        'hlsUrl'       => "https://{$pull_zone}.b-cdn.net/{$video_id}/playlist.m3u8",
+        'thumbnailUrl' => "https://{$pull_zone}.b-cdn.net/{$video_id}/thumbnail.jpg",
+        'captions'     => $captions,
+    ];
 }

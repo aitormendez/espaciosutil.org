@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import {
   MediaPlayer,
   MediaProvider,
@@ -20,6 +20,88 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
   const thumbnailUrl = `https://${pullZone}.b-cdn.net/${videoId}/thumbnail.jpg`;
   const lastSavedTime = useRef(0);
   const saveInterval = 5; // Save every 5 seconds
+  const [videoSrc, setVideoSrc] = useState(hlsUrl);
+  const [posterUrl, setPosterUrl] = useState(thumbnailUrl);
+  const [subtitleTracks, setSubtitleTracks] = useState([]);
+
+  useEffect(() => {
+    if (!videoId || !videoLibraryId) {
+      setSubtitleTracks([]);
+      setVideoSrc(hlsUrl);
+      setPosterUrl(thumbnailUrl);
+      return undefined;
+    }
+
+    const controller = new AbortController();
+
+    const fetchVideoMetadata = async () => {
+      try {
+        const response = await fetch(
+          `/wp-json/espacio-sutil/v1/video-resolutions?library_id=${videoLibraryId}&video_id=${videoId}`,
+          { signal: controller.signal }
+        );
+
+        if (!response.ok) {
+          console.error('Failed to fetch Bunny metadata', await response.json());
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data?.hlsUrl) {
+          setVideoSrc(data.hlsUrl);
+        } else {
+          setVideoSrc(hlsUrl);
+        }
+
+        if (data?.thumbnailUrl) {
+          setPosterUrl(data.thumbnailUrl);
+        } else {
+          setPosterUrl(thumbnailUrl);
+        }
+
+        if (Array.isArray(data?.captions)) {
+          const sanitizedTracks = data.captions
+            .filter(
+              (track) =>
+                typeof track?.lang === 'string' &&
+                typeof track?.label === 'string' &&
+                typeof track?.src === 'string'
+            )
+            .map((track) => ({
+              lang: track.lang,
+              label: track.label,
+              src: track.src,
+              default: Boolean(track.default),
+            }));
+
+          if (
+            sanitizedTracks.length > 0 &&
+            !sanitizedTracks.some((track) => track.default)
+          ) {
+            sanitizedTracks[0].default = true;
+          }
+
+          setSubtitleTracks(sanitizedTracks);
+        } else {
+          setSubtitleTracks([]);
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Error fetching Bunny metadata:', error);
+        }
+        setVideoSrc(hlsUrl);
+        setPosterUrl(thumbnailUrl);
+        setSubtitleTracks([]);
+      }
+    };
+
+    fetchVideoMetadata();
+
+    return () => {
+      controller.abort();
+    };
+  }, [hlsUrl, thumbnailUrl, videoId, videoLibraryId]);
 
   const saveVideoProgress = useCallback(
     async (currentTime) => {
@@ -116,36 +198,28 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
     <MediaPlayer
       className="w-full h-full rounded-md overflow-hidden"
       title={videoName || 'Video Destacado'}
-      src={hlsUrl}
+      src={videoSrc}
       aspectRatio="16/9"
       crossOrigin
       playsInline
       ref={playerRef}
     >
       <MediaProvider>
-        {[
-          { lang: 'es', label: 'Español' },
-          { lang: 'en', label: 'English' },
-          { lang: 'fr', label: 'Français' },
-          { lang: 'de', label: 'Deutsch' },
-          { lang: 'it', label: 'Italiano' },
-          { lang: 'ru', label: 'Русский' },
-          { lang: 'zh', label: '中文（简体）' },
-        ].map(({ lang, label }, i) => (
+        {subtitleTracks.map((track, index) => (
           <Track
-            key={lang}
+            key={`${track.lang}-${index}`}
             kind="subtitles"
-            src={`https://${pullZone}.b-cdn.net/${videoId}/captions/${lang}.vtt`}
-            label={label}
-            lang={lang}
-            default={i === 0}
+            src={track.src}
+            label={track.label}
+            lang={track.lang}
+            default={Boolean(track.default)}
           />
         ))}
       </MediaProvider>
       <Captions className="vds-captions" />
       <Poster
         className="absolute inset-0 block h-full w-full bg-black rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
-        src={thumbnailUrl}
+        src={posterUrl}
         alt="Video Thumbnail"
       />
       <DefaultVideoLayout icons={defaultLayoutIcons} />
