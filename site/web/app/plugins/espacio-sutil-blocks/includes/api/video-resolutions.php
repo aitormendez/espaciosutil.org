@@ -88,9 +88,57 @@ function es_blocks_fetch_video_details($video_id, $library_id)
         }
     }
 
+    // Bunny expone varios campos posibles para el póster: priorizamos la URL completa y
+    // caemos a rutas relativas dentro del mismo directorio del vídeo.
+    $thumbnail_candidates = [
+        $data['thumbnailUrl'] ?? null,
+        $data['thumbnailFileUrl'] ?? null,
+        $data['thumbnailFilePath'] ?? null,
+        $data['thumbnailFileName'] ?? null,
+        $data['thumbnail'] ?? null,
+    ];
+
+    $poster_url = null;
+
+    foreach ($thumbnail_candidates as $candidate) {
+        if (empty($candidate) || !is_string($candidate)) {
+            continue;
+        }
+
+        $candidate = trim($candidate);
+
+        if ($candidate === '') {
+            continue;
+        }
+
+        if (strpos($candidate, '://') !== false) {
+            $poster_url = esc_url_raw($candidate);
+            break;
+        }
+
+        $sanitized_path = ltrim(str_replace(['..', '\\'], '', $candidate), '/');
+
+        if ($sanitized_path === '') {
+            continue;
+        }
+
+        $poster_url = sprintf(
+            'https://%s.b-cdn.net/%s/%s',
+            $pull_zone,
+            $video_id,
+            $sanitized_path
+        );
+
+        break;
+    }
+
+    if (!$poster_url) {
+        $poster_url = "https://{$pull_zone}.b-cdn.net/{$video_id}/thumbnail.jpg";
+    }
+
     return [
         'hlsUrl'       => "https://{$pull_zone}.b-cdn.net/{$video_id}/playlist.m3u8",
-        'thumbnailUrl' => "https://{$pull_zone}.b-cdn.net/{$video_id}/thumbnail.jpg",
+        'thumbnailUrl' => $poster_url,
         'captions'     => $captions,
     ];
 }
