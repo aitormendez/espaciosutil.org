@@ -12,7 +12,43 @@ import '@vidstack/react/player/styles/default/layouts/video.css';
 import {
   DefaultVideoLayout,
   defaultLayoutIcons,
+  DefaultTooltip,
 } from '@vidstack/react/player/layouts/default';
+
+const WideIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+    <rect x="3" y="6" width="18" height="12" rx="2" strokeWidth="1.5" />
+    <rect x="7" y="10" width="10" height="4" stroke="none" fill="currentColor" />
+  </svg>
+);
+
+const CenteredIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
+    <rect x="6" y="5" width="12" height="14" rx="2" strokeWidth="1.5" />
+    <rect x="9" y="9" width="6" height="6" stroke="none" fill="currentColor" />
+  </svg>
+);
+
+const LayoutToggleButton = ({ isFullWidth, onToggle }) => {
+  const label = isFullWidth
+    ? 'Cambiar a vista centrada'
+    : 'Cambiar a ancho completo';
+  const Icon = isFullWidth ? CenteredIcon : WideIcon;
+
+  return (
+    <DefaultTooltip content={label} placement="top end">
+      <button
+        type="button"
+        className="vds-button vds-layout-toggle-button"
+        onClick={onToggle}
+        aria-label={label}
+        aria-pressed={!isFullWidth}
+      >
+        <Icon className="vds-icon" />
+      </button>
+    </DefaultTooltip>
+  );
+};
 
 const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
   const playerRef = useRef(null);
@@ -23,6 +59,11 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
   const [videoSrc, setVideoSrc] = useState(hlsUrl);
   const [posterUrl, setPosterUrl] = useState(thumbnailUrl);
   const [subtitleTracks, setSubtitleTracks] = useState([]);
+  const [isFullWidth, setIsFullWidth] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.matchMedia('(min-width: 768px)').matches;
+  });
 
   useEffect(() => {
     if (!videoId || !videoLibraryId) {
@@ -194,14 +235,57 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
     };
   }, [videoId, saveVideoProgress, saveInterval]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+
+    const handleMatchChange = (event) => {
+      const matches = event.matches;
+      setIsDesktop(matches);
+      if (!matches) {
+        setIsFullWidth(true);
+      }
+    };
+
+    handleMatchChange(mediaQuery);
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleMatchChange);
+      return () => {
+        mediaQuery.removeEventListener('change', handleMatchChange);
+      };
+    }
+
+    if (typeof mediaQuery.addListener === 'function') {
+      mediaQuery.addListener(handleMatchChange);
+      return () => {
+        mediaQuery.removeListener(handleMatchChange);
+      };
+    }
+
+    return undefined;
+  }, []);
+
+  const effectiveFullWidth = isDesktop ? isFullWidth : true;
+
+  const playerClassName = `featured-video-player block w-full h-full rounded-md overflow-hidden transition-[max-width] duration-300 ease-in-out${
+    effectiveFullWidth ? '' : ' mx-auto max-w-4xl'
+  }`;
+
+  const handleLayoutToggle = useCallback(() => {
+    setIsFullWidth((prev) => !prev);
+  }, []);
+
   return (
     <MediaPlayer
-      className="w-full h-full rounded-md overflow-hidden"
+      className={playerClassName}
       title={videoName || 'Video Destacado'}
       src={videoSrc}
       aspectRatio="16/9"
       crossOrigin
       playsInline
+      data-layout-mode={effectiveFullWidth ? 'wide' : 'narrow'}
       ref={playerRef}
     >
       <MediaProvider>
@@ -222,7 +306,17 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
         src={posterUrl}
         alt="Video Thumbnail"
       />
-      <DefaultVideoLayout icons={defaultLayoutIcons} />
+      <DefaultVideoLayout
+        icons={defaultLayoutIcons}
+        slots={{
+          afterFullscreenButton: isDesktop ? (
+            <LayoutToggleButton
+              isFullWidth={effectiveFullWidth}
+              onToggle={handleLayoutToggle}
+            />
+          ) : undefined,
+        }}
+      />
     </MediaPlayer>
   );
 };

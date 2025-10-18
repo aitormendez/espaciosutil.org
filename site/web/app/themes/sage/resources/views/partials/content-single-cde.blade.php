@@ -21,7 +21,7 @@
         @if ($featured_video_id && $featured_video_library_id && $bunny_pull_zone)
             <div id="featured-video-player" data-video-id="{{ $featured_video_id }}"
                 data-video-library-id="{{ $featured_video_library_id }}" data-pull-zone="{{ $bunny_pull_zone }}"
-                data-video-name="{{ $featured_video_name }}" class="aspect-video w-full p-6">
+                data-video-name="{{ $featured_video_name }}" class="featured-video-container flex w-full justify-center p-6">
             </div>
         @endif
 
