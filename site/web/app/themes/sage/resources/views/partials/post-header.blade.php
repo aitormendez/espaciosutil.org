@@ -1,5 +1,5 @@
-<header class="post-header flex w-full justify-center px-6 text-center">
-    <div class="prose prose-sutil py-24">
+<header class="post-header flex w-full justify-center text-center">
+    <div class="prose w-full pb-24">
         @if (is_tax('revelador'))
             <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
                 Revelador
@@ -10,6 +10,26 @@
             <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
                 Area
             </div>
+        @endif
+
+        @if (!empty($cde_breadcrumb))
+            <nav aria-label="Miga de pan"
+                class="not-prose text-gris3 bg-negro/80 leading-2 mb-6 flex w-full border-y px-6 py-4 font-sans text-sm font-light uppercase tracking-wide md:pb-1 md:pt-2 md:leading-6">
+                <ol class="flex w-full flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center md:gap-3">
+                    @foreach ($cde_breadcrumb as $index => $crumb)
+                        <li class="flex items-center gap-2">
+                            @if ($index > 0)
+                                <span class="text-gris4">&gt;</span>
+                            @endif
+                            @if (!empty($crumb['url']))
+                                <a href="{{ $crumb['url'] }}" class="hover:text-morado2">{{ $crumb['label'] }}</a>
+                            @else
+                                <span class="text-gris1">{{ $crumb['label'] }}</span>
+                            @endif
+                        </li>
+                    @endforeach
+                </ol>
+            </nav>
         @endif
 
         <h1 class="text-center text-5xl font-thin md:text-7xl">{!! $title !!}</h1>

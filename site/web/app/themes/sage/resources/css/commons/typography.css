@@ -143,7 +143,3 @@
 @utility prose-2xl {
   font-size: 1.5rem;
 }
-
-@utility not-prose {
-  background-color: none;
-}

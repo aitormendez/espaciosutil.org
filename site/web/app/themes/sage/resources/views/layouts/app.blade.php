@@ -18,13 +18,13 @@
 <body @php(body_class()) data-barba="wrapper">
     @php(wp_body_open())
 
-    <div id="tsparticles" class="bg-negro fixed h-full w-full"></div>
+    <div id="tsparticles" class="bg-negro fixed top-0 h-full w-full"></div>
 
     @include('sections.header')
 
     <div class="t-0 relative z-10" data-barba="container" data-barba-namespace="{{ $barba_namespace }}">
         <main id="main"
-            class="main {{ is_front_page() ? 'pt-[256px] lg:pt-0' : 'pt-[256px] lg:pt-[98px]' }} text-blanco w-full">
+            class="main {{ is_front_page() ? 'pt-[256px] lg:pt-0' : 'pt-[350px] lg:pt-[129px]' }} text-blanco w-full">
             @yield('content')
         </main>
 

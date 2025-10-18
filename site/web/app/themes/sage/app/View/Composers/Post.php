@@ -30,6 +30,7 @@ class Post extends Composer
             'thumb' => $this->thumb(),
             'revelador' => $this->revelador(),
             'autor' => $this->autor(),
+            'cde_breadcrumb' => $this->cdeBreadcrumb(),
             'pagination' => function () {
                 return $this->pagination();
             },
@@ -96,6 +97,47 @@ class Post extends Composer
         }
 
         return get_the_title();
+    }
+
+    /**
+     * Builds breadcrumb data for singular CDE entries.
+     *
+     * @return array|null
+     */
+    protected function cdeBreadcrumb()
+    {
+        if (!is_singular('cde')) {
+            return null;
+        }
+
+        $post_id = get_the_ID();
+
+        if (!$post_id) {
+            return null;
+        }
+
+        $breadcrumb = [
+            [
+                'label' => 'Curso de Desarrollo Espiritual',
+                'url' => home_url('/curso-de-desarrollo-espiritual/'),
+            ],
+        ];
+
+        $ancestors = array_reverse(get_post_ancestors($post_id));
+
+        foreach ($ancestors as $ancestor_id) {
+            $breadcrumb[] = [
+                'label' => get_the_title($ancestor_id),
+                'url' => get_permalink($ancestor_id),
+            ];
+        }
+
+        $breadcrumb[] = [
+            'label' => get_the_title($post_id),
+            'url' => null,
+        ];
+
+        return $breadcrumb;
     }
 
     /**
