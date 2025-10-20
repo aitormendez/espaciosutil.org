@@ -57,6 +57,7 @@ Este es el tema personalizado para el sitio web de **Espacio Sutil**, basado en 
 El tema implementa un Custom Post Type (CPT) `cde` para gestionar el contenido del "Curso de Desarrollo Espiritual".
 
 - **Índice Jerárquico Automatizado:** Las páginas del curso utilizan un índice jerárquico que se genera automáticamente, facilitando la navegación y estructuración del contenido.
+- **Miga de pan jerárquica:** Cada lección `cde` muestra su cadena de padres dentro del header de la entrada. El composer `app/View/Composers/Post.php` reúne el árbol y añade un enlace raíz fijo al curso, mientras que la vista `resources/views/partials/post-header.blade.php` lo renderiza en formato apilado en móviles (una línea por nivel con prefijo `>`) y horizontal a partir de `md`, asegurando accesibilidad sin sobrecargar la interfaz.
 - **Extracto Enriquecido:** Cada entrada del curso puede tener un extracto enriquecido (WYSIWYG) gestionado a través de un campo de [Advanced Custom Fields (ACF)](https://www.advancedcustomfields.com/). Este extracto es visible para todos los usuarios.
 - **Contenido Restringido:** El contenido principal de las entradas del curso está dividido en dos partes: un extracto público y el contenido completo, que es accesible únicamente para usuarios con una membresía activa.
 
