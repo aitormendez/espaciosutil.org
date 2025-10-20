@@ -88,6 +88,26 @@ Bunny.net detecta automáticamente los subtítulos cargados y los expone mediant
 
 El bloque personalizado `espacio-sutil-blocks` renderiza el player Vidstack en la plantilla `content-single-cde.blade.php` si se detecta un `featured_video_id`. Los subtítulos se cargan automáticamente desde la carpeta `captions/` del CDN y se muestran en pantalla con soporte multilenguaje.
 
+#### Conmutador de anchura del video destacado
+
+El reproductor de la lección `cde` incluye un conmutador integrado en los controles que alterna entre:
+
+- Ancho completo (predeterminado).
+- Columna centrada con `max-w-4xl` (estilo alineado al contenido de la lección).
+
+Detalles de comportamiento y accesibilidad:
+
+- El botón aparece únicamente en pantallas de escritorio (`min-width: 768px`). En dispositivos móviles, el reproductor permanece a ancho completo.
+- La alternancia es instantánea y no recarga el video ni pierde el progreso.
+- El botón incluye `aria-label` y tooltip para accesibilidad y consistencia con el UI de Vidstack.
+
+Ubicación de la implementación:
+
+- Lógica y botón: `resources/js/components/FeaturedVideo.jsx`
+- Contenedor del player: `resources/views/partials/content-single-cde.blade.php`
+
+Nota: Por ahora, la preferencia no se persiste. Si se requiere, puede añadirse con `localStorage`.
+
 #### Sistema de Marcación de Lecciones
 
 Este tema incluye un sistema para que los usuarios registrados puedan marcar lecciones del curso como "vistos".
