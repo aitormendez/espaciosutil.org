@@ -133,6 +133,12 @@ Este tema incluye un sistema para que los usuarios registrados puedan marcar lec
   - Icono de "no visto" (`<x-coolicon-hide />`) si la lección no ha sido completada.
 - Estos iconos se renderizan directamente en Blade al generar el índice, respetando el estado guardado para cada usuario.
 
+#### Lecciones inactivas
+
+- El grupo de campos `Cde` incluye el toggle `active_lesson`, activado por defecto.
+- Al desactivarlo, la lección sigue apareciendo en el índice, pero se muestra sin enlace y con un estilo atenuado para indicar que aún no está disponible.
+- Esta información se propaga desde el endpoint `espaciosutil/v1/indice-revelador` hacia la vista `partials/course-index-item`, que decide si renderizar el elemento como enlace o como texto estático.
+
 #### Resumen
 
 Este sistema permite que los estudiantes lleven un control visual y funcional de su progreso en el curso, sin necesidad de plugins adicionales, integrándose perfectamente con la arquitectura del tema.

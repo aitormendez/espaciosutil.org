@@ -43,7 +43,7 @@
                 <main class="mt-12 md:mt-0 md:w-2/3">
                     <h2 class="mb-6 font-sans text-2xl">Lecciones</h2>
                     <div id="indice-ajax-container" class="course-index prose font-sans">
-                        <p>Selecciona un revelador para ver sus lecciones.</p>
+                        <p>Selecciona una serie para ver sus lecciones.</p>
                     </div>
                 </main>
             </div>

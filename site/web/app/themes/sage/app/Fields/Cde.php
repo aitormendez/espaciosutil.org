@@ -20,6 +20,14 @@ class Cde extends Field
             ->setLocation('post_type', '==', 'cde');
 
         $cde
+            ->addTrueFalse('active_lesson', [
+                'label' => 'Lección activa',
+                'instructions' => 'Desactívalo para ocultar el enlace en el índice y marcar la lección como pendiente.',
+                'default_value' => 1,
+                'ui' => 1,
+                'ui_on_text' => 'Activa',
+                'ui_off_text' => 'Inactiva',
+            ])
             ->addWysiwyg('rich_excerpt', [
                 'label' => 'Extracto Enriquecido',
                 'instructions' => 'Contenido del extracto visible para todos.',

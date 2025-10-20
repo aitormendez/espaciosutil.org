@@ -49,11 +49,15 @@ class RouteServiceProvider extends ServiceProvider
                     $post_map = [];
 
                     foreach ($all_posts as $post) {
+                        $fieldValue = get_field('active_lesson', $post->ID);
+                        $isActive = $fieldValue === null ? true : (bool) $fieldValue;
+
                         $post_map[$post->ID] = (object) [
                             'id' => $post->ID,
                             'title' => $post->post_title,
                             'permalink' => get_permalink($post->ID),
                             'parent' => $post->post_parent,
+                            'active' => $isActive,
                             'children' => [],
                         ];
                     }
