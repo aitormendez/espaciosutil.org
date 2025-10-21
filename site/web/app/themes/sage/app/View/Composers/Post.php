@@ -128,7 +128,7 @@ class Post extends Composer
         foreach ($ancestors as $ancestor_id) {
             $breadcrumb[] = [
                 'label' => get_the_title($ancestor_id),
-                'url' => get_permalink($ancestor_id),
+                'url' => $this->isLessonActive($ancestor_id) ? get_permalink($ancestor_id) : null,
             ];
         }
 
@@ -138,6 +138,27 @@ class Post extends Composer
         ];
 
         return $breadcrumb;
+    }
+
+    /**
+     * Determine if the lesson should appear as active (linkable) in the breadcrumb.
+     *
+     * @param int $postId
+     * @return bool
+     */
+    protected function isLessonActive(int $postId): bool
+    {
+        if (get_post_type($postId) !== 'cde') {
+            return true;
+        }
+
+        if (!function_exists('get_field')) {
+            return true;
+        }
+
+        $value = get_field('active_lesson', $postId);
+
+        return $value === null ? true : (bool) $value;
     }
 
     /**
