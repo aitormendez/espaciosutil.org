@@ -7,14 +7,16 @@ export function toc() {
   const tocContainer = document.getElementById('toc');
   const footer = document.getElementById('footer');
 
-  gsap.to('#toc', {
-    scrollTrigger: {
-      trigger: footer,
-      toggleActions: 'play reverse play reverse',
-      markers: false,
-    },
-    opacity: 0,
-  });
+  if (tocContainer && footer) {
+    gsap.to(tocContainer, {
+      scrollTrigger: {
+        trigger: footer,
+        toggleActions: 'play reverse play reverse',
+        markers: false,
+      },
+      opacity: 0,
+    });
+  }
 
   if (tocContainer) {
     if (tocContainer.dataset.toc) {
