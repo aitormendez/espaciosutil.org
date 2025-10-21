@@ -9,10 +9,27 @@ const initFeaturedVideoPlayer = () => {
     const videoLibraryId = featuredVideoContainer.dataset.videoLibraryId;
     const pullZone = featuredVideoContainer.dataset.pullZone;
     const videoName = featuredVideoContainer.dataset.videoName;
+    let chapters = [];
+
+    if (featuredVideoContainer.dataset.videoChapters) {
+      try {
+        chapters = JSON.parse(featuredVideoContainer.dataset.videoChapters);
+      } catch (error) {
+        console.error('No se pudo parsear el subíndice de capítulos del video.', error);
+      }
+    }
 
     if (videoId && videoLibraryId && pullZone) {
       const root = createRoot(featuredVideoContainer);
-      root.render(<FeaturedVideo videoId={videoId} videoLibraryId={videoLibraryId} pullZone={pullZone} videoName={videoName} />);
+      root.render(
+        <FeaturedVideo
+          videoId={videoId}
+          videoLibraryId={videoLibraryId}
+          pullZone={pullZone}
+          videoName={videoName}
+          chapters={chapters}
+        />
+      );
     }
   }
 };

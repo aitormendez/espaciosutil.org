@@ -50,7 +50,18 @@ const LayoutToggleButton = ({ isFullWidth, onToggle }) => {
   );
 };
 
-const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
+const toVttTimestamp = (totalSeconds) => {
+  const safeTotal = Math.max(0, Number.isFinite(totalSeconds) ? totalSeconds : 0);
+  const hours = Math.floor(safeTotal / 3600);
+  const minutes = Math.floor((safeTotal % 3600) / 60);
+  const seconds = Math.floor(safeTotal % 60);
+
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.000`;
+};
+
+const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName, chapters = [] }) => {
   const playerRef = useRef(null);
   const hlsUrl = `https://${pullZone}.b-cdn.net/${videoId}/playlist.m3u8`;
   const thumbnailUrl = `https://${pullZone}.b-cdn.net/${videoId}/thumbnail.jpg`;
@@ -70,6 +81,7 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
     if (typeof window === 'undefined') return true;
     return window.matchMedia('(min-width: 768px)').matches;
   });
+  const [chapterTrackUrl, setChapterTrackUrl] = useState(null);
 
   useEffect(() => {
     if (!videoId || !videoLibraryId) {
@@ -284,6 +296,80 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
     setIsFullWidth((prev) => !prev);
   }, []);
 
+  useEffect(() => {
+    const handleSeekClick = (event) => {
+      const target = event.target.closest('[data-video-seek]');
+      if (!target) {
+        return;
+      }
+
+      const seekTo = Number(target.dataset.videoSeek);
+      if (!Number.isFinite(seekTo)) {
+        return;
+      }
+
+      const playerElement = playerRef.current;
+      if (!playerElement) {
+        return;
+      }
+
+      playerElement.currentTime = Math.max(0, seekTo);
+      if (typeof playerElement.play === 'function') {
+        const playPromise = playerElement.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {});
+        }
+      }
+    };
+
+    document.addEventListener('click', handleSeekClick);
+
+    return () => {
+      document.removeEventListener('click', handleSeekClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!Array.isArray(chapters) || chapters.length === 0) {
+      setChapterTrackUrl((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
+        }
+        return null;
+      });
+      return undefined;
+    }
+
+    const sortedChapters = [...chapters].sort((a, b) => (a.time ?? 0) - (b.time ?? 0));
+    const lines = ['WEBVTT', ''];
+
+    sortedChapters.forEach((chapter, index) => {
+      const startSeconds = Math.max(0, Number(chapter?.time ?? 0));
+      const nextChapter = sortedChapters[index + 1];
+      const nextStart = nextChapter ? Math.max(startSeconds, Number(nextChapter.time ?? startSeconds + 1)) : startSeconds + 1;
+      const endSeconds = nextStart <= startSeconds ? startSeconds + 1 : nextStart;
+      const title = typeof chapter?.title === 'string' && chapter.title.trim() ? chapter.title.trim() : `Capítulo ${index + 1}`;
+
+      lines.push(`${toVttTimestamp(startSeconds)} --> ${toVttTimestamp(endSeconds)}`);
+      lines.push(title);
+      lines.push('');
+    });
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/vtt' });
+    const nextUrl = URL.createObjectURL(blob);
+
+    setChapterTrackUrl((prev) => {
+      if (prev) {
+        URL.revokeObjectURL(prev);
+      }
+      return nextUrl;
+    });
+
+    return () => {
+      URL.revokeObjectURL(nextUrl);
+    };
+  }, [chapters]);
+
   return (
     <MediaPlayer
       className={playerClassName}
@@ -306,6 +392,9 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
             default={Boolean(track.default)}
           />
         ))}
+        {chapterTrackUrl ? (
+          <Track kind="chapters" src={chapterTrackUrl} label="Subíndice" default />
+        ) : null}
       </MediaProvider>
       <Captions className="vds-captions" />
       <Poster

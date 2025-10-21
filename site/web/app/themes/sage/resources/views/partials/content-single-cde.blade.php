@@ -4,10 +4,24 @@
     </header>
 
     <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-6">
-        <div
-            class="contenido prose prose-sutil prose-xl md:prose-2xl mt-18 mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
+        <div class="contenido prose md:prose-2xl mt-18 mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
             {{-- Parte 1: Extracto (visible para todos) --}}
             @php the_field('rich_excerpt') @endphp
+
+            @if (!empty($lesson_subindex['items']))
+                <nav class="bg-morado4/90 not-prose mt-12 rounded-sm px-6 py-5 font-sans text-base"
+                    aria-labelledby="lesson-subindex-title">
+                    <p id="lesson-subindex-title" class="font-display text-morado1 font-medium tracking-wide">
+                        Subíndice de la lección: {{ $lesson_subindex_root_title }}
+                    </p>
+                    <div class="mt-4">
+                        @include('partials.lesson-subindex', [
+                            'items' => $lesson_subindex['items'],
+                            'interactive' => $has_access,
+                        ])
+                    </div>
+                </nav>
+            @endif
         </div>
     </div>
 
@@ -21,7 +35,8 @@
         @if ($featured_video_id && $featured_video_library_id && $bunny_pull_zone)
             <div id="featured-video-player" data-video-id="{{ $featured_video_id }}"
                 data-video-library-id="{{ $featured_video_library_id }}" data-pull-zone="{{ $bunny_pull_zone }}"
-                data-video-name="{{ $featured_video_name }}" class="featured-video-container flex w-full justify-center p-6">
+                data-video-name="{{ $featured_video_name }}" data-video-chapters='@json($lesson_subindex['chapters'] ?? [])'
+                class="featured-video-container flex w-full justify-center p-6">
             </div>
         @endif
 

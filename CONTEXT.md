@@ -160,3 +160,14 @@ Cada tarjeta muestra los planes disponibles con:
 - Layout flexible con Tailwind (`flex-wrap`) que muestra las tarjetas en filas responsivas.
 - Imágenes optimizadas con `srcset` y `sizes` para carga adaptable.
 - No se utiliza ningún shortcode nativo de PMP para esta vista, aunque el shortcode puede coexistir en la misma página para comparación o fallback.
+
+## 9. Subíndice jerárquico para lecciones CDE
+
+- Se amplió el grupo de campos `Cde` (`app/Fields/Cde.php`) con un repeater `lesson_subindex_items`. Cada fila almacena `level` (1–4), `title`, `description`, `timecode` (placeholder `00:05:30`) y `anchor`. El editor ordena manualmente los ítems; la jerarquía final se deduce combinando orden + nivel.
+- El composer `app/View/Composers/SingleCde.php` expone dos estructuras:
+  - `lesson_subindex['items']`: árbol con hijos anidados que se usa para renderizar Blade.
+  - `lesson_subindex['chapters']`: lista plana con `time` en segundos y `time_label` formateado, reutilizada por el reproductor para la pista `chapters`.
+  - El helper `resolveLevel()` asegura que el valor de `level` se normalice aunque ACF devuelva texto (“Nivel 2”), mientras `normalizeTimecode()` valida tiempos `hh:mm:ss`. Se normalizan anclas con `sanitize_title`.
+- Las vistas `resources/views/partials/lesson-subindex.blade.php` y `lesson-subindex-children.blade.php` renderizan listas ordenadas/viñetas con botones `data-video-seek`. El bloque se incluye después del campo `rich_excerpt` en `partials/content-single-cde.blade.php`.
+- El contenedor del player añade `data-video-chapters` (JSON) que `initFeaturedVideoPlayer.jsx` parsea y pasa a `FeaturedVideo.jsx`. Este componente genera un `Blob` WebVTT para `Track kind="chapters"` y escucha clicks globales en `[data-video-seek]` para invocar `playerRef.current.currentTime`.
+- Cuando no hay subíndice se omiten tanto la navegación como la pista de capítulos. El árbol (items + chapters) está listo para reutilizarse en el índice AJAX del curso sin recalcular los datos.

@@ -61,6 +61,17 @@ El tema implementa un Custom Post Type (CPT) `cde` para gestionar el contenido d
 - **Extracto Enriquecido:** Cada entrada del curso puede tener un extracto enriquecido (WYSIWYG) gestionado a través de un campo de [Advanced Custom Fields (ACF)](https://www.advancedcustomfields.com/). Este extracto es visible para todos los usuarios.
 - **Contenido Restringido:** El contenido principal de las entradas del curso está dividido en dos partes: un extracto público y el contenido completo, que es accesible únicamente para usuarios con una membresía activa.
 
+#### Subíndice de la lección
+
+Cada lección dispone de un subíndice manual que se muestra tras el extracto y que también alimenta los capítulos del video.
+
+1. En la edición de la lección abre el grupo **Subíndice de la lección**.
+2. Añade los apartados necesarios y ordénalos mediante drag & drop.
+3. Selecciona el `Nivel` (1 para elementos raíz, 2–4 para anidados). La jerarquía se reconstruye automáticamente combinando el orden con este valor.
+4. El campo `Título` es obligatorio; `Descripción`, `Marca de tiempo` (`hh:mm:ss`) y `Ancla` son opcionales.
+5. Al rellenar `Marca de tiempo`, el subíndice muestra un botón que salta al instante correspondiente y el reproductor Vidstack crea una pista `chapters` con esa información.
+6. El campo `Ancla` genera un slug sanitizado que permite enlazar a secciones del contenido protegido.
+
 ### Video Destacado con Bunny.net
 
 Cada lección del curso (`cde`) puede incluir un video destacado, alojado en Bunny.net, que se muestra al principio del contenido.
