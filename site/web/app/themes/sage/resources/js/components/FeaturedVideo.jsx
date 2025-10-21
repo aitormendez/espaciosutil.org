@@ -59,7 +59,13 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
   const [videoSrc, setVideoSrc] = useState(hlsUrl);
   const [posterUrl, setPosterUrl] = useState(thumbnailUrl);
   const [subtitleTracks, setSubtitleTracks] = useState([]);
-  const [isFullWidth, setIsFullWidth] = useState(true);
+  const [isFullWidth, setIsFullWidth] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) {
+      return false;
+    }
+
+    return !window.matchMedia('(min-width: 768px)').matches;
+  });
   const [isDesktop, setIsDesktop] = useState(() => {
     if (typeof window === 'undefined') return true;
     return window.matchMedia('(min-width: 768px)').matches;
@@ -113,14 +119,15 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName }) => {
               lang: track.lang,
               label: track.label,
               src: track.src,
-              default: Boolean(track.default),
+              default: false,
             }));
 
-          if (
-            sanitizedTracks.length > 0 &&
-            !sanitizedTracks.some((track) => track.default)
-          ) {
-            sanitizedTracks[0].default = true;
+          if (sanitizedTracks.length > 1) {
+            sanitizedTracks.sort((a, b) => {
+              if (a.lang === 'es' && b.lang !== 'es') return -1;
+              if (a.lang !== 'es' && b.lang === 'es') return 1;
+              return 0;
+            });
           }
 
           setSubtitleTracks(sanitizedTracks);
