@@ -73,13 +73,6 @@ class Cde extends Field
                     'instructions' => 'Nombre del apartado tal como aparece en el subíndice.',
                     'required' => 1,
                 ])
-                ->addTextarea('description', [
-                    'label' => 'Descripción breve',
-                    'instructions' => 'Opcional, se mostrará debajo del título.',
-                    'required' => 0,
-                    'rows' => 2,
-                    'new_lines' => 'br',
-                ])
                 ->addText('timecode', [
                     'label' => 'Marca de tiempo',
                     'instructions' => 'Formato hh:mm:ss para saltar al momento del video (opcional).',
@@ -98,6 +91,17 @@ class Cde extends Field
                     ],
                 ])
             ->endRepeater();
+
+        $cde->addTextarea('lesson_subindex_import', [
+            'label' => 'Importar subíndice desde JSON',
+            'instructions' => 'Pega un JSON con objetos {title, level, timecode?, anchor?}. Se procesará al guardar la lección.',
+            'required' => 0,
+            'wrapper' => [
+                'width' => '',
+            ],
+            'rows' => 6,
+            'new_lines' => '',
+        ]);
 
         return $cde->build();
     }

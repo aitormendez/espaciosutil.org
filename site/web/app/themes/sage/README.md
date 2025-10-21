@@ -63,14 +63,23 @@ El tema implementa un Custom Post Type (CPT) `cde` para gestionar el contenido d
 
 #### Subíndice de la lección
 
-Cada lección dispone de un subíndice manual que se muestra tras el extracto y que también alimenta los capítulos del video.
+Cada lección dispone de un subíndice editorial que se muestra tras el extracto y que alimenta los capítulos del video.
 
 1. En la edición de la lección abre el grupo **Subíndice de la lección**.
-2. Añade los apartados necesarios y ordénalos mediante drag & drop.
-3. Selecciona el `Nivel` (1 para elementos raíz, 2–4 para anidados). La jerarquía se reconstruye automáticamente combinando el orden con este valor.
-4. El campo `Título` es obligatorio; `Descripción`, `Marca de tiempo` (`hh:mm:ss`) y `Ancla` son opcionales.
-5. Al rellenar `Marca de tiempo`, el subíndice muestra un botón que salta al instante correspondiente y el reproductor Vidstack crea una pista `chapters` con esa información.
-6. El campo `Ancla` genera un slug sanitizado que permite enlazar a secciones del contenido protegido.
+2. Puedes crear apartados manualmente (botón “Añadir apartado”) o importar un JSON en el campo **Importar subíndice desde JSON**.
+3. Si importas, el JSON debe ser un array de objetos con `title` (string), `level` (1–4), y opcionalmente `timecode` (`hh:mm:ss`) y `anchor` (slug sin `#`):
+
+   ```json
+   [
+     { "title": "Introducción", "level": 1, "timecode": "00:01:12", "anchor": "introduccion" },
+     { "title": "Referencias", "level": 2, "timecode": "00:03:45", "anchor": "referencias" },
+     { "title": "Conclusión", "level": 1 }
+   ]
+   ```
+
+4. Al guardar la lección, el JSON se valida, rellena el repeater y el campo se limpia. Los elementos quedan disponibles para retoques manuales.
+5. El campo `Nivel` controla la profundidad (1 = raíz, 2–4 = hijos). La jerarquía se reconstruye combinando orden + nivel.
+6. Las marcas de tiempo generan chips interactivos y una pista `chapters` en el player para usuarios con acceso; los visitantes no logueados ven una versión estática del índice.
 
 ### Video Destacado con Bunny.net
 
