@@ -1,16 +1,27 @@
-@php $interactive = $interactive ?? true @endphp
+@php
+    $interactive = $interactive ?? true;
+    $isNested = $is_nested ?? true;
+    $padMap = [
+        1 => 'pl-4',
+        2 => 'pl-8',
+        3 => 'pl-12',
+        4 => 'pl-16',
+    ];
+@endphp
 
 <ul class="list-disc space-y-3 pl-5">
     @foreach ($items as $item)
         @php
+            $level = max(1, min(4, (int) ($item['level'] ?? 2)));
             $hasAnchor = !empty($item['anchor']);
             $titleClasses =
                 $interactive && $hasAnchor
-                    ? 'text-morado2 hover:text-blanco cursor-pointer transition font-semibold'
+                    ? 'text-morado2 hover:text-blanco cursor-pointer transition'
                     : 'text-morado2';
+            $indentPad = $padMap[$level] ?? 'pl-6';
         @endphp
-        <li class="bg-morado5/50 border-morado3/50 rounded-sm border px-4 py-2">
-            <div class="flex flex-wrap items-center gap-3">
+        <li class="bg-morado5/50 border-morado3/50 rounded-sm border px-4 py-2" data-level="{{ $level }}">
+            <div class="{{ $indentPad }} flex flex-wrap items-center gap-3">
                 @if ($interactive && $hasAnchor)
                     <a href="#{{ $item['anchor'] }}" class="{{ $titleClasses }}">
                         {{ $item['title'] }}
@@ -33,17 +44,12 @@
                 @endif
             </div>
 
-            @if ($item['description'])
-                <p class="text-morado1/80 mt-2 text-sm">
-                    {{ $item['description'] }}
-                </p>
-            @endif
-
             @if (!empty($item['children']))
                 <div class="mt-3 pl-4">
                     @include('partials.lesson-subindex-children', [
                         'items' => $item['children'],
                         'interactive' => $interactive,
+                        'is_nested' => true,
                     ])
                 </div>
             @endif

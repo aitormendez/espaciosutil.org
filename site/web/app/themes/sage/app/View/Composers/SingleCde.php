@@ -127,6 +127,7 @@ class SingleCde extends Composer
                 'description' => $description ?: null,
                 'anchor' => $anchor,
                 'timecode' => $timecode,
+                'level' => $level,
                 'children' => [],
             ];
 

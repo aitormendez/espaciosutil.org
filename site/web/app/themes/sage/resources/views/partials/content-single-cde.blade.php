@@ -18,6 +18,7 @@
                         @include('partials.lesson-subindex', [
                             'items' => $lesson_subindex['items'],
                             'interactive' => $has_access,
+                            'is_nested' => false,
                         ])
                     </div>
                 </nav>

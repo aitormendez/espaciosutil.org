@@ -1,16 +1,34 @@
-@php $interactive = $interactive ?? true @endphp
+@php
+    $interactive = $interactive ?? true;
+    $isNested = $is_nested ?? false;
+    $padMap = [
+        1 => 'pl-4',
+        2 => 'pl-8',
+        3 => 'pl-12',
+        4 => 'pl-16',
+    ];
+    $marginMap = [
+        1 => 'ml-0',
+        2 => 'ml-6',
+        3 => 'ml-10',
+        4 => 'ml-14',
+    ];
+@endphp
 
 <ol class="list-decimal space-y-3 pl-5">
     @foreach ($items as $item)
         @php
+            $level = max(1, min(4, (int) ($item['level'] ?? 1)));
             $hasAnchor = !empty($item['anchor']);
+            $indentPad = $padMap[$level] ?? 'pl-4';
+            $indentMargin = !$isNested && $level > 1 ? ($marginMap[$level] ?? 'ml-6') : 'ml-0';
             $titleClasses =
                 $interactive && $hasAnchor
                     ? 'text-morado2 hover:text-blanco cursor-pointer tracking-wide transition'
                     : 'text-morado2 tracking-wide';
         @endphp
-        <li class="bg-morado5/60 rounded-sm p-4">
-            <div class="flex flex-wrap items-center gap-3">
+        <li class="bg-morado5/60 rounded-sm py-4 pr-4 {{ $indentMargin }}" data-level="{{ $level }}">
+            <div class="flex flex-wrap items-center gap-3 {{ $indentPad }}">
                 @if ($interactive && $hasAnchor)
                     <a href="#{{ $item['anchor'] }}" class="{{ $titleClasses }}">
                         {{ $item['title'] }}
@@ -33,17 +51,12 @@
                 @endif
             </div>
 
-            @if ($item['description'])
-                <p class="text-morado1/80 mt-2 text-sm">
-                    {{ $item['description'] }}
-                </p>
-            @endif
-
             @if (!empty($item['children']))
                 <div class="mt-3 pl-4">
                     @include('partials.lesson-subindex-children', [
                         'items' => $item['children'],
                         'interactive' => $interactive,
+                        'is_nested' => true,
                     ])
                 </div>
             @endif
