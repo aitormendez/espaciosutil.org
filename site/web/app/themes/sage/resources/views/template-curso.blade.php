@@ -25,25 +25,56 @@
             <div class="mx-auto w-full max-w-4xl px-6 md:flex md:space-x-12 md:px-0">
                 <aside class="md:w-1/3">
                     <h2 class="mb-6 font-sans text-2xl">Series</h2>
-                    <ul class="space-y-2">
-                        @foreach ($series_cde_lessons as $lesson)
+                    <ul class="space-y-3">
+                        @foreach ($series_cde_lessons as $series)
                             @php
-                                $terms = get_the_terms($lesson->ID, 'serie_cde');
-                                $serieName = $terms && !is_wp_error($terms) ? $terms[0]->name : $lesson->post_title;
+                                $seriesTermId = $series['term_id'] ?? null;
+                                $seriesBlocks = $series['blocks'] ?? [];
+                                $seriesSlug = sanitize_title($series['name']);
+                                $seriesButtonId = $seriesTermId
+                                    ? 'serie-toggle-' . $seriesTermId
+                                    : 'serie-toggle-' . $seriesSlug;
+                                $seriesPanelId = $seriesTermId
+                                    ? 'serie-panel-' . $seriesTermId
+                                    : $seriesButtonId . '-panel';
                             @endphp
-                            <li>
-                                <button data-post-id="{{ $lesson->ID }}"
-                                    class="serie-cde-button bg-morado2 rounded-xs text-gris5 hover:bg-blanco w-full cursor-pointer p-3 text-left transition-colors">
-                                    {{ $serieName }}
+                            <li class="serie-accordion-item">
+                                <button type="button"
+                                    class="serie-accordion-toggle bg-morado2 rounded-xs text-gris5 hover:bg-blanco flex w-full items-center justify-between px-3 py-2 text-left font-semibold transition-colors"
+                                    data-series-term="{{ $seriesTermId }}" aria-expanded="false"
+                                    aria-controls="{{ $seriesPanelId }}" id="{{ $seriesButtonId }}">
+                                    <span>{{ $series['name'] }}</span>
+                                    <span class="serie-accordion-icon transition-transform duration-200">+</span>
                                 </button>
+
+                                <div id="{{ $seriesPanelId }}" class="serie-accordion-panel hidden" role="region"
+                                    aria-labelledby="{{ $seriesButtonId }}">
+                                    @if (!empty($seriesBlocks))
+                                        <ul class="mt-2 space-y-2">
+                                            @foreach ($seriesBlocks as $block)
+                                                <li>
+                                                    <button type="button"
+                                                        class="serie-cde-button bg-morado4/80 hover:bg-morado1/80 rounded-xs text-blanco flex w-full cursor-pointer px-3 py-2 text-left transition-colors"
+                                                        data-post-id="{{ $block['post_id'] }}"
+                                                        data-block-term="{{ $block['term_id'] }}">
+                                                        <span>{{ $block['name'] }}</span>
+                                                    </button>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="rounded-xs bg-morado4/50 text-gris5 mt-2 p-3 text-sm">No hay bloques
+                                            disponibles.</p>
+                                    @endif
+                                </div>
                             </li>
                         @endforeach
                     </ul>
                 </aside>
                 <main class="mt-12 md:mt-0 md:w-2/3">
-                    <h2 class="mb-6 font-sans text-2xl">Lecciones</h2>
+                    <h2 class="mb-6 font-sans text-2xl">Temas</h2>
                     <div id="indice-ajax-container" class="course-index prose font-sans">
-                        <p>Selecciona una serie para ver sus lecciones.</p>
+                        <p>Selecciona un bloque de la serie para ver sus temas.</p>
                     </div>
                 </main>
             </div>

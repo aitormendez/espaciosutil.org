@@ -165,9 +165,11 @@ Este sistema permite que los estudiantes lleven un control visual y funcional de
 
 #### Organización por series
 
-- Las lecciones raíz del curso se clasifican mediante la taxonomía personalizada `serie_cde`.
-- **Solo la lección raíz de cada serie debe llevar asignado el término `serie_cde`**; las lecciones hijas permanecen sin término y cuelgan jerárquicamente de la raíz.
-- La plantilla `template-curso` usa esa taxonomía para construir el listado de series y cargar el índice jerárquico de cada una vía AJAX.
+- La taxonomía `serie_cde` es jerárquica: los términos raíz representan las series y sus términos hijo representan los bloques de contenido de cada serie.
+- Cada bloque debe tener una lección raíz `cde` asociada únicamente al término hijo correspondiente; las lecciones descendientes permanecen sin término y se anidan mediante el campo padre (`post_parent`).
+- El término raíz solo sirve para generar el botón de la serie dentro del índice, por lo que no debe asignarse a ninguna entrada.
+- Para crear un bloque nuevo: crea el término hijo bajo la serie, asigna ese término a la lección raíz del bloque (puedes nombrarla siguiendo el patrón `Serie › Bloque`) y organiza el resto de lecciones como hijas de esa entrada raíz.
+- La plantilla `template-curso` renderiza un acordeón: el botón de serie despliega sus bloques y, al elegir un bloque, se carga su índice jerárquico vía AJAX; el orden de los bloques se controla con `term_order` y el de las lecciones con `menu_order`.
 - Las antiguas entradas de `revelador` se mantienen para el resto de contenidos del sitio, pero ya no se utilizan para el CPT `cde`.
 
 #### Control de acceso por membresía (Paid Memberships Pro)
