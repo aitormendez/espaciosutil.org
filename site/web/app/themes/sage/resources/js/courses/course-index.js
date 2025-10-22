@@ -145,6 +145,7 @@ if (!container || (!seriesToggles.length && !blockButtons.length)) {
         }
         const data = await response.json();
         container.innerHTML = data.html;
+        initializeCourseIndexChildren(container);
       } catch (error) {
         container.innerHTML =
           '<p>Ha ocurrido un error al cargar el índice.</p>';
@@ -169,4 +170,93 @@ if (!container || (!seriesToggles.length && !blockButtons.length)) {
 
   container.setAttribute('role', 'region');
   container.setAttribute('aria-live', 'polite');
+
+  function initializeCourseIndexChildren(root) {
+    if (!root) {
+      return;
+    }
+
+    const toggles = root.querySelectorAll('[data-toggle-children="true"]');
+    toggles.forEach((toggle) => {
+      if (toggle.dataset.toggleChildrenInitialized === 'true') {
+        return;
+      }
+
+      const item = toggle.closest('.course-index-item');
+      const panel = item?.querySelector('[data-children-wrapper]');
+      if (!panel) {
+        return;
+      }
+
+      toggle.dataset.toggleChildrenInitialized = 'true';
+      panel.style.overflow = 'hidden';
+      panel.dataset.expanded = panel.dataset.expanded ?? 'true';
+      panel.style.height = 'auto';
+
+      const icon = toggle.querySelector('.course-index-chevron');
+
+      const setIcon = (isOpen) => {
+        if (icon) {
+          icon.textContent = isOpen ? '-' : '+';
+        }
+      };
+
+      setIcon(panel.dataset.expanded !== 'false');
+
+      const openPanel = () => {
+        gsap.killTweensOf(panel);
+        toggle.setAttribute('aria-expanded', 'true');
+        panel.dataset.expanded = 'true';
+        panel.classList.remove('is-collapsed');
+        gsap.fromTo(
+          panel,
+          { height: 0, opacity: 0 },
+          {
+            height: 'auto',
+            opacity: 1,
+            duration: 0.3,
+            ease: 'power2.out',
+            onComplete: () => {
+              panel.style.height = 'auto';
+            },
+          }
+        );
+        setIcon(true);
+      };
+
+      const closePanel = () => {
+        gsap.killTweensOf(panel);
+        toggle.setAttribute('aria-expanded', 'false');
+        panel.dataset.expanded = 'false';
+        gsap.to(panel, {
+          height: 0,
+          opacity: 0,
+          duration: 0.25,
+          ease: 'power2.inOut',
+        });
+        setIcon(false);
+      };
+
+      const handleToggle = () => {
+        const isExpanded = panel.dataset.expanded !== 'false';
+        if (isExpanded) {
+          closePanel();
+        } else {
+          openPanel();
+        }
+      };
+
+      toggle.addEventListener('click', () => {
+        handleToggle();
+      });
+      toggle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          handleToggle();
+        }
+      });
+    });
+  }
+
+  initializeCourseIndexChildren(container);
 }
