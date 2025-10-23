@@ -129,6 +129,32 @@ Ubicación de la implementación:
 
 Nota: Por ahora, la preferencia no se persiste. Si se requiere, puede añadirse con `localStorage`.
 
+### Audio destacado y modo “Escuchar”
+
+Además del vídeo, cada lección puede ofrecer una pista de audio alojada en la misma Video Library de Bunny.net. Cuando hay audio y vídeo disponibles, el frontend muestra un selector para elegir entre “Ver video” y “Escuchar audio”; si solo se proporciona audio, el modo se activa automáticamente.
+
+#### Campos en el editor
+
+Dentro del grupo **Video destacado** se añadieron tres campos nuevos:
+
+- `featured_audio_id`: Stream ID del audio en Bunny.net (obligatorio para mostrar el reproductor de audio).
+- `featured_audio_library_id`: ID de la Video Library. Déjalo con el valor por defecto salvo que el audio viva en otra librería.
+- `featured_audio_name`: Etiqueta opcional que se muestra en el UI. Si se deja vacío, se usa el título de la lección.
+
+#### Flujo editorial
+
+1. Sube el archivo de audio (mp3/wav/etc.) a la **Video Library** de Bunny; aunque no tenga pista de vídeo, Bunny Stream genera automáticamente un HLS de audio.
+2. (Opcional) Agrupa los audios en una colección propia de la librería para diferenciarlos de los vídeos.
+3. Copia el `Video ID` del asset y pégalo en `featured_audio_id`. Si usas otra librería, especifica también `featured_audio_library_id`.
+4. Guarda la lección. El subíndice de capítulos (repeater ACF) se reutiliza tanto para vídeo como para audio, por lo que los saltos funcionan en ambos modos.
+
+#### Comportamiento en frontend
+
+- El progreso de escucha y visionado se guarda de forma independiente usando el endpoint `/wp-json/espacio-sutil/v1/video-progress` (el Stream ID actúa como clave).
+- El reproductor de audio usa Vidstack con el layout `DefaultAudioLayout` e incorpora la miniatura de Bunny como portada circular encima de los controles.
+- Los capítulos se inyectan como pista `chapters`, y los botones del subíndice hacen “seek” en el medio actualmente activo.
+- Si no se define `featured_audio_id`, no se muestra el toggle ni el reproductor de audio.
+
 #### Sistema de Marcación de Lecciones
 
 Este tema incluye un sistema para que los usuarios registrados puedan marcar lecciones del curso como "vistos".

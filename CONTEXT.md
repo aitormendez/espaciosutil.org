@@ -117,6 +117,18 @@ Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEP
 - Este componente utiliza la librería `@vidstack/react` para renderizar el reproductor.
 - **URL del Póster:** La URL correcta para la imagen del póster (miniatura) de un vídeo en Bunny.net no es `poster.jpg`, sino `thumbnail.jpg`. La estructura es: `https://{PULL_ZONE}.b-cdn.net/{VIDEO_ID}/thumbnail.jpg`.
 
+### Selector Video/Audio con Vidstack
+
+- El grupo de campos `app/Fields/FeaturedVideo.php` ahora incluye los pares `featured_audio_*` (ID, library_id y nombre opcional). Si el ID está vacío, la vista ignora el modo audio.
+- El composer `App\View\Composers\SingleCde` expone `featured_media`, que empaqueta la información de vídeo y audio (IDs, library, nombre, capítulos, URLs de fallback) y las inyecta en el contenedor Blade.
+- `resources/views/partials/content-single-cde.blade.php` serializa esas props en `data-media-props` dentro del `div#featured-lesson-media`. `resources/js/initFeaturedVideoPlayer.jsx` lee el JSON y monta el wrapper React.
+- `resources/js/components/FeaturedLessonMedia.jsx` es el orquestador: normaliza los datos, decide si hay vídeo y/o audio y renderiza el toggle “Ver video / Escuchar audio”. Cuando sólo existe uno de los medios, el toggle desaparece.
+- `FeaturedVideo.jsx` y el nuevo `FeaturedAudio.jsx` comparten utilidades:
+  - `fetchMediaMetadata.js` (REST `/wp-json/espacio-sutil/v1/video-resolutions`) resuelve HLS, poster, captions y tipo de medio. El endpoint PHP `espacio-sutil-blocks/includes/api/video-resolutions.php` ahora identifica si el asset sólo contiene audio (`mediaKind='audio'`) y siempre devuelve el playlist HLS.
+  - `mediaChapters.js` genera el WebVTT de capítulos a partir del subíndice ya existente; ambos players montan la pista `chapters`.
+- El reproductor de audio usa `DefaultAudioLayout`, muestra la miniatura (si existe) como avatar y fuerza `viewType="audio"` para que Vidstack muestre controles específicos. El progreso de vídeo y audio se persiste con el mismo endpoint `/wp-json/espacio-sutil/v1/video-progress`, diferenciando por Stream ID.
+- El toggle frontal se apoya en Tailwind y guarda el estado en memoria (no en localStorage). Cambiar de modo no reinicia el progreso del medio activo.
+
 ## 8. Implementación de Tabla de Precios de Suscripciones
 
 La página de suscripciones del sitio ha sido completamente rediseñada para mostrar una tabla de precios personalizada basada en campos ACF, integrados mediante `acf-composer`.

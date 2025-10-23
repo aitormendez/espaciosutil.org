@@ -39,7 +39,32 @@ class FeaturedVideo extends Field
             ])
             ->addText('featured_video_name', [
                 'label' => 'Nombre del Video',
-                'instructions' => 'Introduce el nombre del video que se mostrará en el reproductor.',
+                'instructions' => 'Nombre descriptivo. Dejar en blanco para usar el título de la lección.',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '100',
+                ],
+            ])
+            ->addText('featured_audio_id', [
+                'label' => 'ID del Audio (Bunny.net Stream ID)',
+                'instructions' => 'Introduce el Stream ID del audio en Bunny.net (usa la misma Video Library).',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_audio_library_id', [
+                'label' => 'ID de la Librería para Audio (Bunny.net Video Library ID)',
+                'instructions' => 'Deja el valor por defecto si el audio vive en la misma librería que los videos.',
+                'default_value' => '457097',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_audio_name', [
+                'label' => 'Nombre del Audio',
+                'instructions' => 'Nombre descriptivo. Dejar en blanco para usar el título de la lección.',
                 'required' => 0,
                 'wrapper' => [
                     'width' => '100',

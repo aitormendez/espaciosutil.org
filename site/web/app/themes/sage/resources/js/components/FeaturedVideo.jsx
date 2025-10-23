@@ -14,6 +14,8 @@ import {
   defaultLayoutIcons,
   DefaultTooltip,
 } from '@vidstack/react/player/layouts/default';
+import { fetchMediaMetadata } from '../utils/fetchMediaMetadata.js';
+import { buildChaptersVtt } from '../utils/mediaChapters.js';
 
 const WideIcon = (props) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" {...props}>
@@ -50,25 +52,63 @@ const LayoutToggleButton = ({ isFullWidth, onToggle }) => {
   );
 };
 
-const toVttTimestamp = (totalSeconds) => {
-  const safeTotal = Math.max(0, Number.isFinite(totalSeconds) ? totalSeconds : 0);
-  const hours = Math.floor(safeTotal / 3600);
-  const minutes = Math.floor((safeTotal % 3600) / 60);
-  const seconds = Math.floor(safeTotal % 60);
+const normalizeCaptionTracks = (tracks) => {
+  if (!Array.isArray(tracks)) {
+    return [];
+  }
 
-  return `${hours.toString().padStart(2, '0')}:${minutes
-    .toString()
-    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.000`;
+  const sanitizedTracks = tracks
+    .filter(
+      (track) =>
+        typeof track?.lang === 'string' &&
+        typeof track?.label === 'string' &&
+        typeof track?.src === 'string'
+    )
+    .map((track) => ({
+      lang: track.lang,
+      label: track.label,
+      src: track.src,
+      default: Boolean(track.default),
+    }));
+
+  if (sanitizedTracks.length > 1) {
+    sanitizedTracks.sort((a, b) => {
+      if (a.lang === 'es' && b.lang !== 'es') return -1;
+      if (a.lang !== 'es' && b.lang === 'es') return 1;
+      return 0;
+    });
+  }
+
+  return sanitizedTracks;
 };
 
-const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName, chapters = [] }) => {
+const FeaturedVideo = ({
+  videoId,
+  videoLibraryId,
+  pullZone,
+  videoName,
+  lessonTitle,
+  chapters = [],
+  defaultHlsUrl,
+  defaultPosterUrl,
+}) => {
   const playerRef = useRef(null);
-  const hlsUrl = `https://${pullZone}.b-cdn.net/${videoId}/playlist.m3u8`;
-  const thumbnailUrl = `https://${pullZone}.b-cdn.net/${videoId}/thumbnail.jpg`;
+  const fallbackHlsUrl =
+    typeof defaultHlsUrl === 'string' && defaultHlsUrl.trim()
+      ? defaultHlsUrl.trim()
+      : pullZone
+        ? `https://${pullZone}.b-cdn.net/${videoId}/playlist.m3u8`
+        : '';
+  const fallbackPosterUrl =
+    typeof defaultPosterUrl === 'string' && defaultPosterUrl.trim()
+      ? defaultPosterUrl.trim()
+      : pullZone
+        ? `https://${pullZone}.b-cdn.net/${videoId}/thumbnail.jpg`
+        : '';
   const lastSavedTime = useRef(0);
   const saveInterval = 5; // Save every 5 seconds
-  const [videoSrc, setVideoSrc] = useState(hlsUrl);
-  const [posterUrl, setPosterUrl] = useState(thumbnailUrl);
+  const [videoSrc, setVideoSrc] = useState(fallbackHlsUrl);
+  const [posterUrl, setPosterUrl] = useState(fallbackPosterUrl);
   const [subtitleTracks, setSubtitleTracks] = useState([]);
   const [isFullWidth, setIsFullWidth] = useState(() => {
     if (typeof window === 'undefined' || !window.matchMedia) {
@@ -82,86 +122,58 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName, chapters 
     return window.matchMedia('(min-width: 768px)').matches;
   });
   const [chapterTrackUrl, setChapterTrackUrl] = useState(null);
+  const resolvedTitle = (() => {
+    if (typeof videoName === 'string' && videoName.trim()) {
+      return videoName.trim();
+    }
+    if (typeof lessonTitle === 'string' && lessonTitle.trim()) {
+      return lessonTitle.trim();
+    }
+    return 'Video Destacado';
+  })();
+
+  useEffect(() => {
+    setVideoSrc(fallbackHlsUrl);
+    setPosterUrl(fallbackPosterUrl);
+  }, [fallbackHlsUrl, fallbackPosterUrl]);
 
   useEffect(() => {
     if (!videoId || !videoLibraryId) {
       setSubtitleTracks([]);
-      setVideoSrc(hlsUrl);
-      setPosterUrl(thumbnailUrl);
+      setVideoSrc(fallbackHlsUrl);
+      setPosterUrl(fallbackPosterUrl);
       return undefined;
     }
 
     const controller = new AbortController();
 
-    const fetchVideoMetadata = async () => {
+    const fetchMetadata = async () => {
       try {
-        const response = await fetch(
-          `/wp-json/espacio-sutil/v1/video-resolutions?library_id=${videoLibraryId}&video_id=${videoId}`,
-          { signal: controller.signal }
-        );
+        const mediaMetadata = await fetchMediaMetadata({
+          mediaId: videoId,
+          libraryId: videoLibraryId,
+          signal: controller.signal,
+        });
 
-        if (!response.ok) {
-          console.error('Failed to fetch Bunny metadata', await response.json());
-          return;
-        }
-
-        const data = await response.json();
-
-        if (data?.hlsUrl) {
-          setVideoSrc(data.hlsUrl);
-        } else {
-          setVideoSrc(hlsUrl);
-        }
-
-        if (data?.thumbnailUrl) {
-          setPosterUrl(data.thumbnailUrl);
-        } else {
-          setPosterUrl(thumbnailUrl);
-        }
-
-        if (Array.isArray(data?.captions)) {
-          const sanitizedTracks = data.captions
-            .filter(
-              (track) =>
-                typeof track?.lang === 'string' &&
-                typeof track?.label === 'string' &&
-                typeof track?.src === 'string'
-            )
-            .map((track) => ({
-              lang: track.lang,
-              label: track.label,
-              src: track.src,
-              default: false,
-            }));
-
-          if (sanitizedTracks.length > 1) {
-            sanitizedTracks.sort((a, b) => {
-              if (a.lang === 'es' && b.lang !== 'es') return -1;
-              if (a.lang !== 'es' && b.lang === 'es') return 1;
-              return 0;
-            });
-          }
-
-          setSubtitleTracks(sanitizedTracks);
-        } else {
-          setSubtitleTracks([]);
-        }
+        setVideoSrc(mediaMetadata?.hlsUrl ?? fallbackHlsUrl);
+        setPosterUrl(mediaMetadata?.thumbnailUrl ?? fallbackPosterUrl);
+        setSubtitleTracks(normalizeCaptionTracks(mediaMetadata?.captions));
       } catch (error) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching Bunny metadata:', error);
         }
-        setVideoSrc(hlsUrl);
-        setPosterUrl(thumbnailUrl);
+        setVideoSrc(fallbackHlsUrl);
+        setPosterUrl(fallbackPosterUrl);
         setSubtitleTracks([]);
       }
     };
 
-    fetchVideoMetadata();
+    fetchMetadata();
 
     return () => {
       controller.abort();
     };
-  }, [hlsUrl, thumbnailUrl, videoId, videoLibraryId]);
+  }, [fallbackHlsUrl, fallbackPosterUrl, videoId, videoLibraryId]);
 
   const saveVideoProgress = useCallback(
     async (currentTime) => {
@@ -340,22 +352,18 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName, chapters 
       return undefined;
     }
 
-    const sortedChapters = [...chapters].sort((a, b) => (a.time ?? 0) - (b.time ?? 0));
-    const lines = ['WEBVTT', ''];
+    const vttContent = buildChaptersVtt(chapters);
+    if (!vttContent) {
+      setChapterTrackUrl((prev) => {
+        if (prev) {
+          URL.revokeObjectURL(prev);
+        }
+        return null;
+      });
+      return undefined;
+    }
 
-    sortedChapters.forEach((chapter, index) => {
-      const startSeconds = Math.max(0, Number(chapter?.time ?? 0));
-      const nextChapter = sortedChapters[index + 1];
-      const nextStart = nextChapter ? Math.max(startSeconds, Number(nextChapter.time ?? startSeconds + 1)) : startSeconds + 1;
-      const endSeconds = nextStart <= startSeconds ? startSeconds + 1 : nextStart;
-      const title = typeof chapter?.title === 'string' && chapter.title.trim() ? chapter.title.trim() : `Capítulo ${index + 1}`;
-
-      lines.push(`${toVttTimestamp(startSeconds)} --> ${toVttTimestamp(endSeconds)}`);
-      lines.push(title);
-      lines.push('');
-    });
-
-    const blob = new Blob([lines.join('\n')], { type: 'text/vtt' });
+    const blob = new Blob([vttContent], { type: 'text/vtt' });
     const nextUrl = URL.createObjectURL(blob);
 
     setChapterTrackUrl((prev) => {
@@ -373,7 +381,7 @@ const FeaturedVideo = ({ videoId, videoLibraryId, pullZone, videoName, chapters 
   return (
     <MediaPlayer
       className={playerClassName}
-      title={videoName || 'Video Destacado'}
+      title={resolvedTitle}
       src={videoSrc}
       aspectRatio="16/9"
       crossOrigin

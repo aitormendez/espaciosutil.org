@@ -60,12 +60,15 @@ class SingleCde extends Composer
             wp_reset_postdata();
         }
 
+        $lesson_subindex = $this->buildLessonSubindex();
+
         return [
             'is_completed' => in_array(get_the_ID(), $completed_lessons, true),
             'has_access' => $has_access,
             'related_lessons' => $related_lessons,
-            'lesson_subindex' => $this->buildLessonSubindex(),
+            'lesson_subindex' => $lesson_subindex,
             'lesson_subindex_root_title' => get_the_title(),
+            'featured_media' => $this->prepareFeaturedMedia($lesson_subindex['chapters'] ?? []),
         ];
     }
 
@@ -158,6 +161,79 @@ class SingleCde extends Composer
         return [
             'items' => $tree,
             'chapters' => $chapters,
+        ];
+    }
+
+    /**
+     * Prepara la información de video/audio destacado para la vista.
+     *
+     * @param array $chapters
+     * @return array
+     */
+    protected function prepareFeaturedMedia(array $chapters): array
+    {
+        $pull_zone = getenv('BUNNY_PULL_ZONE') ?: null;
+
+        $video = $this->resolveMediaEntry('featured_video', $pull_zone, $chapters);
+        $audio = $this->resolveMediaEntry('featured_audio', $pull_zone, $chapters);
+
+        return [
+            'video' => $video,
+            'audio' => $audio,
+            'pull_zone' => $pull_zone,
+            'has_video' => $video !== null,
+            'has_audio' => $audio !== null,
+        ];
+    }
+
+    /**
+     * Resuelve los campos ACF de un medio destacado.
+     *
+     * @param string $field_prefix
+     * @param string|null $pull_zone
+     * @param array $chapters
+     * @return array|null
+     */
+    protected function resolveMediaEntry(string $field_prefix, ?string $pull_zone, array $chapters): ?array
+    {
+        if (!function_exists('get_field')) {
+            return null;
+        }
+
+        $id_raw = get_field("{$field_prefix}_id");
+        $library_raw = get_field("{$field_prefix}_library_id");
+        $name_raw = get_field("{$field_prefix}_name");
+
+        $media_id = is_scalar($id_raw) ? trim((string) $id_raw) : '';
+
+        if ($media_id === '') {
+            return null;
+        }
+
+        $library_id = is_scalar($library_raw) ? trim((string) $library_raw) : '';
+        if ($library_id === '') {
+            $library_id = '457097';
+        }
+
+        $name = is_string($name_raw) ? trim($name_raw) : '';
+        $name = $name !== '' ? $name : null;
+
+        $default_hls_url = null;
+        $default_thumbnail_url = null;
+
+        if ($pull_zone) {
+            $default_hls_url = sprintf('https://%s.b-cdn.net/%s/playlist.m3u8', $pull_zone, $media_id);
+            $default_thumbnail_url = sprintf('https://%s.b-cdn.net/%s/thumbnail.jpg', $pull_zone, $media_id);
+        }
+
+        return [
+            'type' => $field_prefix === 'featured_audio' ? 'audio' : 'video',
+            'id' => $media_id,
+            'library_id' => $library_id,
+            'name' => $name,
+            'chapters' => $chapters,
+            'default_hls_url' => $default_hls_url,
+            'default_thumbnail_url' => $default_thumbnail_url,
         ];
     }
 

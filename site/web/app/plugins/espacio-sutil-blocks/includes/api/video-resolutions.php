@@ -22,13 +22,13 @@ function es_blocks_get_video_resolutions($data)
         return new WP_Error('no_video_id', 'No video ID provided', ['status' => 400]);
     }
 
-    $video_details = es_blocks_fetch_video_details($video_id, $library_id);
+    $media_details = es_blocks_fetch_media_details($video_id, $library_id);
 
-    if (empty($video_details)) {
+    if (!is_array($media_details) || empty($media_details['hlsUrl'])) {
         return new WP_Error('no_encodings', 'No video resolutions found', ['status' => 404]);
     }
 
-    $response = rest_ensure_response($video_details);
+    $response = rest_ensure_response($media_details);
     $response->header('Cache-Control', 'no-cache, no-store, must-revalidate');
     $response->header('Pragma', 'no-cache');
     $response->header('Expires', '0');
@@ -36,7 +36,7 @@ function es_blocks_get_video_resolutions($data)
     return $response;
 }
 
-function es_blocks_fetch_video_details($video_id, $library_id)
+function es_blocks_fetch_media_details($video_id, $library_id)
 {
     $api_key   = getenv('BUNNY_KEY');
     $pull_zone = getenv('BUNNY_PULL_ZONE');
@@ -59,10 +59,6 @@ function es_blocks_fetch_video_details($video_id, $library_id)
 
     $body = wp_remote_retrieve_body($response);
     $data = json_decode($body, true);
-
-    if (!isset($data['availableResolutions'])) {
-        return [];
-    }
 
     $captions = [];
 
@@ -136,9 +132,34 @@ function es_blocks_fetch_video_details($video_id, $library_id)
         $poster_url = "https://{$pull_zone}.b-cdn.net/{$video_id}/thumbnail.jpg";
     }
 
+    $available_resolutions = $data['availableResolutions'] ?? [];
+    if (!is_array($available_resolutions)) {
+        $available_resolutions = [];
+    }
+
+    $has_video_tracks = false;
+
+    foreach ($available_resolutions as $resolution) {
+        if (!is_string($resolution)) {
+            continue;
+        }
+
+        $normalized = strtolower(trim($resolution));
+
+        if ($normalized !== '' && $normalized !== 'audio') {
+            $has_video_tracks = true;
+            break;
+        }
+    }
+
+    $media_kind = $has_video_tracks ? 'video' : 'audio';
+
     return [
+        'mediaKind'    => $media_kind,
         'hlsUrl'       => "https://{$pull_zone}.b-cdn.net/{$video_id}/playlist.m3u8",
         'thumbnailUrl' => $poster_url,
         'captions'     => $captions,
+        'length'       => isset($data['length']) ? (float) $data['length'] : null,
+        'title'        => isset($data['title']) ? sanitize_text_field($data['title']) : null,
     ];
 }

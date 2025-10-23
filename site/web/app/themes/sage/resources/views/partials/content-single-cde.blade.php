@@ -28,16 +28,20 @@
 
     {{-- Parte 2: Contenido completo (visible solo para miembros logueados con membresía activa) --}}
     @if ($has_access)
-        @php($featured_video_id = get_field('featured_video_id'))
-        @php($featured_video_library_id = get_field('featured_video_library_id'))
-        @php($featured_video_name = get_field('featured_video_name'))
-        @php($bunny_pull_zone = getenv('BUNNY_PULL_ZONE'))
+        @php
+            $has_featured_media = ($featured_media['has_video'] ?? false) || ($featured_media['has_audio'] ?? false);
+            $media_props = [
+                'video' => $featured_media['video'] ?? null,
+                'audio' => $featured_media['audio'] ?? null,
+                'pullZone' => $featured_media['pull_zone'] ?? null,
+                'lessonTitle' => get_the_title(),
+            ];
+        @endphp
 
-        @if ($featured_video_id && $featured_video_library_id && $bunny_pull_zone)
-            <div id="featured-video-player" data-video-id="{{ $featured_video_id }}"
-                data-video-library-id="{{ $featured_video_library_id }}" data-pull-zone="{{ $bunny_pull_zone }}"
-                data-video-name="{{ $featured_video_name }}" data-video-chapters='@json($lesson_subindex['chapters'] ?? [])'
-                class="featured-video-container flex w-full justify-center p-6">
+        @if ($has_featured_media)
+            <div id="featured-lesson-media"
+                data-media-props='@json($media_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'
+                class="featured-media-container flex w-full justify-center p-6">
             </div>
         @endif
 
