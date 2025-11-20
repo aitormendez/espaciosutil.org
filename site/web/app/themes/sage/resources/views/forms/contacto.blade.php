@@ -1,4 +1,13 @@
-<x-html-forms :form="$form" class="my-20">
+@php
+    $hfTimestamp = time();
+    $hfSignature = wp_hash($hfTimestamp.'|'.($form->ID ?? 'contacto'));
+    $hfHidden = view('forms.partials.antispam-hidden', [
+        'timestamp' => $hfTimestamp,
+        'signature' => $hfSignature,
+    ])->render();
+@endphp
+
+<x-html-forms :form="$form" class="my-20" :hidden="$hfHidden">
     <input name="NAME" type="text" placeholder="Nombre completo"
         class="bg-morado4 border-gris3 mb-6 block w-full rounded border px-4 py-3" required>
 

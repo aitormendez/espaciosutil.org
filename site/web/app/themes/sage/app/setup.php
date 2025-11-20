@@ -210,3 +210,51 @@ add_action('widgets_init', function () {
         'id' => 'sidebar-footer',
     ] + $config);
 });
+
+/**
+ * Blindaje anti spam para el formulario de contacto (HTML Forms).
+ * - Firma campos ocultos para evitar falsificaciones.
+ * - Exige tiempo mínimo en el formulario y caducidad.
+ * - Añade rate limit suave por IP.
+ */
+add_filter('hf_validate_form', function ($error, $form, $data) {
+    $hasCustomFields = array_key_exists('_hf_ts', $data) || array_key_exists('_hf_sig', $data);
+
+    if (! empty($error) || (! $hasCustomFields && ($form->slug ?? '') !== 'contacto')) {
+        return $error;
+    }
+
+    if (! $hasCustomFields) {
+        return 'spam';
+    }
+
+    $timestamp = isset($data['_hf_ts']) ? (int) $data['_hf_ts'] : 0;
+    $signature = $data['_hf_sig'] ?? '';
+
+    if (! $timestamp || ! is_string($signature)) {
+        return 'spam';
+    }
+
+    $expectedSignature = wp_hash($timestamp.'|'.$form->ID);
+
+    if (! hash_equals($expectedSignature, $signature)) {
+        return 'spam';
+    }
+
+    $age = time() - $timestamp;
+    if ($age < 3 || $age > 45 * MINUTE_IN_SECONDS) {
+        return 'spam';
+    }
+
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateKey = sprintf('hf_rate_%d_%s', $form->ID, md5($ip));
+    $attempts = (int) get_transient($rateKey);
+
+    if ($attempts >= 5) {
+        return 'spam';
+    }
+
+    set_transient($rateKey, $attempts + 1, 30 * MINUTE_IN_SECONDS);
+
+    return '';
+}, 10, 3);

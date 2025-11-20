@@ -194,3 +194,12 @@ Cada tarjeta muestra los planes disponibles con:
 - El árbol resultante renderizado por `partials/course-index-item` añade para cada nodo con descendientes un botón independiente (`course-index-toggle`) que controla columnas anidadas sin interferir con el enlace principal ni el icono de progreso. El JS reusa `gsap` para colapsar/expandir cada wrapper (`data-children-wrapper`) y sincroniza `aria-expanded` e iconos `+/-`.
 - Los nodos sin icono de progreso utilizan un `span` placeholder (`course-index-placeholder-icon` con `aria-hidden="true"`) para mantener la alineación vertical entre iconos, enlaces y botones en todas las profundidades.
 - Los estilos heredan de Tailwind; los paneles se ocultan con la clase `hidden` y un `overflow: hidden` inline para permitir la animación de altura.
+
+## 11. Formularios (HTML Forms + Sage)
+
+- Se usa el plugin **HTML Forms** y el wrapper **Log1x/sage-html-forms**. El componente Blade `<x-html-forms>` pinta el formulario, añade nonce y el honeypot `_hf_h{ID}` y admite markup oculto por la prop `hidden`.
+- Formulario frontal de contacto: `resources/views/forms/contacto.blade.php`. Los campos usan nombres en mayúsculas (NAME, EMAIL, MESSAGE, TEMA[]); el envío es AJAX del plugin.
+- Plantillas de email:
+  - `resources/views/forms/contacto.html` (y su fuente `contacto.mjml`) es el aviso interno al sitio; usa placeholders `[NAME]`, `[EMAIL]`, `[TEMA]`, `[MESSAGE]`.
+  - `resources/views/forms/contacto-self.html` (y `contacto-self.mjml`) es el auto‑respuesta al remitente confirmando recepción, mostrando los mismos placeholders.
+- Antispam: además del honeypot, el tema inyecta campos ocultos firmados (`_hf_ts`, `_hf_sig`) y un filtro en `app/setup.php` (`hf_validate_form`) que valida la firma, exige 3 s mínimos, caduca a 45 min y limita a 5 envíos/IP cada 30 min. Si faltan/alteran estos campos devuelve `spam`.
