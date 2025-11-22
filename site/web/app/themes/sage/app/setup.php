@@ -221,19 +221,6 @@ add_action('widgets_init', function () {
  * - Añade rate limit suave por IP.
  */
 add_filter('hf_validate_form', function ($error, $form, $data) {
-    $logger = function_exists('app') ? app('log') : null;
-    $log = function (string $reason, array $extra = []) use ($logger, $form) {
-        if (! $logger) {
-            return;
-        }
-
-        $logger->info('[hf_antispam] '.$reason, array_merge([
-            'form_id' => $form->ID ?? null,
-            'form_slug' => $form->slug ?? null,
-            'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-        ], $extra));
-    };
-
     $hasCustomFields = array_key_exists('_hf_ts', $data) || array_key_exists('_hf_sig', $data);
 
     if (! empty($error) || (! $hasCustomFields && ($form->slug ?? '') !== 'contacto')) {
@@ -241,7 +228,6 @@ add_filter('hf_validate_form', function ($error, $form, $data) {
     }
 
     if (! $hasCustomFields) {
-        $log('missing_custom_fields');
         return 'spam';
     }
 
@@ -249,25 +235,29 @@ add_filter('hf_validate_form', function ($error, $form, $data) {
     $signature = $data['_hf_sig'] ?? '';
 
     if (! $timestamp || ! is_string($signature)) {
-        $log('invalid_timestamp_or_signature', ['ts' => $timestamp]);
         return 'spam';
     }
 
     $expectedSignature = wp_hash($timestamp.'|'.$form->ID);
 
     if (! hash_equals($expectedSignature, $signature)) {
-        $log('signature_mismatch', ['ts' => $timestamp]);
         return 'spam';
     }
 
     $age = time() - $timestamp;
     if ($age < 3 || $age > 45 * MINUTE_IN_SECONDS) {
-        $log('age_out_of_bounds', ['age_seconds' => $age]);
         return 'spam';
     }
 
-    // Rate limit desactivado temporalmente para diagnóstico.
-    $log('rate_limit_skipped');
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateKey = sprintf('hf_rate_%d_%s', $form->ID, md5($ip));
+    $attempts = (int) get_transient($rateKey);
+
+    if ($attempts >= 5) {
+        return 'spam';
+    }
+
+    set_transient($rateKey, $attempts + 1, 30 * MINUTE_IN_SECONDS);
 
     return '';
 }, 10, 3);
