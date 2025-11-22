@@ -221,17 +221,15 @@ add_action('widgets_init', function () {
  * - Añade rate limit suave por IP.
  */
 add_filter('hf_validate_form', function ($error, $form, $data) {
-    $logger = function_exists('app') ? app('log') : null;
-    $log = function (string $reason, array $extra = []) use ($logger, $form) {
-        if (! $logger) {
-            return;
-        }
-
-        $logger->info('[hf_antispam] '.$reason, array_merge([
+    $log = function (string $reason, array $extra = []) use ($form) {
+        $payload = array_merge([
+            'reason' => $reason,
             'form_id' => $form->ID ?? null,
             'form_slug' => $form->slug ?? null,
             'ip' => $_SERVER['REMOTE_ADDR'] ?? 'unknown',
-        ], $extra));
+        ], $extra);
+
+        error_log('[hf_antispam] '.wp_json_encode($payload));
     };
 
     $hasCustomFields = array_key_exists('_hf_ts', $data) || array_key_exists('_hf_sig', $data);
