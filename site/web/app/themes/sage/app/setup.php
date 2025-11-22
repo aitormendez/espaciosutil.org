@@ -187,9 +187,6 @@ add_filter('pmpro_restrictable_post_types', function ($postTypes) {
 // Nota: no añadimos 'cde' a 'pmpro_search_filter_post_types' para que
 // los listados/índices del curso muestren todas las lecciones.
 
-// HTML Forms: evitar que el conteo de campos extra marque como spam al añadir antispam propio.
-add_filter('hf_validate_form_request_size', '__return_false');
-
 /**
  * Register the theme sidebars.
  *
