@@ -187,6 +187,38 @@ add_filter('pmpro_restrictable_post_types', function ($postTypes) {
 // Nota: no añadimos 'cde' a 'pmpro_search_filter_post_types' para que
 // los listados/índices del curso muestren todas las lecciones.
 
+/**
+ * HTML Forms: captcha simple para el formulario de contacto.
+ */
+add_filter('hf_validate_form', function ($error, $form, $data) {
+    if (($form->slug ?? '') !== 'contacto') {
+        return $error;
+    }
+
+    if (! empty($error)) {
+        return $error;
+    }
+
+    $answer = strtolower(trim($data['CAPTCHA'] ?? ''));
+    if ($answer !== 'luz') {
+        return 'invalid_captcha';
+    }
+
+    return '';
+}, 10, 3);
+
+add_filter('hf_form_response', function ($response, $form, $data) {
+    if (($form->slug ?? '') !== 'contacto') {
+        return $response;
+    }
+
+    if (isset($response['message']['type']) && $response['message']['type'] === 'error') {
+        $response['message']['text'] = __('No pudimos verificar que eres humano. Inténtalo de nuevo.', 'sage');
+    }
+
+    return $response;
+}, 10, 3);
+
 // HTML Forms: permitir campos extra (p. ej. antispam) sin marcar como spam por tamaño del POST.
 add_filter('hf_validate_form_request_size', '__return_false');
 
