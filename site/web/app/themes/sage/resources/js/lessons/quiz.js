@@ -25,11 +25,33 @@ const ensureQuizStyles = (() => {
         overflow: hidden;
         margin: 12px 0 16px;
       }
+      :root {
+        --quiz-score-width: 848px;
+      }
       #lesson-quiz .quiz-progress-bar {
         height: 100%;
         width: var(--percent, 0%);
         background: linear-gradient(90deg, #a855f7, #67e8f9);
         transition: width 240ms ease;
+      }
+      #lesson-quiz .quiz-progress-bar.question {
+        background: var(--quiz-question-color, #fbbf24); /* bg-sun */
+      }
+      #lesson-quiz .quiz-progress-bar.score {
+        background: none;
+        position: relative;
+        overflow: hidden;
+      }
+      #lesson-quiz .quiz-progress-bar.score::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: var(--quiz-score-width, 848px);
+        background: linear-gradient(90deg, #a855f7, #ffffff);
+        background-repeat: repeat-x;
+        pointer-events: none;
       }
       #lesson-quiz .quiz-shell {
         display: flex;
@@ -155,8 +177,12 @@ const buildSlidesHtml = (questions, selections) =>
     .map(
       (q, idx) => `
     <div class="swiper-slide quiz-slide" data-question-index="${idx}">
-      <div class="text-sm text-morado1 mb-2">Pregunta ${idx + 1} de ${questions.length}</div>
-      <h3 class="font-display text-xl font-semibold text-white">${q.question}</h3>
+      <div class="text-sm text-morado1 mb-2">Pregunta ${idx + 1} de ${
+        questions.length
+      }</div>
+      <h3 class="font-display text-xl font-semibold text-white">${
+        q.question
+      }</h3>
       <div class="quiz-options" data-quiz-options>
         ${q.answers
           .map(
@@ -192,7 +218,10 @@ const evaluateSelection = (question, selected) => {
   const selectedSet = new Set(selected);
 
   if (correctSet.size === 0) {
-    return { valid: false, message: 'La pregunta no tiene respuestas correctas configuradas.' };
+    return {
+      valid: false,
+      message: 'La pregunta no tiene respuestas correctas configuradas.',
+    };
   }
 
   const isCorrect =
@@ -248,12 +277,15 @@ const fetchResult = async (postId) => {
   }
 
   try {
-    const response = await fetch(`${api.root}cde/v1/quiz/result?post_id=${postId}`, {
-      headers: {
-        'X-WP-Nonce': api.nonce,
-      },
-      credentials: 'same-origin',
-    });
+    const response = await fetch(
+      `${api.root}cde/v1/quiz/result?post_id=${postId}`,
+      {
+        headers: {
+          'X-WP-Nonce': api.nonce,
+        },
+        credentials: 'same-origin',
+      }
+    );
 
     if (response.status === 401) {
       return null;
@@ -284,7 +316,9 @@ const renderSummary = (target, state, saveStatus) => {
         <li class="rounded-sm border border-white/10 bg-white/5 px-4 py-3">
           <div class="flex items-center justify-between gap-3">
             <p class="font-semibold text-white">${q.question}</p>
-            <span class="text-sm ${isCorrect ? 'text-emerald-300' : 'text-rose-300'}">
+            <span class="text-sm ${
+              isCorrect ? 'text-emerald-300' : 'text-rose-300'
+            }">
               ${isCorrect ? 'Correcto' : 'Incorrecto'}
             </span>
           </div>
@@ -314,7 +348,7 @@ const renderSummary = (target, state, saveStatus) => {
         <span class="font-semibold text-white">${correct} / ${total} correctas (${percent}%)</span>
       </div>
       <div class="mt-2 quiz-progress" aria-hidden="true">
-        <div class="quiz-progress-bar" style="--percent: ${percent}%"></div>
+        <div class="quiz-progress-bar score" style="--percent: ${percent}%"></div>
       </div>
       <ul class="mt-4 space-y-3">
         ${rows}
@@ -335,6 +369,10 @@ const updateProgressBar = (root, currentIndex, totalQuestions) => {
   const divisor = Math.max(totalQuestions - 1, 1);
   const percent = Math.round((currentIndex / divisor) * 100);
   bar.style.setProperty('--percent', `${percent}%`);
+  if (bar.classList.contains('score')) {
+    const inner = bar.querySelector(':before');
+    // El pseudo-elemento usa width fijo; nada que actualizar aquí.
+  }
 };
 
 const collectSlideSelection = (slide) => {
@@ -384,11 +422,11 @@ const initLessonQuiz = () => {
     swiper: null,
   };
 
-const buildShell = () => {
-  target.innerHTML = `
+  const buildShell = () => {
+    target.innerHTML = `
     <div class="quiz-shell">
       <div class="quiz-progress" aria-hidden="true">
-        <div class="quiz-progress-bar" style="--percent: 0%"></div>
+        <div class="quiz-progress-bar question" style="--percent: 0%"></div>
       </div>
       <div class="quiz-swiper swiper" role="region" aria-label="Cuestionario">
         <div class="swiper-wrapper">
@@ -458,7 +496,9 @@ const buildShell = () => {
           const validateBtn = container.querySelector('.quiz-validate-next');
           if (validateBtn) {
             validateBtn.style.display =
-              activeIndex === state.questions.length - 1 ? 'none' : 'inline-block';
+              activeIndex === state.questions.length - 1
+                ? 'none'
+                : 'inline-block';
           }
           const submitBtn = container.querySelector('.quiz-submit');
           if (submitBtn) {
