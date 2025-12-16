@@ -68,41 +68,41 @@ class Cde extends Field
                 'layout' => 'block',
                 'button_label' => 'Añadir apartado',
             ])
-                ->addSelect('level', [
-                    'label' => 'Nivel',
-                    'instructions' => 'Determina la profundidad dentro del subíndice (1 a 4).',
-                    'choices' => [
-                        1 => 'Nivel 1',
-                        2 => 'Nivel 2',
-                        3 => 'Nivel 3',
-                        4 => 'Nivel 4',
-                    ],
-                    'default_value' => 1,
-                    'required' => 1,
-                    'return_format' => 'value',
-                ])
-                ->addText('title', [
-                    'label' => 'Título',
-                    'instructions' => 'Nombre del apartado tal como aparece en el subíndice.',
-                    'required' => 1,
-                ])
-                ->addText('timecode', [
-                    'label' => 'Marca de tiempo',
-                    'instructions' => 'Formato hh:mm:ss para saltar al momento del video (opcional).',
-                    'required' => 0,
-                    'placeholder' => '00:05:30',
-                    'wrapper' => [
-                        'width' => '50',
-                    ],
-                ])
-                ->addText('anchor', [
-                    'label' => 'Ancla',
-                    'instructions' => 'Slug opcional para enlazar secciones del contenido escrito.',
-                    'required' => 0,
-                    'wrapper' => [
-                        'width' => '50',
-                    ],
-                ])
+            ->addSelect('level', [
+                'label' => 'Nivel',
+                'instructions' => 'Determina la profundidad dentro del subíndice (1 a 4).',
+                'choices' => [
+                    1 => 'Nivel 1',
+                    2 => 'Nivel 2',
+                    3 => 'Nivel 3',
+                    4 => 'Nivel 4',
+                ],
+                'default_value' => 1,
+                'required' => 1,
+                'return_format' => 'value',
+            ])
+            ->addText('title', [
+                'label' => 'Título',
+                'instructions' => 'Nombre del apartado tal como aparece en el subíndice.',
+                'required' => 1,
+            ])
+            ->addText('timecode', [
+                'label' => 'Marca de tiempo',
+                'instructions' => 'Formato hh:mm:ss para saltar al momento del video (opcional).',
+                'required' => 0,
+                'placeholder' => '00:05:30',
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('anchor', [
+                'label' => 'Ancla',
+                'instructions' => 'Slug opcional para enlazar secciones del contenido escrito.',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
             ->endRepeater()
             ->addTextarea('lesson_subindex_import', [
                 'label' => 'Importar subíndice desde JSON',
@@ -197,38 +197,37 @@ class Cde extends Field
                 'layout' => 'block',
                 'button_label' => 'Añadir pregunta',
             ])
-                ->addText('question', [
-                    'label' => 'Pregunta',
-                    'instructions' => 'Texto de la pregunta.',
-                    'required' => 1,
-                ])
-                ->addRepeater('answers', [
-                    'label' => 'Respuestas',
-                    'instructions' => 'Incluye todas las opciones. Puede haber múltiples respuestas correctas.',
-                    'required' => 1,
-                    'min' => 2,
-                    'layout' => 'row',
-                    'button_label' => 'Añadir respuesta',
-                ])
-                    ->addText('answer_text', [
-                        'label' => 'Respuesta',
-                        'required' => 1,
-                        'wrapper' => [
-                            'width' => '70',
-                        ],
-                    ])
-                    ->addTrueFalse('is_correct', [
-                        'label' => 'Correcta',
-                        'instructions' => 'Marca si esta respuesta es correcta.',
-                        'default_value' => 0,
-                        'ui' => 1,
-                        'wrapper' => [
-                            'width' => '30',
-                        ],
-                    ])
-                ->endRepeater()
+            ->addText('question', [
+                'label' => 'Pregunta',
+                'instructions' => 'Texto de la pregunta.',
+                'required' => 1,
+            ])
+            ->addRepeater('answers', [
+                'label' => 'Respuestas',
+                'instructions' => 'Incluye todas las opciones. Puede haber múltiples respuestas correctas.',
+                'required' => 1,
+                'min' => 2,
+                'layout' => 'column',
+                'button_label' => 'Añadir respuesta',
+            ])
+            ->addText('answer_text', [
+                'label' => 'Respuesta',
+                'required' => 1,
+                'wrapper' => [
+                    'width' => '70',
+                ],
+            ])
+            ->addTrueFalse('is_correct', [
+                'label' => 'Correcta',
+                'instructions' => 'Marca si esta respuesta es correcta.',
+                'default_value' => 0,
+                'ui' => 1,
+                'wrapper' => [
+                    'width' => '30',
+                ],
+            ])
             ->endRepeater()
-
+            ->endRepeater()
             ->addTab('related_lessons', [
                 'label' => 'Lecciones relacionadas',
                 'placement' => 'top',

@@ -68,6 +68,7 @@ class SingleCde extends Composer
             'related_lessons' => $related_lessons,
             'lesson_subindex' => $lesson_subindex,
             'lesson_subindex_root_title' => get_the_title(),
+            'lesson_quiz' => $this->buildLessonQuiz(),
             'featured_media' => $this->prepareFeaturedMedia($lesson_subindex['chapters'] ?? []),
         ];
     }
@@ -161,6 +162,82 @@ class SingleCde extends Composer
         return [
             'items' => $tree,
             'chapters' => $chapters,
+        ];
+    }
+
+    /**
+     * Prepara los datos del cuestionario desde ACF.
+     *
+     * @return array
+     */
+    protected function buildLessonQuiz(): array
+    {
+        if (!function_exists('get_field')) {
+            return [
+                'enabled' => false,
+                'questions' => [],
+                'count' => 0,
+                'post_id' => get_the_ID(),
+            ];
+        }
+
+        $enabledRaw = get_field('quiz_enabled');
+        $rawQuestions = get_field('quiz_questions') ?: [];
+
+        $questions = [];
+
+        foreach ($rawQuestions as $rawQuestion) {
+            $questionText = is_string($rawQuestion['question'] ?? null) ? trim($rawQuestion['question']) : '';
+
+            if ($questionText === '') {
+                continue;
+            }
+
+            $rawAnswers = $rawQuestion['answers'] ?? [];
+
+            if (!is_array($rawAnswers) || empty($rawAnswers)) {
+                continue;
+            }
+
+            $answers = [];
+            $correctCount = 0;
+
+            foreach ($rawAnswers as $rawAnswer) {
+                $answerText = is_string($rawAnswer['answer_text'] ?? null) ? trim($rawAnswer['answer_text']) : '';
+
+                if ($answerText === '') {
+                    continue;
+                }
+
+                $isCorrect = !empty($rawAnswer['is_correct']);
+
+                $answers[] = [
+                    'text' => $answerText,
+                    'is_correct' => $isCorrect,
+                ];
+
+                if ($isCorrect) {
+                    $correctCount++;
+                }
+            }
+
+            if (count($answers) < 2 || $correctCount < 1) {
+                continue;
+            }
+
+            $questions[] = [
+                'question' => $questionText,
+                'answers' => $answers,
+            ];
+        }
+
+        $enabled = (bool) $enabledRaw && !empty($questions);
+
+        return [
+            'enabled' => $enabled,
+            'questions' => $questions,
+            'count' => count($questions),
+            'post_id' => get_the_ID(),
         ];
     }
 

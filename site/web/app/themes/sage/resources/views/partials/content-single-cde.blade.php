@@ -51,6 +51,27 @@
             </div>
         </div>
 
+        @if ($lesson_quiz['enabled'] ?? false)
+            @php
+                $quiz_props = [
+                    'postId' => $lesson_quiz['post_id'] ?? null,
+                    'questions' => $lesson_quiz['questions'] ?? [],
+                ];
+            @endphp
+            <section class="bg-morado4/90 not-prose mx-auto my-10 w-full max-w-4xl rounded-sm px-6 py-6 text-white"
+                id="lesson-quiz"
+                data-quiz-props='@json($quiz_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
+                <header class="mb-4">
+                    <p class="font-display text-sm uppercase tracking-[0.2em] text-morado1">Cuestionario</p>
+                    <h2 class="font-display text-2xl font-semibold leading-tight text-white">Refuerza lo aprendido</h2>
+                    <p class="mt-1 text-base text-morado1">Responde las preguntas. Puede haber varias opciones correctas.</p>
+                </header>
+                <div data-quiz-target class="text-morado1">
+                    <p class="text-sm">Cargando cuestionario…</p>
+                </div>
+            </section>
+        @endif
+
         @include('partials.videos-realacionados-cde')
 
         @php(comments_template())
