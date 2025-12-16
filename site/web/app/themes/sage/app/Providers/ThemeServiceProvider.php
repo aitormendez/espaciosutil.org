@@ -28,7 +28,8 @@ class ThemeServiceProvider extends SageServiceProvider
         // Asignar rol "estudiante" si el pedido completado incluye un curso
         add_action('woocommerce_order_status_completed', [$this, 'asignarRolEstudiantePorCategoria']);
         add_action('acf/save_post', [$this, 'importLessonSubindexFromJson'], 20);
-        add_action('admin_notices', [$this, 'renderLessonSubindexFallbackNotice']);
+        add_action('acf/save_post', [$this, 'importLessonQuizFromJson'], 20);
+        add_action('admin_notices', [$this, 'renderAcfFallbackNotices']);
     }
 
     public function asignarRolEstudiantePorCategoria($order_id)
@@ -148,40 +149,180 @@ class ThemeServiceProvider extends SageServiceProvider
         $this->addAcfNotice(sprintf('Subíndice importado correctamente (%d elementos).', count($items)), 'success');
     }
 
-    protected function addAcfNotice(string $message, string $class = 'info'): void
+    /**
+     * Importa el cuestionario desde el campo JSON y lo vuelca en el repeater.
+     *
+     * @param int|string $postId
+     * @return void
+     */
+    public function importLessonQuizFromJson($postId): void
+    {
+        if (!is_numeric($postId)) {
+            return;
+        }
+
+        $postId = (int) $postId;
+
+        if ($postId <= 0) {
+            return;
+        }
+
+        if (\wp_is_post_revision($postId) || \wp_is_post_autosave($postId)) {
+            return;
+        }
+
+        if (\get_post_type($postId) !== 'cde') {
+            return;
+        }
+
+        $rawJson = \get_field('quiz_json_import', $postId);
+
+        if (empty($rawJson)) {
+            return;
+        }
+
+        $decoded = json_decode($rawJson, true);
+
+        if (!is_array($decoded)) {
+            $message = 'No se pudo leer el JSON del cuestionario. ' . (function_exists('json_last_error_msg') ? json_last_error_msg() : '');
+            $this->addAcfNotice(trim($message), 'error', 'lesson_quiz');
+            return;
+        }
+
+        $questions = [];
+        $errors = [];
+
+        foreach ($decoded as $index => $entry) {
+            $rowNumber = $index + 1;
+
+            if (!is_array($entry)) {
+                $errors[] = "La pregunta {$rowNumber} no es un objeto válido.";
+                continue;
+            }
+
+            $questionText = isset($entry['question']) ? trim((string) $entry['question']) : '';
+
+            if ($questionText === '') {
+                $errors[] = "La pregunta {$rowNumber} no tiene texto.";
+                continue;
+            }
+
+            $answers = $entry['answers'] ?? [];
+
+            if (!is_array($answers) || empty($answers)) {
+                $errors[] = "La pregunta {$rowNumber} no tiene respuestas.";
+                continue;
+            }
+
+            $normalizedAnswers = [];
+            $correctCount = 0;
+
+            foreach ($answers as $answerIndex => $answerEntry) {
+                $answerNumber = $answerIndex + 1;
+
+                if (!is_array($answerEntry)) {
+                    $errors[] = "La respuesta {$answerNumber} de la pregunta {$rowNumber} no es un objeto válido.";
+                    continue;
+                }
+
+                $answerText = isset($answerEntry['text']) ? trim((string) $answerEntry['text']) : '';
+
+                if ($answerText === '') {
+                    $errors[] = "La respuesta {$answerNumber} de la pregunta {$rowNumber} está vacía.";
+                    continue;
+                }
+
+                $isCorrect = !empty($answerEntry['is_correct']) ? 1 : 0;
+
+                $normalizedAnswers[] = [
+                    'answer_text' => $answerText,
+                    'is_correct' => $isCorrect,
+                ];
+
+                if ($isCorrect) {
+                    $correctCount++;
+                }
+            }
+
+            if (count($normalizedAnswers) < 2) {
+                $errors[] = "La pregunta {$rowNumber} debe tener al menos dos respuestas.";
+                continue;
+            }
+
+            if ($correctCount < 1) {
+                $errors[] = "La pregunta {$rowNumber} debe tener al menos una respuesta correcta.";
+                continue;
+            }
+
+            $questions[] = [
+                'question' => $questionText,
+                'answers' => $normalizedAnswers,
+            ];
+        }
+
+        if (!empty($errors)) {
+            $this->addAcfNotice(implode(' ', $errors), 'error', 'lesson_quiz');
+            return;
+        }
+
+        if (empty($questions)) {
+            $this->addAcfNotice('No se importó ninguna pregunta. Verifica que el JSON contenga al menos una pregunta con respuestas.', 'warning', 'lesson_quiz');
+            return;
+        }
+
+        \update_field('quiz_questions', $questions, $postId);
+        \update_field('quiz_json_import', '', $postId);
+
+        $this->addAcfNotice(sprintf('Cuestionario importado correctamente (%d preguntas).', count($questions)), 'success', 'lesson_quiz');
+    }
+
+    protected function addAcfNotice(string $message, string $class = 'info', string $context = 'lesson_subindex'): void
     {
         if (function_exists('acf_add_admin_notice')) {
             acf_add_admin_notice($message, $class);
             return;
         }
 
-        \add_filter('redirect_post_location', function ($location) use ($message, $class) {
+        $noticeKey = "{$context}_notice";
+        $typeKey = "{$context}_notice_type";
+
+        \add_filter('redirect_post_location', function ($location) use ($message, $class, $noticeKey, $typeKey) {
             return \add_query_arg([
-                'lesson_subindex_notice' => rawurlencode($message),
-                'lesson_subindex_notice_type' => $class,
+                $noticeKey => rawurlencode($message),
+                $typeKey => $class,
             ], $location);
-        });
+        }, 10, 1);
     }
 
-    public function renderLessonSubindexFallbackNotice(): void
+    public function renderAcfFallbackNotices(): void
     {
-        if (empty($_GET['lesson_subindex_notice'])) {
-            return;
-        }
-
-        $message = \sanitize_text_field(\wp_unslash($_GET['lesson_subindex_notice']));
-        $type = \sanitize_key($_GET['lesson_subindex_notice_type'] ?? 'info');
-
-        $classMap = [
-            'success' => 'notice notice-success',
-            'warning' => 'notice notice-warning',
-            'error' => 'notice notice-error',
-            'info' => 'notice notice-info',
+        $contexts = [
+            'lesson_subindex',
+            'lesson_quiz',
         ];
 
-        $class = $classMap[$type] ?? $classMap['info'];
+        foreach ($contexts as $context) {
+            $noticeKey = "{$context}_notice";
+            $typeKey = "{$context}_notice_type";
 
-        printf('<div class="%1$s"><p>%2$s</p></div>', \esc_attr($class), \esc_html($message));
+            if (empty($_GET[$noticeKey])) {
+                continue;
+            }
+
+            $message = \sanitize_text_field(\wp_unslash($_GET[$noticeKey]));
+            $type = \sanitize_key($_GET[$typeKey] ?? 'info');
+
+            $classMap = [
+                'success' => 'notice notice-success',
+                'warning' => 'notice notice-warning',
+                'error' => 'notice notice-error',
+                'info' => 'notice notice-info',
+            ];
+
+            $class = $classMap[$type] ?? $classMap['info'];
+
+            printf('<div class="%1$s"><p>%2$s</p></div>', \esc_attr($class), \esc_html($message));
+        }
     }
 
     protected function normalizeLevel($value): int
