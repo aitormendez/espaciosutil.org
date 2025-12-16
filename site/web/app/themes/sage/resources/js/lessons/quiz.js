@@ -9,6 +9,15 @@ const ensureQuizStyles = (() => {
 
     const style = document.createElement('style');
     style.textContent = `
+      #lesson-quiz [data-quiz-target] {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+      }
+      #lesson-quiz .quiz-panel {
+        position: relative;
+        width: 100%;
+      }
       #lesson-quiz .quiz-progress {
         position: relative;
         height: 8px;
@@ -21,20 +30,6 @@ const ensureQuizStyles = (() => {
         width: var(--percent, 0%);
         background: linear-gradient(90deg, #a855f7, #67e8f9);
         transition: width 250ms ease;
-      }
-      #lesson-quiz .quiz-slide-in {
-        animation: quizSlideIn 220ms ease;
-      }
-      #lesson-quiz .quiz-slide-out {
-        animation: quizSlideOut 200ms ease;
-      }
-      @keyframes quizSlideIn {
-        from { opacity: 0; transform: translateX(12px); }
-        to { opacity: 1; transform: translateX(0); }
-      }
-      @keyframes quizSlideOut {
-        from { opacity: 1; transform: translateX(0); }
-        to { opacity: 0; transform: translateX(-12px); }
       }
       #lesson-quiz .quiz-nav {
         display: flex;
@@ -132,7 +127,7 @@ const renderEmpty = (target, message) => {
   target.innerHTML = `<p class="text-sm">${message}</p>`;
 };
 
-const renderQuestion = (target, state) => {
+const renderQuestion = (panel, state) => {
   const { questions, currentIndex, selected } = state;
   const question = questions[currentIndex];
   const total = questions.length;
@@ -167,7 +162,7 @@ const renderQuestion = (target, state) => {
     )
     .join('');
 
-  target.innerHTML = `
+  panel.innerHTML = `
     <div class="flex items-center justify-between text-sm text-morado1">
       <span>Pregunta ${currentIndex + 1} de ${total}</span>
     </div>
@@ -203,7 +198,7 @@ const renderQuestion = (target, state) => {
   `;
 };
 
-const renderSummary = (target, state, saveStatus) => {
+const renderSummary = (panel, state, saveStatus) => {
   const { questions, answers } = state;
   const total = questions.length;
   const correct = answers.filter((a) => a.isCorrect).length;
@@ -242,7 +237,7 @@ const renderSummary = (target, state, saveStatus) => {
     return '';
   })();
 
-  target.innerHTML = `
+  panel.innerHTML = `
     <div class="flex items-center justify-between text-sm text-morado1">
       <span>Has completado el cuestionario</span>
       <span class="font-semibold text-white">${correct} / ${total} correctas (${percent}%)</span>
@@ -394,13 +389,42 @@ const initLessonQuiz = () => {
     feedbackEl.textContent = message;
   };
 
-  const renderWithSlide = (renderer) => {
-    renderer();
-    gsap.fromTo(
-      target,
-      { opacity: 0, x: 12 },
-      { opacity: 1, x: 0, duration: 0.22, ease: 'power2.out' }
-    );
+  const renderWithSlide = (renderer, direction = 'forward') => {
+    const oldPanel = target.querySelector('.quiz-panel');
+    const newPanel = document.createElement('div');
+    newPanel.className = 'quiz-panel';
+
+    renderer(newPanel);
+
+    if (!oldPanel) {
+      target.innerHTML = '';
+      target.appendChild(newPanel);
+      target.style.height = 'auto';
+      return;
+    }
+
+    target.appendChild(newPanel);
+
+    const startHeight = target.offsetHeight;
+    const newHeight = newPanel.offsetHeight;
+    const offset = direction === 'backward' ? -24 : 24;
+
+    gsap.set(target, { height: startHeight });
+    gsap.set(oldPanel, { position: 'absolute', inset: 0, x: 0, y: 0 });
+    gsap.set(newPanel, { position: 'absolute', inset: 0, x: offset, y: 0 });
+
+    const tl = gsap.timeline({
+      defaults: { duration: 0.24, ease: 'power2.out' },
+      onComplete: () => {
+        oldPanel.remove();
+        gsap.set(newPanel, { position: 'relative', inset: '', x: 0, y: 0 });
+        target.style.height = 'auto';
+      },
+    });
+
+    tl.to(target, { height: newHeight }, 0)
+      .to(oldPanel, { x: -offset }, 0)
+      .to(newPanel, { x: 0 }, 0);
   };
 
   const reset = () => {
@@ -410,7 +434,7 @@ const initLessonQuiz = () => {
     state.answers = [];
     state.finished = false;
     state.saveStatus = null;
-    renderWithSlide(() => renderQuestion(target, state));
+    renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
   };
 
   const renderFromSaved = (saved) => {
@@ -432,7 +456,7 @@ const initLessonQuiz = () => {
     state.finished = true;
     state.saveStatus = { state: 'saved' };
 
-    renderWithSlide(() => renderSummary(target, state, state.saveStatus));
+    renderWithSlide((panel) => renderSummary(panel, state, state.saveStatus), 'forward');
   };
 
   fetchResult(postId).then((saved) => {
@@ -480,12 +504,12 @@ const initLessonQuiz = () => {
         state.finished = true;
         const saveStatus = await saveResult(state.postId, state.answers);
         state.saveStatus = saveStatus;
-        renderWithSlide(() => renderSummary(target, state, saveStatus));
+        renderWithSlide((panel) => renderSummary(panel, state, saveStatus), 'forward');
       } else {
         state.selections[state.currentIndex] = selected;
         state.currentIndex += 1;
         state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide(() => renderQuestion(target, state));
+        renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
       }
     }
 
@@ -501,7 +525,7 @@ const initLessonQuiz = () => {
       state.selections[state.currentIndex] = state.selected;
       state.currentIndex = Math.max(0, state.currentIndex - 1);
       state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide(() => renderQuestion(target, state));
+      renderWithSlide((panel) => renderQuestion(panel, state), 'backward');
     }
 
     if (nextBtn) {
@@ -510,7 +534,7 @@ const initLessonQuiz = () => {
       state.selections[state.currentIndex] = state.selected;
       state.currentIndex = Math.min(state.questions.length - 1, state.currentIndex + 1);
       state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide(() => renderQuestion(target, state));
+      renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
     }
 
     if (dotBtn) {
@@ -518,10 +542,14 @@ const initLessonQuiz = () => {
       if (state.finished) return;
       const targetIndex = Number(dotBtn.dataset.quizDot);
       if (Number.isNaN(targetIndex)) return;
+      const prevIndex = state.currentIndex;
       state.selections[state.currentIndex] = state.selected;
       state.currentIndex = Math.max(0, Math.min(state.questions.length - 1, targetIndex));
       state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide(() => renderQuestion(target, state));
+      renderWithSlide(
+        (panel) => renderQuestion(panel, state),
+        targetIndex < prevIndex ? 'backward' : 'forward'
+      );
     }
   });
 
@@ -554,7 +582,7 @@ const initLessonQuiz = () => {
         state.selections[state.currentIndex] = state.selected;
         state.currentIndex -= 1;
         state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide(() => renderQuestion(target, state));
+        renderWithSlide((panel) => renderQuestion(panel, state), 'backward');
       }
     }
     if (event.key === 'ArrowRight') {
@@ -563,7 +591,7 @@ const initLessonQuiz = () => {
         state.selections[state.currentIndex] = state.selected;
         state.currentIndex += 1;
         state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide(() => renderQuestion(target, state));
+        renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
       }
     }
   });
