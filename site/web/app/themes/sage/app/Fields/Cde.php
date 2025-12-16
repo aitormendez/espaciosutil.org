@@ -174,11 +174,60 @@ class Cde extends Field
                 'label' => 'Cuestionario',
                 'placement' => 'top',
             ])
-            ->addMessage('quiz_placeholder', 'Aquí se añadirán los campos del cuestionario de la lección en el siguiente paso.', [
-                'wrapper' => [
-                    'width' => '',
-                ],
+            ->addTrueFalse('quiz_enabled', [
+                'label' => 'Activar cuestionario',
+                'instructions' => 'Muestra el cuestionario de la lección en el frontend. Desactívalo para ocultarlo.',
+                'default_value' => 0,
+                'ui' => 1,
+                'ui_on_text' => 'Activo',
+                'ui_off_text' => 'Oculto',
             ])
+            ->addTextarea('quiz_json_import', [
+                'label' => 'Importar cuestionario desde JSON',
+                'instructions' => 'Pega un JSON con preguntas y respuestas para rellenar el cuestionario al guardar. Formato: [{"question": "...", "answers": [{"text": "...", "is_correct": true}]}].',
+                'required' => 0,
+                'rows' => 6,
+                'new_lines' => '',
+            ])
+            ->addRepeater('quiz_questions', [
+                'label' => 'Preguntas',
+                'instructions' => 'Añade una pregunta y sus posibles respuestas. Marca todas las respuestas correctas que apliquen.',
+                'required' => 0,
+                'min' => 0,
+                'layout' => 'block',
+                'button_label' => 'Añadir pregunta',
+            ])
+                ->addText('question', [
+                    'label' => 'Pregunta',
+                    'instructions' => 'Texto de la pregunta.',
+                    'required' => 1,
+                ])
+                ->addRepeater('answers', [
+                    'label' => 'Respuestas',
+                    'instructions' => 'Incluye todas las opciones. Puede haber múltiples respuestas correctas.',
+                    'required' => 1,
+                    'min' => 2,
+                    'layout' => 'row',
+                    'button_label' => 'Añadir respuesta',
+                ])
+                    ->addText('answer_text', [
+                        'label' => 'Respuesta',
+                        'required' => 1,
+                        'wrapper' => [
+                            'width' => '70',
+                        ],
+                    ])
+                    ->addTrueFalse('is_correct', [
+                        'label' => 'Correcta',
+                        'instructions' => 'Marca si esta respuesta es correcta.',
+                        'default_value' => 0,
+                        'ui' => 1,
+                        'wrapper' => [
+                            'width' => '30',
+                        ],
+                    ])
+                ->endRepeater()
+            ->endRepeater()
 
             ->addTab('related_lessons', [
                 'label' => 'Lecciones relacionadas',
