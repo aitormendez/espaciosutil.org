@@ -77,5 +77,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const markCompleteModule = await import('./courses/mark-complete.js');
     markCompleteModule.default();
+
+    const lessonQuizModule = await import('./lessons/quiz.js');
+    lessonQuizModule.default();
   }
 });

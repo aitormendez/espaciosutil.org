@@ -7,8 +7,9 @@
 namespace App;
 
 use Illuminate\Support\Facades\Vite;
-use App\Api\VideoProgress;
 use App\Api\CompletedLessons;
+use App\Api\LessonQuiz;
+use App\Api\VideoProgress;
 
 /**
  * Inject styles into the block editor.
@@ -145,6 +146,9 @@ add_action('rest_api_init', function () {
 
     $completed_lessons_api = new CompletedLessons();
     $completed_lessons_api->register_routes();
+
+    $lesson_quiz_api = new LessonQuiz();
+    $lesson_quiz_api->register_routes();
 });
 
 /**
