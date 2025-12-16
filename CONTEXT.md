@@ -1,7 +1,5 @@
 # Contexto del Proyecto: Espacio Sutil (Restauración)
 
-Este archivo proporciona el contexto necesario para que Gemini pueda asistir eficazmente en la restauración de este proyecto.
-
 ## 1. Resumen del Proyecto
 
 - **Nombre:** Espacio Sutil
@@ -119,7 +117,7 @@ Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEP
 
 ### Selector Video/Audio con Vidstack
 
-- El grupo de campos `app/Fields/FeaturedVideo.php` ahora incluye los pares `featured_audio_*` (ID, library_id y nombre opcional). Si el ID está vacío, la vista ignora el modo audio.
+- En la pestaña **Medios (Video/Audio)** del grupo “Lección CDE” (`app/Fields/Cde.php`) se incluyen los pares `featured_audio_*` (ID, library_id y nombre opcional). Si el ID está vacío, la vista ignora el modo audio.
 - El composer `App\View\Composers\SingleCde` expone `featured_media`, que empaqueta la información de vídeo y audio (IDs, library, nombre, capítulos, URLs de fallback) y las inyecta en el contenedor Blade.
 - `resources/views/partials/content-single-cde.blade.php` serializa esas props en `data-media-props` dentro del `div#featured-lesson-media`. `resources/js/initFeaturedVideoPlayer.jsx` lee el JSON y monta el wrapper React.
 - `resources/js/components/FeaturedLessonMedia.jsx` es el orquestador: normaliza los datos, decide si hay vídeo y/o audio y renderiza el toggle “Ver video / Escuchar audio”. Cuando sólo existe uno de los medios, el toggle desaparece.

@@ -60,12 +60,13 @@ El tema implementa un Custom Post Type (CPT) `cde` para gestionar el contenido d
 - **Miga de pan jerárquica:** Cada lección `cde` muestra su cadena de padres dentro del header de la entrada. El composer `app/View/Composers/Post.php` reúne el árbol y añade un enlace raíz fijo al curso, mientras que la vista `resources/views/partials/post-header.blade.php` lo renderiza en formato apilado en móviles (una línea por nivel con prefijo `>`) y horizontal a partir de `md`, asegurando accesibilidad sin sobrecargar la interfaz.
 - **Extracto Enriquecido:** Cada entrada del curso puede tener un extracto enriquecido (WYSIWYG) gestionado a través de un campo de [Advanced Custom Fields (ACF)](https://www.advancedcustomfields.com/). Este extracto es visible para todos los usuarios.
 - **Contenido Restringido:** El contenido principal de las entradas del curso está dividido en dos partes: un extracto público y el contenido completo, que es accesible únicamente para usuarios con una membresía activa.
+- **Edición en pestañas:** Todos los campos de la lección viven en el grupo “Lección CDE” (`app/Fields/Cde.php`) con pestañas: General, Subíndice, Medios (Video/Audio), Cuestionario y Lecciones relacionadas.
 
 #### Subíndice de la lección
 
 Cada lección dispone de un subíndice editorial que se muestra tras el extracto y que alimenta los capítulos del video.
 
-1. En la edición de la lección abre el grupo **Subíndice de la lección**.
+1. En la edición de la lección abre la pestaña **Subíndice** del grupo “Lección CDE”.
 2. Puedes crear apartados manualmente (botón “Añadir apartado”) o importar un JSON en el campo **Importar subíndice desde JSON**.
 3. Si importas, el JSON debe ser un array de objetos con `title` (string), `level` (1–4), y opcionalmente `timecode` (`hh:mm:ss`) y `anchor` (slug sin `#`):
 
@@ -87,13 +88,11 @@ Cada lección del curso (`cde`) puede incluir un video destacado, alojado en Bun
 
 #### Campos en el Editor
 
-El video se configura desde el editor mediante tres campos personalizados de ACF:
+El video se configura desde el editor en la pestaña **Medios (Video/Audio)** del grupo “Lección CDE” mediante estos campos:
 
-- `featured_video_id`: ID del video en la Video Library de Bunny.net.
-- `featured_video_library`: ID de la Video Library asociada.
-- `featured_video_lang`: Código de idioma predeterminado para los subtítulos (`es`, `en`, `fr`, etc).
-
-Estos campos están definidos en `app/Fields/FeaturedVideo.php` mediante AcfComposer.
+- `featured_video_id`: ID (Stream ID) del video en la Video Library de Bunny.net.
+- `featured_video_library_id`: ID de la Video Library asociada.
+- `featured_video_name`: Nombre descriptivo opcional (si se deja vacío, se usa el título de la lección).
 
 #### Subida y Formato de Video
 
@@ -302,7 +301,7 @@ El tema incluye una sección para mostrar lecciones relacionadas al final de cad
 
 ### Implementación Técnica
 
-- **Campo de Relación ACF:** La relación se gestiona a través de un campo `relationship` de ACF llamado `cde_related_lessons`. Este campo está definido en `app/Fields/RelatedLessons.php` mediante `AcfComposer` y está restringido para mostrar únicamente posts del tipo `cde`.
+- **Campo de Relación ACF:** La relación se gestiona a través de un campo `relationship` de ACF llamado `cde_related_lessons`, ubicado en la pestaña **Lecciones relacionadas** del grupo “Lección CDE” (`app/Fields/Cde.php`, `AcfComposer`). Está restringido para mostrar únicamente posts del tipo `cde`.
 - **View Composer:** El composer `app/View/Composers/SingleCde.php` se encarga de:
   1.  Obtener los objetos de post de las lecciones relacionadas a través del campo ACF.
   2.  Iterar sobre cada lección relacionada para obtener su título, enlace permanente y el `featured_video_id`.

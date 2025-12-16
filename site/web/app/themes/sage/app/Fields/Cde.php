@@ -14,12 +14,20 @@ class Cde extends Field
      */
     public function fields(): array
     {
-        $cde = new FieldsBuilder('cde_fields');
+        $cde = new FieldsBuilder('cde_fields', [
+            'title' => 'Lección CDE',
+            'position' => 'acf_after_title',
+            'style' => 'seamless',
+            'show_in_rest' => 1,
+        ]);
+
+        $cde->setLocation('post_type', '==', 'cde');
 
         $cde
-            ->setLocation('post_type', '==', 'cde');
-
-        $cde
+            ->addTab('general', [
+                'label' => 'General',
+                'placement' => 'top',
+            ])
             ->addTrueFalse('active_lesson', [
                 'label' => 'Lección activa',
                 'instructions' => 'Desactívalo para ocultar el enlace en el índice y marcar la lección como pendiente.',
@@ -41,6 +49,11 @@ class Cde extends Field
                 'toolbar' => 'full',
                 'media_upload' => 1,
                 'delay' => 0,
+            ])
+
+            ->addTab('lesson_subindex', [
+                'label' => 'Subíndice',
+                'placement' => 'top',
             ])
             ->addRepeater('lesson_subindex_items', [
                 'label' => 'Subíndice de la lección',
@@ -90,18 +103,102 @@ class Cde extends Field
                         'width' => '50',
                     ],
                 ])
-            ->endRepeater();
+            ->endRepeater()
+            ->addTextarea('lesson_subindex_import', [
+                'label' => 'Importar subíndice desde JSON',
+                'instructions' => 'Pega un JSON con objetos {title, level, timecode?, anchor?}. Se procesará al guardar la lección.',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '',
+                ],
+                'rows' => 6,
+                'new_lines' => '',
+            ])
 
-        $cde->addTextarea('lesson_subindex_import', [
-            'label' => 'Importar subíndice desde JSON',
-            'instructions' => 'Pega un JSON con objetos {title, level, timecode?, anchor?}. Se procesará al guardar la lección.',
-            'required' => 0,
-            'wrapper' => [
-                'width' => '',
-            ],
-            'rows' => 6,
-            'new_lines' => '',
-        ]);
+            ->addTab('lesson_media', [
+                'label' => 'Medios (Video/Audio)',
+                'placement' => 'top',
+            ])
+            ->addText('featured_video_id', [
+                'label' => 'ID del Video (Bunny.net Stream ID)',
+                'instructions' => 'Introduce el Stream ID del video de Bunny.net',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_video_library_id', [
+                'label' => 'ID de la Librería (Bunny.net Video Library ID)',
+                'instructions' => 'Introduce el ID de la librería de video de Bunny.net',
+                'default_value' => '457097',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_video_name', [
+                'label' => 'Nombre del Video',
+                'instructions' => 'Nombre descriptivo. Dejar en blanco para usar el título de la lección.',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '100',
+                ],
+            ])
+            ->addText('featured_audio_id', [
+                'label' => 'ID del Audio (Bunny.net Stream ID)',
+                'instructions' => 'Introduce el Stream ID del audio en Bunny.net (usa la misma Video Library).',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_audio_library_id', [
+                'label' => 'ID de la Librería para Audio (Bunny.net Video Library ID)',
+                'instructions' => 'Deja el valor por defecto si el audio vive en la misma librería que los videos.',
+                'default_value' => '457097',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
+            ->addText('featured_audio_name', [
+                'label' => 'Nombre del Audio',
+                'instructions' => 'Nombre descriptivo. Dejar en blanco para usar el título de la lección.',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '100',
+                ],
+            ])
+
+            ->addTab('quiz', [
+                'label' => 'Cuestionario',
+                'placement' => 'top',
+            ])
+            ->addMessage('quiz_placeholder', 'Aquí se añadirán los campos del cuestionario de la lección en el siguiente paso.', [
+                'wrapper' => [
+                    'width' => '',
+                ],
+            ])
+
+            ->addTab('related_lessons', [
+                'label' => 'Lecciones relacionadas',
+                'placement' => 'top',
+            ])
+            ->addRelationship('cde_related_lessons', [
+                'label' => 'Lecciones Relacionadas',
+                'instructions' => 'Selecciona otras lecciones para mostrarlas como contenido relacionado.',
+                'required' => 0,
+                'post_type' => ['cde'],
+                'taxonomy' => [],
+                'filters' => [
+                    0 => 'search',
+                    1 => 'post_type',
+                ],
+                'elements' => '',
+                'min' => '',
+                'max' => '',
+                'return_format' => 'object',
+            ]);
 
         return $cde->build();
     }
