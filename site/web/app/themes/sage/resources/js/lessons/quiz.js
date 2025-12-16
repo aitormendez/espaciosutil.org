@@ -1,3 +1,44 @@
+const ensureQuizStyles = (() => {
+  let injected = false;
+
+  return () => {
+    if (injected) return;
+    injected = true;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #lesson-quiz .quiz-progress {
+        position: relative;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        overflow: hidden;
+      }
+      #lesson-quiz .quiz-progress-bar {
+        height: 100%;
+        width: var(--percent, 0%);
+        background: linear-gradient(90deg, #a855f7, #67e8f9);
+        transition: width 250ms ease;
+      }
+      #lesson-quiz .quiz-slide-in {
+        animation: quizSlideIn 220ms ease;
+      }
+      #lesson-quiz .quiz-slide-out {
+        animation: quizSlideOut 200ms ease;
+      }
+      @keyframes quizSlideIn {
+        from { opacity: 0; transform: translateX(12px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+      @keyframes quizSlideOut {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-12px); }
+      }
+    `;
+    document.head.appendChild(style);
+  };
+})();
+
 const parseQuizProps = (container) => {
   try {
     return JSON.parse(container.dataset.quizProps || '{}');
@@ -63,6 +104,7 @@ const renderQuestion = (target, state) => {
   const question = questions[currentIndex];
   const total = questions.length;
   const selectedSet = new Set(selected);
+  const progressPercent = Math.round((currentIndex / total) * 100);
 
   const options = question.answers
     .map(
@@ -84,6 +126,9 @@ const renderQuestion = (target, state) => {
     <div class="flex items-center justify-between text-sm text-morado1">
       <span>Pregunta ${currentIndex + 1} de ${total}</span>
     </div>
+    <div class="mt-2 quiz-progress" aria-hidden="true">
+      <div class="quiz-progress-bar" style="--percent: ${progressPercent}%"></div>
+    </div>
     <h3 class="mt-3 font-display text-xl font-semibold text-white">${question.question}</h3>
     <div class="mt-4 space-y-3" data-quiz-options>
       ${options}
@@ -104,6 +149,7 @@ const renderSummary = (target, state, saveStatus) => {
   const { questions, answers } = state;
   const total = questions.length;
   const correct = answers.filter((a) => a.isCorrect).length;
+  const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
 
   const rows = questions
     .map((q, idx) => {
@@ -141,9 +187,10 @@ const renderSummary = (target, state, saveStatus) => {
   target.innerHTML = `
     <div class="flex items-center justify-between text-sm text-morado1">
       <span>Has completado el cuestionario</span>
-      <span class="font-semibold text-white">${correct} / ${total} correctas (${Math.round(
-    (correct / total) * 100
-  )}%)</span>
+      <span class="font-semibold text-white">${correct} / ${total} correctas (${percent}%)</span>
+    </div>
+    <div class="mt-2 quiz-progress" aria-hidden="true">
+      <div class="quiz-progress-bar" style="--percent: ${percent}%"></div>
     </div>
     <ul class="mt-4 space-y-3">
       ${rows}
@@ -214,11 +261,43 @@ const saveResult = async (postId, answers) => {
   }
 };
 
+const fetchResult = async (postId) => {
+  const api = getApiConfig();
+
+  if (!api) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${api.root}cde/v1/quiz/result?post_id=${postId}`, {
+      headers: {
+        'X-WP-Nonce': api.nonce,
+      },
+      credentials: 'same-origin',
+    });
+
+    if (response.status === 401) {
+      return null;
+    }
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data?.result || null;
+  } catch (e) {
+    return null;
+  }
+};
+
 const initLessonQuiz = () => {
   const container = document.getElementById('lesson-quiz');
   if (!container) {
     return;
   }
+
+  ensureQuizStyles();
 
   const target = container.querySelector('[data-quiz-target]');
   const props = parseQuizProps(container);
@@ -256,16 +335,47 @@ const initLessonQuiz = () => {
     feedbackEl.textContent = message;
   };
 
+  const renderWithSlide = (renderer) => {
+    target.classList.remove('quiz-slide-in');
+    renderer();
+    // Trigger reflow for animation
+    void target.offsetWidth; // eslint-disable-line no-unused-expressions
+    target.classList.add('quiz-slide-in');
+  };
+
   const reset = () => {
     state.currentIndex = 0;
     state.selected = [];
     state.answers = [];
     state.finished = false;
     state.saveStatus = null;
-    renderQuestion(target, state);
+    renderWithSlide(() => renderQuestion(target, state));
   };
 
-  reset();
+  const renderFromSaved = (saved) => {
+    if (!saved || !Array.isArray(saved.answers)) {
+      reset();
+      return;
+    }
+
+    state.answers = saved.answers.map((item, idx) => ({
+      questionIndex: idx,
+      selected: Array.isArray(item.selected) ? item.selected : [],
+      isCorrect: Boolean(item.correct),
+    }));
+    state.finished = true;
+    state.saveStatus = { state: 'saved' };
+
+    renderWithSlide(() => renderSummary(target, state, state.saveStatus));
+  };
+
+  fetchResult(postId).then((saved) => {
+    if (saved) {
+      renderFromSaved(saved);
+    } else {
+      reset();
+    }
+  });
 
   container.addEventListener('click', async (event) => {
     const submitBtn = event.target.closest('.quiz-submit');
@@ -301,11 +411,11 @@ const initLessonQuiz = () => {
         state.finished = true;
         const saveStatus = await saveResult(state.postId, state.answers);
         state.saveStatus = saveStatus;
-        renderSummary(target, state, saveStatus);
+        renderWithSlide(() => renderSummary(target, state, saveStatus));
       } else {
         state.currentIndex += 1;
         state.selected = [];
-        renderQuestion(target, state);
+        renderWithSlide(() => renderQuestion(target, state));
       }
     }
 
