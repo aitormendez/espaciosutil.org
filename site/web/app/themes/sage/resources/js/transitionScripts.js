@@ -31,9 +31,4 @@ export async function transitionScriptsAfter() {
     ultimosVideosSubidos();
     cosmos();
   }
-
-  if (document.body.classList.contains('post-type-archive-event')) {
-    const {eventos} = await import('./eventos.js');
-    eventos();
-  }
 }

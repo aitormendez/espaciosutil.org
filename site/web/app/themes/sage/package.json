@@ -24,10 +24,6 @@
   },
   "dependencies": {
     "@barba/core": "^2.9.7",
-    "@fullcalendar/core": "^6.1.5",
-    "@fullcalendar/daygrid": "^6.1.5",
-    "@fullcalendar/list": "^6.1.5",
-    "@fullcalendar/timegrid": "^6.1.5",
     "@react-three/drei": "^10.3.0",
     "@react-three/fiber": "^9.1.2",
     "@react-three/postprocessing": "^3.0.4",
@@ -44,6 +40,7 @@
     "three": "^0.159.0",
     "tocbot": "^4.21.0",
     "tsparticles": "^2.9.3",
-    "tsparticles-engine": "^2.9.3"
+    "tsparticles-engine": "^2.9.3",
+    "swiper": "^11.2.1"
   }
 }

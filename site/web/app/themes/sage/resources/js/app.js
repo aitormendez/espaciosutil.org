@@ -51,11 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     infiniteScrollSeries();
   }
 
-  if (document.body.classList.contains('post-type-archive-event')) {
-    const { eventos } = await import('./eventos.js');
-    eventos();
-  }
-
   if (document.body.classList.contains('home') && xlMin.matches) {
     cosmos();
   }

@@ -1,4 +1,8 @@
-import { gsap } from 'gsap';
+import Swiper from 'swiper';
+import { Navigation, Pagination, Keyboard } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const ensureQuizStyles = (() => {
   let injected = false;
@@ -12,11 +16,6 @@ const ensureQuizStyles = (() => {
       #lesson-quiz [data-quiz-target] {
         position: relative;
         overflow: hidden;
-        min-height: 120px;
-      }
-      #lesson-quiz .quiz-panel {
-        position: relative;
-        width: 100%;
       }
       #lesson-quiz .quiz-progress {
         position: relative;
@@ -24,45 +23,73 @@ const ensureQuizStyles = (() => {
         border-radius: 999px;
         background: rgba(255,255,255,0.08);
         overflow: hidden;
+        margin: 12px 0 16px;
       }
       #lesson-quiz .quiz-progress-bar {
         height: 100%;
         width: var(--percent, 0%);
         background: linear-gradient(90deg, #a855f7, #67e8f9);
-        transition: width 250ms ease;
+        transition: width 240ms ease;
       }
-      #lesson-quiz .quiz-nav {
+      #lesson-quiz .quiz-shell {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      #lesson-quiz .quiz-swiper {
+        width: 100%;
+      }
+      #lesson-quiz .quiz-swiper .swiper-wrapper {
+        display: flex;
+        transition-property: transform;
+        box-sizing: content-box;
+      }
+      #lesson-quiz .quiz-swiper .swiper-slide {
+        width: 100%;
+        flex-shrink: 0;
+        box-sizing: border-box;
+      }
+      #lesson-quiz .quiz-slide {
+        padding: 4px 0 12px;
+      }
+      #lesson-quiz .quiz-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 16px;
+      }
+      #lesson-quiz .quiz-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 6px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.05);
+      }
+      #lesson-quiz .quiz-footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
-        margin-top: 16px;
+        gap: 12px;
         flex-wrap: wrap;
+        margin-top: 12px;
       }
-      #lesson-quiz .quiz-dots {
-        display: flex;
-        gap: 8px;
-        flex: 1;
-        flex-wrap: wrap;
+      #lesson-quiz .quiz-pagination {
+        position: static;
       }
-      #lesson-quiz .quiz-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 999px;
-        border: 1px solid rgba(255,255,255,0.4);
-        background: rgba(255,255,255,0.15);
-        cursor: pointer;
-        transition: all 160ms ease;
+      #lesson-quiz .quiz-pagination .swiper-pagination-bullet {
+        background: rgba(255,255,255,0.4);
+        opacity: 1;
       }
-      #lesson-quiz .quiz-dot.is-active {
+      #lesson-quiz .quiz-pagination .swiper-pagination-bullet-active {
         background: linear-gradient(90deg, #a855f7, #67e8f9);
-        border-color: transparent;
-        box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
       }
-      #lesson-quiz .quiz-dot:hover {
-        transform: translateY(-1px);
+      #lesson-quiz .quiz-summary {
+        padding: 4px 0;
       }
     `;
+
     document.head.appendChild(style);
   };
 })();
@@ -123,138 +150,37 @@ const normalizeQuestions = (questions = []) =>
     })
     .filter(Boolean);
 
+const buildSlidesHtml = (questions, selections) =>
+  questions
+    .map(
+      (q, idx) => `
+    <div class="swiper-slide quiz-slide" data-question-index="${idx}">
+      <div class="text-sm text-morado1 mb-2">Pregunta ${idx + 1} de ${questions.length}</div>
+      <h3 class="font-display text-xl font-semibold text-white">${q.question}</h3>
+      <div class="quiz-options" data-quiz-options>
+        ${q.answers
+          .map(
+            (a) => `
+          <label class="quiz-option">
+            <input
+              type="checkbox"
+              class="quiz-checkbox h-4 w-4 rounded border-white/30 bg-white/10 text-morado1 focus:ring-morado1"
+              data-answer-index="${a.index}"
+              ${selections[idx]?.includes(a.index) ? 'checked' : ''}
+              tabindex="0"
+            />
+            <span class="text-white">${a.text}</span>
+          </label>
+        `
+          )
+          .join('')}
+      </div>
+    </div>`
+    )
+    .join('');
+
 const renderEmpty = (target, message) => {
   target.innerHTML = `<p class="text-sm">${message}</p>`;
-};
-
-const renderQuestion = (panel, state) => {
-  const { questions, currentIndex, selected } = state;
-  const question = questions[currentIndex];
-  const total = questions.length;
-  const selectedSet = new Set(selected);
-  const progressPercent = Math.round((currentIndex / total) * 100);
-
-  const dots = questions
-    .map(
-      (_q, idx) => `
-      <button
-        type="button"
-        class="quiz-dot ${idx === currentIndex ? 'is-active' : ''}"
-        data-quiz-dot="${idx}"
-        aria-label="Ir a la pregunta ${idx + 1}"
-      ></button>`
-    )
-    .join('');
-
-  const options = question.answers
-    .map(
-      (answer) => `
-      <label class="flex items-center gap-3 rounded border border-white/10 bg-white/5 px-4 py-3">
-        <input
-          type="checkbox"
-          class="quiz-option h-4 w-4 rounded border-white/30 bg-white/10 text-morado1 focus:ring-morado1"
-          data-answer-index="${answer.index}"
-          ${selectedSet.has(answer.index) ? 'checked' : ''}
-        />
-        <span class="text-white">${answer.text}</span>
-      </label>
-    `
-    )
-    .join('');
-
-  panel.innerHTML = `
-    <div class="flex items-center justify-between text-sm text-morado1">
-      <span>Pregunta ${currentIndex + 1} de ${total}</span>
-    </div>
-    <div class="mt-2 quiz-progress" aria-hidden="true">
-      <div class="quiz-progress-bar" style="--percent: ${progressPercent}%"></div>
-    </div>
-    <h3 class="mt-3 font-display text-xl font-semibold text-white">${question.question}</h3>
-    <div class="mt-4 space-y-3" data-quiz-options>
-      ${options}
-    </div>
-    <div class="mt-5 flex flex-wrap gap-3">
-      <button type="button" class="quiz-submit rounded-sm bg-morado1 px-4 py-2 text-sm font-semibold text-morado5 hover:bg-morado2 focus:outline-none focus:ring-2 focus:ring-white/40">
-        ${currentIndex + 1 === total ? 'Finalizar' : 'Comprobar y siguiente'}
-      </button>
-      <button type="button" class="quiz-restart rounded-sm border border-white/20 px-4 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-        Reiniciar cuestionario
-      </button>
-    </div>
-    <div class="mt-3 text-sm text-morado1" data-quiz-feedback></div>
-    <div class="quiz-nav">
-      <div class="flex items-center gap-2">
-        <button type="button" class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20" ${currentIndex === 0 ? 'disabled' : ''}>
-          ← Anterior
-        </button>
-        <button type="button" class="quiz-next rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20" ${currentIndex + 1 >= total ? 'disabled' : ''}>
-          Siguiente →
-        </button>
-      </div>
-      <div class="quiz-dots" role="tablist" aria-label="Navegación del cuestionario">
-        ${dots}
-      </div>
-    </div>
-  `;
-};
-
-const renderSummary = (panel, state, saveStatus) => {
-  const { questions, answers } = state;
-  const total = questions.length;
-  const correct = answers.filter((a) => a.isCorrect).length;
-  const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
-
-  const rows = questions
-    .map((q, idx) => {
-      const answer = answers.find((a) => a.questionIndex === idx);
-      const isCorrect = answer?.isCorrect;
-      return `
-        <li class="rounded-sm border border-white/10 bg-white/5 px-4 py-3">
-          <div class="flex items-center justify-between gap-3">
-            <p class="font-semibold text-white">${q.question}</p>
-            <span class="text-sm ${isCorrect ? 'text-emerald-300' : 'text-rose-300'}">
-              ${isCorrect ? 'Correcto' : 'Incorrecto'}
-            </span>
-          </div>
-        </li>
-      `;
-    })
-    .join('');
-
-  const saveMessage = (() => {
-    if (!saveStatus) {
-      return '';
-    }
-    if (saveStatus.state === 'saved') {
-      return `<p class="text-sm text-emerald-300">Resultado guardado.</p>`;
-    }
-    if (saveStatus.state === 'unauthorized') {
-      return `<p class="text-sm text-amber-200">Inicia sesión para guardar tu resultado.</p>`;
-    }
-    if (saveStatus.state === 'error') {
-      return `<p class="text-sm text-rose-200">No se pudo guardar el resultado: ${saveStatus.message}</p>`;
-    }
-    return '';
-  })();
-
-  panel.innerHTML = `
-    <div class="flex items-center justify-between text-sm text-morado1">
-      <span>Has completado el cuestionario</span>
-      <span class="font-semibold text-white">${correct} / ${total} correctas (${percent}%)</span>
-    </div>
-    <div class="mt-2 quiz-progress" aria-hidden="true">
-      <div class="quiz-progress-bar" style="--percent: ${percent}%"></div>
-    </div>
-    <ul class="mt-4 space-y-3">
-      ${rows}
-    </ul>
-    <div class="mt-5 flex flex-wrap gap-3">
-      <button type="button" class="quiz-restart rounded-sm border border-white/20 px-4 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-        Rehacer cuestionario
-      </button>
-    </div>
-    <div class="mt-3">${saveMessage}</div>
-  `;
 };
 
 const evaluateSelection = (question, selected) => {
@@ -344,6 +270,92 @@ const fetchResult = async (postId) => {
   }
 };
 
+const renderSummary = (target, state, saveStatus) => {
+  const { questions, answers } = state;
+  const total = questions.length;
+  const correct = answers.filter((a) => a.isCorrect).length;
+  const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  const rows = questions
+    .map((q, idx) => {
+      const answer = answers.find((a) => a.questionIndex === idx);
+      const isCorrect = answer?.isCorrect;
+      return `
+        <li class="rounded-sm border border-white/10 bg-white/5 px-4 py-3">
+          <div class="flex items-center justify-between gap-3">
+            <p class="font-semibold text-white">${q.question}</p>
+            <span class="text-sm ${isCorrect ? 'text-emerald-300' : 'text-rose-300'}">
+              ${isCorrect ? 'Correcto' : 'Incorrecto'}
+            </span>
+          </div>
+        </li>
+      `;
+    })
+    .join('');
+
+  const saveMessage = (() => {
+    if (!saveStatus) return '';
+    if (saveStatus.state === 'saved') {
+      return `<p class="text-sm text-emerald-300">Resultado guardado.</p>`;
+    }
+    if (saveStatus.state === 'unauthorized') {
+      return `<p class="text-sm text-amber-200">Inicia sesión para guardar tu resultado.</p>`;
+    }
+    if (saveStatus.state === 'error') {
+      return `<p class="text-sm text-rose-200">No se pudo guardar el resultado: ${saveStatus.message}</p>`;
+    }
+    return '';
+  })();
+
+  target.innerHTML = `
+    <div class="quiz-summary">
+      <div class="flex items-center justify-between text-sm text-morado1">
+        <span>Has completado el cuestionario</span>
+        <span class="font-semibold text-white">${correct} / ${total} correctas (${percent}%)</span>
+      </div>
+      <div class="mt-2 quiz-progress" aria-hidden="true">
+        <div class="quiz-progress-bar" style="--percent: ${percent}%"></div>
+      </div>
+      <ul class="mt-4 space-y-3">
+        ${rows}
+      </ul>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <button type="button" class="quiz-restart rounded-sm border border-white/20 px-4 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+          Rehacer cuestionario
+        </button>
+      </div>
+      <div class="mt-3">${saveMessage}</div>
+    </div>
+  `;
+};
+
+const updateProgressBar = (root, currentIndex, totalQuestions) => {
+  const bar = root.querySelector('.quiz-progress-bar');
+  if (!bar) return;
+  const divisor = Math.max(totalQuestions - 1, 1);
+  const percent = Math.round((currentIndex / divisor) * 100);
+  bar.style.setProperty('--percent', `${percent}%`);
+};
+
+const collectSlideSelection = (slide) => {
+  const checkboxes = slide.querySelectorAll('[data-answer-index]');
+  const selected = [];
+  checkboxes.forEach((input) => {
+    if (input.checked) {
+      selected.push(Number(input.dataset.answerIndex));
+    }
+  });
+  return selected;
+};
+
+const applySelectionsToSlide = (slide, selection = []) => {
+  const set = new Set(selection);
+  slide.querySelectorAll('[data-answer-index]').forEach((input) => {
+    const idx = Number(input.dataset.answerIndex);
+    input.checked = set.has(idx);
+  });
+};
+
 const initLessonQuiz = () => {
   const container = document.getElementById('lesson-quiz');
   if (!container) {
@@ -365,236 +377,229 @@ const initLessonQuiz = () => {
   const state = {
     questions,
     postId,
-    currentIndex: 0,
-    selected: [],
     selections: {},
     answers: [],
     finished: false,
-    feedback: '',
     saveStatus: null,
+    swiper: null,
   };
 
-  const updateFeedback = (message, tone = 'neutral') => {
-    const feedbackEl = container.querySelector('[data-quiz-feedback]');
-    if (!feedbackEl) return;
-
-    const toneClass =
-      tone === 'error'
-        ? 'text-rose-200'
-        : tone === 'success'
-        ? 'text-emerald-300'
-        : 'text-morado1';
-
-    feedbackEl.className = `mt-3 text-sm ${toneClass}`;
-    feedbackEl.textContent = message;
+const buildShell = () => {
+  target.innerHTML = `
+    <div class="quiz-shell">
+      <div class="quiz-progress" aria-hidden="true">
+        <div class="quiz-progress-bar" style="--percent: 0%"></div>
+      </div>
+      <div class="quiz-swiper swiper" role="region" aria-label="Cuestionario">
+        <div class="swiper-wrapper">
+          ${buildSlidesHtml(state.questions, state.selections)}
+        </div>
+        <div class="quiz-pagination swiper-pagination"></div>
+      </div>
+      <div class="quiz-footer">
+        <div class="flex items-center gap-2">
+          <button type="button" class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+            ← Anterior
+          </button>
+          <button type="button" class="quiz-next rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+            Siguiente →
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="button" class="quiz-validate-next rounded-sm bg-morado1 px-4 py-3 text-sm font-semibold text-morado5 hover:bg-morado2 focus:outline-none focus:ring-2 focus:ring-white/40">
+            Validar y pasar a la siguiente
+          </button>
+          <button type="button" class="quiz-submit rounded-sm bg-morado1 px-4 py-2 text-sm font-semibold text-morado5 hover:bg-morado2 focus:outline-none focus:ring-2 focus:ring-white/40">
+            Finalizar
+          </button>
+          <button type="button" class="quiz-restart rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+            Reiniciar
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
   };
 
-  const renderWithSlide = (renderer, direction = 'forward') => {
-    const oldPanel = target.querySelector('.quiz-panel');
-    const newPanel = document.createElement('div');
-    newPanel.className = 'quiz-panel';
+  const initSwiper = () => {
+    const swiperEl = target.querySelector('.quiz-swiper');
+    if (!swiperEl) return;
 
-    renderer(newPanel);
-
-    if (!oldPanel) {
-      target.innerHTML = '';
-      target.appendChild(newPanel);
-      target.style.height = 'auto';
-      return;
-    }
-
-    target.appendChild(newPanel);
-
-    const startHeight = target.offsetHeight;
-    const newHeight = newPanel.offsetHeight;
-    const offset = direction === 'backward' ? -24 : 24;
-
-    gsap.set(target, { height: startHeight });
-    gsap.set(oldPanel, { position: 'absolute', inset: 0, x: 0, y: 0 });
-    gsap.set(newPanel, { position: 'absolute', inset: 0, x: offset, y: 0 });
-
-    const tl = gsap.timeline({
-      defaults: { duration: 0.24, ease: 'power2.out' },
-      onComplete: () => {
-        oldPanel.remove();
-        gsap.set(newPanel, { position: 'relative', inset: '', x: 0, y: 0 });
-        target.style.height = 'auto';
+    state.swiper = new Swiper(swiperEl, {
+      modules: [Navigation, Pagination, Keyboard],
+      speed: 260,
+      allowTouchMove: false,
+      preventClicks: false,
+      preventClicksPropagation: false,
+      slidesPerView: 1,
+      spaceBetween: 12,
+      navigation: {
+        nextEl: container.querySelector('.quiz-next'),
+        prevEl: container.querySelector('.quiz-prev'),
+      },
+      pagination: {
+        el: container.querySelector('.quiz-pagination'),
+        clickable: true,
+      },
+      keyboard: {
+        enabled: true,
+      },
+      on: {
+        slideChange: () => {
+          const { activeIndex, previousIndex } = state.swiper;
+          const prevSlide = state.swiper.slides[previousIndex] || null;
+          if (prevSlide) {
+            state.selections[previousIndex] = collectSlideSelection(prevSlide);
+          }
+          updateProgressBar(container, activeIndex, state.questions.length);
+          const currentSlide = state.swiper.slides[activeIndex];
+          const selection = state.selections[activeIndex] || [];
+          applySelectionsToSlide(currentSlide, selection);
+          const validateBtn = container.querySelector('.quiz-validate-next');
+          if (validateBtn) {
+            validateBtn.style.display =
+              activeIndex === state.questions.length - 1 ? 'none' : 'inline-block';
+          }
+          const submitBtn = container.querySelector('.quiz-submit');
+          if (submitBtn) {
+            submitBtn.disabled = activeIndex !== state.questions.length - 1;
+          }
+        },
       },
     });
 
-    tl.to(target, { height: newHeight }, 0)
-      .to(oldPanel, { x: -offset }, 0)
-      .to(newPanel, { x: 0 }, 0);
-  };
-
-  const reset = () => {
-    state.currentIndex = 0;
-    state.selected = [];
-    state.selections = {};
-    state.answers = [];
-    state.finished = false;
-    state.saveStatus = null;
-    renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
-  };
-
-  const renderFromSaved = (saved) => {
-    if (!saved || !Array.isArray(saved.answers)) {
-      reset();
-      return;
+    updateProgressBar(container, 0, state.questions.length);
+    const validateBtn = container.querySelector('.quiz-validate-next');
+    if (validateBtn && state.questions.length === 1) {
+      validateBtn.style.display = 'none';
     }
+    const submitBtn = container.querySelector('.quiz-submit');
+    if (submitBtn && state.questions.length > 1) {
+      submitBtn.disabled = true;
+    }
+  };
 
-    state.answers = saved.answers.map((item, idx) => {
-      const selected = Array.isArray(item.selected) ? item.selected : [];
-      state.selections[idx] = selected;
+  const collectAllAnswers = () => {
+    if (!state.swiper) return;
+    const slides = state.swiper.slides;
+    slides.forEach((slide, idx) => {
+      state.selections[idx] = collectSlideSelection(slide);
+    });
+  };
 
-      return {
+  const evaluateAll = () => {
+    const answers = [];
+    let hasError = null;
+
+    state.questions.forEach((q, idx) => {
+      const selected = state.selections[idx] || [];
+      const evaluation = evaluateSelection(q, selected);
+      if (!evaluation.valid) {
+        hasError = `Pregunta ${idx + 1}: ${evaluation.message}`;
+        return;
+      }
+      answers.push({
         questionIndex: idx,
         selected,
-        isCorrect: Boolean(item.correct),
-      };
+        isCorrect: evaluation.isCorrect,
+      });
     });
-    state.finished = true;
-    state.saveStatus = { state: 'saved' };
 
-    renderWithSlide((panel) => renderSummary(panel, state, state.saveStatus), 'forward');
+    if (hasError) {
+      return { error: hasError };
+    }
+
+    state.answers = answers;
+    return { ok: true };
   };
 
-  fetchResult(postId).then((saved) => {
-    if (saved) {
-      renderFromSaved(saved);
-    } else {
-      reset();
-    }
-  });
+  const goToSummary = (saveStatus) => {
+    state.finished = true;
+    renderSummary(target, state, saveStatus);
+  };
 
-  container.addEventListener('click', async (event) => {
-    const submitBtn = event.target.closest('.quiz-submit');
-    const restartBtn = event.target.closest('.quiz-restart');
-    const prevBtn = event.target.closest('.quiz-prev');
-    const nextBtn = event.target.closest('.quiz-next');
-    const dotBtn = event.target.closest('.quiz-dot');
+  const restart = () => {
+    state.finished = false;
+    state.selections = {};
+    state.answers = [];
+    state.saveStatus = null;
+    buildShell();
+    initSwiper();
+  };
 
-    if (submitBtn) {
-      const question = state.questions[state.currentIndex];
-      const optionsWrapper = container.querySelector('[data-quiz-options]');
-      if (!optionsWrapper) return;
+  const attachEvents = () => {
+    target.addEventListener('click', async (event) => {
+      const submitBtn = event.target.closest('.quiz-submit');
+      const restartBtn = event.target.closest('.quiz-restart');
+      const validateNextBtn = event.target.closest('.quiz-validate-next');
 
-      const selected = Array.from(optionsWrapper.querySelectorAll('.quiz-option:checked')).map(
-        (el) => Number(el.dataset.answerIndex)
-      );
-
-      const evaluation = evaluateSelection(question, selected);
-      if (!evaluation.valid) {
-        updateFeedback(evaluation.message, 'error');
+      if (validateNextBtn) {
+        if (!state.swiper) return;
+        const idx = state.swiper.activeIndex;
+        const slide = state.swiper.slides[idx];
+        const selected = collectSlideSelection(slide);
+        const evaluation = evaluateSelection(state.questions[idx], selected);
+        if (!evaluation.valid) {
+          alert(evaluation.message);
+          return;
+        }
+        state.selections[idx] = selected;
+        if (idx < state.questions.length - 1) {
+          state.swiper.slideNext();
+        }
         return;
       }
 
-      state.answers = [
-        ...state.answers.filter((a) => a.questionIndex !== state.currentIndex),
-        {
-          questionIndex: state.currentIndex,
-          selected,
-          isCorrect: evaluation.isCorrect,
-        },
-      ];
+      if (submitBtn) {
+        if (state.finished) {
+          restart();
+          return;
+        }
 
-      const isLast = state.currentIndex + 1 === state.questions.length;
+        collectAllAnswers();
+        const evaluated = evaluateAll();
+        if (evaluated?.error) {
+          alert(evaluated.error); // simple feedback; puede sustituirse por UI inline
+          return;
+        }
 
-      if (isLast) {
-        state.finished = true;
         const saveStatus = await saveResult(state.postId, state.answers);
         state.saveStatus = saveStatus;
-        renderWithSlide((panel) => renderSummary(panel, state, saveStatus), 'forward');
-      } else {
-        state.selections[state.currentIndex] = selected;
-        state.currentIndex += 1;
-        state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
+        goToSummary(saveStatus);
       }
-    }
 
-    if (restartBtn) {
-      event.preventDefault();
-      reset();
-      updateFeedback('');
-    }
+      if (restartBtn) {
+        event.preventDefault();
+        restart();
+      }
+    });
+  };
 
-    if (prevBtn) {
-      event.preventDefault();
-      if (state.currentIndex === 0 || state.finished) return;
-      state.selections[state.currentIndex] = state.selected;
-      state.currentIndex = Math.max(0, state.currentIndex - 1);
-      state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide((panel) => renderQuestion(panel, state), 'backward');
-    }
+  const boot = async () => {
+    const saved = await fetchResult(postId);
 
-    if (nextBtn) {
-      event.preventDefault();
-      if (state.finished) return;
-      state.selections[state.currentIndex] = state.selected;
-      state.currentIndex = Math.min(state.questions.length - 1, state.currentIndex + 1);
-      state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
-    }
-
-    if (dotBtn) {
-      event.preventDefault();
-      if (state.finished) return;
-      const targetIndex = Number(dotBtn.dataset.quizDot);
-      if (Number.isNaN(targetIndex)) return;
-      const prevIndex = state.currentIndex;
-      state.selections[state.currentIndex] = state.selected;
-      state.currentIndex = Math.max(0, Math.min(state.questions.length - 1, targetIndex));
-      state.selected = state.selections[state.currentIndex] || [];
-      renderWithSlide(
-        (panel) => renderQuestion(panel, state),
-        targetIndex < prevIndex ? 'backward' : 'forward'
-      );
-    }
-  });
-
-  container.addEventListener('change', (event) => {
-    const option = event.target.closest('.quiz-option');
-    if (!option) return;
-
-    const idx = Number(option.dataset.answerIndex);
-    if (Number.isNaN(idx)) return;
-
-    const selected = new Set(state.selected);
-    if (option.checked) {
-      selected.add(idx);
-    } else {
-      selected.delete(idx);
-    }
-
-    state.selected = Array.from(selected);
-    state.selections[state.currentIndex] = state.selected;
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (!container.contains(document.activeElement)) {
+    if (saved && Array.isArray(saved.answers)) {
+      state.answers = saved.answers.map((item, idx) => ({
+        questionIndex: idx,
+        selected: Array.isArray(item.selected) ? item.selected : [],
+        isCorrect: Boolean(item.correct),
+      }));
+      state.selections = saved.answers.reduce((acc, item, idx) => {
+        acc[idx] = Array.isArray(item.selected) ? item.selected : [];
+        return acc;
+      }, {});
+      state.saveStatus = { state: 'saved' };
+      goToSummary(state.saveStatus);
+      attachEvents();
       return;
     }
-    if (state.finished) return;
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      if (state.currentIndex > 0) {
-        state.selections[state.currentIndex] = state.selected;
-        state.currentIndex -= 1;
-        state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide((panel) => renderQuestion(panel, state), 'backward');
-      }
-    }
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      if (state.currentIndex < state.questions.length - 1) {
-        state.selections[state.currentIndex] = state.selected;
-        state.currentIndex += 1;
-        state.selected = state.selections[state.currentIndex] || [];
-        renderWithSlide((panel) => renderQuestion(panel, state), 'forward');
-      }
-    }
-  });
+
+    buildShell();
+    initSwiper();
+    attachEvents();
+  };
+
+  boot();
 };
 
 export default initLessonQuiz;
