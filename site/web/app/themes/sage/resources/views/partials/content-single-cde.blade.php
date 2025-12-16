@@ -47,7 +47,7 @@
 
         <div class="bg-morado5/90 prose prose-sutil prose-xl md:prose-2xl w-full p-6 md:px-0">
             <div class="prose prose-sutil prose-xl md:prose-2xl mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
-                @php(the_content())
+                @php the_content() @endphp
             </div>
         </div>
 
