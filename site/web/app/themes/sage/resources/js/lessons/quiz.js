@@ -4,118 +4,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const ensureQuizStyles = (() => {
-  let injected = false;
-
-  return () => {
-    if (injected) return;
-    injected = true;
-
-    const style = document.createElement('style');
-    style.textContent = `
-      #lesson-quiz [data-quiz-target] {
-        position: relative;
-        overflow: hidden;
-      }
-      #lesson-quiz .quiz-progress {
-        position: relative;
-        height: 8px;
-        border-radius: 999px;
-        background: rgba(255,255,255,0.08);
-        overflow: hidden;
-        margin: 12px 0 16px;
-      }
-      :root {
-        --quiz-score-width: 848px;
-      }
-      #lesson-quiz .quiz-progress-bar {
-        height: 100%;
-        width: var(--percent, 0%);
-        background: linear-gradient(90deg, #a855f7, #67e8f9);
-        transition: width 240ms ease;
-      }
-      #lesson-quiz .quiz-progress-bar.question {
-        background: var(--quiz-question-color, #fbbf24); /* bg-sun */
-      }
-      #lesson-quiz .quiz-progress-bar.score {
-        background: none;
-        position: relative;
-        overflow: hidden;
-      }
-      #lesson-quiz .quiz-progress-bar.score::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: var(--quiz-score-width, 848px);
-        background: linear-gradient(90deg, #a855f7, #ffffff);
-        background-repeat: repeat-x;
-        pointer-events: none;
-      }
-      #lesson-quiz .quiz-shell {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      #lesson-quiz .quiz-swiper {
-        width: 100%;
-      }
-      #lesson-quiz .quiz-swiper .swiper-wrapper {
-        display: flex;
-        transition-property: transform;
-        box-sizing: content-box;
-      }
-      #lesson-quiz .quiz-swiper .swiper-slide {
-        width: 100%;
-        flex-shrink: 0;
-        box-sizing: border-box;
-      }
-      #lesson-quiz .quiz-slide {
-        padding: 4px 0 12px;
-      }
-      #lesson-quiz .quiz-options {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 16px;
-      }
-      #lesson-quiz .quiz-option {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        border-radius: 6px;
-        border: 1px solid rgba(255,255,255,0.12);
-        background: rgba(255,255,255,0.05);
-      }
-      #lesson-quiz .quiz-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-      #lesson-quiz .quiz-pagination {
-        position: static;
-      }
-      #lesson-quiz .quiz-pagination .swiper-pagination-bullet {
-        background: rgba(255,255,255,0.4);
-        opacity: 1;
-      }
-      #lesson-quiz .quiz-pagination .swiper-pagination-bullet-active {
-        background: linear-gradient(90deg, #a855f7, #67e8f9);
-      }
-      #lesson-quiz .quiz-summary {
-        padding: 4px 0;
-      }
-    `;
-
-    document.head.appendChild(style);
-  };
-})();
-
 const parseQuizProps = (container) => {
   try {
     return JSON.parse(container.dataset.quizProps || '{}');
@@ -177,12 +65,7 @@ const buildSlidesHtml = (questions, selections) =>
     .map(
       (q, idx) => `
     <div class="swiper-slide quiz-slide" data-question-index="${idx}">
-      <div class="text-sm text-morado1 mb-2">Pregunta ${idx + 1} de ${
-        questions.length
-      }</div>
-      <h3 class="font-display text-xl font-semibold text-white">${
-        q.question
-      }</h3>
+      <h3 class="font-display text-xl text-white mb-12 mt-4">${q.question}</h3>
       <div class="quiz-options" data-quiz-options>
         ${q.answers
           .map(
@@ -375,6 +258,24 @@ const updateProgressBar = (root, currentIndex, totalQuestions) => {
   }
 };
 
+const updateQuizCounter = (root, currentIndex, totalQuestions) => {
+  const currentEl = root.querySelector('[data-quiz-counter-current]');
+  const totalEl = root.querySelector('[data-quiz-counter-total]');
+  if (!currentEl && !totalEl) return;
+  const total = Math.max(Number(totalQuestions) || 0, 0);
+  const current =
+    total > 0 ? Math.min(Math.max(currentIndex + 1, 1), total) : 0;
+  if (currentEl) currentEl.textContent = String(current);
+  if (totalEl) totalEl.textContent = String(total);
+};
+
+const setQuizCounterVisibility = (root, isVisible) => {
+  const counter = root.querySelector('[data-quiz-counter]');
+  if (!counter) return;
+  counter.classList.toggle('hidden', !isVisible);
+  counter.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+};
+
 const collectSlideSelection = (slide) => {
   const checkboxes = slide.querySelectorAll('[data-answer-index]');
   const selected = [];
@@ -400,8 +301,6 @@ const initLessonQuiz = () => {
     return;
   }
 
-  ensureQuizStyles();
-
   const target = container.querySelector('[data-quiz-target]');
   const props = parseQuizProps(container);
   const questions = normalizeQuestions(props.questions);
@@ -422,41 +321,16 @@ const initLessonQuiz = () => {
     swiper: null,
   };
 
+  const shellHtml = target.innerHTML;
+
   const buildShell = () => {
-    target.innerHTML = `
-    <div class="quiz-shell">
-      <div class="quiz-progress" aria-hidden="true">
-        <div class="quiz-progress-bar question" style="--percent: 0%"></div>
-      </div>
-      <div class="quiz-swiper swiper" role="region" aria-label="Cuestionario">
-        <div class="swiper-wrapper">
-          ${buildSlidesHtml(state.questions, state.selections)}
-        </div>
-        <div class="quiz-pagination swiper-pagination"></div>
-      </div>
-      <div class="quiz-footer">
-        <div class="flex items-center gap-2">
-          <button type="button" class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-            ← Anterior
-          </button>
-          <button type="button" class="quiz-next rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-            Siguiente →
-          </button>
-        </div>
-        <div class="flex items-center gap-3">
-          <button type="button" class="quiz-validate-next rounded-sm bg-morado1 px-4 py-3 text-sm font-semibold text-morado5 hover:bg-morado2 focus:outline-none focus:ring-2 focus:ring-white/40">
-            Validar y pasar a la siguiente
-          </button>
-          <button type="button" class="quiz-submit rounded-sm bg-morado1 px-4 py-2 text-sm font-semibold text-morado5 hover:bg-morado2 focus:outline-none focus:ring-2 focus:ring-white/40">
-            Finalizar
-          </button>
-          <button type="button" class="quiz-restart rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-            Reiniciar
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
+    target.innerHTML = shellHtml;
+  };
+
+  const renderSlides = () => {
+    const wrapper = target.querySelector('.swiper-wrapper');
+    if (!wrapper) return;
+    wrapper.innerHTML = buildSlidesHtml(state.questions, state.selections);
   };
 
   const initSwiper = () => {
@@ -490,6 +364,7 @@ const initLessonQuiz = () => {
             state.selections[previousIndex] = collectSlideSelection(prevSlide);
           }
           updateProgressBar(container, activeIndex, state.questions.length);
+          updateQuizCounter(container, activeIndex, state.questions.length);
           const currentSlide = state.swiper.slides[activeIndex];
           const selection = state.selections[activeIndex] || [];
           applySelectionsToSlide(currentSlide, selection);
@@ -500,22 +375,15 @@ const initLessonQuiz = () => {
                 ? 'none'
                 : 'inline-block';
           }
-          const submitBtn = container.querySelector('.quiz-submit');
-          if (submitBtn) {
-            submitBtn.disabled = activeIndex !== state.questions.length - 1;
-          }
         },
       },
     });
 
     updateProgressBar(container, 0, state.questions.length);
+    updateQuizCounter(container, 0, state.questions.length);
     const validateBtn = container.querySelector('.quiz-validate-next');
     if (validateBtn && state.questions.length === 1) {
       validateBtn.style.display = 'none';
-    }
-    const submitBtn = container.querySelector('.quiz-submit');
-    if (submitBtn && state.questions.length > 1) {
-      submitBtn.disabled = true;
     }
   };
 
@@ -555,6 +423,12 @@ const initLessonQuiz = () => {
 
   const goToSummary = (saveStatus) => {
     state.finished = true;
+    updateQuizCounter(
+      container,
+      state.questions.length - 1,
+      state.questions.length
+    );
+    setQuizCounterVisibility(container, false);
     renderSummary(target, state, saveStatus);
   };
 
@@ -563,7 +437,9 @@ const initLessonQuiz = () => {
     state.selections = {};
     state.answers = [];
     state.saveStatus = null;
+    setQuizCounterVisibility(container, true);
     buildShell();
+    renderSlides();
     initSwiper();
   };
 
@@ -635,7 +511,9 @@ const initLessonQuiz = () => {
     }
 
     buildShell();
+    renderSlides();
     initSwiper();
+    setQuizCounterVisibility(container, true);
     attachEvents();
   };
 
