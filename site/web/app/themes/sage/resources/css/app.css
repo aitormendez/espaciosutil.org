@@ -20,6 +20,7 @@
 @import './comments.css';
 @import './pmp.css';
 @import './layouts/niveles-membresia.css';
+@import './layouts/quiz.css';
 
 .toc {
   overflow-y: auto;

@@ -1,0 +1,107 @@
+/* Quiz layout and shown-only styles */
+#lesson-quiz {
+  --quiz-score-width: 848px;
+}
+
+#lesson-quiz [data-quiz-target] {
+  position: relative;
+  overflow: hidden;
+}
+
+#lesson-quiz .quiz-progress {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin: 12px 0 16px;
+}
+
+#lesson-quiz .quiz-progress-bar {
+  height: 100%;
+  width: var(--percent, 0%);
+  background: linear-gradient(90deg, #a855f7, #67e8f9);
+  transition: width 240ms ease;
+}
+
+#lesson-quiz .quiz-progress-bar.question {
+  background: var(--quiz-question-color, #d4ff84);
+}
+
+#lesson-quiz .quiz-progress-bar.score {
+  background: none;
+  position: relative;
+  overflow: hidden;
+}
+
+#lesson-quiz .quiz-progress-bar.score::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--quiz-score-width, 848px);
+  background: linear-gradient(90deg, #a855f7, #ffffff);
+  background-repeat: repeat-x;
+  pointer-events: none;
+}
+
+#lesson-quiz .quiz-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#lesson-quiz .quiz-swiper {
+  width: 100%;
+}
+
+#lesson-quiz .quiz-swiper .swiper-wrapper {
+  display: flex;
+  transition-property: transform;
+  box-sizing: content-box;
+}
+
+#lesson-quiz .quiz-swiper .swiper-slide {
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+#lesson-quiz .quiz-slide {
+  padding: 4px 0 12px;
+}
+
+#lesson-quiz .quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+#lesson-quiz .quiz-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#lesson-quiz .quiz-pagination {
+  position: static;
+}
+
+#lesson-quiz .quiz-pagination .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+}
+
+#lesson-quiz .quiz-pagination .swiper-pagination-bullet-active {
+  background: #d4ff84;
+}
+
+#lesson-quiz .quiz-summary {
+  padding: 4px 0;
+}
