@@ -82,6 +82,40 @@ Cada lección dispone de un subíndice editorial que se muestra tras el extracto
 5. El campo `Nivel` controla la profundidad (1 = raíz, 2–4 = hijos). La jerarquía se reconstruye combinando orden + nivel.
 6. Las marcas de tiempo generan chips interactivos y una pista `chapters` en el player para usuarios con acceso; los visitantes no logueados ven una versión estática del índice.
 
+#### Cuestionario de la lección
+
+Cada lección puede incluir un cuestionario autocorregible para reforzar el contenido. Se configura en la pestaña **Cuestionario** del grupo “Lección CDE”.
+
+1. Activa **Activar cuestionario** (`quiz_enabled`).
+2. Añade preguntas en **Preguntas** (`quiz_questions`):
+   - **Pregunta**: enunciado.
+   - **Respuestas**: añade al menos 2 opciones y marca **Correcta** en todas las respuestas que deban considerarse correctas (puede haber más de una).
+3. (Opcional) Importa preguntas pegando JSON en **Importar cuestionario desde JSON** (`quiz_json_import`) y guarda la lección.
+4. Si el JSON es válido, al guardar se rellena el repeater y el campo de importación se limpia; si hay errores se muestra un aviso en el admin.
+
+Formato JSON esperado (array de preguntas):
+
+```json
+[
+  {
+    "question": "¿Pregunta de ejemplo?",
+    "answers": [
+      { "text": "Opción A", "is_correct": true },
+      { "text": "Opción B", "is_correct": false },
+      { "text": "Opción C", "is_correct": true }
+    ]
+  }
+]
+```
+
+Comportamiento en el frontend:
+
+- El bloque sólo aparece si `quiz_enabled` está activo y hay preguntas válidas.
+- El botón principal **Validar y pasar a la siguiente** exige marcar al menos una opción y avanza pregunta a pregunta; en la última pregunta desaparece y se habilita **Finalizar**.
+- Hay navegación secundaria con **Anterior/Siguiente** y puntos (paginación).
+- Al finalizar, se muestra un resumen con aciertos; si el usuario está logueado el resultado se guarda y al recargar la lección se mostrará el resumen directamente (con opción de **Rehacer cuestionario**).
+- Ajustes visuales del bloque (incluida la variable `--quiz-score-width` del degradado) viven en `resources/css/layouts/quiz.css`.
+
 ### Video Destacado con Bunny.net
 
 Cada lección del curso (`cde`) puede incluir un video destacado, alojado en Bunny.net, que se muestra al principio del contenido.

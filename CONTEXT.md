@@ -182,7 +182,35 @@ Cada tarjeta muestra los planes disponibles con:
 - El contenedor del player añade `data-video-chapters` (JSON) que `initFeaturedVideoPlayer.jsx` parsea y pasa a `FeaturedVideo.jsx`. Este componente genera un `Blob` WebVTT para `Track kind="chapters"` y escucha clicks globales en `[data-video-seek]` para invocar `playerRef.current.currentTime`.
 - Cuando no hay subíndice se omiten tanto la navegación como la pista de capítulos. El árbol (items + chapters) está listo para reutilizarse en el índice AJAX del curso sin recalcular los datos.
 
-## 10. Bloques de contenidos en el índice del CDE
+## 10. Cuestionario por lección (CDE)
+
+- Los campos viven en la pestaña **Cuestionario** del grupo “Lección CDE” (`site/web/app/themes/sage/app/Fields/Cde.php`) y permiten activar/ocultar el bloque en cada lección:
+  - `quiz_enabled` (true/false): controla si el cuestionario se muestra en la lección.
+  - `quiz_questions` (repeater): lista de preguntas.
+    - `question` (texto): enunciado.
+    - `answers` (repeater): respuestas posibles.
+      - `answer_text` (texto): opción.
+      - `is_correct` (true/false): marca las respuestas correctas (puede haber múltiples).
+  - `quiz_json_import` (textarea): importación rápida desde JSON (se procesa al guardar).
+- Importación desde JSON: `App\Providers\ThemeServiceProvider::importLessonQuizFromJson()` engancha en `acf/save_post` y:
+  - valida estructura y contenido (pregunta con texto, mínimo 2 respuestas, mínimo 1 correcta),
+  - vuelca los datos al repeater `quiz_questions`,
+  - limpia `quiz_json_import`,
+  - muestra avisos en admin (ACF notice o fallback en `admin_notices`).
+- Exposición a la vista: `App\View\Composers\SingleCde` construye `lesson_quiz` con preguntas normalizadas y lo marca como `enabled` solo si `quiz_enabled` y existe contenido válido.
+- Renderizado: `resources/views/partials/content-single-cde.blade.php` incluye una sección `#lesson-quiz` y serializa las props iniciales en `data-quiz-props` (JSON seguro en HTML) para bootstrap del frontend.
+- Frontend (mini-app):
+  - `resources/js/lessons/quiz.js` monta el cuestionario con Swiper (paginación + navegación + teclado). Se deshabilita el swipe/touch (`allowTouchMove: false`) para evitar que Swiper intercepte clicks sobre checkboxes.
+  - `resources/css/layouts/quiz.css` contiene los estilos del bloque (importado desde `resources/css/app.css`).
+  - Barras de progreso:
+    - progreso por pregunta: color sólido (usa `--quiz-question-color`, por defecto “bg-sun”).
+    - resultado final: degradado “fijo” recortado por overflow (controlado por `--quiz-score-width`, por defecto 848px).
+- Persistencia de resultados:
+  - Endpoint REST: `App\Api\LessonQuiz` registra `POST /wp-json/cde/v1/quiz/submit` y `GET /wp-json/cde/v1/quiz/result`.
+  - Se guarda en `user_meta` por usuario y lección con clave `cde_quiz_result_{postId}` e incluye `correct`, `total`, `percentage`, detalles por pregunta y timestamp.
+  - Regla de acierto por pregunta: el usuario debe marcar exactamente todas las respuestas correctas (si marca una incorrecta o se deja una correcta sin marcar, la pregunta cuenta como incorrecta).
+
+## 11. Bloques de contenidos en el índice del CDE
 
 - La taxonomía `serie_cde` se explota ahora de forma jerárquica: los términos raíz identifican las series y los términos hijo representan cada bloque de contenidos. Ninguna entrada `cde` lleva asignado el término raíz; únicamente la lección raíz de cada bloque recibe el término hijo correspondiente.
 - `app/View/Composers/TemplateCurso.php` expone una colección `series_cde_lessons` con la forma `serie → bloques`. El método `getSeriesWithBlocks()` recupera los términos raíz (`parent = 0`, `hide_empty = false`) y, para cada uno, `getBlocksForSeries()` obtiene sus términos hijo y localiza la lección raíz mediante `getBlockRootPost()`. Este último descarta candidatos cuyo ancestro ya tenga el mismo término para evitar duplicados y usa el primer resultado como fallback.
