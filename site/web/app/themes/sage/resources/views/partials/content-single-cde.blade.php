@@ -44,8 +44,8 @@
             </div>
         @endif
 
-        <div class="prose prose-xl bg-morado5/90 prose-sutil md:prose-2xl w-full p-6 md:px-0">
-            <div class="prose prose-sutil prose-xl md:prose-2xl mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
+        <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-6 md:px-0">
+            <div class="prose prose-xl md:prose-2xl mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
                 @php the_content() @endphp
             </div>
         </div>
@@ -89,7 +89,7 @@
                         <div
                             class="quiz-footer grid grid-cols-1 grid-rows-[auto_auto_auto] items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:grid-rows-1">
                             <div
-                                class="flex items-center gap-2 justify-self-center col-start-1 row-start-2 md:justify-self-start md:col-start-1 md:row-start-1">
+                                class="col-start-1 row-start-2 flex items-center gap-2 justify-self-center md:col-start-1 md:row-start-1 md:justify-self-start">
                                 <button type="button"
                                     class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
                                     ←
@@ -100,11 +100,11 @@
                                 </button>
                             </div>
                             <button type="button"
-                                class="quiz-validate-next text-morado5 hover:bg-sol justify-self-center col-start-1 row-start-1 md:col-start-2 md:row-start-1 rounded-full bg-green-500 px-4 py-3 text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/40">
+                                class="quiz-validate-next text-morado5 hover:bg-sol col-start-1 row-start-1 justify-self-center rounded-full bg-green-500 px-4 py-3 text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 md:col-start-2 md:row-start-1">
                                 Validar y pasar a la siguiente
                             </button>
                             <div
-                                class="flex items-center gap-3 justify-self-center col-start-1 row-start-3 md:justify-self-end md:col-start-3 md:row-start-1">
+                                class="col-start-1 row-start-3 flex items-center gap-3 justify-self-center md:col-start-3 md:row-start-1 md:justify-self-end">
                                 <button type="button"
                                     class="quiz-submit bg-morado1 text-morado5 hover:bg-morado2 rounded-sm px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-white/40">
                                     Finalizar
@@ -124,7 +124,7 @@
 
         @php(comments_template())
     @else
-        <div class="prose prose-sutil prose-xl md:prose-2xl mb-8 w-full !p-6 md:px-0">
+        <div class="prose prose-xl md:prose-2xl mb-8 w-full !p-6 md:px-0">
             <div class="bg-morado3 mx-auto mt-8 max-w-4xl rounded p-4 text-white">
                 <p>Para acceder al contenido completo de esta lección, por favor <a
                         href="{{ wp_login_url(get_permalink()) }}" class="underline">inicia sesión</a> o <a

@@ -5,9 +5,8 @@
         @include('partials.entry-meta')
     </header>
 
-    <div class="e-content relative border-t border-blanco flex justify-center pb-20 text-blanco flex-wrap bg-morado5/90">
-        <div
-            class="contenido max-w-4xl mx-auto w-full prose prose-sutil mt-24 prose-xl md:prose-2xl !leading-tight px-6 md:px-0">
+    <div class="e-content border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-20">
+        <div class="contenido prose prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
             @php(the_content())
         </div>
     </div>

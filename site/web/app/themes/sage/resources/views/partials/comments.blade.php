@@ -8,8 +8,7 @@
 
 <section id="comments"
     class="comments border-blanco text-blanco bg-morado5/90 flex flex-wrap justify-center border-t pb-20"">
-    <div
-        class="contenido prose prose-sutil prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
+    <div class="contenido prose prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
 
         @if ($responses())
             <h2 class="bg-morado4 !mt-0 p-2 text-center font-sans !text-base">

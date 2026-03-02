@@ -3,10 +3,10 @@
 @section('content')
     @include('partials.page-header')
 
-    <div class="content relative border-t border-blanco flex flex-col py-20 px-6 text-blanco bg-morado5/90">
+    <div class="content border-blanco text-blanco bg-morado5/90 relative flex flex-col border-t px-6 py-20">
         <div id="calendario" class="relative w-full font-sans text-xs md:text-lg"></div>
 
-        <div class="posts relative prose prose-sutil mt-24">
+        <div class="posts prose relative mt-24">
             <h2 class="">Próximos eventos</h2>
             @while (have_posts())
                 @php(the_post())

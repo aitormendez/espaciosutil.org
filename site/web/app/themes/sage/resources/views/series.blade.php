@@ -11,7 +11,7 @@
     @endwhile
 
     <div class="border-blanco text-blanco bg-morado5/90 relative flex justify-center border-t py-6 md:py-20">
-        <div class="prose-sutil prose prose-xl md:prose-2xl relative w-full max-w-none leading-snug md:leading-snug">
+        <div class="prose prose-xl md:prose-2xl relative w-full max-w-none leading-snug md:leading-snug">
             <div class="px-6">
                 @includeFirst(['partials.content-page', 'partials.content'])
             </div>
@@ -37,7 +37,7 @@
                                     <div class="excerpt mp-6 md:mb-20">{{ get_the_excerpt() }}</div>
                                 @endif
 
-                                                                        @php $series_rel = $series_relacionadas() @endphp
+                                @php $series_rel = $series_relacionadas() @endphp
 
                                 @if ($series_rel)
                                     <ul class="series-relacionadas !m-0">
