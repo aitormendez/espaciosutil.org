@@ -1,15 +1,5 @@
-@php
-    $navContextData = nav_context_data();
-    $switchUrl = $navContextData['switch_target_url'];
-    $switchLabel = $navContextData['switch_target_label'];
-@endphp
-
 <div class="border-gris3 relative border-b py-1 font-sans font-light text-white xl:pr-12">
     <div class="mx-auto flex flex-col items-center justify-center sm:flex-row sm:space-x-6 xl:!justify-end">
-        <a href="{{ $switchUrl }}" @if (should_prevent_barba_for_url($switchUrl)) data-barba-prevent @endif
-            class="transition hover:text-gray-300">
-            {{ $switchLabel }}
-        </a>
         @if (!is_user_logged_in())
             <a href="{{ home_url('/login/') }}" data-barba-prevent class="transition hover:text-gray-300">Acceso</a>
         @else

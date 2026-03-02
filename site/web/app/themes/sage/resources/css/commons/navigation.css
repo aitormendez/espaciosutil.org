@@ -1,0 +1,11 @@
+/* Navigation-specific styles */
+
+.my-menu-item {
+  &.switch {
+    @apply font-sans text-sm uppercase tracking-wider transition cursor-pointer border rounded px-0 overflow-hidden;
+
+    a {
+      @apply block pt-[5px] pb-[4px] px-4 hover:bg-cde hover:text-white;
+    }
+  }
+}
