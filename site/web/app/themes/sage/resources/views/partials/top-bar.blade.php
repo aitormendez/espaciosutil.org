@@ -5,7 +5,7 @@
             Curso Desarrollo Espiritual
         </a>
         @if (!is_user_logged_in())
-            <a href="{{ get_permalink(get_page_by_path('login')) }}" class="transition hover:text-gray-300">Acceso</a>
+            <a href="{{ home_url('/login/') }}" class="transition hover:text-gray-300">Acceso</a>
         @else
             <a href="{{ home_url('/cuenta-de-membresia') }}" class="transition hover:text-gray-300">Mi
                 cuenta</a>
