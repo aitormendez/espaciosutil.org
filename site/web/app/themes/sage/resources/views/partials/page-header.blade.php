@@ -1,12 +1,12 @@
     @php
-        $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
-        $curso_page_ids = [2347, 2288, 2271, 2242];
-        $is_pmpro_page = \App\is_pmpro_core_page((int) get_queried_object_id());
+        $navContextData = nav_context_data();
+        $is_pmpro_page = $navContextData['is_pmpro_page'];
+        $show_cde_hero_nav = $navContextData['show_cde_hero_nav'];
     @endphp
 
     <div class="page-header flex w-full flex-col items-center px-6 text-center">
         <div
-            class="{{ $is_pmpro_page ? 'font-sans' : 'prose' }} {{ is_page($curso_page_ids) ? 'hidden' : '' }} mb-24 w-full max-w-5xl lg:pt-24">
+            class="{{ $is_pmpro_page ? 'font-sans' : 'prose' }} {{ $show_cde_hero_nav ? 'hidden' : '' }} mb-24 w-full max-w-5xl lg:pt-24">
             @if (is_tax('revelador'))
                 <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
                     Revelador
@@ -24,7 +24,7 @@
         </div>
 
 
-        @if (is_page($pmp_page_ids))
+        @if ($is_pmpro_page)
             <nav class="mb-6 hidden w-full justify-center font-sans text-2xl xl:flex">
                 <ul class="flex flex-wrap gap-12">
                     <x-navigation name="membresia_navigation"
@@ -34,7 +34,7 @@
             </nav>
         @endif
 
-        @if (is_page($curso_page_ids))
+        @if ($show_cde_hero_nav)
             <div id="arbol" class="w-50 relative z-10 order-1 lg:order-none">
                 <x-es-cde-arbol-peq class="relative top-[120px] lg:hidden" />
                 <x-es-cde-arbol-grande class="relative top-[170px] hidden lg:block" />

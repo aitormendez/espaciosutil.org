@@ -2,8 +2,12 @@
 
 @section('content')
     @while (have_posts())
-        @php(the_post())
-        @php($is_pmpro_page = \App\is_pmpro_core_page((int) get_the_ID()))
+        @php
+            the_post();
+        @endphp
+        @php
+            $is_pmpro_page = \App\is_pmpro_core_page((int) get_the_ID());
+        @endphp
         @include('partials.page-header')
 
         <div class="content border-blanco bg-morado5/90 relative border-t px-6 lg:px-0">

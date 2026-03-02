@@ -1,6 +1,44 @@
 import { gsap } from 'gsap';
+
 const particlesContainer = document.getElementById('tsparticles');
 const menus = gsap.utils.toArray('.my-menu-item');
+
+function getPersistentSectionColor() {
+  const color = document.body?.dataset.sectionColor;
+
+  return color && color.trim() !== '' ? color : '#000000';
+}
+
+function changeBgColor(color, immediate = false) {
+  if (!particlesContainer || !color) {
+    return;
+  }
+
+  const animation = {
+    backgroundColor: color,
+    overwrite: true,
+  };
+
+  if (immediate) {
+    gsap.set(particlesContainer, animation);
+    return;
+  }
+
+  gsap.to(particlesContainer, animation);
+}
+
+function previewMenuColor(menu) {
+  const link = menu?.querySelector('a');
+  const color = link?.dataset?.color;
+
+  if (color) {
+    changeBgColor(color);
+  }
+}
+
+function restorePersistentBgColor() {
+  changeBgColor(getPersistentSectionColor());
+}
 
 export function navegacion() {
   const banner = document.querySelector('#banner');
@@ -22,7 +60,7 @@ export function navegacion() {
       },
     });
 
-    openMenu && openMenu.close();
+    openMenu && menuClose(openMenu);
   }
 
   function muestraBanner() {
@@ -64,15 +102,16 @@ export function navegacion() {
   });
 
   function menuOpen(menu) {
-    let childMenu = menu.querySelector('.my-child-menu');
+    const childMenu = menu.querySelector('.my-child-menu');
 
     if (childMenu) {
-      let items = childMenu.querySelectorAll('li');
+      const items = childMenu.querySelectorAll('li');
 
       if (openMenu !== menu) {
         childMenu.classList.remove('xl:hidden');
-        openMenu && menuClose(openMenu);
+        openMenu && menuClose(openMenu, { restoreColor: false });
         openMenu = menu;
+        previewMenuColor(menu);
         gsap.to(items, {
           opacity: 1,
           overwrite: true,
@@ -89,10 +128,21 @@ export function navegacion() {
     setSubmenuBg(childMenu);
   }
 
-  function menuClose(menu) {
-    let childMenu = menu.querySelector('.my-child-menu');
-    let items = childMenu.querySelectorAll('li');
+  function menuClose(menu, { restoreColor = true } = {}) {
+    const childMenu = menu.querySelector('.my-child-menu');
+
     openMenu = undefined;
+
+    if (!childMenu) {
+      if (restoreColor) {
+        restorePersistentBgColor();
+      }
+
+      return;
+    }
+
+    const items = childMenu.querySelectorAll('li');
+
     gsap.to(items, {
       opacity: 0,
       overwrite: true,
@@ -102,12 +152,17 @@ export function navegacion() {
         childMenu.classList.add('xl:hidden');
       },
     });
+
     setSubmenuBg(childMenu);
+
+    if (restoreColor) {
+      restorePersistentBgColor();
+    }
   }
 
   function setSubmenuBg(childMenu) {
     if (openMenu) {
-      let calculatedHeight = childMenu.offsetHeight + 70;
+      const calculatedHeight = childMenu.offsetHeight + 70;
       submenuBg.classList.add('border-b');
       gsap.to(submenuBg, {
         delay: 0.5,
@@ -129,8 +184,8 @@ export function navegacion() {
   }
 
   function moverLinea(menu) {
-    let enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
-    let navPos = document.querySelector('#nav').getBoundingClientRect().left;
+    const enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
+    const navPos = document.querySelector('#nav').getBoundingClientRect().left;
 
     gsap.to(linea, {
       x: enlacePrincipalRect.left - navPos,
@@ -139,8 +194,8 @@ export function navegacion() {
   }
 
   function setLinea(menu) {
-    let enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
-    let navPos = document.querySelector('#nav').getBoundingClientRect().left;
+    const enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
+    const navPos = document.querySelector('#nav').getBoundingClientRect().left;
 
     gsap.set(linea, {
       x: enlacePrincipalRect.left - navPos,
@@ -184,7 +239,6 @@ export function navegacion() {
 export function navegacionMovil() {
   const menus = gsap.utils.toArray('.my-menu-item');
   const burguer = document.getElementById('burguer');
-  // const cerrar = document.getElementById('cerrar');
   const nav = document.getElementById('nav');
   let navOpen = false;
   let openMenu;
@@ -206,6 +260,11 @@ export function navegacionMovil() {
     gsap.to(nav, {
       x: '-100vw',
     });
+
+    if (openMenu) {
+      openMenu.close();
+    }
+
     navOpen = false;
   }
 
@@ -218,19 +277,25 @@ export function navegacionMovil() {
   }
 
   menus.forEach((menu) => {
-    let box = menu.querySelector('.my-child-menu'),
-      isOpen = false;
+    const box = menu.querySelector('.my-child-menu');
+    let isOpen = false;
 
     if (box) {
-      let items = box.querySelectorAll('li');
+      const items = box.querySelectorAll('li');
 
       gsap.set(items, { y: -30 });
 
       menu.open = () => {
         if (!isOpen) {
           isOpen = true;
-          openMenu && openMenu.close();
+
+          if (openMenu && openMenu !== menu) {
+            openMenu.close({ restoreColor: false });
+          }
+
           openMenu = menu;
+          previewMenuColor(menu);
+
           gsap.to(box, {
             height: 'auto',
             duration: 1,
@@ -247,17 +312,26 @@ export function navegacionMovil() {
         }
       };
 
-      menu.close = () => {
+      menu.close = ({ restoreColor = true } = {}) => {
         if (isOpen) {
           isOpen = false;
-          openMenu = null;
+
+          if (openMenu === menu) {
+            openMenu = null;
+          }
+
           gsap.to(box, {
             height: 0,
             overwrite: true,
             onComplete: () => gsap.set(items, { y: -30, overwrite: true }),
           });
+
+          if (restoreColor) {
+            restorePersistentBgColor();
+          }
         }
       };
+
       menu.addEventListener('click', () =>
         isOpen ? menu.close() : menu.open()
       );
@@ -273,46 +347,26 @@ export function navegacionMovil() {
 }
 
 export function particlesBgColor() {
-  const menuItems = document.querySelectorAll('#nav .my-menu  > li > a');
-  const logoLink = document.querySelector('.brand');
-
-  logoLink.addEventListener('click', () => changeBgColor('#000000'));
+  const menuItems = document.querySelectorAll('#nav .my-menu > li > a');
 
   menuItems.forEach((item) => {
     const color = item.dataset.color;
+
+    if (!color) {
+      return;
+    }
+
+    const menu = item.closest('.my-menu-item');
+    const hasChildMenu = Boolean(menu?.querySelector('.my-child-menu'));
+
+    if (hasChildMenu) {
+      return;
+    }
 
     item.addEventListener('click', () => changeBgColor(color));
   });
 }
 
 export function setBgColorAtLoadPage() {
-  const body = document.querySelector('body');
-  let colorFondo;
-
-  if (body.classList.contains('home')) {
-    colorFondo = '#000000';
-  } else if (body.classList.contains('single-noticia')) {
-    const itemNoticiasLink = document.querySelector(
-      '.menu-item-object-noticia a'
-    );
-    colorFondo = itemNoticiasLink.dataset.color;
-  } else if (document.querySelector('.active-ancestor')) {
-    colorFondo = document.querySelector('.active-ancestor').querySelector('a')
-      .dataset.color;
-  } else if (document.querySelector('.active')) {
-    colorFondo = document.querySelector('.active').querySelector('a')
-      .dataset.color;
-  } else {
-    colorFondo = '#000';
-  }
-
-  gsap.set(particlesContainer, {
-    backgroundColor: colorFondo,
-  });
-}
-
-function changeBgColor(color) {
-  gsap.to(particlesContainer, {
-    backgroundColor: color,
-  });
+  changeBgColor(getPersistentSectionColor(), true);
 }

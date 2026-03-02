@@ -2,10 +2,12 @@
     'name' => 'footer_navigation',
 ])
 
-@php($menu = \Log1x\Navi\Navi::make()->build($name))
+@php
+    $menu = \Log1x\Navi\Navi::make()->build($name);
+@endphp
 
 @if ($menu->isNotEmpty())
-    <ul id="nav" class="mx-auto flex max-w-4xl flex-wrap px-6 lg:px-0 xl:max-w-6xl">
+    <ul id="nav-footer" class="mx-auto flex max-w-4xl flex-wrap px-6 lg:px-0 xl:max-w-6xl">
         @foreach ($menu->all() as $item)
             <li @class([
                 'px-2 flex flex-col py-4 border-b border-gris1 last:border-none w-full md:w-1/2 xl:w-1/3',
@@ -24,7 +26,8 @@
                                     'font-extralight text-gris2 hover:text-blanco',
                                     $child->classes ?? '',
                                     'active' => $child->active,
-                                ]) href="{{ $child->url }}">
+                                ]) href="{{ $child->url }}"
+                                    @if (should_prevent_barba_for_url($child->url)) data-barba-prevent @endif>
                                     {{ $child->label }}
                                 </a>
                             </li>

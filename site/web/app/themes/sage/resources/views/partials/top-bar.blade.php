@@ -1,13 +1,19 @@
+@php
+    $navContextData = nav_context_data();
+    $switchUrl = $navContextData['switch_target_url'];
+    $switchLabel = $navContextData['switch_target_label'];
+@endphp
+
 <div class="border-gris3 relative border-b py-1 font-sans font-light text-white xl:pr-12">
     <div class="mx-auto flex flex-col items-center justify-center sm:flex-row sm:space-x-6 xl:!justify-end">
-        <a href="{{ get_permalink(get_page_by_path('curso-de-desarrollo-espiritual')) }}"
+        <a href="{{ $switchUrl }}" @if (should_prevent_barba_for_url($switchUrl)) data-barba-prevent @endif
             class="transition hover:text-gray-300">
-            Curso Desarrollo Espiritual
+            {{ $switchLabel }}
         </a>
         @if (!is_user_logged_in())
-            <a href="{{ home_url('/login/') }}" class="transition hover:text-gray-300">Acceso</a>
+            <a href="{{ home_url('/login/') }}" data-barba-prevent class="transition hover:text-gray-300">Acceso</a>
         @else
-            <a href="{{ home_url('/cuenta-de-membresia') }}" class="transition hover:text-gray-300">Mi
+            <a href="{{ home_url('/cuenta-de-membresia') }}" data-barba-prevent class="transition hover:text-gray-300">Mi
                 cuenta</a>
             <form method="POST" action="{{ site_url('wp-login.php?action=logout') }}" class="inline">
                 @php
