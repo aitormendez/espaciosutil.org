@@ -26,7 +26,7 @@
         data-primary-menu="{{ $navContextData['primary_menu_name'] }}"
         class="bg-negro text-blanco {{ is_admin_bar_showing() ? 'xl:top-[88px]' : 'xl:top-[57px]' }} fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:min-h-0 xl:w-auto xl:bg-transparent">
         <ul class="my-menu flex flex-wrap items-center p-6 text-2xl xl:px-0 xl:pb-[25px] xl:pt-0">
-            <x-navigation name="primary_navigation" class="flex font-extralight" />
+            <x-navigation name="{{ $navContextData['primary_menu_name'] }}" class="flex font-extralight" />
 
             @if ($navContextData['is_pmpro_page'])
                 <x-navigation name="membresia_navigation" class="flex xl:hidden" />

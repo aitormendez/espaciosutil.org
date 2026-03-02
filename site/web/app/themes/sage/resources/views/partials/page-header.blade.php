@@ -47,7 +47,7 @@
                     <span class="block lg:inline"> de desarrollo</span>
                     <span class="block lg:inline">espiritual</span>
                 </div>
-                <nav>
+                <nav class="xl:hidden" aria-label="Navegación secundaria CDE">
                     <x-navigation-cde name="cde_navigation" />
                 </nav>
             </div>
