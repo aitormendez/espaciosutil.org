@@ -1,0 +1,130 @@
+@layer components {
+  /* Base: clase reutilizable + submits nativos */
+  :where(
+    .btn,
+    form :is(button[type='submit'], input[type='submit'], input[type='button'])
+  ) {
+    --btn-bg: var(--color-morado5);
+    --btn-border: var(--color-gris2);
+    --btn-text: var(--color-gris1);
+    --btn-bg-hover: var(--color-sol);
+    --btn-border-hover: var(--color-sol);
+    --btn-text-hover: var(--color-gris5);
+
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border px-4 pt-[8px] pb-[6px]
+           font-sans text-sm uppercase tracking-wider transition cursor-pointer;
+
+    background-color: var(--btn-bg);
+    border-color: var(--btn-border);
+    color: var(--btn-text);
+  }
+
+  :where(
+    .btn:hover,
+    form
+      :is(
+        button[type='submit'],
+        input[type='submit'],
+        input[type='button']
+      ):hover
+  ) {
+    background-color: var(--btn-bg-hover);
+    border-color: var(--btn-border-hover);
+    color: var(--btn-text-hover);
+  }
+
+  /* Enlaces de acciones (dentro o fuera del form, excepto enlaces-botón) */
+  :where(form a, .pmpro_actions_nav a, .form-actions a, .actions-nav a):not(
+    :where(
+      .btn,
+      .button,
+      .wp-element-button,
+      .wp-block-button__link,
+      [role='button']
+    )
+  ) {
+    @apply underline underline-offset-4 decoration-1 transition-colors;
+    color: var(--color-morado2);
+  }
+
+  :where(form a, .pmpro_actions_nav a, .form-actions a, .actions-nav a):not(
+    :where(
+      .btn,
+      .button,
+      .wp-element-button,
+      .wp-block-button__link,
+      [role='button']
+    )
+  ):hover {
+    color: var(--color-blanco);
+  }
+
+  :where(form a, .pmpro_actions_nav a, .form-actions a, .actions-nav a):not(
+    :where(
+      .btn,
+      .button,
+      .wp-element-button,
+      .wp-block-button__link,
+      [role='button']
+    )
+  ):focus-visible {
+    @apply outline-none ring-2 ring-morado2/40 rounded-sm;
+  }
+
+  /* Variantes */
+  .btn--secondary {
+    --btn-bg: transparent;
+    --btn-border: var(--color-gris3);
+    --btn-text: var(--color-gris1);
+  }
+
+  .btn--danger {
+    --btn-bg: #b91c1c;
+    --btn-border: #b91c1c;
+    --btn-text: #fff;
+    --btn-bg-hover: #dc2626;
+    --btn-border-hover: #dc2626;
+    --btn-text-hover: #fff;
+  }
+}
+
+/* PMPro Login Form */
+
+@layer components {
+  body.pmpro-login #pmpro_login .pmpro_card {
+    @apply rounded p-6;
+  }
+
+  body.pmpro-login #pmpro_login #loginform {
+    @apply flex flex-col gap-3;
+  }
+
+  body.pmpro-login #pmpro_login #loginform .login-password {
+    @apply flex flex-col gap-2;
+  }
+
+  body.pmpro-login #pmpro_login #loginform .login-remember {
+    @apply mt-1;
+  }
+
+  body.pmpro-login #pmpro_login #loginform .login-submit {
+    @apply mt-2;
+  }
+
+  body.pmpro-login #pmpro_login label {
+    @apply text-gris1/80 text-sm;
+  }
+
+  body.pmpro-login #pmpro_login input[type='text'],
+  body.pmpro-login #pmpro_login input[type='password'],
+  body.pmpro-login #pmpro_login input[type='email'] {
+    @apply w-full rounded border px-3 py-2 mb-4;
+    border-color: var(--color-gris3);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--color-gris1);
+  }
+
+  body.pmpro-login #pmpro_login input:focus {
+    @apply outline-none ring-2 ring-morado2/40;
+  }
+}
