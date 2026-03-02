@@ -51,12 +51,11 @@ Destinos canónicos:
 
 Decisiones confirmadas:
 - El contexto se determina por URL (sin override editorial por ahora).
-- Enlace de acceso de miembros: migrar a `/login-2/` (flujo en un solo paso).
+- Enlace de acceso de miembros: usar `/login/` (flujo en un solo paso con PMPro).
 - `Cancelar membresía` no forma parte del menú principal objetivo; se mantiene como paso interno del flujo de cuenta (`/cuenta-de-membresia/cancelacion-de-membresia/?levelstocancel=...`).
 
 Estado de implementación (2026-03-01):
-- `pmpro_login_page_id` actualizado a `2243` (`/login-2/`).
-- Enlace `Acceso` de la top bar actualizado para usar `login-2` con fallback seguro.
+- `pmpro_login_page_id` y top bar alineados a `/login/`.
 
 Pendiente de cierre:
 - Separar `hub` y `índice de lecciones` en URLs distintas:
@@ -89,7 +88,7 @@ Bloque público (siempre visible):
 
 Visibilidad por autenticación:
 - Usuario no logeado:
-  - `Acceso` (objetivo: `/login-2/`)
+  - `Acceso` (objetivo: `/login/`)
 - Usuario logeado:
   - `Mi cuenta`
   - `Perfil`
@@ -139,6 +138,28 @@ Validación:
 
 Salida:
 - Matriz versionada en este documento o anexo.
+
+## Fase 0B: Contrato Barba (compatibilidad de navegación)
+
+Objetivo:
+- Evitar incoherencias de cabecera/menú al mezclar cambio de contexto con transiciones Barba.
+
+Tareas:
+- Definir el contrato de navegación:
+  - Navegación dentro del mismo contexto (`es -> es`, `cde -> cde`): puede usar Barba.
+  - Cambio de contexto (`es <-> cde`): navegación completa (hard reload), sin transición SPA.
+- Marcar enlaces de cambio de contexto (switch top bar + ítems de cruce) con `data-barba-prevent`.
+- Marcar también flujos sensibles de autenticación/membresía (login, cuenta y páginas PMPro core) con `data-barba-prevent`.
+- Añadir `data-nav-context` en `<body>` para trazabilidad y verificación manual.
+- Eliminar ambigüedad por IDs duplicados en navegación (`id="nav"` debe ser único).
+
+Validación:
+- Navegando entre dos URLs del mismo contexto, Barba sigue funcionando sin perder estado visual.
+- Al cambiar de contexto por switch o por ítem de cruce, se produce carga completa y la cabecera refleja el contexto correcto.
+- En `/login/` y páginas PMPro core, no hay efectos secundarios de transición SPA.
+
+Salida:
+- Contrato Barba aprobado y aplicado como precondición para Fase 1+.
 
 ## Fase 1: Infraestructura de contexto (sin cambios visuales)
 
@@ -307,11 +328,17 @@ Riesgo:
 Mitigación:
 - Redefinir hero como secundario o puramente visual.
 
+Riesgo:
+- Cabecera desincronizada con el contexto real al navegar con Barba.
+Mitigación:
+- Aplicar Fase 0B (hard reload en cambios de contexto y rutas sensibles).
+
 ## 9. Orden sugerido de ejecución inmediata
 
 1. Fase 0 (matriz de URLs)
-2. Fase 1 (composer/contexto)
-3. Fase 2 (menú único desktop)
-4. Fase 3 (móvil)
-5. Fase 4 y 5 (switch + ítems de cruce)
-6. Fase 6 y 7 (racionalización + QA + despliegue)
+2. Fase 0B (contrato Barba)
+3. Fase 1 (composer/contexto)
+4. Fase 2 (menú único desktop)
+5. Fase 3 (móvil)
+6. Fase 4 y 5 (switch + ítems de cruce)
+7. Fase 6 y 7 (racionalización + QA + despliegue)
