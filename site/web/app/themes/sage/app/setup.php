@@ -227,6 +227,46 @@ add_filter('hf_form_response', function ($response, $form, $data) {
 add_filter('hf_validate_form_request_size', '__return_false');
 
 /**
+ * Return core PMPro page IDs configured in options.
+ */
+function pmpro_core_page_ids(): array
+{
+    static $ids = null;
+
+    if (is_array($ids)) {
+        return $ids;
+    }
+
+    $optionKeys = [
+        'pmpro_account_page_id',
+        'pmpro_billing_page_id',
+        'pmpro_cancel_page_id',
+        'pmpro_checkout_page_id',
+        'pmpro_confirmation_page_id',
+        'pmpro_invoice_page_id',
+        'pmpro_levels_page_id',
+        'pmpro_login_page_id',
+        'pmpro_member_profile_edit_page_id',
+    ];
+
+    $ids = array_filter(array_map('intval', array_map('get_option', $optionKeys)));
+
+    return $ids;
+}
+
+/**
+ * Check whether a given page ID belongs to PMPro core pages.
+ */
+function is_pmpro_core_page(int $pageId = 0): bool
+{
+    if ($pageId <= 0) {
+        return false;
+    }
+
+    return in_array($pageId, pmpro_core_page_ids(), true);
+}
+
+/**
  * Register the theme sidebars.
  *
  * @return void

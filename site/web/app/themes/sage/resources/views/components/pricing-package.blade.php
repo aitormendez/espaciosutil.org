@@ -68,7 +68,7 @@
     $semiState = $semiIsSubscribed ? 'subscribed' : 'available';
 @endphp
 
-<div class="pricing-package not-prose rounded-xs mb-6 border border-white p-6">
+<div class="pricing-package rounded-xs mb-6 border border-white p-6">
     <div class="flex flex-col flex-wrap gap-6 sm:flex-row">
         {{-- Bloque visual (opcional) --}}
         @if ($image)

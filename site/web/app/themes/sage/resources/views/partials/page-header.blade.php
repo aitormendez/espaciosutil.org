@@ -1,10 +1,12 @@
     @php
         $pmp_page_ids = [2236, 2237, 2238, 2241, 2244, 2239];
         $curso_page_ids = [2347, 2288, 2271, 2242];
+        $is_pmpro_page = \App\is_pmpro_core_page((int) get_queried_object_id());
     @endphp
 
     <div class="page-header flex w-full flex-col items-center px-6 text-center">
-        <div class="prose prose-sutil {{ is_page($curso_page_ids) ? 'hidden' : '' }} mb-24 w-full max-w-5xl lg:pt-24">
+        <div
+            class="{{ $is_pmpro_page ? 'font-sans' : 'prose' }} {{ is_page($curso_page_ids) ? 'hidden' : '' }} mb-24 w-full max-w-5xl lg:pt-24">
             @if (is_tax('revelador'))
                 <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
                     Revelador
