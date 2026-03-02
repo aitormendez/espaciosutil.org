@@ -220,3 +220,37 @@ Cada tarjeta muestra los planes disponibles con:
 - El árbol resultante renderizado por `partials/course-index-item` añade para cada nodo con descendientes un botón independiente (`course-index-toggle`) que controla columnas anidadas sin interferir con el enlace principal ni el icono de progreso. El JS reusa `gsap` para colapsar/expandir cada wrapper (`data-children-wrapper`) y sincroniza `aria-expanded` e iconos `+/-`.
 - Los nodos sin icono de progreso utilizan un `span` placeholder (`course-index-placeholder-icon` con `aria-hidden="true"`) para mantener la alineación vertical entre iconos, enlaces y botones en todas las profundidades.
 - Los estilos heredan de Tailwind; los paneles se ocultan con la clase `hidden` y un `overflow: hidden` inline para permitir la animación de altura.
+
+## 12. Color de fondo por sección (tsparticles)
+
+Se ha reemplazado la estrategia basada en “click de ítem de menú” por una estrategia de **sección persistente** derivada de la página actual.
+
+### Definición de sección
+
+- La sección se define como el **ítem de primer nivel** (ancestro top-level) del menú `primary_navigation`.
+- El color de sección se sigue editando en ACF sobre ítems de menú mediante `menu_item_bg_color` (`site/web/app/themes/sage/app/Fields/MenuItems.php`).
+- Los ítems de primer nivel en navegación incluyen `data-section="section-{ID}"` y `data-color` (`site/web/app/themes/sage/resources/views/components/navigation.blade.php`).
+
+### Resolución backend (fuente de verdad)
+
+- El helper `primary_navigation_section_context()` (`site/web/app/themes/sage/app/helpers.php`) resuelve la sección actual:
+  - obtiene los items de `primary_navigation`,
+  - hace match de la URL actual por `path` (exacto o prefijo más largo),
+  - ignora enlaces no navegables (`#`) y hosts externos,
+  - asciende por `menu_item_parent` hasta el ancestro de primer nivel,
+  - devuelve `key`, `color`, `menu_item_id`, `label`.
+- Fallback por defecto: sección `home` con color `#000000`.
+- El layout principal expone esa resolución en `<body>` con `data-section` y `data-section-color` (`site/web/app/themes/sage/resources/views/layouts/app.blade.php`).
+
+### Comportamiento frontend
+
+- `setBgColorAtLoadPage()` en `resources/js/nav.js` aplica siempre el color persistente desde `body[data-section-color]`.
+- Al abrir un menú de primer nivel con submenú se aplica un **preview temporal** del color de esa sección.
+- Si el submenú se cierra sin navegación (segundo click, click fuera, cierre de nav móvil, etc.), el fondo se restaura al color persistente de la página actual.
+- Los ítems de primer nivel sin submenú (navegación directa) mantienen el cambio visual y la navegación consolida el nuevo color al entrar en la página destino.
+
+### Integración con Barba
+
+- En transiciones Barba se parsea `next.html`, se actualizan clases del `<body>` y también `data-section` / `data-section-color`.
+- Tras sincronizar esos atributos, se reaplica el color persistente de `tsparticles`.
+- Esto evita desincronizaciones cuando hay navegación AJAX sin recarga completa.
