@@ -8,18 +8,18 @@ function js_data()
 }
 
 /**
- * Resolve the current section from the primary menu hierarchy.
+ * Resolve section context from a menu location hierarchy.
  *
  * A section is always the top-level ancestor menu item.
  *
  * @return array{key: string, color: string, menu_item_id: int, label: string}
  */
-function primary_navigation_section_context(): array
+function navigation_section_context(string $menuLocation = 'primary_navigation'): array
 {
-    static $context = null;
+    static $contextsByLocation = [];
 
-    if (is_array($context)) {
-        return $context;
+    if (isset($contextsByLocation[$menuLocation]) && is_array($contextsByLocation[$menuLocation])) {
+        return $contextsByLocation[$menuLocation];
     }
 
     $default = [
@@ -30,12 +30,12 @@ function primary_navigation_section_context(): array
     ];
 
     $menuLocations = get_nav_menu_locations();
-    $menuId = (int) ($menuLocations['primary_navigation'] ?? 0);
+    $menuId = (int) ($menuLocations[$menuLocation] ?? 0);
 
     if (! $menuId) {
-        $context = $default;
+        $contextsByLocation[$menuLocation] = $default;
 
-        return $context;
+        return $contextsByLocation[$menuLocation];
     }
 
     $menuItems = wp_get_nav_menu_items($menuId, [
@@ -43,9 +43,9 @@ function primary_navigation_section_context(): array
     ]);
 
     if (! is_array($menuItems) || $menuItems === []) {
-        $context = $default;
+        $contextsByLocation[$menuLocation] = $default;
 
-        return $context;
+        return $contextsByLocation[$menuLocation];
     }
 
     $itemsById = [];
@@ -103,30 +103,52 @@ function primary_navigation_section_context(): array
     }
 
     if (! $bestMatch) {
-        $context = $default;
+        $contextsByLocation[$menuLocation] = $default;
 
-        return $context;
+        return $contextsByLocation[$menuLocation];
     }
 
     $topLevelItem = top_level_menu_item((int) $bestMatch->ID, $itemsById);
 
     if (! $topLevelItem) {
-        $context = $default;
+        $contextsByLocation[$menuLocation] = $default;
 
-        return $context;
+        return $contextsByLocation[$menuLocation];
     }
 
     $topLevelItemId = (int) $topLevelItem->ID;
     $color = get_field('menu_item_bg_color', $topLevelItemId);
 
-    $context = [
+    $contextsByLocation[$menuLocation] = [
         'key' => 'section-' . $topLevelItemId,
         'color' => is_string($color) && $color !== '' ? $color : '#000000',
         'menu_item_id' => $topLevelItemId,
         'label' => is_string($topLevelItem->title) ? $topLevelItem->title : '',
     ];
 
-    return $context;
+    return $contextsByLocation[$menuLocation];
+}
+
+/**
+ * Resolve section context using legacy primary location.
+ *
+ * @return array{key: string, color: string, menu_item_id: int, label: string}
+ */
+function primary_navigation_section_context(): array
+{
+    return navigation_section_context('primary_navigation');
+}
+
+/**
+ * Resolve section context using current active primary menu by context.
+ *
+ * @return array{key: string, color: string, menu_item_id: int, label: string}
+ */
+function current_navigation_section_context(): array
+{
+    $navContextData = nav_context_data();
+
+    return navigation_section_context((string) ($navContextData['primary_menu_name'] ?? 'primary_navigation'));
 }
 
 /**

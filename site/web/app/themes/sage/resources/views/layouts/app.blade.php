@@ -18,8 +18,8 @@
 </head>
 
 @php
-    $sectionContext = primary_navigation_section_context();
     $navContextData = nav_context_data();
+    $sectionContext = current_navigation_section_context();
 @endphp
 
 <body class="{{ implode(' ', get_body_class()) }}" data-barba="wrapper" data-nav-context="{{ $navContextData['nav_context'] }}"
