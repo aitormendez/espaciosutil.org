@@ -254,3 +254,55 @@ Se ha reemplazado la estrategia basada en “click de ítem de menú” por una 
 - En transiciones Barba se parsea `next.html`, se actualizan clases del `<body>` y también `data-section` / `data-section-color`.
 - Tras sincronizar esos atributos, se reaplica el color persistente de `tsparticles`.
 - Esto evita desincronizaciones cuando hay navegación AJAX sin recarga completa.
+
+## 13. Reestructuración de navegación por contextos (ES/CDE)
+
+Se ha consolidado una navegación por **contexto activo** para reducir la mezcla entre Espacio Sutil (ES) y Curso de Desarrollo Espiritual (CDE).
+
+### Principios aplicados
+
+- La **URL es la fuente de verdad** del contexto.
+- Si la URL pertenece al ámbito CDE, se muestra navegación CDE.
+- Si la URL pertenece al ámbito ES, se muestra navegación ES.
+- El cambio de contexto envía a una URL canónica del otro contexto.
+
+### Menús y cabecera
+
+- El menú principal se resuelve con `nav_context_data()`:
+  - `primary_navigation` para ES.
+  - `cde_navigation` para CDE.
+- El enlace de cruce se movió al propio menú principal (item tipo “switch”).
+- La top bar se simplificó y ya no contiene enlace de cruce; mantiene solo accesos de sesión/cuenta.
+- En móvil se conserva una sola navegación visible (la del contexto activo).
+
+### Contrato Barba (navegación suave)
+
+- Se mantiene transición Barba en navegación interna de un mismo contexto.
+- Se evita Barba en rutas sensibles (login, cuenta, checkout PMP y admin).
+- También se evita Barba en saltos entre contextos (ES ↔ CDE).
+
+Esto está implementado en:
+- `app/helpers.php` (`should_prevent_barba_for_url`, `nav_context_from_path`, `is_barba_sensitive_path`).
+- `resources/js/barba.js` (regla `prevent` y sincronización post-transición).
+
+### Estado activo del menú con Barba
+
+Como el header queda fuera del contenedor Barba, el estado activo no se refresca desde Blade en cada transición. Para resolverlo:
+
+- Se implementó sincronización frontend de clases `active` y `active-ancestor`.
+- Se ejecuta al cargar página y tras cada transición Barba.
+- Se sincroniza también la línea de navegación desktop (`#linea`) según item activo.
+
+Archivo clave:
+- `resources/js/nav.js` (`syncActiveMenuState`, `syncNavLineWithActive`).
+
+### Estilo por contexto
+
+- Se añadieron variables de color de enlaces de menú según `body[data-nav-context]`.
+- ES mantiene color actual.
+- CDE usa `--color-cde` como base y color de énfasis para estado activo/hover.
+- Se añadieron reglas específicas para submenú (`.my-child-item`) y su estado activo.
+
+Archivos clave:
+- `resources/css/commons/navigation.css`
+- `resources/views/components/navigation.blade.php`
