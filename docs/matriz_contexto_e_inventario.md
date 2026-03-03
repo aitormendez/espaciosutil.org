@@ -51,7 +51,7 @@ Origen de datos: `wp-cli` sobre entorno local (`site/`).
 ### 1.4 Menú `cde_navigation` actual
 
 - Contenido (`/curso-de-desarrollo-espiritual/`)
-- Suscripción (`/suscripciones/`)
+- Suscripción (`/suscripcion/`)
 - Programa (`/el-curso-en-profundidad/`)
 
 ### 1.5 Menú `membresia_navigation` actual
@@ -74,7 +74,7 @@ Regla base:
 | --- | --- | --- | --- |
 | `/curso-de-desarrollo-espiritual/` | CDE | `cde_navigation` | Home ES (`/`) |
 | `/indice-de-lecciones/` | CDE | `cde_navigation` | Home ES (`/`) |
-| `/suscripciones/` | CDE | `cde_navigation` | Home ES (`/`) |
+| `/suscripcion/` | CDE | `cde_navigation` | Home ES (`/`) |
 | `/el-curso-en-profundidad/` | CDE | `cde_navigation` | Home ES (`/`) |
 | `/login-2/` | CDE | `cde_navigation` | Home ES (`/`) |
 | `/login/` | CDE (transición) | `cde_navigation` | Home ES (`/`) |

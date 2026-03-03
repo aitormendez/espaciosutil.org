@@ -2,26 +2,32 @@
         $navContextData = nav_context_data();
         $is_pmpro_page = $navContextData['is_pmpro_page'];
         $show_cde_hero_nav = $navContextData['show_cde_hero_nav'];
+        $is_cde_context = $navContextData['nav_context'] === 'cde';
+        $use_compact_header = $is_pmpro_page || ($is_cde_context && !$show_cde_hero_nav);
     @endphp
 
     <div class="page-header flex w-full flex-col items-center px-6 text-center">
-        <div
-            class="{{ $is_pmpro_page ? 'font-sans' : 'prose' }} {{ $show_cde_hero_nav ? 'hidden' : '' }} mb-24 w-full max-w-5xl lg:pt-24">
-            @if (is_tax('revelador'))
-                <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
-                    Revelador
-                </div>
-            @elseif (is_tax('canal'))
-                <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
-                    Canal
-                </div>
-            @elseif (is_tax('facilitador'))
-                <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
-                    Facilitador
-                </div>
-            @endif
-            <h1 class="text-center text-5xl font-thin lg:text-7xl">{!! $title !!}</h1>
-        </div>
+        @if (!$show_cde_hero_nav)
+            <div class="{{ $use_compact_header ? 'font-sans' : 'prose' }} mb-24 w-full max-w-5xl lg:pt-24">
+                @if (is_tax('revelador'))
+                    <div
+                        class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
+                        Revelador
+                    </div>
+                @elseif (is_tax('canal'))
+                    <div
+                        class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
+                        Canal
+                    </div>
+                @elseif (is_tax('facilitador'))
+                    <div
+                        class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
+                        Facilitador
+                    </div>
+                @endif
+                <h1 class="text-center text-5xl font-thin lg:text-5xl">{!! $title !!}</h1>
+            </div>
+        @endif
 
 
         @if ($is_pmpro_page)
@@ -47,9 +53,6 @@
                     <span class="block lg:inline"> de desarrollo</span>
                     <span class="block lg:inline">espiritual</span>
                 </div>
-                <nav class="xl:hidden" aria-label="Navegación secundaria CDE">
-                    <x-navigation-cde name="cde_navigation" />
-                </nav>
             </div>
         @endif
     </div>

@@ -322,7 +322,7 @@ function nav_context_from_path(string $path): string
     $cdePrefixes = [
         '/curso-de-desarrollo-espiritual/',
         '/indice-de-lecciones/',
-        '/suscripciones/',
+        '/suscripcion/',
         '/el-curso-en-profundidad/',
         '/bases-de-colaboracion/',
         '/login/',
@@ -574,10 +574,6 @@ function should_show_cde_hero_nav(): bool
 
     $heroPaths = [
         '/curso-de-desarrollo-espiritual/',
-        '/indice-de-lecciones/',
-        '/suscripciones/',
-        '/el-curso-en-profundidad/',
-        '/bases-de-colaboracion/',
     ];
 
     return in_array($normalizedPath, $heroPaths, true);

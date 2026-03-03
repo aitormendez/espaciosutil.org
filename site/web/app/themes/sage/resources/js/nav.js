@@ -64,6 +64,10 @@ function childMenuItems(menuItem) {
   return [...menuItem.querySelectorAll('.my-child-item')];
 }
 
+function isSwitchMenuItem(menuItem) {
+  return Boolean(menuItem?.classList?.contains('switch'));
+}
+
 export function syncNavLineWithActive() {
   if (!window.matchMedia('(min-width: 1280px)').matches) {
     return;
@@ -286,7 +290,9 @@ export function navegacion() {
       openMenu = undefined;
     }
 
-    moverLinea(menu);
+    if (!isSwitchMenuItem(menu)) {
+      moverLinea(menu);
+    }
     setSubmenuBg(childMenu);
   }
 

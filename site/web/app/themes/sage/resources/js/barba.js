@@ -18,7 +18,7 @@ function navContextFromPath(pathname) {
   const cdePrefixes = [
     '/curso-de-desarrollo-espiritual/',
     '/indice-de-lecciones/',
-    '/suscripciones/',
+    '/suscripcion/',
     '/el-curso-en-profundidad/',
     '/bases-de-colaboracion/',
     '/login/',

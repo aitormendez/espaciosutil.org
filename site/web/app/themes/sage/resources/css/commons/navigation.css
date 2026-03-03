@@ -26,7 +26,12 @@ body[data-nav-context='es'] {
 }
 
 body[data-nav-context='cde'] {
-  --menu-link-color: var(--color-cde);
+  --menu-link-color: var(--color-cde-light);
+  --menu-link-active-color: var(--color-sol);
+}
+
+.my-menu-item.membresia-tabs {
+  --menu-link-color: var(--color-blanco);
   --menu-link-active-color: var(--color-sol);
 }
 
@@ -52,14 +57,14 @@ body[data-nav-context='cde'] {
 
 .my-menu-item {
   &.switch {
-    @apply font-sans text-sm uppercase tracking-wider transition cursor-pointer border rounded px-0 overflow-hidden;
+    @apply relative top-[3px] font-sans text-sm uppercase tracking-wider transition cursor-pointer border rounded px-0 overflow-hidden;
 
     &.cde a {
       @apply text-white;
     }
 
     a {
-      @apply block pt-[5px] pb-[4px] px-4 hover:bg-cde hover:text-white;
+      @apply block pt-[6px] pb-[4px] px-3 hover:bg-cde hover:text-white;
     }
   }
 }
