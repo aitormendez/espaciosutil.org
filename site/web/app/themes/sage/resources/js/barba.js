@@ -2,7 +2,7 @@ import barba from '@barba/core';
 import {gsap} from 'gsap';
 import {transitionScriptsAfter, transitionScriptsEnter} from './transitionScripts.js';
 import {ScrollToPlugin} from 'gsap/ScrollToPlugin.js';
-import {setBgColorAtLoadPage} from './nav.js';
+import {setBgColorAtLoadPage, syncActiveMenuState} from './nav.js';
 gsap.registerPlugin(ScrollToPlugin);
 
 function normalizePath(pathname) {
@@ -123,6 +123,7 @@ export function barbaInit() {
   });
 
   barba.hooks.after(() => {
+    syncActiveMenuState();
     transitionScriptsAfter();
   });
 }

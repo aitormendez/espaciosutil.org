@@ -3,6 +3,168 @@ import { gsap } from 'gsap';
 const particlesContainer = document.getElementById('tsparticles');
 const menus = gsap.utils.toArray('.my-menu-item');
 
+function normalizePath(pathname) {
+  if (!pathname || pathname === '/') {
+    return '/';
+  }
+
+  return pathname.endsWith('/') ? pathname : `${pathname}/`;
+}
+
+function hrefToPath(href) {
+  if (!href) {
+    return null;
+  }
+
+  const normalizedHref = href.trim();
+
+  if (
+    normalizedHref === '' ||
+    normalizedHref.startsWith('#') ||
+    normalizedHref.startsWith('mailto:') ||
+    normalizedHref.startsWith('tel:') ||
+    normalizedHref.startsWith('javascript:')
+  ) {
+    return null;
+  }
+
+  try {
+    const url = new URL(normalizedHref, window.location.origin);
+    if (url.origin !== window.location.origin) {
+      return null;
+    }
+
+    return normalizePath(url.pathname);
+  } catch {
+    return null;
+  }
+}
+
+function isPathMatch(currentPath, targetPath) {
+  if (!targetPath) {
+    return false;
+  }
+
+  if (targetPath === '/') {
+    return currentPath === '/';
+  }
+
+  return currentPath === targetPath || currentPath.startsWith(targetPath);
+}
+
+function topLevelMenuItems() {
+  return [...document.querySelectorAll('#nav .my-menu-item')];
+}
+
+function topLevelLink(menuItem) {
+  return menuItem.querySelector(':scope > a');
+}
+
+function childMenuItems(menuItem) {
+  return [...menuItem.querySelectorAll('.my-child-item')];
+}
+
+export function syncNavLineWithActive() {
+  if (!window.matchMedia('(min-width: 1280px)').matches) {
+    return;
+  }
+
+  const nav = document.querySelector('#nav');
+  const line = document.querySelector('#linea');
+
+  if (!nav || !line) {
+    return;
+  }
+
+  const activeMenu = nav.querySelector(
+    '.my-menu-item.active-ancestor, .my-menu-item.active'
+  );
+
+  if (!activeMenu) {
+    gsap.set(line, { width: 0 });
+    return;
+  }
+
+  const activeLink = topLevelLink(activeMenu);
+
+  if (!activeLink) {
+    return;
+  }
+
+  const linkRect = activeLink.getBoundingClientRect();
+  const navRect = nav.getBoundingClientRect();
+
+  gsap.set(line, {
+    x: linkRect.left - navRect.left,
+    width: linkRect.width,
+  });
+}
+
+export function syncActiveMenuState() {
+  const currentPath = normalizePath(window.location.pathname);
+  const topItems = topLevelMenuItems();
+
+  if (topItems.length === 0) {
+    return;
+  }
+
+  topItems.forEach((item) => {
+    item.classList.remove('active', 'active-ancestor');
+    childMenuItems(item).forEach((child) => child.classList.remove('active'));
+  });
+
+  let bestTopItem = null;
+  let bestTopScore = -1;
+
+  topItems.forEach((item) => {
+    let hasActiveChild = false;
+    let childScore = -1;
+
+    childMenuItems(item).forEach((child) => {
+      const childPath = hrefToPath(child.querySelector('a')?.getAttribute('href'));
+      const childMatches = isPathMatch(currentPath, childPath);
+
+      child.classList.toggle('active', childMatches);
+
+      if (childMatches) {
+        hasActiveChild = true;
+        childScore = Math.max(childScore, childPath?.length ?? 0);
+      }
+    });
+
+    const topPath = hrefToPath(topLevelLink(item)?.getAttribute('href'));
+    const topMatches = isPathMatch(currentPath, topPath);
+
+    let itemScore = -1;
+
+    if (topMatches) {
+      itemScore = Math.max(itemScore, (topPath?.length ?? 0) + 100);
+    }
+
+    if (hasActiveChild) {
+      itemScore = Math.max(itemScore, childScore + 200);
+    }
+
+    if (itemScore > bestTopScore) {
+      bestTopScore = itemScore;
+      bestTopItem = {
+        item,
+        hasActiveChild,
+      };
+    }
+  });
+
+  if (bestTopItem) {
+    bestTopItem.item.classList.add('active');
+
+    if (bestTopItem.hasActiveChild) {
+      bestTopItem.item.classList.add('active-ancestor');
+    }
+  }
+
+  syncNavLineWithActive();
+}
+
 function getPersistentSectionColor() {
   const color = document.body?.dataset.sectionColor;
 

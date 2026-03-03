@@ -1,7 +1,7 @@
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones } from './constelaciones.js';
-import { particlesBgColor, setBgColorAtLoadPage } from './nav.js';
+import { particlesBgColor, setBgColorAtLoadPage, syncActiveMenuState } from './nav.js';
 import { coloresHover } from './colores.js';
 import { toc } from './toc.js';
 import { cosmos } from './cosmos/cosmos.jsx';
@@ -26,6 +26,8 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const xlMin = window.matchMedia('(min-width: 1280px)');
+
+  syncActiveMenuState();
 
   if (!document.getElementById('wpadminbar')) {
     const { barbaInit } = await import('./barba.js');
