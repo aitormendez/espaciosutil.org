@@ -37,7 +37,6 @@ function isSensitivePath(pathname) {
     '/cuenta-de-membresia/',
     '/pago-de-membresia/',
     '/confirmacion-de-membresia/',
-    '/suscripciones/',
     '/wp/wp-login.php/',
     '/wp/wp-admin/',
   ];

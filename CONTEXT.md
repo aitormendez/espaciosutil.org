@@ -278,7 +278,7 @@ Se ha consolidado una navegación por **contexto activo** para reducir la mezcla
 ### Contrato Barba (navegación suave)
 
 - Se mantiene transición Barba en navegación interna de un mismo contexto.
-- Se evita Barba en rutas sensibles (login, cuenta, checkout PMP y admin).
+- Se evita Barba en rutas sensibles (login, cuenta, checkout/confirmación PMP y admin).
 - También se evita Barba en saltos entre contextos (ES ↔ CDE).
 
 Esto está implementado en:

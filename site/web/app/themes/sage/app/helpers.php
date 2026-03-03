@@ -295,7 +295,6 @@ function is_barba_sensitive_path(string $path): bool
         '/cuenta-de-membresia/',
         '/pago-de-membresia/',
         '/confirmacion-de-membresia/',
-        '/suscripciones/',
         '/wp/wp-login.php/',
         '/wp/wp-admin/',
     ];
