@@ -103,6 +103,14 @@ function navigation_section_context(string $menuLocation = 'primary_navigation')
     }
 
     if (! $bestMatch) {
+        $fallbackContext = fallback_navigation_section_context($menuLocation, $menuItems);
+
+        if (is_array($fallbackContext)) {
+            $contextsByLocation[$menuLocation] = $fallbackContext;
+
+            return $contextsByLocation[$menuLocation];
+        }
+
         $contextsByLocation[$menuLocation] = $default;
 
         return $contextsByLocation[$menuLocation];
@@ -127,6 +135,55 @@ function navigation_section_context(string $menuLocation = 'primary_navigation')
     ];
 
     return $contextsByLocation[$menuLocation];
+}
+
+/**
+ * Resolve a contextual fallback section when current URL is outside menu coverage.
+ *
+ * For CDE navigation, this keeps CDE pages (e.g. hub/login/membership routes)
+ * in CDE color even when those URLs are intentionally not present in cde_navigation.
+ *
+ * @param array<int, object> $menuItems
+ * @return array{key: string, color: string, menu_item_id: int, label: string}|null
+ */
+function fallback_navigation_section_context(string $menuLocation, array $menuItems): ?array
+{
+    if ($menuLocation !== 'cde_navigation' || $menuItems === []) {
+        return null;
+    }
+
+    $topLevelItems = array_values(array_filter(
+        $menuItems,
+        static fn ($item) => (int) ($item->menu_item_parent ?? 0) === 0
+    ));
+
+    if ($topLevelItems === []) {
+        return null;
+    }
+
+    usort($topLevelItems, static function ($a, $b): int {
+        return ((int) ($a->menu_order ?? 0)) <=> ((int) ($b->menu_order ?? 0));
+    });
+
+    foreach ($topLevelItems as $menuItem) {
+        $itemPath = menu_item_match_path($menuItem);
+
+        if (! is_string($itemPath) || nav_context_from_path($itemPath) !== 'cde') {
+            continue;
+        }
+
+        $itemId = (int) $menuItem->ID;
+        $color = get_field('menu_item_bg_color', $itemId);
+
+        return [
+            'key' => 'section-' . $itemId,
+            'color' => is_string($color) && $color !== '' ? $color : '#000000',
+            'menu_item_id' => $itemId,
+            'label' => is_string($menuItem->title) ? $menuItem->title : '',
+        ];
+    }
+
+    return null;
 }
 
 /**
