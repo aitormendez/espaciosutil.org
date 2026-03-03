@@ -1,8 +1,42 @@
 /* Navigation-specific styles */
 
+body[data-nav-context='es'] {
+  --menu-link-color: var(--color-blanco);
+  --menu-link-active-color: var(--color-morado3);
+}
+
+body[data-nav-context='cde'] {
+  --menu-link-color: var(--color-cde);
+  --menu-link-active-color: var(--color-sol);
+}
+
+.my-menu-item > .my-menu-link {
+  @apply transition-colors;
+  color: var(--menu-link-color);
+}
+
+.my-menu-item.active > .my-menu-link,
+.my-menu-item > .my-menu-link:hover {
+  color: var(--menu-link-active-color);
+}
+
+.my-child-item > .my-child-menu-link {
+  @apply transition-colors;
+  color: inherit;
+}
+
+.my-child-item.active > .my-child-menu-link,
+.my-child-item > .my-child-menu-link:hover {
+  color: var(--menu-link-active-color);
+}
+
 .my-menu-item {
   &.switch {
     @apply font-sans text-sm uppercase tracking-wider transition cursor-pointer border rounded px-0 overflow-hidden;
+
+    &.cde a {
+      @apply text-white;
+    }
 
     a {
       @apply block pt-[5px] pb-[4px] px-4 hover:bg-cde hover:text-white;

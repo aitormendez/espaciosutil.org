@@ -12,8 +12,7 @@
         @if ($show)
             <li
                 class="my-menu-item {{ $attributes->get('class') }} {{ $itemClassNames }} {{ $item->activeAncestor ? 'active-ancestor' : '' }} {{ $item->active ? 'active' : '' }} my-2 inline-block w-full xl:w-auto xl:px-6">
-                <a class="hover:text-morado3 {{ $item->active ? 'text-morado3' : 'text-blanco' }}"
-                    href="{{ $item->url }}" data-section="section-{{ $item->id }}"
+                <a class="my-menu-link" href="{{ $item->url }}" data-section="section-{{ $item->id }}"
                     @if (should_prevent_barba_for_url($item->url)) data-barba-prevent @endif
                     data-color="{{ get_field('menu_item_bg_color', $item->id) }}">
                     {{ $item->label }}
@@ -27,7 +26,7 @@
                             @endphp
                             <li
                                 class="text-gris2 xl:text-blanco my-child-item {{ $childClassNames }} {{ $child->active ? 'active' : '' }} border-b border-zinc-800 pb-1 font-thin first:border-t xl:border-none xl:pb-0 xl:opacity-0">
-                                <a class="hover:text-morado3" href="{{ $child->url }}"
+                                <a class="my-child-menu-link" href="{{ $child->url }}"
                                     @if (should_prevent_barba_for_url($child->url)) data-barba-prevent @endif>
                                     {{ $child->label }}
                                 </a>
