@@ -18,6 +18,20 @@ SKIP_DB=false
 SKIP_ASSETS=false
 POSITIONAL_ARGS=()
 
+WP_BIN="$(command -v wp)"
+WP_BIN_HEADER="$(head -n 1 "$WP_BIN" 2>/dev/null || true)"
+
+# Keep PHP notices visible (stderr) without polluting SQL stdout streams.
+if [[ "$WP_BIN_HEADER" == *"php"* ]]; then
+  wp_cmd() {
+    php -d "error_reporting=E_ALL" -d display_errors=stderr "$WP_BIN" "$@"
+  }
+else
+  wp_cmd() {
+    "$WP_BIN" "$@"
+  }
+fi
+
 while [[ $# -gt 0 ]]; do
   case $1 in
     --skip-db)
@@ -99,9 +113,9 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
     local AVAILFROM
 
     if [[ "$LOCAL" = true && $FROM == "development" ]]; then
-      AVAILFROM=$(wp option get home 2>&1)
+      AVAILFROM=$(wp_cmd option get home 2>&1)
     else
-      AVAILFROM=$(wp "@$FROM" option get home 2>&1)
+      AVAILFROM=$(wp_cmd "@$FROM" option get home 2>&1)
     fi
     if [[ $AVAILFROM == *"Error"* ]]; then
       echo "❌  Unable to connect to $FROM"
@@ -115,9 +129,9 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   availto() {
     local AVAILTO
     if [[ "$LOCAL" = true && $TO == "development" ]]; then
-      AVAILTO=$(wp option get home 2>&1)
+      AVAILTO=$(wp_cmd option get home 2>&1)
     else
-      AVAILTO=$(wp "@$TO" option get home 2>&1)
+      AVAILTO=$(wp_cmd "@$TO" option get home 2>&1)
     fi
 
     if [[ $AVAILTO == *"Error"* ]]; then
@@ -134,20 +148,20 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo "Syncing database..."
     # Export/import database, run search & replace
     if [[ "$LOCAL" = true && $TO == "development" ]]; then
-      wp db export --default-character-set=utf8mb4 &&
-      wp db reset --yes &&
-      wp "@$FROM" db export --default-character-set=utf8mb4 - | wp db import - &&
-      wp search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
+      wp_cmd db export --default-character-set=utf8mb4 &&
+      wp_cmd db reset --yes &&
+      wp_cmd "@$FROM" db export --default-character-set=utf8mb4 - | wp_cmd db import - &&
+      wp_cmd search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
     elif [[ "$LOCAL" = true && $FROM == "development" ]]; then
-      wp "@$TO" db export --default-character-set=utf8mb4 &&
-      wp "@$TO" db reset --yes &&
-      wp db export --default-character-set=utf8mb4 - | wp "@$TO" db import - &&
-      wp "@$TO" search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
+      wp_cmd "@$TO" db export --default-character-set=utf8mb4 &&
+      wp_cmd "@$TO" db reset --yes &&
+      wp_cmd db export --default-character-set=utf8mb4 - | wp_cmd "@$TO" db import - &&
+      wp_cmd "@$TO" search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
     else
-      wp "@$TO" db export --default-character-set=utf8mb4 &&
-      wp "@$TO" db reset --yes &&
-      wp "@$FROM" db export --default-character-set=utf8mb4 - | wp "@$TO" db import - &&
-      wp "@$TO" search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
+      wp_cmd "@$TO" db export --default-character-set=utf8mb4 &&
+      wp_cmd "@$TO" db reset --yes &&
+      wp_cmd "@$FROM" db export --default-character-set=utf8mb4 - | wp_cmd "@$TO" db import - &&
+      wp_cmd "@$TO" search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
     fi
   fi
 
