@@ -1,5 +1,25 @@
 /* Navigation-specific styles */
 
+.cde-link {
+  @apply transition-colors;
+  color: var(--color-blanco);
+}
+
+.cde-link:hover,
+.cde-link:focus-visible {
+  color: var(--color-cde);
+}
+
+#logotipo svg {
+  @apply transition-colors;
+  color: var(--color-blanco);
+}
+
+.brand-link:hover #logotipo svg,
+.brand-link:focus-visible #logotipo svg {
+  color: var(--color-morado3);
+}
+
 body[data-nav-context='es'] {
   --menu-link-color: var(--color-blanco);
   --menu-link-active-color: var(--color-morado3);

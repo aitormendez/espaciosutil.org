@@ -3,30 +3,35 @@
 @php
     $navContextData = nav_context_data();
     $isCdeContext = $navContextData['nav_context'] === 'cde';
-    $brandUrl = $isCdeContext ? home_url('/curso-de-desarrollo-espiritual/') : home_url('/');
+    $brandUrl = home_url('/');
+    $cdeHubUrl = home_url('/curso-de-desarrollo-espiritual/');
 @endphp
 
 <header id="banner" class="absolute z-40 w-full text-white xl:fixed">
     <div class="bg-negro absolute left-0 top-0 hidden h-full w-full opacity-80 md:block"></div>
     @include('partials.top-bar')
 
+    <div id="brand" class="flex flex-nowrap items-center">
+        <a class="brand-link relative inline-flex flex-col items-center p-6 font-bold md:flex-row" href="{{ $brandUrl }}"
+            @if (should_prevent_barba_for_url($brandUrl)) data-barba-prevent @endif>
+            <div id="simbolo" class="my-6 w-24 md:my-0 md:mr-8 md:w-12">
+                <img src="{{ Vite::asset('resources/images/simbolo-espacio-sutil-color.svg') }}"
+                    alt="Símbolo Espacio Sutil">
+            </div>
+            <div id="logotipo">
+                <x-es-logotipo-espacio-sutil class="h-auto w-[212px]" />
+            </div>
+        </a>
 
-    <a id="brand" class="brand relative flex flex-col items-center p-6 font-bold md:flex-row"
-        href="{{ $brandUrl }}" @if (should_prevent_barba_for_url($brandUrl)) data-barba-prevent @endif>
-        <div id="simbolo" class="my-6 w-24 md:my-0 md:mr-8 md:w-12">
-            <img src="{{ Vite::asset('resources/images/simbolo-espacio-sutil-color.svg') }}" alt="Símbolo Espacio Sutil">
-        </div>
-        <div id="logotipo">
-            <img src="{{ Vite::asset('resources/images/logotipo-espacio-sutil.svg') }}" alt="Logotipo Espacio Sutil">
-        </div>
         @if ($isCdeContext)
-            <span class="mt-4 hidden items-center gap-2 lg:ml-6 lg:mt-0 lg:flex">
+            <a id="cde" class="cde-link relative top-[-8px] mt-4 hidden items-center gap-2 lg:inline-flex"
+                href="{{ $cdeHubUrl }}" @if (should_prevent_barba_for_url($cdeHubUrl)) data-barba-prevent @endif>
                 <x-es-cde-arbol-peq class="absolute w-12" />
                 <span
                     class="relative left-[55px] top-[3px] hidden font-sans text-[1.8rem] font-light tracking-wide lg:block">CDE</span>
-            </span>
+            </a>
         @endif
-    </a>
+    </div>
 
     <div id="submenu-bg" class="border-gris3 relative hidden w-screen border-t xl:block"></div>
 
