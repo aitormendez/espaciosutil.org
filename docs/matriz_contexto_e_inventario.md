@@ -276,6 +276,6 @@ Notas:
 - `post_type=area` usa slug/archive: `/areas/`
 - `post_type=noticia` usa slug/archive: `/noticias/`
 - `post_type=cde` existe como tipo público (la navegación CDE se apoya en páginas + lecciones CDE).
-- La página `login-2` (`post_id=2243`) usa shortcode `[pmpro_login]`.
-- PMPro tiene `pmpro_login_page_id=2243` (apunta a `/login-2/`).
-- El enlace `Acceso` de la top bar apunta a `login-2` con fallback a `login` y `wp_login_url()` si faltan páginas.
+- La página `Acceder` (`post_id=2243`) usa shortcode `[pmpro_login]` y slug `/login/`.
+- PMPro tiene `pmpro_login_page_id=2243` (apunta a `/login/`).
+- No hay top bar activa: el acceso/salida de sesión se resuelve desde el menú principal contextual.

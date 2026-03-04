@@ -2,6 +2,7 @@
 
 Fecha: 2026-03-01
 Estado: Propuesto para ejecución progresiva
+Nota de estado actual (2026-03-03): la top-bar ya no forma parte de la navegación activa; el cambio de contexto se resuelve desde el menú principal.
 
 ## 1. Objetivo
 
@@ -55,7 +56,7 @@ Decisiones confirmadas:
 - `Cancelar membresía` no forma parte del menú principal objetivo; se mantiene como paso interno del flujo de cuenta (`/cuenta-de-membresia/cancelacion-de-membresia/?levelstocancel=...`).
 
 Estado de implementación (2026-03-01):
-- `pmpro_login_page_id` y top bar alineados a `/login/`.
+- `pmpro_login_page_id` alineado a `/login/`.
 
 Pendiente de cierre:
 - Separar `hub` y `índice de lecciones` en URLs distintas:
@@ -148,7 +149,7 @@ Tareas:
 - Definir el contrato de navegación:
   - Navegación dentro del mismo contexto (`es -> es`, `cde -> cde`): puede usar Barba.
   - Cambio de contexto (`es <-> cde`): navegación completa (hard reload), sin transición SPA.
-- Marcar enlaces de cambio de contexto (switch top bar + ítems de cruce) con `data-barba-prevent`.
+- Marcar enlaces de cambio de contexto (ítems de cruce en menú) con `data-barba-prevent`.
 - Marcar también flujos sensibles de autenticación/membresía (login, cuenta y páginas PMPro core) con `data-barba-prevent`.
 - Añadir `data-nav-context` en `<body>` para trazabilidad y verificación manual.
 - Eliminar ambigüedad por IDs duplicados en navegación (`id="nav"` debe ser único).
@@ -191,7 +192,7 @@ Objetivo:
 
 Tareas:
 - En `sections/header`, renderizar solo el menú del contexto activo.
-- Mantener la top bar como utilitaria (switch + acceso/cuenta).
+- Mantener una sola navegación principal (sin top bar) para switch y acceso/cuenta.
 - Si la navegación CDE existe en hero, marcarla temporalmente como secundaria.
 
 Validación:
@@ -228,7 +229,7 @@ Objetivo:
 - Cambio de contexto claro y sin estados ambiguos.
 
 Tareas:
-- Implementar switch en top bar que navegue a la portada del otro contexto.
+- Implementar cambio de contexto en el menú principal que navegue a la portada del otro contexto.
 - Evitar persistir un “modo de menú” separado de la URL.
 
 Validación:
