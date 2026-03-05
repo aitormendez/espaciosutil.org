@@ -106,6 +106,11 @@ add_action('after_setup_theme', function () {
     add_theme_support('post-thumbnails');
 
     /**
+     * Enable excerpts on pages (used by the membership landing hero subtitle).
+     */
+    add_post_type_support('page', 'excerpt');
+
+    /**
      * Enable responsive embed support.
      *
      * @link https://developer.wordpress.org/block-editor/how-to-guides/themes/theme-support/#responsive-embedded-content

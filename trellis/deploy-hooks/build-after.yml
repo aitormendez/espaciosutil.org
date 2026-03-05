@@ -1,12 +1,19 @@
-# Placeholder `deploy_build_after` hook
-#
-# ⚠️ This example assumes your theme is using Sage 11
-#
-# Uncomment the lines below if you are using Sage 11
-# NOTE: this task will fail if Sage theme is not activated at time of deployment.
-#
-# ---
-# - name: Run Acorn optimize
-#   command: wp acorn optimize
-#   args:
-#     chdir: "{{ deploy_helper.new_release_path }}"
+---
+- name: Check active theme
+  command: wp theme list --status=active --field=name
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  register: wp_active_themes
+  changed_when: false
+
+- name: Clear Acorn caches
+  command: wp acorn optimize:clear
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: "'sage' in wp_active_themes.stdout_lines"
+
+- name: Optimize Acorn
+  command: wp acorn optimize
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: "'sage' in wp_active_themes.stdout_lines"

@@ -1,6 +1,7 @@
 @php
     $menu = \Log1x\Navi\Navi::make()->build($name);
     $logoutUrl = htmlspecialchars_decode(wp_logout_url(home_url('/login/')), ENT_QUOTES);
+    $isPrimaryNavigation = in_array((string) $name, ['primary_navigation', 'cde_navigation'], true);
 @endphp
 
 @if ($menu->isNotEmpty())
@@ -11,6 +12,8 @@
             $itemClassNames = implode(' ', $itemClassList);
             $itemIsLogoutLink = in_array('logout-link', $itemClassList, true);
             $itemUrl = $itemIsLogoutLink ? $logoutUrl : $item->url;
+            $itemPath = normalize_section_path((string) (wp_parse_url((string) $itemUrl, PHP_URL_PATH) ?? '/'));
+            $itemLabel = $isPrimaryNavigation && $itemPath === '/suscripcion/' ? 'Suscripción' : $item->label;
         @endphp
 
         @if ($show)
@@ -19,7 +22,7 @@
                 <a class="my-menu-link" href="{{ $itemUrl }}" data-section="section-{{ $item->id }}"
                     @if (should_prevent_barba_for_url($itemUrl)) data-barba-prevent @endif
                     data-color="{{ get_field('menu_item_bg_color', $item->id) }}">
-                    {{ $item->label }}
+                    {{ $itemLabel }}
                 </a>
                 @if ($item->children)
                     <ul

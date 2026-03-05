@@ -149,7 +149,7 @@
     };
 @endphp
 
-<div class="pricing-table mx-auto w-full px-4 py-8">
+<div id="planes" class="pricing-table mx-auto w-full px-4 py-8">
     <div class="flex flex-col">
         @if (!empty($pairedSeries))
             {{-- MODO: PARES DEFINIDOS (tarjeta por serie con mensual + anual) --}}

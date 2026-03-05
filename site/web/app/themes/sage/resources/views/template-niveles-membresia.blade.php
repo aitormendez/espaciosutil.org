@@ -7,7 +7,7 @@
 @section('content')
     @while (have_posts())
         @php(the_post())
-        @include('partials.page-header')
+        @include('partials.page-header', ['variant' => 'membership-landing'])
 
         <div class="content border-blanco bg-morado5/90 relative border-t px-6 pt-44 font-sans lg:px-0">
             <!-- Membresías (auto-cargadas desde PMPro) -->

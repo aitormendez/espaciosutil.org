@@ -68,7 +68,8 @@
     "wpackagist-plugin/autodescription": "*",
     "log1x/acf-composer": "^3.4",
     "blade-ui-kit/blade-icons": "^1.8",
-    "codeat3/blade-coolicons": "^1.6"
+    "codeat3/blade-coolicons": "^1.6",
+    "secondnetwork/blade-tabler-icons": "^3.38"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
