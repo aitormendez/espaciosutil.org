@@ -13,6 +13,7 @@ class TemplateCurso extends Composer
      */
     protected static $views = [
         'template-curso',
+        'template-suscripcion',
     ];
 
     /**
@@ -89,6 +90,7 @@ class TemplateCurso extends Composer
                 'slug' => $block_term->slug,
                 'post_id' => $block_post->ID,
                 'post_title' => $block_post->post_title,
+                'lessons_count' => $this->getLessonsCountForBlock($block_post->ID),
             ];
         }, $block_terms);
 
@@ -134,5 +136,27 @@ class TemplateCurso extends Composer
         }
 
         return $posts[0];
+    }
+
+    /**
+     * Counts published lessons nested under the block root post.
+     *
+     * @param int $block_root_post_id
+     * @return int
+     */
+    protected function getLessonsCountForBlock($block_root_post_id)
+    {
+        if (!$block_root_post_id) {
+            return 0;
+        }
+
+        $descendants = get_pages([
+            'post_type' => 'cde',
+            'post_status' => 'publish',
+            'child_of' => (int) $block_root_post_id,
+            'number' => 0,
+        ]);
+
+        return is_array($descendants) ? count($descendants) : 0;
     }
 }
