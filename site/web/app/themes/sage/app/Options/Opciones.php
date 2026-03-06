@@ -28,52 +28,7 @@ class Opciones extends Field
     {
         $fields = Builder::make('opciones');
 
-        // Repeater principal: definición de series con sus niveles
-        $fields
-            ->addRepeater('series_membresia', [
-                'label' => 'Series de membresía',
-                'instructions' => 'Empareja un nivel mensual, opcionalmente uno semestral, y uno anual por cada serie; añade los metadatos de la tarjeta.',
-                'min' => 0,
-            ])
-            ->addText('display_name', [
-                'label' => 'Nombre público de la tarjeta',
-                'instructions' => 'Ej.: Ramtha, Curso de Desarrollo Espiritual, etc.',
-                'required' => 0,
-            ])
-            ->addNumber('monthly_level_id', [
-                'label' => 'ID nivel mensual (PMP)',
-                'instructions' => 'Introduce el ID del nivel mensual en Paid Memberships Pro.',
-                'min' => 1,
-                'required' => 1,
-            ])
-            ->addNumber('semiannual_level_id', [
-                'label' => 'ID nivel semestral (PMP)',
-                'instructions' => 'Opcional. ID del nivel semestral en Paid Memberships Pro (ciclo de 6 meses).',
-                'min' => 1,
-                'required' => 0,
-            ])
-            ->addNumber('yearly_level_id', [
-                'label' => 'ID nivel anual (PMP)',
-                'instructions' => 'Introduce el ID del nivel anual en Paid Memberships Pro.',
-                'min' => 1,
-                'required' => 1,
-            ])
-            ->addImage('image', [
-                'label' => 'Imagen de la tarjeta',
-                'return_format' => 'url', // facilita el uso directo en el componente
-                'preview_size' => 'medium',
-            ])
-            ->addTextarea('short_description', [
-                'label' => 'Descripción corta',
-                'instructions' => 'Opcional. Si se deja vacío, se usará la descripción del nivel.',
-                'rows' => 3,
-            ])
-            ->addNumber('order', [
-                'label' => 'Orden',
-                'instructions' => 'Número para ordenar las tarjetas (ascendente).',
-                'default_value' => 0,
-            ])
-            ->endRepeater();
+        // PMPro native level groups are now the source of truth for memberships.
 
         return $fields->build();
     }
