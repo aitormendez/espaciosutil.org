@@ -28,12 +28,12 @@
               @endif
 
               <div class="membership-hero-ctas mt-12 flex flex-col gap-4 sm:flex-row">
-                <x-membership-hero-ctas href="#planes" text="Elegir plan" background-class="bg-morado5/90 hover:bg-white"
-                  text-class="text-gray-200 hover:text-morado5 font-semibold" icon="tabler-arrow-badge-down-filled"
-                  class="border-transparent" />
-                <x-membership-hero-ctas href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
-                  background-class="bg-morado5/30 hover:bg-morado5/55" text-class="text-gris1 font-medium"
-                  icon="tabler-arrow-badge-right-filled" class="border-morado2/50 hover:border-morado1" />
+                <x-cta href="#planes" text="Elegir plan"
+                  clases="bg-morado5/90 hover:text-morado5 font-semibold text-gray-200"
+                  icon="tabler-arrow-badge-down-filled" />
+                <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
+                  icon="tabler-arrow-badge-right-filled"
+                  clases="bg-morado5/30 hover:text-morado5 font-semibold text-gray-200" />
               </div>
             </div>
           </div>
