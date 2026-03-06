@@ -63,6 +63,65 @@
           'icon' => 'tabler-key-filled',
       ],
   ];
+  $como_funciona_list_items = [
+      [
+          'text' => 'Elige tu plan (mensual, semestral o anual).',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+      [
+          'text' => 'Accede a todo el contenido del CDE desde el primer minuto.',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+      [
+          'text' => 'Elige serie y orden: estudia a tu ritmo, con nuevas lecciones cada semana.',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+  ];
+  $para_quien_es_list_items = [
+      [
+          'text' => 'Si quieres comprender textos revelados con profundidad, sin perderte en tecnicismos.',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+      [
+          'text' => 'Si valoras estructura, contexto y claridad por encima de motivación pasajera.',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+      [
+          'text' => 'Si buscas un estudio sostenido, con lecciones nuevas y un orden flexible.',
+          'icon' => 'tabler-arrow-badge-right-filled',
+      ],
+  ];
+  $membership_account_url = function_exists('pmpro_url') ? pmpro_url('account') : home_url('/mi-cuenta/');
+  $faq_items = [
+      [
+          'question' => '¿Puedo cancelar cuando quiera?',
+          'answer' => 'Sí. Puedes cancelar desde tu cuenta. (Ajustar según condiciones reales.)',
+      ],
+      [
+          'question' => '¿El acceso es el mismo en mensual, semestral y anual?',
+          'answer' => 'Sí. El acceso es completo en los tres. Solo cambia la frecuencia de pago.',
+      ],
+      [
+          'question' => '¿Qué pasa si cancelo?',
+          'answer' => 'Mantienes el acceso hasta el final del periodo ya pagado. (Confirmar.)',
+      ],
+      [
+          'question' => '¿Puedo cambiar de plan más adelante?',
+          'answer' => 'Sí. (Confirmar el flujo: cambio inmediato vs al final del ciclo.)',
+      ],
+      [
+          'question' => '¿Hay contenido nuevo?',
+          'answer' => 'Sí: nuevas lecciones con cadencia semanal.',
+      ],
+      [
+          'question' => '¿Necesito empezar por una serie concreta?',
+          'answer' => 'No. Puedes elegir el orden. Si quieres, ofrecemos una ruta recomendada.',
+      ],
+      [
+          'question' => '¿Dónde se gestiona la membresía (pagos, facturas, datos)?',
+          'answer' => 'Desde <a href="' . esc_url($membership_account_url) . '">Mi cuenta</a>.',
+      ],
+  ];
 @endphp
 
 @extends('layouts.app')
@@ -74,7 +133,7 @@
     @endphp
     @include('partials.page-header', ['variant' => 'membership-landing'])
 
-    <div class="content border-blanco/30 bg-morado5/90 relative border-t px-6 font-sans lg:px-0">
+    <div class="content border-blanco/30 bg-morado5/90 relative border-t pb-40 pt-6 font-sans lg:px-0">
       <!-- Membresías (auto-cargadas desde PMPro) -->
       <div class="relative mx-auto w-full max-w-2xl px-6 pt-10 !leading-tight md:px-0">
         <x-item-list :items="$membership_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
@@ -108,13 +167,13 @@
                 </h3>
 
                 @if (!empty($seriesBlocks))
-                  <ul class="">
+                  <ul class="list-disc">
                     @foreach ($seriesBlocks as $block)
                       @php
                         $lessonsCount = (int) ($block['lessons_count'] ?? 0);
                       @endphp
                       <li
-                        class="border-blanco/30 mx-auto flex max-w-2xl items-center justify-between gap-3 border-t py-2 text-2xl text-white/80">
+                        class="border-blanco/30 text-blanco/50 mx-auto flex max-w-2xl items-center justify-between gap-3 border-t py-2 pl-6 text-2xl">
                         <span class="flex-1 text-left">{{ $block['name'] }}</span>
                         <span class="whitespace-nowrap text-right text-white/60">{{ $lessonsCount }}
                           {{ $lessonsCount === 1 ? 'lección' : 'lecciones' }}</span>
@@ -141,11 +200,43 @@
       <div id="que-incluye" class="mx-auto mt-16 max-w-2xl">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Qué incluye</h2>
       </div>
-      <div class="relative mx-auto w-full max-w-2xl px-6 pt-10 !leading-tight md:px-0">
+      <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
         <x-item-list :items="$que_incluye_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
+
+      <div id="como-funciona" class="mx-auto mt-16 max-w-2xl">
+        <h2 class="text-gris1 mb-3 text-4xl font-light">Cómo funciona (3 pasos)</h2>
+      </div>
+      <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
+        <x-item-list :items="$como_funciona_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+          item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
+          icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
+      </div>
+
+      <div id="para-quien-es" class="mx-auto mt-16 max-w-2xl">
+        <h2 class="text-gris1 mb-3 text-4xl font-light">Para quién es</h2>
+      </div>
+      <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
+        <x-item-list :items="$para_quien_es_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+          item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
+          icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
+      </div>
+
+      <div id="faq" class="mx-auto mt-16 max-w-2xl">
+        <h2 class="text-gris1 mb-3 text-4xl font-light">Preguntas frecuentes (FAQ)</h2>
+      </div>
+      <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
+        @if (!empty($faq_items))
+          <div class="mt-10">
+            @foreach ($faq_items as $faq)
+              <x-faq-item :question="$faq['question']" :answer="$faq['answer']" :open="$loop->first" />
+            @endforeach
+          </div>
+        @endif
+      </div>
+
       @includeFirst(['partials.content-page', 'partials.content'])
 
 
