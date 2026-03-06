@@ -27,6 +27,7 @@
                 </div>
               @endif
 
+
               <div class="membership-hero-ctas mt-12 flex flex-col gap-4 sm:flex-row">
                 <x-cta href="#planes" text="Elegir plan"
                   clases="bg-morado5/90 hover:text-morado5 font-semibold text-gray-200"
