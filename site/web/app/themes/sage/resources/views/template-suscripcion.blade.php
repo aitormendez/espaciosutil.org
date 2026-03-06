@@ -237,6 +237,19 @@
         @endif
       </div>
 
+      <div id="planes" class="mx-auto mt-16 max-w-2xl">
+        <h2 class="text-gris1 mb-3 text-4xl font-light">Una sola membresía. Todo el CDE. Tú eliges el orden.</h2>
+      </div>
+
+      <div
+        class="membership-hero-ctas mx-auto mt-16 flex w-full max-w-2xl flex-col justify-center gap-4 px-6 sm:flex-row md:px-0">
+        <x-cta href="#planes" text="Elegir plan" clases="bg-cde hover:text-morado5 font-semibold text-gray-200"
+          icon="tabler-arrow-badge-up-filled" />
+        <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
+          icon="tabler-arrow-badge-right-filled" clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200" />
+      </div>
+
+
       @includeFirst(['partials.content-page', 'partials.content'])
 
 
