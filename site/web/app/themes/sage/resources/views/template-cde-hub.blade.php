@@ -237,13 +237,6 @@
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full border border-white p-2" />
       </section>
 
-      <div class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
-        <h2 class="text-gris1 mb-4 text-4xl font-light">Cierre</h2>
-        <p class="text-gris2 text-lg font-light leading-relaxed">
-          Si buscas comprender estos textos con más claridad y más estructura, aquí tienes una forma ordenada de empezar.
-        </p>
-      </div>
-
       <div class="mx-auto mt-12 grid w-full max-w-5xl gap-4 px-6 sm:grid-cols-2 md:px-0 xl:grid-cols-4">
         <x-cta href="{{ $free_lesson_url }}" text="Ver lección gratuita"
           clases="bg-cde hover:text-morado5 font-semibold text-gray-200" icon="tabler-eye-filled" />
