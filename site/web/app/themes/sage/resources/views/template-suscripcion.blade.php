@@ -140,29 +140,29 @@
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
-      <div id="planes" class="mx-auto mt-16 max-w-2xl">
+      <div id="planes" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Elige tu frecuencia de pago</h2>
         <p class="text-gris2 font-light">Misma membresía, distinto ritmo de cobro.</p>
       </div>
       <x-pricing-table />
 
       <div id="acceso-series" class="mt-20">
-        <div class="mx-auto max-w-2xl">
+        <div class="mx-auto max-w-2xl px-6 md:px-0">
           <h2 class="text-gris1 mb-3 text-4xl font-light">A qué da acceso (series y lecciones)</h2>
-          <p class="text-gris2 font-light">Series núcleo (lanzamiento):</p>
         </div>
 
         @if (!empty($series_cde_lessons))
-          <ul class="mt-6 space-y-3">
+          <ul class="mt-6 space-y-3 px-6 md:px-0">
             @foreach ($series_cde_lessons as $series)
               @php
                 $seriesBlocks = $series['blocks'] ?? [];
                 $blocksCount = count($seriesBlocks);
               @endphp
-              <li class="bg-negro/30 border-blanco border-t font-serif last:border-b">
-                <h3 class="mx-auto flex max-w-2xl items-center justify-between py-3 text-2xl font-light text-white/90">
+              <li class="bg-negro/30 border-blanco border-t font-serif text-lg last:border-b md:text-2xl">
+                <h3
+                  class="mx-auto flex max-w-2xl items-center justify-between px-3 py-3 font-light text-white/90 md:px-0">
                   <span>{{ $series['name'] }}</span>
-                  <span class="text-2xl text-white/60">{{ $blocksCount }}
+                  <span class="text-white/60">{{ $blocksCount }}
                     {{ $blocksCount === 1 ? 'bloque' : 'bloques' }}</span>
                 </h3>
 
@@ -173,7 +173,7 @@
                         $lessonsCount = (int) ($block['lessons_count'] ?? 0);
                       @endphp
                       <li
-                        class="border-blanco/30 text-blanco/50 mx-auto flex max-w-2xl items-center justify-between gap-3 border-t py-2 pl-6 text-2xl">
+                        class="border-blanco/30 text-blanco/50 mx-auto flex max-w-2xl items-center justify-between gap-3 border-t py-2 pl-6 pr-3 md:pr-0">
                         <span class="flex-1 text-left">{{ $block['name'] }}</span>
                         <span class="whitespace-nowrap text-right text-white/60">{{ $lessonsCount }}
                           {{ $lessonsCount === 1 ? 'lección' : 'lecciones' }}</span>
@@ -192,12 +192,13 @@
             disponibles todavía.</p>
         @endif
 
-        <p class="text-gris2 mx-auto mt-6 max-w-2xl font-light"><span class="font-semibold text-white/90">Nuevos
-            contenidos:</span>
-          se irán incorporando semanalmente nuevas series, bloques y lecciones dentro de la membresía única.</p>
+        <p class="text-gris2 mx-auto mt-6 max-w-2xl px-6 font-light md:px-0"><span
+            class="font-semibold text-white/90">Nuevos
+            contenidos:</span> se irán incorporando semanalmente nuevas series, bloques y lecciones dentro de la membresía
+          única.</p>
       </div>
 
-      <div id="que-incluye" class="mx-auto mt-16 max-w-2xl">
+      <div id="que-incluye" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Qué incluye</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
@@ -206,7 +207,7 @@
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
 
-      <div id="como-funciona" class="mx-auto mt-16 max-w-2xl">
+      <div id="como-funciona" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Cómo funciona (3 pasos)</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
@@ -215,7 +216,7 @@
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
 
-      <div id="para-quien-es" class="mx-auto mt-16 max-w-2xl">
+      <div id="para-quien-es" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Para quién es</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
@@ -224,7 +225,7 @@
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
 
-      <div id="faq" class="mx-auto mt-16 max-w-2xl">
+      <div id="faq" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Preguntas frecuentes (FAQ)</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
@@ -237,7 +238,7 @@
         @endif
       </div>
 
-      <div id="planes" class="mx-auto mt-16 max-w-2xl">
+      <div id="planes" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Una sola membresía. Todo el CDE. Tú eliges el orden.</h2>
       </div>
 

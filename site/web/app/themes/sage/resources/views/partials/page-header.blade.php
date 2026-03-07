@@ -70,14 +70,14 @@
       @endif
 
       @if ($show_cde_hero_nav)
-        <div id="arbol" class="w-50 relative z-10 order-1 lg:order-none">
-          <x-es-cde-arbol-peq class="relative top-[120px] lg:hidden" />
-          <x-es-cde-arbol-grande class="relative top-[170px] hidden lg:block" />
+        <div id="arbol" class="w-25 lg:w-50 relative z-10 order-1">
+          <x-es-cde-arbol-peq class="relative top-[70px] lg:hidden" />
+          <x-es-cde-arbol-grande class="lg:-mb-30 relative top-[40px] hidden lg:block" />
         </div>
 
         <div
-          class="mb-2 flex w-full justify-between pt-12 font-sans font-extralight uppercase tracking-wider lg:static lg:pt-0">
-          <div class="text-left">
+          class="mb-2 flex w-full justify-center pt-6 font-sans font-extralight uppercase tracking-wider lg:text-3xl">
+          <div class="text-center">
             <span class="block lg:inline">Curso</span>
             <span class="block lg:inline"> de desarrollo</span>
             <span class="block lg:inline">espiritual</span>
