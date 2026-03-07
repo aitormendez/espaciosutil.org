@@ -1,6 +1,6 @@
 import.meta.glob(['../images/**', '../fonts/**']);
 
-import { constelaciones } from './constelaciones.js';
+import { constelaciones, destruirConstelaciones } from './constelaciones.js';
 import {
   navegacion,
   navegacionMovil,
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
+    destruirConstelaciones();
     destroyNavigation = navegacionMovil();
   };
 

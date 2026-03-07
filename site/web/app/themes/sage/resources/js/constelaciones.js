@@ -3,8 +3,20 @@ import { loadSlim } from 'tsparticles-slim';
 
 loadSlim(tsParticles);
 
+const CONTAINER_ID = 'tsparticles';
+
+function getConstelacionesContainer() {
+  return tsParticles
+    .dom()
+    .find((container) => container.id === CONTAINER_ID && !container.destroyed);
+}
+
 export function constelaciones() {
-  tsParticles.load('tsparticles', {
+  if (getConstelacionesContainer()) {
+    return;
+  }
+
+  tsParticles.load(CONTAINER_ID, {
     particles: {
       color: { value: '#ffffff' },
       links: { enable: true },
@@ -15,4 +27,14 @@ export function constelaciones() {
       zIndex: { value: { min: 0, max: 100 } },
     },
   });
+}
+
+export function destruirConstelaciones() {
+  const container = getConstelacionesContainer();
+
+  if (!container) {
+    return;
+  }
+
+  container.destroy();
 }
