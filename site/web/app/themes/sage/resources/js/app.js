@@ -92,7 +92,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (document.body.classList.contains('page-template-template-curso')) {
-    await import('./courses/course-index.js');
+    const initCourseIndexModule = await import('./courses/course-index.js');
+    initCourseIndexModule.default();
   }
 
   if (document.body.classList.contains('single-cde')) {

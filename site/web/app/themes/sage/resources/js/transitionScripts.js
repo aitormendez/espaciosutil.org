@@ -25,6 +25,11 @@ export async function transitionScriptsAfter() {
     infiniteScrollSeries();
   }
 
+  if (document.body.classList.contains('page-template-template-curso')) {
+    const initCourseIndexModule = await import('./courses/course-index.js');
+    initCourseIndexModule.default();
+  }
+
   if (document.body.classList.contains('home')) {
     const {ultimosVideosSubidos} = await import('./youTubeApi.js');
     // const {cosmos} = await import('./cosmos/cosmos.jsx');
