@@ -5,8 +5,9 @@
       $is_cde_context = $navContextData['nav_context'] === 'cde';
       $variant = $variant ?? null;
       $is_membership_landing = $variant === 'membership-landing';
-      $show_membership_tabs = $is_pmpro_page && !$is_membership_landing;
-      $hero_excerpt = $is_membership_landing && has_excerpt() ? get_the_excerpt() : '';
+      $is_cde_hub_landing = $variant === 'cde-hub-landing';
+      $show_membership_tabs = $is_pmpro_page && !$is_membership_landing && !$is_cde_hub_landing;
+      $hero_excerpt = ($is_membership_landing || $is_cde_hub_landing) && has_excerpt() ? get_the_excerpt() : '';
       $decoded_title = wp_specialchars_decode((string) $title, ENT_QUOTES);
       $safe_title_with_break = wp_kses(str_ireplace(['<br/>', '<br />'], '<br>', $decoded_title), ['br' => []]);
       $use_compact_header = $is_pmpro_page || ($is_cde_context && !$show_cde_hero_nav);
@@ -14,7 +15,7 @@
 
     <div class="page-header flex w-full flex-col items-center px-6 text-center">
       @if (!$show_cde_hero_nav)
-        @if ($is_membership_landing)
+        @if ($is_membership_landing || $is_cde_hub_landing)
           <div class="mb-14 w-full max-w-5xl pt-24 lg:mb-24 lg:pt-28">
             <div class="mx-auto flex w-full max-w-4xl flex-col items-center text-left font-sans">
               <h1 class="mb-10 text-center text-5xl font-thin lg:text-5xl">
@@ -27,15 +28,16 @@
                 </div>
               @endif
 
-
-              <div class="membership-hero-ctas mt-12 flex flex-col gap-4 sm:flex-row">
-                <x-cta href="#planes" text="Elegir plan"
-                  clases="bg-morado5/90 hover:text-morado5 font-semibold text-gray-200"
-                  icon="tabler-arrow-badge-down-filled" />
-                <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
-                  icon="tabler-arrow-badge-right-filled"
-                  clases="bg-morado5/30 hover:text-morado5 font-semibold text-gray-200" />
-              </div>
+              @if ($is_membership_landing)
+                <div class="membership-hero-ctas mt-12 flex flex-col gap-4 sm:flex-row">
+                  <x-cta href="#planes" text="Elegir plan"
+                    clases="bg-morado5/90 hover:text-morado5 font-semibold text-gray-200"
+                    icon="tabler-arrow-badge-down-filled" />
+                  <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
+                    icon="tabler-arrow-badge-right-filled"
+                    clases="bg-morado5/30 hover:text-morado5 font-semibold text-gray-200" />
+                </div>
+              @endif
             </div>
           </div>
         @else
