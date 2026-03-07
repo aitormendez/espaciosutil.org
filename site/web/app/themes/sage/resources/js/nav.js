@@ -1,7 +1,6 @@
 import { gsap } from 'gsap';
 
 const particlesContainer = document.getElementById('tsparticles');
-const menus = gsap.utils.toArray('.my-menu-item');
 
 function normalizePath(pathname) {
   if (!pathname || pathname === '/') {
@@ -66,6 +65,15 @@ function childMenuItems(menuItem) {
 
 function isSwitchMenuItem(menuItem) {
   return Boolean(menuItem?.classList?.contains('switch'));
+}
+
+function addListener(cleanups, target, event, handler, options) {
+  if (!target?.addEventListener) {
+    return;
+  }
+
+  target.addEventListener(event, handler, options);
+  cleanups.push(() => target.removeEventListener(event, handler, options));
 }
 
 export function syncNavLineWithActive() {
@@ -207,14 +215,27 @@ function restorePersistentBgColor() {
 }
 
 export function navegacion() {
+  const cleanups = [];
+  const timers = [];
+  const desktopMenus = gsap.utils.toArray('.my-menu-item');
   const banner = document.querySelector('#banner');
   const brand = document.getElementById('brand');
-  banner.abierto = true;
-  let openMenu;
   const submenuBg = document.querySelector('#submenu-bg');
   const linea = document.querySelector('#linea');
 
+  if (!banner || !brand || !submenuBg || !linea) {
+    return () => {};
+  }
+
+  banner.abierto = true;
+  let openMenu;
+  let isDestroyed = false;
+
   function escondeBanner() {
+    if (isDestroyed) {
+      return;
+    }
+
     banner.abierto = false;
     gsap.to(banner, {
       overwrite: true,
@@ -230,6 +251,10 @@ export function navegacion() {
   }
 
   function muestraBanner() {
+    if (isDestroyed) {
+      return;
+    }
+
     banner.classList.remove('xl:hidden');
     banner.abierto = true;
     gsap.to(banner, {
@@ -238,14 +263,16 @@ export function navegacion() {
     });
   }
 
-  menus.forEach((menu) => {
+  desktopMenus.forEach((menu) => {
     // Prevenir acción por defecto enlaces vacíos
     const enlaces = menu.querySelectorAll('a');
     enlaces.forEach((enlace) => {
       if (enlace.getAttribute('href') === '#') {
-        enlace.addEventListener('click', function (event) {
+        const preventLink = function (event) {
           event.preventDefault();
-        });
+        };
+
+        addListener(cleanups, enlace, 'click', preventLink);
       }
     });
 
@@ -253,19 +280,23 @@ export function navegacion() {
       menu.classList.contains('active-ancestor') ||
       menu.classList.contains('active')
     ) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setLinea(menu);
       }, 100);
+      timers.push(timer);
     }
 
-    menu.addEventListener('click', () =>
-      menu === openMenu ? menuClose(menu) : menuOpen(menu)
-    );
+    const handleMenuClick = () =>
+      menu === openMenu ? menuClose(menu) : menuOpen(menu);
+
+    addListener(cleanups, menu, 'click', handleMenuClick);
   });
 
-  brand.addEventListener('click', () => {
+  const handleBrandClick = () => {
     openMenu && menuClose(openMenu);
-  });
+  };
+
+  addListener(cleanups, brand, 'click', handleBrandClick);
 
   function menuOpen(menu) {
     const childMenu = menu.querySelector('.my-child-menu');
@@ -374,7 +405,7 @@ export function navegacion() {
   // detectar clic fuera del banner para cerrar el submenú
   // https://www.w3docs.com/snippets/javascript/how-to-detect-a-click-outside-an-element.html
 
-  document.addEventListener('click', (evt) => {
+  const handleDocumentClick = (evt) => {
     const flyoutEl = document.getElementById('banner');
     let targetEl = evt.target;
 
@@ -386,14 +417,16 @@ export function navegacion() {
     } while (targetEl);
 
     openMenu && menuClose(openMenu);
-  });
+  };
+
+  addListener(cleanups, document, 'click', handleDocumentClick);
 
   // scroll
 
   let oldValue = 0;
   let newValue = 0;
 
-  window.addEventListener('scroll', () => {
+  const handleScroll = () => {
     newValue = window.pageYOffset;
     if (oldValue < newValue && banner.abierto === true) {
       escondeBanner();
@@ -401,13 +434,47 @@ export function navegacion() {
       muestraBanner();
     }
     oldValue = newValue;
-  });
+  };
+
+  addListener(cleanups, window, 'scroll', handleScroll);
+
+  return () => {
+    isDestroyed = true;
+
+    timers.forEach((timer) => clearTimeout(timer));
+    cleanups.forEach((cleanup) => cleanup());
+
+    gsap.killTweensOf(banner);
+    gsap.killTweensOf(submenuBg);
+    gsap.killTweensOf(linea);
+
+    banner.abierto = true;
+    banner.classList.remove('xl:hidden');
+    gsap.set(banner, { clearProps: 'opacity' });
+
+    submenuBg.classList.remove('border-b');
+    gsap.set(submenuBg, { height: 0 });
+
+    openMenu = undefined;
+    desktopMenus.forEach((menu) => {
+      const childMenu = menu.querySelector('.my-child-menu');
+      if (childMenu) {
+        childMenu.classList.add('xl:hidden');
+      }
+    });
+  };
 }
 
 export function navegacionMovil() {
-  const menus = gsap.utils.toArray('.my-menu-item');
+  const cleanups = [];
+  const mobileMenus = gsap.utils.toArray('.my-menu-item');
   const burguer = document.getElementById('burguer');
   const nav = document.getElementById('nav');
+
+  if (!burguer || !nav) {
+    return () => {};
+  }
+
   let navOpen = false;
   let openMenu;
 
@@ -415,16 +482,22 @@ export function navegacionMovil() {
     x: '-100vw',
   });
 
-  burguer.addEventListener('click', () => {
+  const setBurguerState = (open) => {
+    burguer.classList.toggle('is-active', open);
+  };
+
+  const handleBurguerClick = () => {
     if (navOpen) {
       cerrarNav();
     } else {
       abrirNav();
     }
-  });
+  };
+
+  addListener(cleanups, burguer, 'click', handleBurguerClick);
 
   function cerrarNav() {
-    burguer.classList.toggle('is-active');
+    setBurguerState(false);
     gsap.to(nav, {
       x: '-100vw',
     });
@@ -437,14 +510,14 @@ export function navegacionMovil() {
   }
 
   function abrirNav() {
-    burguer.classList.toggle('is-active');
+    setBurguerState(true);
     gsap.to(nav, {
       x: 0,
     });
     navOpen = true;
   }
 
-  menus.forEach((menu) => {
+  mobileMenus.forEach((menu) => {
     const box = menu.querySelector('.my-child-menu');
     let isOpen = false;
 
@@ -500,18 +573,46 @@ export function navegacionMovil() {
         }
       };
 
-      menu.addEventListener('click', () =>
-        isOpen ? menu.close() : menu.open()
-      );
+      const handleMenuClick = () =>
+        isOpen ? menu.close() : menu.open();
+
+      addListener(cleanups, menu, 'click', handleMenuClick);
 
       // cerrar nav en movil cuando clicas submenús
       items.forEach((item) => {
-        item.addEventListener('click', () => cerrarNav());
+        const handleItemClick = () => cerrarNav();
+        addListener(cleanups, item, 'click', handleItemClick);
       });
     } else {
-      menu.addEventListener('click', () => cerrarNav());
+      const handleMenuWithoutChildrenClick = () => cerrarNav();
+      addListener(cleanups, menu, 'click', handleMenuWithoutChildrenClick);
     }
   });
+
+  return () => {
+    cleanups.forEach((cleanup) => cleanup());
+
+    gsap.killTweensOf(nav);
+    gsap.set(nav, { clearProps: 'x' });
+    setBurguerState(false);
+    navOpen = false;
+
+    openMenu = null;
+    mobileMenus.forEach((menu) => {
+      const box = menu.querySelector('.my-child-menu');
+      if (!box) {
+        return;
+      }
+
+      const items = box.querySelectorAll('li');
+      gsap.killTweensOf(box);
+      gsap.killTweensOf(items);
+      gsap.set(box, { height: 0 });
+      gsap.set(items, { y: -30 });
+    });
+
+    restorePersistentBgColor();
+  };
 }
 
 export function particlesBgColor() {

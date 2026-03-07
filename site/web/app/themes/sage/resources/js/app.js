@@ -1,7 +1,13 @@
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones } from './constelaciones.js';
-import { particlesBgColor, setBgColorAtLoadPage, syncActiveMenuState } from './nav.js';
+import {
+  navegacion,
+  navegacionMovil,
+  particlesBgColor,
+  setBgColorAtLoadPage,
+  syncActiveMenuState,
+} from './nav.js';
 import { coloresHover } from './colores.js';
 import { toc } from './toc.js';
 import { cosmos } from './cosmos/cosmos.jsx';
@@ -26,6 +32,8 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const xlMin = window.matchMedia('(min-width: 1280px)');
+  let navMode = null;
+  let destroyNavigation = () => {};
 
   syncActiveMenuState();
 
@@ -39,13 +47,33 @@ document.addEventListener('DOMContentLoaded', async () => {
   coloresHover();
   toc();
 
-  if (xlMin.matches) {
-    const { navegacion } = await import('./nav.js');
-    navegacion();
-    constelaciones();
-  } else {
-    const { navegacionMovil } = await import('./nav.js');
-    navegacionMovil();
+  const initNavigationByViewport = () => {
+    const nextNavMode = xlMin.matches ? 'desktop' : 'mobile';
+
+    if (nextNavMode === navMode) {
+      return;
+    }
+
+    destroyNavigation();
+    navMode = nextNavMode;
+
+    if (nextNavMode === 'desktop') {
+      destroyNavigation = navegacion();
+      constelaciones();
+      return;
+    }
+
+    destroyNavigation = navegacionMovil();
+  };
+
+  initNavigationByViewport();
+
+  const handleViewportNavigationChange = () => initNavigationByViewport();
+
+  if (typeof xlMin.addEventListener === 'function') {
+    xlMin.addEventListener('change', handleViewportNavigationChange);
+  } else if (typeof xlMin.addListener === 'function') {
+    xlMin.addListener(handleViewportNavigationChange);
   }
 
   if (document.body.classList.contains('page-template-series')) {
