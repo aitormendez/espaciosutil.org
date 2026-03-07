@@ -82,7 +82,7 @@
       ],
       [
           'text' => 'Clarificación de conceptos, contexto, estructura y armonización entre revelaciones cuando aplica.',
-          'icon' => 'tabler-sparkles',
+          'icon' => 'tabler-sparkles-filled',
       ],
       [
           'text' => 'Acceso a todo el catálogo del CDE mientras dure tu suscripción.',
