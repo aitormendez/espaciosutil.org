@@ -101,51 +101,7 @@ Para el entorno de `production`, es necesario configurar el secreto `TRELLIS_DEP
 - El reproductor de audio usa `DefaultAudioLayout`, muestra la miniatura (si existe) como avatar y fuerza `viewType="audio"` para que Vidstack muestre controles específicos. El progreso de vídeo y audio se persiste con el mismo endpoint `/wp-json/espacio-sutil/v1/video-progress`, diferenciando por Stream ID.
 - El toggle frontal se apoya en Tailwind y guarda el estado en memoria (no en localStorage). Cambiar de modo no reinicia el progreso del medio activo.
 
-## 8. Implementación de Tabla de Precios de Suscripciones
-
-La página de suscripciones del sitio ha sido completamente rediseñada para mostrar una tabla de precios personalizada basada en campos ACF, integrados mediante `acf-composer`.
-
-### Estructura de datos
-
-Se ha creado un campo de opciones ACF llamado `series_membresia` de tipo **repeater**, accesible desde la página de opciones `Opciones`. Cada fila representa una **serie de contenidos** y permite configurar varios planes de pago asociados a esa serie. Los campos incluidos son:
-
-- `monthly_level_id`: ID del nivel mensual de PMP (requerido)
-- `semiannual_level_id`: ID del nivel semestral (opcional)
-- `yearly_level_id`: ID del nivel anual de PMP (requerido)
-- `display_name`: Nombre público mostrado en la tarjeta
-- `short_description`: Descripción corta de la serie (opcional)
-- `image`: Imagen ilustrativa de la serie (opcional)
-- `order`: Número entero usado para ordenar las tarjetas
-
-La relación entre estos niveles no se define en los niveles de PMP sino únicamente en este campo de opciones, evitando metaboxes y garantizando una implementación mantenible.
-
-### Componentes y renderizado
-
-Los datos se renderizan mediante dos componentes Blade:
-
-1. `pricing-table.blade.php`: Controlador de la tabla que itera por el repeater y pasa los datos a cada tarjeta como props.
-2. `pricing-package.blade.php`: Componente de tarjeta individual que muestra nombre, descripción, imagen y los planes disponibles (mensual, semestral, anual).
-
-Cada tarjeta muestra los planes disponibles con:
-
-- Precio
-- Periodicidad (`/mes`, `/semestre`, `/año`)
-- Ahorro calculado dinámicamente (comparado con el plan mensual)
-- Botón de suscripción o estado "Suscrito" si el usuario ya tiene ese plan activo
-
-### Comportamiento del botón de suscripción
-
-- Los botones usan la función `pmpro_url('checkout', '?level=X')` para generar la URL de compra.
-- Si el usuario ya tiene ese nivel activo (`pmpro_hasMembershipLevel(X)`), se muestra el botón como "Suscrito" y enlaza a la página de cuenta (`pmpro_url('account')`).
-- Los botones incluyen atributos `aria-label` dinámicos y `data-subscribed`, `data-state` para su estilado condicional.
-
-### Consideraciones de diseño
-
-- Layout flexible con Tailwind (`flex-wrap`) que muestra las tarjetas en filas responsivas.
-- Imágenes optimizadas con `srcset` y `sizes` para carga adaptable.
-- No se utiliza ningún shortcode nativo de PMP para esta vista, aunque el shortcode puede coexistir en la misma página para comparación o fallback.
-
-## 9. Subíndice jerárquico para lecciones CDE
+## 8. Subíndice jerárquico para lecciones CDE
 
 - Se amplió el grupo de campos `Cde` (`app/Fields/Cde.php`) con un repeater `lesson_subindex_items`. Cada fila almacena `level` (1–4), `title`, `description`, `timecode` (placeholder `00:05:30`) y `anchor`. El editor ordena manualmente los ítems; la jerarquía final se deduce combinando orden + nivel.
 - El composer `app/View/Composers/SingleCde.php` expone dos estructuras:
@@ -156,7 +112,7 @@ Cada tarjeta muestra los planes disponibles con:
 - El contenedor del player añade `data-video-chapters` (JSON) que `initFeaturedVideoPlayer.jsx` parsea y pasa a `FeaturedVideo.jsx`. Este componente genera un `Blob` WebVTT para `Track kind="chapters"` y escucha clicks globales en `[data-video-seek]` para invocar `playerRef.current.currentTime`.
 - Cuando no hay subíndice se omiten tanto la navegación como la pista de capítulos. El árbol (items + chapters) está listo para reutilizarse en el índice AJAX del curso sin recalcular los datos.
 
-## 10. Cuestionario por lección (CDE)
+## 9. Cuestionario por lección (CDE)
 
 - Los campos viven en la pestaña **Cuestionario** del grupo “Lección CDE” (`site/web/app/themes/sage/app/Fields/Cde.php`) y permiten activar/ocultar el bloque en cada lección:
   - `quiz_enabled` (true/false): controla si el cuestionario se muestra en la lección.
@@ -184,7 +140,7 @@ Cada tarjeta muestra los planes disponibles con:
   - Se guarda en `user_meta` por usuario y lección con clave `cde_quiz_result_{postId}` e incluye `correct`, `total`, `percentage`, detalles por pregunta y timestamp.
   - Regla de acierto por pregunta: el usuario debe marcar exactamente todas las respuestas correctas (si marca una incorrecta o se deja una correcta sin marcar, la pregunta cuenta como incorrecta).
 
-## 11. Bloques de contenidos en el índice del CDE
+## 10. Bloques de contenidos en el índice del CDE
 
 - La taxonomía `serie_cde` se explota ahora de forma jerárquica: los términos raíz identifican las series y los términos hijo representan cada bloque de contenidos. Ninguna entrada `cde` lleva asignado el término raíz; únicamente la lección raíz de cada bloque recibe el término hijo correspondiente.
 - `app/View/Composers/TemplateCurso.php` expone una colección `series_cde_lessons` con la forma `serie → bloques`. El método `getSeriesWithBlocks()` recupera los términos raíz (`parent = 0`, `hide_empty = false`) y, para cada uno, `getBlocksForSeries()` obtiene sus términos hijo y localiza la lección raíz mediante `getBlockRootPost()`. Este último descarta candidatos cuyo ancestro ya tenga el mismo término para evitar duplicados y usa el primer resultado como fallback.
@@ -195,7 +151,7 @@ Cada tarjeta muestra los planes disponibles con:
 - Los nodos sin icono de progreso utilizan un `span` placeholder (`course-index-placeholder-icon` con `aria-hidden="true"`) para mantener la alineación vertical entre iconos, enlaces y botones en todas las profundidades.
 - Los estilos heredan de Tailwind; los paneles se ocultan con la clase `hidden` y un `overflow: hidden` inline para permitir la animación de altura.
 
-## 12. Color de fondo por sección (tsparticles)
+## 11. Color de fondo por sección (tsparticles)
 
 Se ha reemplazado la estrategia basada en “click de ítem de menú” por una estrategia de **sección persistente** derivada de la página actual.
 
@@ -232,7 +188,7 @@ Se ha reemplazado la estrategia basada en “click de ítem de menú” por una 
 - Tras sincronizar esos atributos, se reaplica el color persistente de `tsparticles`.
 - Esto evita desincronizaciones cuando hay navegación AJAX sin recarga completa.
 
-## 13. Reestructuración de navegación por contextos (ES/CDE)
+## 12. Reestructuración de navegación por contextos (ES/CDE)
 
 Se ha consolidado una navegación por **contexto activo** para reducir la mezcla entre Espacio Sutil (ES) y Curso de Desarrollo Espiritual (CDE).
 
@@ -258,6 +214,76 @@ Se ha consolidado una navegación por **contexto activo** para reducir la mezcla
 
 - Se mantiene transición Barba en navegación interna de un mismo contexto.
 - Se evita Barba en rutas sensibles (login, cuenta, checkout/confirmación PMP y admin).
+
+## 13. Landing de suscripción (`template-suscripcion`)
+
+La página de suscripción se ha rehecho como landing editorial dentro de `site/web/app/themes/sage/resources/views/template-suscripcion.blade.php`, reutilizando infraestructura nativa de WordPress, Paid Memberships Pro y componentes Blade del tema.
+
+### Hero y cabecera
+
+- `partials/page-header.blade.php` soporta la variante `membership-landing`.
+- En esa variante:
+  - el título de la página se usa como H1,
+  - el excerpt se usa como subtítulo,
+  - se renderizan dos CTAs fijos con `x-cta`: `Elegir plan` (`#planes`) y `Ver lección gratuita` (`/leccion-gratuita/`).
+- El item de navegación principal puede mantener el label “Suscripción” aunque el título público de la página cambie.
+
+### Tabla de precios y PMPro
+
+- La tabla de precios ahora se alimenta de grupos nativos de PMPro:
+  - `pricing-table.blade.php` obtiene los grupos con `pmpro_get_level_groups_in_order()`.
+  - Los niveles del grupo se clasifican por ciclo:
+    - mensual: `1 month`
+    - semestral: `6 months`
+    - anual: `1 year`
+- La UI actual asume el modelo “3 frecuencias” para cada grupo y no implementa todavía un render genérico para ciclos arbitrarios.
+- `pricing-package.blade.php` renderiza el encabezado de grupo y delega cada card de frecuencia en `pricing-plan-card.blade.php`.
+- La descripción visible de cada card sale del campo nativo `description` del nivel PMPro correspondiente, no de una descripción de grupo.
+- El cálculo de ahorro:
+  - anual contra `12 x mensual`
+  - semestral contra `6 x mensual`
+  - solo muestra badge si el ahorro es real.
+- Los botones de compra:
+  - si el usuario ya tiene ese nivel, muestran `Suscrito` y apuntan a `pmpro_url('account')`,
+  - si no, enlazan al checkout del nivel.
+
+### Series y bloques accesibles desde la membresía
+
+- La sección “A qué da acceso (series y lecciones)” se genera automáticamente desde la taxonomía jerárquica `serie_cde`.
+- Se reutiliza `App\View\Composers\TemplateCurso`, que ahora también sirve datos a `template-suscripcion`.
+- `TemplateCurso` expone `series_cde_lessons` con estructura:
+  - serie raíz
+  - bloques hijo
+  - `lessons_count` por bloque
+- El conteo de lecciones se calcula con `get_pages(child_of => $block_root_post_id)` sobre el árbol jerárquico de páginas `cde`.
+- La sección de suscripción no usa AJAX ni JS para este bloque: muestra todo expandido en la carga inicial.
+- Semánticamente la estructura es lista anidada:
+  - `ul` de series
+  - `li` por serie
+  - `ul` anidada de bloques
+- Las etiquetas de contador ya contemplan singular/plural:
+  - `bloque` / `bloques`
+  - `lección` / `lecciones`
+
+### Listas de valor, FAQ y cierre
+
+- La landing usa `x-item-list` para varias secciones editoriales:
+  - beneficios iniciales,
+  - “Qué incluye”,
+  - “Cómo funciona (3 pasos)”,
+  - “Para quién es”.
+- Para las dos últimas se usa el icono `tabler-arrow-badge-right-filled`.
+- La sección FAQ usa `faq-item.blade.php`, basada en `<details>/<summary>` sin JS adicional.
+- El cierre de la landing repite los dos CTAs principales del hero para reforzar la conversión al final de la página.
+
+### Responsive y layout
+
+- Se ajustó la responsividad del banner global y de la landing de suscripción:
+  - `layouts/app.blade.php`
+  - `sections/header.blade.php`
+  - `partials/page-header.blade.php`
+  - `template-suscripcion.blade.php`
+- En móvil se redujo el espacio superior del layout general y se reequilibró la cabecera CDE.
 - También se evita Barba en saltos entre contextos (ES ↔ CDE).
 
 Esto está implementado en:
