@@ -35,7 +35,7 @@
 
   <div class="t-0 relative z-10" data-barba="container" data-barba-namespace="{{ $barba_namespace }}">
     <main id="main"
-      class="main {{ is_front_page() ? 'pt-[256px] lg:pt-0' : 'pt-[214px] lg:pt-[129px]' }} text-blanco w-full">
+      class="main {{ is_front_page() ? 'pt-[256px] lg:pt-0' : 'pt-[214px] lg:pt-[96px]' }} text-blanco w-full">
       @yield('content')
     </main>
 

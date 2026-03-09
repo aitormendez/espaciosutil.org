@@ -11,7 +11,7 @@
     @endphp
     @include('partials.page-header')
 
-    <div class="border-blanco bg-morado5/90 prose md:prose-2xl flex justify-center border-t pb-12 pt-44 text-lg">
+    <div class="border-blanco bg-morado5/90 prose-cde flex justify-center border-t pb-12 pt-44">
       <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
         <div class="">
           @php
@@ -68,7 +68,7 @@
         </aside>
         <main class="mt-12 md:mt-0 md:w-2/3">
           <h2 class="mb-6 font-sans text-2xl">Temas</h2>
-          <div id="indice-ajax-container" class="course-index prose font-sans">
+          <div id="indice-ajax-container" class="course-index prose-cde">
             <p>Selecciona un bloque de la serie para ver sus temas.</p>
           </div>
         </main>

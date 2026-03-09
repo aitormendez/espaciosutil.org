@@ -41,7 +41,7 @@
             </div>
           </div>
         @else
-          <div class="{{ $use_compact_header ? 'font-sans' : 'prose' }} mb-24 w-full max-w-5xl lg:pt-24">
+          <div class="{{ $use_compact_header ? 'font-sans' : '' }} w-full max-w-5xl py-24">
             @if (is_tax('revelador'))
               <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
                 Revelador

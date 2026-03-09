@@ -136,6 +136,110 @@
   }
 }
 
+@utility prose-cde {
+  @apply font-sans font-light leading-relaxed text-gris2;
+  font-size: 1rem;
+
+  & > * + * {
+    margin-top: 1.25em;
+  }
+
+  h1:not(:where(.not-prose, .not-prose *)) {
+    color: theme('colors.gris1');
+    font-size: 3rem;
+    font-weight: 200;
+    line-height: 1.1;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  h2:not(:where(.not-prose, .not-prose *)) {
+    color: theme('colors.gris1');
+    font-size: 2.25rem;
+    font-weight: 300;
+    line-height: 1.15;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  h3:not(:where(.not-prose, .not-prose *)) {
+    color: theme('colors.gris1');
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.25;
+    margin-top: 0;
+    margin-bottom: 0.75em;
+  }
+
+  h4:not(:where(.not-prose, .not-prose *)) {
+    color: theme('colors.gris1');
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.3;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+  }
+
+  p:not(:where(.not-prose, .not-prose *)) {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 0;
+  }
+
+  ul:not(:where(.not-prose, .not-prose *)) {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    list-style-type: disc;
+    padding-left: 1.25em;
+    margin-bottom: 0;
+  }
+
+  ol:not(:where(.not-prose, .not-prose *)) {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    list-style-type: decimal;
+    padding-left: 1.25em;
+    margin-bottom: 0;
+  }
+
+  li:not(:where(.not-prose, .not-prose *)) {
+    margin-top: 0.5em;
+  }
+
+  a:not(:where(.not-prose, .not-prose *)) {
+    color: var(--color-cde-light);
+    text-decoration-line: underline;
+    text-decoration-color: theme('colors.blanco / 0.3');
+    text-underline-offset: 0.2em;
+    transition: color 0.2s;
+  }
+
+  a:not(:where(.not-prose, .not-prose *)):hover {
+    color: theme('colors.blanco');
+  }
+
+  blockquote:not(:where(.not-prose, .not-prose *)) {
+    border-left: 0.25em solid theme('colors.blanco / 0.3');
+    padding-left: 1em;
+    color: theme('colors.gris1');
+    margin: 1.5em 0;
+  }
+
+  hr:not(:where(.not-prose, .not-prose *)) {
+    margin: 2em 0;
+    border-top: 1px solid theme('colors.blanco / 0.2');
+  }
+
+  strong:not(:where(.not-prose, .not-prose *)) {
+    font-weight: 600;
+    color: theme('colors.blanco');
+  }
+
+  em:not(:where(.not-prose, .not-prose *)) {
+    font-style: italic;
+  }
+}
+
 @utility prose-xl {
   font-size: 1.25rem;
 }

@@ -18,6 +18,7 @@
 @import './commons/components.css';
 @import './commons/navigation.css';
 @import './commons/variables.css';
+@import './components/program-phase-card.css';
 @import './blocks/responsive-cols.css';
 @import './comments.css';
 @import './pmp.css';
