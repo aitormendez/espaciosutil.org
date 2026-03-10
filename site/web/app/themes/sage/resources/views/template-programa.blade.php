@@ -35,6 +35,14 @@
       <section id="programa-enfoque-practico" class="mt-24">
         @include('partials.programa.block-6')
       </section>
+
+      <section id="programa-fuentes" class="mt-24">
+        @include('partials.programa.block-7')
+      </section>
+
+      <section id="programa-cta-final" class="mt-24">
+        @include('partials.programa.block-8')
+      </section>
     </div>
   @endwhile
 @endsection

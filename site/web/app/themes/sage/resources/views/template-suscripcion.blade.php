@@ -151,46 +151,7 @@
           <h2 class="text-gris1 mb-3 text-4xl font-light">A qué da acceso (series y lecciones)</h2>
         </div>
 
-        @if (!empty($series_cde_lessons))
-          <ul class="mt-6 space-y-3 px-6 md:px-0">
-            @foreach ($series_cde_lessons as $series)
-              @php
-                $seriesBlocks = $series['blocks'] ?? [];
-                $blocksCount = count($seriesBlocks);
-              @endphp
-              <li class="bg-negro/30 border-blanco border-t font-serif text-lg last:border-b md:text-2xl">
-                <h3
-                  class="mx-auto flex max-w-2xl items-center justify-between px-3 py-3 font-light text-white/90 md:px-0">
-                  <span>{{ $series['name'] }}</span>
-                  <span class="text-white/60">{{ $blocksCount }}
-                    {{ $blocksCount === 1 ? 'bloque' : 'bloques' }}</span>
-                </h3>
-
-                @if (!empty($seriesBlocks))
-                  <ul class="list-disc">
-                    @foreach ($seriesBlocks as $block)
-                      @php
-                        $lessonsCount = (int) ($block['lessons_count'] ?? 0);
-                      @endphp
-                      <li
-                        class="border-blanco/30 text-blanco/50 mx-auto flex max-w-2xl items-center justify-between gap-3 border-t py-2 pl-6 pr-3 md:pr-0">
-                        <span class="flex-1 text-left">{{ $block['name'] }}</span>
-                        <span class="whitespace-nowrap text-right text-white/60">{{ $lessonsCount }}
-                          {{ $lessonsCount === 1 ? 'lección' : 'lecciones' }}</span>
-                      </li>
-                    @endforeach
-                  </ul>
-                @else
-                  <p class="mx-auto max-w-2xl px-4 pb-4 text-sm text-white/60">Esta serie aún no tiene bloques
-                    disponibles.</p>
-                @endif
-              </li>
-            @endforeach
-          </ul>
-        @else
-          <p class="rounded-xs mx-auto mt-4 max-w-2xl bg-white/5 px-4 py-3 text-sm text-white/70">No hay series
-            disponibles todavía.</p>
-        @endif
+        <x-series-blocks-list :series="$series_cde_lessons" class="mt-6" />
 
         <p class="text-gris2 mx-auto mt-6 max-w-2xl px-6 font-light md:px-0"><span
             class="font-semibold text-white/90">Nuevos

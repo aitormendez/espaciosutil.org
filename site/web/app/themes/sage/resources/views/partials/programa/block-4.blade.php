@@ -33,7 +33,7 @@
   ];
 @endphp
 
-<div class="mx-auto max-w-4xl px-6 lg:px-0">
+<div class="mx-auto max-w-3xl px-6 lg:px-0">
   <div class="prose-cde">
     <h2>Cómo se trabaja el contenido dentro del curso</h2>
     <p>

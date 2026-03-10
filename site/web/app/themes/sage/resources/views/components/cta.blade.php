@@ -3,6 +3,7 @@
     'text' => '',
     'clases' => 'bg-morado5/90',
     'icon' => null,
+    'iconClases' => 'h-14 w-14',
 ])
 
 <a href="{{ $href }}"
@@ -13,6 +14,6 @@
   ]) }}>
   {{ $text }}
   @if (!empty($icon))
-    <x-dynamic-component :component="$icon" class="h-14 w-14" />
+    <x-dynamic-component :component="$icon" class="{{ $iconClases }}" />
   @endif
 </a>

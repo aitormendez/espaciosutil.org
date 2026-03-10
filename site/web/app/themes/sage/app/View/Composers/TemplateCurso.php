@@ -13,6 +13,7 @@ class TemplateCurso extends Composer
      */
     protected static $views = [
         'template-curso',
+        'template-programa',
         'template-suscripcion',
     ];
 
