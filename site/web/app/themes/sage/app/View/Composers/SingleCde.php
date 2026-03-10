@@ -42,9 +42,14 @@ class SingleCde extends Composer
 
         if ($related_lessons_posts) {
             $bunny_pull_zone = getenv('BUNNY_PULL_ZONE');
-            foreach ($related_lessons_posts as $post) {
-                setup_postdata($post);
-                $featured_video_id = get_field('featured_video_id', $post->ID);
+            foreach ($related_lessons_posts as $related_lesson_raw) {
+                $related_lesson = $this->resolveRelatedLessonPost($related_lesson_raw);
+
+                if (!$related_lesson) {
+                    continue;
+                }
+
+                $featured_video_id = get_field('featured_video_id', $related_lesson->ID);
 
                 $poster_url = null;
                 if ($featured_video_id && $bunny_pull_zone) {
@@ -52,12 +57,11 @@ class SingleCde extends Composer
                 }
 
                 $related_lessons[] = [
-                    'title' => get_the_title($post->ID),
-                    'permalink' => get_permalink($post->ID),
+                    'title' => get_the_title($related_lesson->ID),
+                    'permalink' => get_permalink($related_lesson->ID),
                     'poster_url' => $poster_url,
                 ];
             }
-            wp_reset_postdata();
         }
 
         $lesson_subindex = $this->buildLessonSubindex();
@@ -312,6 +316,33 @@ class SingleCde extends Composer
             'default_hls_url' => $default_hls_url,
             'default_thumbnail_url' => $default_thumbnail_url,
         ];
+    }
+
+    /**
+     * Normalize related lesson values from ACF to a WP_Post instance.
+     *
+     * @param mixed $value
+     * @return \WP_Post|null
+     */
+    protected function resolveRelatedLessonPost($value): ?\WP_Post
+    {
+        if ($value instanceof \WP_Post) {
+            return $value;
+        }
+
+        if (is_object($value) && isset($value->ID) && is_scalar($value->ID)) {
+            $post = get_post((int) $value->ID);
+
+            return $post instanceof \WP_Post ? $post : null;
+        }
+
+        if (is_scalar($value)) {
+            $post = get_post((int) $value);
+
+            return $post instanceof \WP_Post ? $post : null;
+        }
+
+        return null;
     }
 
     /**

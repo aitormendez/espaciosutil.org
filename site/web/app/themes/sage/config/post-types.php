@@ -72,6 +72,10 @@ return [
             'supports' => ['title', 'editor', 'thumbnail', 'revisions', 'excerpt', 'page-attributes', 'comments'],
             'show_in_rest' => true,
             'has_archive' => true,
+            'rewrite' => [
+                'slug' => 'lecciones-del-cde',
+                'with_front' => false,
+            ],
             'names' => [
                 'singular' => 'Lección del CDE',
                 'plural' => 'Lecciones del CDE',
