@@ -14,10 +14,8 @@
   </p>
 </div>
 
-<div class="bg-morado5/90 prose-cde mx-6 mt-20 max-w-3xl rounded border border-white/30 pb-2 lg:mx-auto">
-  <div class="bg-cde/50 w-full px-4 py-2 text-center uppercase text-white/50">Estado actual del programa</div>
-  <p class="mx-6">
-    Actualmente, el CDE se encuentra en su primera fase de desarrollo, con el núcleo visible centrado en
-    comentarios temáticos y estudio guiado de Urantia y Seth.
-  </p>
+<div class="mt-20 max-w-3xl lg:mx-auto">
+  <x-status-card title="Estado actual del programa"
+    text-prefix="Actualmente, el CDE se encuentra en su primera fase de desarrollo, con el núcleo visible centrado en comentarios temáticos y estudio guiado de"
+    :items="$series_cde_lessons" />
 </div>
