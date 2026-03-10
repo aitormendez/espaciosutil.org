@@ -52,7 +52,7 @@
   ];
 @endphp
 
-<div class="prose-cde mx-auto max-w-3xl">
+<div class="prose-cde mx-auto max-w-3xl px-6 lg:px-0">
   <h2>Herramientas y formato de estudio</h2>
   <p>
     Cada lección del CDE está pensada como una unidad de estudio, no solo como una pieza audiovisual. Por eso el curso
@@ -60,9 +60,9 @@
   </p>
 </div>
 
-<div class="mx-auto mt-12 grid max-w-6xl gap-4 md:grid-cols-2 xl:grid-cols-4">
+<div class="mx-auto mt-12 grid max-w-6xl gap-4 px-6 lg:px-0 md:grid-cols-2 xl:grid-cols-4">
   @foreach ($study_tools as $tool)
-    <x-program-area-card :title="$tool['title']" :description="$tool['description']" :icon="$tool['icon']"
+    <x-icon-card :title="$tool['title']" :description="$tool['description']" :icon="$tool['icon']"
       :icon-secondary="$tool['icon_secondary'] ?? null" />
   @endforeach
 </div>

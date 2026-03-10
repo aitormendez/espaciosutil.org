@@ -33,7 +33,7 @@
   ];
 @endphp
 
-<div class="mx-auto max-w-4xl px-6 md:px-0">
+<div class="mx-auto max-w-4xl px-6 lg:px-0">
   <div class="prose-cde">
     <h2>Cómo se trabaja el contenido dentro del curso</h2>
     <p>
@@ -42,7 +42,7 @@
     </p>
   </div>
 
-  <x-item-list :items="$method_items" class="mt-12 gap-8" item-class="flex items-start gap-4"
+  <x-list-card :items="$method_items" class="mt-12 gap-8" item-class="flex items-start gap-4"
     icon-class="text-cde-light mt-1 h-10 w-10 shrink-0 relative -top-2"
     title-class="text-gris1 block text-2xl font-light font-sans" text-class="text-gris2 text-lg font-light font-sans" />
 </div>

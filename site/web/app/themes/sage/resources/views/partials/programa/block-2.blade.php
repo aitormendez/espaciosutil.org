@@ -33,7 +33,7 @@
   ];
 @endphp
 
-<div class="mx-auto max-w-3xl px-6 md:px-0">
+<div class="mx-auto max-w-3xl px-6 lg:px-0">
   <div class="prose-cde mx-auto max-w-4xl">
     <h2>Una propuesta en tres fases</h2>
     <p>
@@ -44,7 +44,7 @@
 
   <div class="mt-12">
     @foreach ($phases as $phase)
-      <x-program-phase-card :title="$phase['title']" :status="$phase['status']" :status-label="$phase['status_label']"
+      <x-timeline-card :title="$phase['title']" :status="$phase['status']" :status-label="$phase['status_label']"
         :paragraphs="$phase['paragraphs']" :first="$loop->first" :last="$loop->last" />
     @endforeach
   </div>

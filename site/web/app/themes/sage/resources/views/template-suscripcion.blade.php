@@ -136,7 +136,7 @@
     <div class="content border-blanco/30 bg-morado5/90 relative border-t pb-40 pt-6 font-sans lg:px-0">
       <!-- Membresías (auto-cargadas desde PMPro) -->
       <div class="relative mx-auto w-full max-w-2xl px-6 pt-10 !leading-tight md:px-0">
-        <x-item-list :items="$membership_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$membership_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
@@ -202,7 +202,7 @@
         <h2 class="text-gris1 mb-3 text-4xl font-light">Qué incluye</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
-        <x-item-list :items="$que_incluye_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$que_incluye_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
@@ -211,7 +211,7 @@
         <h2 class="text-gris1 mb-3 text-4xl font-light">Cómo funciona (3 pasos)</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
-        <x-item-list :items="$como_funciona_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$como_funciona_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>
@@ -220,7 +220,7 @@
         <h2 class="text-gris1 mb-3 text-4xl font-light">Para quién es</h2>
       </div>
       <div class="relative mx-auto w-full max-w-2xl px-6 !leading-tight md:px-0">
-        <x-item-list :items="$para_quien_es_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$para_quien_es_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full p-2 border border-white" />
       </div>

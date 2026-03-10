@@ -33,7 +33,7 @@
   ];
 @endphp
 
-<div class="prose-cde mx-auto max-w-3xl">
+<div class="prose-cde mx-auto max-w-3xl px-6 lg:px-0">
   <h2>Las cinco grandes áreas de profundización</h2>
   <p>
     A medida que el programa avance hacia su desarrollo completo, el CDE se organizará en torno a cinco grandes áreas
@@ -42,8 +42,8 @@
   </p>
 </div>
 
-<div class="mx-auto mt-12 grid max-w-5xl gap-4 md:grid-cols-2 xl:grid-cols-3">
+<div class="mx-auto mt-12 grid max-w-5xl gap-4 px-6 lg:px-0 md:grid-cols-2 xl:grid-cols-3">
   @foreach ($areas as $area)
-    <x-program-area-card :title="$area['title']" :description="$area['description']" :icon="$area['icon']" />
+    <x-icon-card :title="$area['title']" :description="$area['description']" :icon="$area['icon']" />
   @endforeach
 </div>

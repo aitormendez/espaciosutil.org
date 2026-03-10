@@ -1,0 +1,39 @@
+.timeline-card {
+  @apply border-x p-6 lg:p-18 pt-30 lg:pt-40;
+}
+
+.timeline-card--top {
+  @apply border-t rounded-t-lg mt-6;
+}
+
+.timeline-card--middle {
+}
+
+.timeline-card--bottom {
+  @apply border-b rounded-b-lg mb-6;
+}
+
+.timeline-card--single {
+  @apply border-y rounded-lg my-6;
+}
+
+.timeline-card--available {
+}
+
+.timeline-card--in-progress {
+}
+
+.timeline-card__status {
+}
+
+.timeline-card__status-icon {
+}
+
+.timeline-card__status-icon--available {
+}
+
+.timeline-card__status-icon--in-progress {
+}
+
+.timeline-card__content {
+}

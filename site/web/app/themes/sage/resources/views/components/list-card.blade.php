@@ -41,7 +41,7 @@
 @endphp
 
 @if ($normalizedItems->isNotEmpty())
-  <ul {{ $attributes->class(['item-list flex flex-col gap-3']) }}>
+  <ul {{ $attributes->class(['list-card flex flex-col gap-3']) }}>
     @foreach ($normalizedItems as $item)
       @php
         $resolvedItemClass = trim($itemClass . ' ' . ($item['itemClass'] ?? ''));

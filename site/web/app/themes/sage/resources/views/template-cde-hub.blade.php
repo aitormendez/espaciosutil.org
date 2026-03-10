@@ -135,7 +135,7 @@
 
     <div class="content border-blanco/30 bg-morado5/90 relative border-t pb-40 pt-6 font-sans lg:px-0 lg:pt-40">
       <div class="relative mx-auto w-full max-w-2xl px-6 pt-10 !leading-tight md:px-0">
-        <x-item-list :items="$hero_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$hero_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full border border-white p-2" />
         <div class="membership-hero-ctas mt-12 flex flex-col justify-center gap-4 sm:flex-row">
@@ -191,7 +191,7 @@
 
       <section id="que-incluye" class="mx-auto mt-20 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-8 text-4xl font-light">Qué incluye</h2>
-        <x-item-list :items="$includes_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$includes_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full border border-white p-2" />
       </section>
@@ -225,7 +225,7 @@
 
       <section id="como-empezar" class="mx-auto mt-20 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-8 text-4xl font-light">Cómo empezar</h2>
-        <x-item-list :items="$getting_started_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
+        <x-list-card :items="$getting_started_list_items" class="text-gris1 mt-10 w-full max-w-3xl"
           item-class="flex items-center gap-3 text-left text-lg font-thin leading-snug"
           icon-class="text-cde-light h-[48px] w-[48px] shrink-0 rounded-full border border-white p-2" />
       </section>
