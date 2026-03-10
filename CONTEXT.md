@@ -267,7 +267,7 @@ La página de suscripción se ha rehecho como landing editorial dentro de `site/
 
 ### Listas de valor, FAQ y cierre
 
-- La landing usa `x-item-list` para varias secciones editoriales:
+- La landing usa `x-list-card` para varias secciones editoriales:
   - beneficios iniciales,
   - “Qué incluye”,
   - “Cómo funciona (3 pasos)”,
@@ -316,3 +316,24 @@ Archivos clave:
 
 - `resources/css/commons/navigation.css`
 - `resources/views/components/navigation.blade.php`
+
+## 14. Páginas CDE implementadas (panorámica)
+
+Actualmente el CDE se apoya en varias páginas editoriales implementadas directamente en Blade, con una estrategia de plantillas y componentes reutilizables, no con bloques Gutenberg para cada sección.
+
+### Páginas principales
+
+- `template-cde-hub.blade.php`: landing/hub general del CDE. Funciona como puerta de entrada y orientación; combina explicación del proyecto, acciones principales (lección gratuita, suscripción, índice, Telegram) y resumen de qué incluye.
+- `template-suscripcion.blade.php`: landing editorial de membresía. Integra la tabla de PMPro, listas de beneficios y la vista expandida de series, bloques y número de lecciones accesibles con la suscripción.
+- `template-curso.blade.php`: índice del curso. Mantiene el contenido principal de la página y un navegador lateral de series y bloques con carga AJAX del índice detallado.
+- `template-programa.blade.php`: página “Programa” / “El curso en profundidad”. Está construida por secciones parciales (`partials/programa/block-1` a `block-8`) y presenta el curso como un recorrido narrativo: apertura, fases, áreas, método, herramientas, enfoque práctico, fuentes y cierre.
+
+### Componentes reutilizables del entorno CDE
+
+- Se ha consolidado una pequeña capa de componentes Blade reutilizables para este contexto, entre ellos `x-cta`, `x-list-card`, `x-icon-card`, `x-timeline-card`, `x-source-group-card`, `x-series-blocks-list` y `x-status-card`.
+- La variante tipográfica `prose-cde` se usa como base de texto largo/editorial en las páginas del curso, separada de la `.prose` general de Espacio Sutil.
+
+### Datos compartidos entre páginas CDE
+
+- El composer `App\View\Composers\TemplateCurso` sirve `series_cde_lessons` a `template-curso`, `template-suscripcion` y `template-programa`.
+- Esa estructura alimenta tanto el índice del curso como los resúmenes editoriales de series y bloques en Suscripción y Programa, evitando duplicar lógica de taxonomías y conteos.
