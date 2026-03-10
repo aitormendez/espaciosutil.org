@@ -35,7 +35,7 @@
     El Curso de Desarrollo Espiritual se apoya en una base amplia de revelaciones modernas y contemporáneas, junto
     con otras tradiciones y materiales que contribuyen a ampliar la comprensión del camino espiritual.
   </p>
-  <h class="">Nucleo visible actual</h>
+  <h3 class="!mt-20">Nucleo visible actual</h3>
 </div>
 <x-series-blocks-list :series="$series_cde_lessons" class="mt-12 font-sans" />
 

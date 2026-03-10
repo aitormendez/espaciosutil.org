@@ -4,9 +4,11 @@
   </header>
 
   <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-6">
-    <div class="contenido prose md:prose-2xl mt-18 mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
+    <div class="contenido prose-xl md:prose-2xl mt-18 mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
       {{-- Parte 1: Extracto (visible para todos) --}}
-      @php the_field('rich_excerpt') @endphp
+      <div class="px-6 lg:px-0">
+        @php the_field('rich_excerpt') @endphp
+      </div>
 
       @if (!empty($lesson_subindex['items']))
         <nav class="bg-morado4/90 not-prose mt-12 rounded-sm px-6 py-5 font-sans text-base"

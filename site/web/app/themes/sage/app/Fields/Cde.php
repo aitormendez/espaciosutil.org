@@ -30,7 +30,7 @@ class Cde extends Field
             ])
             ->addTrueFalse('active_lesson', [
                 'label' => 'Lección activa',
-                'instructions' => 'Desactívalo para ocultar el enlace en el índice y marcar la lección como pendiente.',
+                'instructions' => 'Desactívalo para mostrar la lección sin enlace en el índice y en la miga de pan, marcándola como pendiente u organizativa.',
                 'default_value' => 1,
                 'ui' => 1,
                 'ui_on_text' => 'Activa',
