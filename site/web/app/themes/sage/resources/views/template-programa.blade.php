@@ -27,6 +27,10 @@
       <section id="programa-metodo" class="mt-24">
         @include('partials.programa.block-4')
       </section>
+
+      <section id="programa-herramientas" class="mt-24">
+        @include('partials.programa.block-5')
+      </section>
     </div>
   @endwhile
 @endsection
