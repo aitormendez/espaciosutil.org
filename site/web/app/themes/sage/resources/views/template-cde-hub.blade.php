@@ -153,8 +153,8 @@
           </a>
         </div>
         <p class="text-gris2 mt-8 text-center text-lg font-light leading-relaxed">
-          Empieza gratis con una lección completa, accede a todo el contenido con la membresía o entra al Índice de
-          lecciones para orientarte.
+          Empieza con una lección gratuita, prueba la membresía gratis durante 7 días o entra al Índice de lecciones para
+          orientarte.
         </p>
       </div>
 
