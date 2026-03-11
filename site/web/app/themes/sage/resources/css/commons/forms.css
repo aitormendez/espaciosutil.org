@@ -1,22 +1,26 @@
+@utility btn-base {
+  --btn-bg: var(--color-morado5);
+  --btn-border: var(--color-gris2);
+  --btn-text: var(--color-gris1);
+  --btn-bg-hover: var(--color-sol);
+  --btn-border-hover: var(--color-sol);
+  --btn-text-hover: var(--color-gris5);
+
+  @apply inline-flex items-center justify-center gap-2 rounded-sm border px-4 pt-[8px] pb-[6px]
+         font-sans text-sm uppercase tracking-wider transition cursor-pointer;
+
+  background-color: var(--btn-bg);
+  border-color: var(--btn-border);
+  color: var(--btn-text);
+}
+
 @layer components {
   /* Base: clase reutilizable + submits nativos */
   :where(
     .btn,
     form :is(button[type='submit'], input[type='submit'], input[type='button'])
   ) {
-    --btn-bg: var(--color-morado5);
-    --btn-border: var(--color-gris2);
-    --btn-text: var(--color-gris1);
-    --btn-bg-hover: var(--color-sol);
-    --btn-border-hover: var(--color-sol);
-    --btn-text-hover: var(--color-gris5);
-
-    @apply inline-flex items-center justify-center gap-2 rounded-sm border px-4 pt-[8px] pb-[6px]
-           font-sans text-sm uppercase tracking-wider transition cursor-pointer;
-
-    background-color: var(--btn-bg);
-    border-color: var(--btn-border);
-    color: var(--btn-text);
+    @apply btn-base;
   }
 
   :where(

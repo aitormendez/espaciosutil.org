@@ -272,6 +272,158 @@ function is_pmpro_core_page(int $pageId = 0): bool
 }
 
 /**
+ * Resolve runtime URLs used inside PMPro account messages.
+ */
+function cde_membership_placeholder_links(): array
+{
+    $accountUrl = function_exists('pmpro_url')
+        ? pmpro_url('account')
+        : home_url('/cuenta-de-membresia/');
+
+    $links = [
+        'ENLACE_HUB' => [
+            'href' => get_permalink((int) (get_page_by_path('curso-de-desarrollo-espiritual')?->ID ?? 0))
+                ?: home_url('/curso-de-desarrollo-espiritual/'),
+            'label' => __('Ir al hub', 'sage'),
+        ],
+        'ENLACE_INDICE_DE_LECCIONES' => [
+            'href' => get_permalink((int) (get_page_by_path('indice-de-lecciones')?->ID ?? 0))
+                ?: home_url('/indice-de-lecciones/'),
+            'label' => __('Ver índice', 'sage'),
+        ],
+        'ENLACE_LECCION_INICIO' => [
+            'href' => home_url('/lecciones-del-cde/urantia/que-es-el-libro-de-urantia/'),
+            'label' => __('Ver lección', 'sage'),
+        ],
+        'ENLACE_TELEGRAM' => [
+            'href' => 'https://t.me/+RJCRMR-axzzgR2Ej',
+            'label' => __('Unirme a Telegram', 'sage'),
+            'target' => '_blank',
+            'rel' => 'noopener noreferrer',
+        ],
+        'ENLACE_CUENTA' => [
+            'href' => $accountUrl,
+            'label' => __('Abrir tu cuenta', 'sage'),
+        ],
+    ];
+
+    return apply_filters('sage/cde_membership_placeholder_links', $links);
+}
+
+/**
+ * Replace editorial PMPro placeholders with runtime links for the current environment.
+ */
+function replace_cde_membership_placeholders(string $message): string
+{
+    $links = cde_membership_placeholder_links();
+
+    foreach ($links as $token => $link) {
+        $href = esc_url((string) ($link['href'] ?? ''));
+        $label = esc_html((string) ($link['label'] ?? $href));
+
+        if ($href === '') {
+            continue;
+        }
+
+        $attributes = sprintf('href="%s"', $href);
+
+        if (! empty($link['target'])) {
+            $attributes .= sprintf(' target="%s"', esc_attr((string) $link['target']));
+        }
+
+        if (! empty($link['rel'])) {
+            $attributes .= sprintf(' rel="%s"', esc_attr((string) $link['rel']));
+        }
+
+        $anchor = sprintf('<a %s>%s</a>', $attributes, $label);
+        $message = str_replace(sprintf('[%s]', $token), $anchor, $message);
+    }
+
+    return $message;
+}
+
+/**
+ * Render PMPro account level message with theme placeholder replacements.
+ *
+ * PMPro stores the message as editable HTML in level meta. We keep that editorial
+ * workflow and only swap placeholder tokens for environment-aware links at render time.
+ */
+function render_cde_membership_account_level_message(object $level): void
+{
+    $message = get_pmpro_membership_level_meta((int) $level->id, 'membership_account_message', true);
+
+    if (! is_string($message) || trim($message) === '') {
+        return;
+    }
+
+    $message = replace_cde_membership_placeholders($message);
+    ?>
+    <div class="<?php echo esc_attr(pmpro_get_element_class('pmpro_account-membership-message')); ?>">
+        <?php echo wpautop(wp_kses_post($message)); ?>
+    </div>
+    <?php
+}
+
+/**
+ * Replace CDE placeholders inside PMPro email template variables.
+ */
+function replace_cde_membership_placeholders_in_pmpro_email_data($data, $email)
+{
+    if (! is_array($data)) {
+        return $data;
+    }
+
+    $message = $data['membership_level_confirmation_message'] ?? null;
+
+    if (is_string($message) && trim($message) !== '') {
+        $data['membership_level_confirmation_message'] = replace_cde_membership_placeholders($message);
+    }
+
+    return $data;
+}
+
+/**
+ * Replace CDE placeholders in the PMPro checkout confirmation page.
+ */
+function replace_cde_membership_placeholders_in_pmpro_confirmation_message(string $message): string
+{
+    if (trim($message) === '') {
+        return $message;
+    }
+
+    return replace_cde_membership_placeholders($message);
+}
+
+add_action('after_setup_theme', function () {
+    if (! function_exists('pmpro_display_member_account_level_message')) {
+        return;
+    }
+
+    remove_action(
+        'pmpro_membership_account_after_level_card_content',
+        'pmpro_display_member_account_level_message'
+    );
+
+    add_action(
+        'pmpro_membership_account_after_level_card_content',
+        __NAMESPACE__ . '\\render_cde_membership_account_level_message'
+    );
+}, 30);
+
+add_filter(
+    'pmpro_email_data',
+    __NAMESPACE__ . '\\replace_cde_membership_placeholders_in_pmpro_email_data',
+    20,
+    2
+);
+
+add_filter(
+    'pmpro_confirmation_message',
+    __NAMESPACE__ . '\\replace_cde_membership_placeholders_in_pmpro_confirmation_message',
+    20
+);
+
+/**
  * Register the theme sidebars.
  *
  * @return void

@@ -1,146 +1,374 @@
 :root {
   --pmpro--base--border-radius: 3px;
-  /* --pmpro--base--spacing--small: 12px; */
-  /* --pmpro--base--spacing--medium: 18px; */
-  /* --pmpro--base--spacing--large: 36px; */
   --pmpro--color--accent: var(--color-morado2);
   --pmpro--color--base: var(--color-morado4);
-  /* --pmpro--color--base-2: #ededed; */
   --pmpro--color--contrast: var(--color-gris1);
   --pmpro--color--border: var(--color-gris3);
   --pmpro--color--border--variation: var(--color-gris3);
-  /* --pmpro--color--info-background: #d9edf7; */
-  /* --pmpro--color--info-border: #bce8f1; */
-  /* --pmpro--color--info-text: #31708f; */
-  /* --pmpro--color--info-link: #245269; */
   --pmpro--color--success-background: var(--color-morado2);
   --pmpro--color--success-border: var(--color-morado2);
   --pmpro--color--success-text: var(--color-morado4);
-  /* --pmpro--color--success-link: #2b542c; */
-  /* --pmpro--color--error-background: #f8d7da; */
-  /* --pmpro--color--error-border: #f5c6cb; */
-  /* --pmpro--color--error-text: #721c24; */
-  /* --pmpro--color--error-link: #843534; */
-  /* --pmpro--color--alert-background: #fff8e0; */
-  /* --pmpro--color--alert-border: #ffeeba; */
-  /* --pmpro--color--alert-text: #6c5101; */
-  /* --pmpro--color--alert-link: #66512c; */
-  /* --pmpro--color--alert2-background: #ffecd9; */
-  /* --pmpro--color--alert2-border: #ffddb1; */
-  /* --pmpro--color--alert2-text: #995d1d; */
-  /* --pmpro--color--alert2-link: #a65e3a; */
 }
 
 @layer components {
   .pmpro,
   .prose .pmpro {
-    @apply font-sans leading-[1.2em];
+    @apply space-y-10 font-sans leading-[1.2em] text-gris1;
   }
 
-  .pmpro_btn-cancel:hover {
-    @apply !bg-negro;
+  .pmpro_section {
+    @apply space-y-4;
+  }
+
+  .pmpro_font-small {
+    @apply text-sm leading-relaxed text-white/65;
+  }
+
+  .pmpro_font-large {
+    @apply text-2xl md:text-3xl;
+  }
+
+  .pmpro_font-x-large {
+    @apply text-3xl md:text-4xl;
+  }
+
+  .pmpro_section_title,
+  .pmpro_form_heading,
+  .pmpro_card_title {
+    @apply text-balance font-light text-3xl text-gris1 md:text-4xl mb-6 text-center;
+  }
+
+  .pmpro_card_title.pmpro_font-large,
+  .pmpro_form_heading.pmpro_font-large {
+    @apply text-2xl md:text-3xl;
+  }
+
+  .pmpro_card_title {
+    @apply flex flex-col items-center;
+    .pmpro_tag {
+      @apply mt-3 w-fit;
+    }
   }
 
   .pmpro_card {
-    @apply bg-morado4 p-4 text-base rounded-md text-gray-200;
+    @apply overflow-hidden rounded-md bg-negro/50 p-4 text-base text-gray-200;
+  }
 
-    .pmpro_card_title,
-    .pmpro_form_heading {
-      @apply !mt-0;
-    }
+  .pmpro_heading-with-avatar {
+    @apply flex items-center gap-3;
 
-    .pmpro_card_content {
-      @apply border-y py-6 mb-2 border-gray-700;
-
-      #pmpro_account-orders & {
-        @apply border-none;
-      }
+    img {
+      @apply h-12 w-12 rounded-full border border-white/15 object-cover;
     }
   }
 
-  /* celdas (incluye el <th> de la 1ª columna del tbody) */
-  .pmpro_table th,
-  .pmpro_table td {
-    @apply py-3 px-4 !border-white/40;
+  .pmpro_section_content {
+    @apply space-y-6;
+
+    .pmpro_card_title {
+      @apply text-left;
+    }
   }
 
-  /* ——— Perfil: inputs y botones ——— */
-  #member-profile-edit {
-    /* grid de campos (respeta pmpro_cols-2 del HTML) */
+  .pmpro_card_content {
+    @apply space-y-5 border-y border-gray-700 py-6;
+  }
+
+  .pmpro_card_actions {
+    @apply flex flex-wrap items-center gap-2 pt-4 text-sm uppercase tracking-[0.08em];
+
+    a {
+      @apply inline-flex items-center justify-center rounded-sm border px-4 pb-[6px] pt-[8px]
+             bg-morado4/10 no-underline transition;
+      border-color: var(--pmpro--color--border);
+      color: var(--pmpro--color--contrast);
+    }
+
+    a:hover {
+      @apply bg-black/30 text-gris1;
+    }
+
+    .pmpro_btn-print {
+      @apply btn-base no-underline mb-6;
+    }
+
+    .pmpro_btn-print:hover {
+      background-color: var(--btn-bg-hover);
+      border-color: var(--btn-border-hover);
+      color: var(--btn-text-hover);
+    }
+
+    .pmpro_btn-print svg {
+      @apply h-4 w-4 shrink-0;
+    }
+  }
+
+  .pmpro_card_action_separator {
+    @apply text-white/25;
+  }
+
+  .pmpro_list {
+    @apply m-0 list-none space-y-3 p-0;
+  }
+
+  .pmpro_list-plain {
+    @apply list-none;
+  }
+
+  .pmpro_list-with-labels {
+    @apply grid gap-4;
+
+    &.pmpro_cols-2 {
+      @apply md:grid-cols-2;
+    }
+
+    &.pmpro_cols-3 {
+      @apply xl:grid-cols-3;
+    }
+  }
+
+  .pmpro_list.pmpro_list-plain.pmpro_list-with-labels .pmpro_list_item {
+    @apply flex flex-col gap-2 rounded-sm border border-white/10 bg-black/10;
+  }
+
+  .pmpro_list_item_label {
+    @apply text-xs uppercase tracking-[0.12em] text-white/55;
+  }
+
+  .pmpro_list_item_value {
+    @apply text-base text-gris1;
+  }
+
+  .pmpro_account-membership-message {
+    @apply mt-6 space-y-4 border-t border-white/10 pt-6 text-[0.98rem] text-white/80 prose-cde;
+
+    ul {
+      @apply m-0 list-disc space-y-2 pl-5;
+    }
+  }
+
+  .pmpro_message {
+    @apply mb-6 rounded-sm border bg-morado4/20 px-4 py-3 text-sm;
+    border-color: var(--pmpro--color--border);
+    color: var(--pmpro--color--contrast);
+
+    &.pmpro_error,
+    &.pmpro_alert {
+      @apply border-red-500/50 bg-red-500/10 text-red-100;
+    }
+
+    &.pmpro_success {
+      @apply border-morado2/60 bg-morado2/15 text-gris1;
+    }
+  }
+
+  .pmpro_section[id^='pmpro_confirmation-'] {
+    @apply rounded-md bg-negro/50 px-5 py-6 md:px-8 md:py-8 my-6 prose-cde;
+    border-color: var(--pmpro--color--border);
+  }
+
+  .pmpro_tag {
+    @apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium uppercase tracking-[0.12em];
+  }
+
+  .pmpro_tag-success,
+  .pmpro_tag-discount-code {
+    @apply border-morado2/70 bg-morado2/15 text-gris1;
+  }
+
+  .pmpro_form {
+    @apply space-y-8;
+
+    .pmpro_form_fieldset {
+      @apply m-0 border-0 p-0;
+    }
+
+    .pmpro_form_legend {
+      @apply mb-6 block w-full p-0;
+    }
+
     .pmpro_form_fields {
-      @apply grid gap-6 md:grid-cols-2;
+      @apply grid gap-6;
     }
 
     .pmpro_form_field {
       @apply space-y-2;
     }
+
     .pmpro_form_label {
-      @apply block text-sm text-white/70;
-    }
-    .pmpro_form_hint {
-      @apply text-sm text-white/60 mt-1;
+      @apply block text-sm uppercase tracking-[0.08em] text-white/70;
     }
 
-    /* inputs base */
+    .pmpro_form_hint {
+      @apply mt-1 text-sm text-white/60;
+    }
+
+    .pmpro_form_fields-inline {
+      @apply flex flex-col gap-3 sm:flex-row sm:items-end;
+    }
+
     .pmpro_form_input,
+    select,
+    textarea,
     input[type='text'],
     input[type='email'],
     input[type='password'],
     input[type='tel'],
     input[type='url'],
-    input[type='number'],
-    select,
-    textarea {
+    input[type='number'] {
       @apply w-full rounded-md border bg-transparent px-3 py-2 text-base
-             placeholder-white/40 outline-none transition
-             focus:ring-2 focus:ring-morado2/40;
+             placeholder-white/40 outline-none transition focus:ring-2
+             focus:ring-morado2/40;
       border-color: var(--pmpro--color--border);
       color: var(--pmpro--color--contrast);
     }
 
-    /* readonly (email en admin) */
     input[readonly] {
-      @apply opacity-80 cursor-not-allowed;
-      background: color-mix(
-        in oklab,
-        var(--pmpro--color--base) 6%,
-        transparent
-      );
+      @apply bg-morado4/[0.06] cursor-not-allowed opacity-80;
     }
 
-    /* contenedor de botones */
+    .pmpro_form_field-password-toggle {
+      @apply mt-2;
+    }
+
     .pmpro_form_submit {
-      @apply mt-6 flex flex-wrap items-center gap-3;
+      @apply mt-8 flex flex-wrap items-center gap-3;
     }
+  }
 
-    /* botón base */
-    .pmpro_btn {
-      @apply inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium
-             border transition focus:outline-none focus:ring-2 focus:ring-morado2/40;
-      border-color: var(--pmpro--color--border);
-      color: var(--pmpro--color--contrast);
-      background: color-mix(
-        in oklab,
-        var(--pmpro--color--base) 10%,
-        transparent
-      );
-    }
-    .pmpro_btn:hover {
+  .pmpro_cols-2 {
+    @apply grid gap-6 md:grid-cols-2;
+  }
+
+  .pmpro_btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm
+           bg-morado4/10 font-medium transition focus:outline-none focus:ring-2 focus:ring-morado2/40;
+    border-color: var(--pmpro--color--border);
+    color: var(--pmpro--color--contrast);
+
+    &:hover {
       @apply bg-black/30;
     }
 
-    /* primario (enviar) */
-    .pmpro_btn-submit-update-profile {
+    &.pmpro_btn-submit,
+    &.pmpro_btn-submit-change-password,
+    &.pmpro_btn-submit-checkout,
+    &.pmpro_btn-submit-discount-code,
+    &.pmpro_btn-submit-update-profile {
       @apply border-morado2 bg-morado2 text-morado4;
     }
-    .pmpro_btn-submit-update-profile:hover {
+
+    &.pmpro_btn-submit:hover,
+    &.pmpro_btn-submit-change-password:hover,
+    &.pmpro_btn-submit-checkout:hover,
+    &.pmpro_btn-submit-discount-code:hover,
+    &.pmpro_btn-submit-update-profile:hover {
       @apply bg-morado2/90;
     }
 
-    /* cancelar (outline) */
+    &.pmpro_btn-plain {
+      @apply border-0 bg-transparent px-0 py-0 text-sm font-medium normal-case tracking-normal underline underline-offset-4;
+    }
+
+    &.pmpro_btn-plain:hover {
+      @apply bg-transparent text-gris1;
+    }
+  }
+
+  .pmpro_hidden {
+    @apply hidden;
+  }
+
+  .pmpro_table {
+    @apply w-full border-collapse text-left;
+
+    th,
+    td {
+      @apply px-4 py-3 align-top !border-white/40;
+    }
+
+    thead th {
+      @apply text-sm uppercase tracking-[0.08em] text-white/70;
+    }
+
+    tbody th {
+      @apply font-medium text-gris1;
+    }
+  }
+
+  .pmpro_level_name_text,
+  .pmpro_level_description_text,
+  .pmpro_level_cost_text,
+  .pmpro_level_expiration_text {
+    @apply text-[0.98rem]  text-white/80;
+  }
+
+  .pmpro_level_description_text > :first-child,
+  .pmpro_level_cost_text > :first-child,
+  .pmpro_level_expiration_text > :first-child {
+    @apply mt-0;
+  }
+
+  .pmpro_level_description_text > :last-child,
+  .pmpro_level_cost_text > :last-child,
+  .pmpro_level_expiration_text > :last-child {
+    @apply mb-0;
+  }
+
+  .pmpro_level_discount_applied {
+    @apply text-sm text-white/70;
+  }
+
+  #pmpro_level_cost {
+    @apply mt-6 space-y-4 border-t border-white/10 pt-6;
+  }
+
+  #pmpro_account_loggedin,
+  #pmpro_processing_message {
+    @apply text-sm  text-white/70;
+  }
+
+  .pmpro_table {
+    @apply min-w-full text-sm;
+  }
+
+  .pmpro_card_content {
+    @apply overflow-x-auto;
+  }
+
+  .pmpro_table {
+    @apply min-w-full text-sm;
+
+    th {
+      @apply border-b !border-white/10 align-middle;
+    }
+
+    td {
+      @apply border-b !border-white/10 align-middle;
+    }
+  }
+
+  #pmpro_pricing_fields {
+    .pmpro_card_actions button:not(.pmpro_btn) {
+      @apply border-0 bg-transparent px-0 py-0 text-sm normal-case tracking-normal underline underline-offset-4;
+      color: var(--pmpro--color--contrast);
+    }
+
+    .pmpro_card_actions button:not(.pmpro_btn):hover {
+      @apply text-gris1;
+    }
+  }
+
+  #member-profile-edit,
+  #change-password {
+    .pmpro_form_submit {
+      @apply mt-6;
+    }
+
     .pmpro_btn-cancel {
       @apply bg-transparent;
     }
+
     .pmpro_btn-cancel:hover {
       @apply bg-white/10;
     }
@@ -150,75 +378,208 @@
     .pmpro_card_content {
       @apply border-none;
     }
+
+    .pmpro_form_submit {
+      @apply mt-4;
+    }
+
+    .pmpro_btn-submit {
+      @apply border-red-600 bg-red-600 text-white;
+    }
+
+    .pmpro_btn-submit:hover {
+      @apply bg-red-500;
+    }
+
+    .pmpro_btn-cancel {
+      @apply bg-transparent;
+    }
+
+    .pmpro_btn-cancel:hover {
+      @apply !bg-white/10;
+    }
   }
 
-  #pmpro_order_list {
-    /* quita el borde superior/inf de la card que se mezclaba con la tabla */
-    .pmpro_card_content {
-      @apply border-none;
-    }
-
-    /* tabla base */
-    .pmpro_table {
-      @apply text-sm;
-    }
-
-    /* cabecera */
-    .pmpro_table thead th {
-      @apply text-white/80;
-    }
+  #pmpro_order_single-items h3 {
+    @apply text-center mb-6;
   }
 
   .pmpro_actions_nav {
     @apply py-2 text-base;
   }
-
-  /* Cancelación de membresía */
-  #pmpro_cancel {
-    /* separación y layout del área de acciones */
-    .pmpro_form_submit {
-      @apply mt-4 flex flex-wrap items-center gap-3;
-    }
-
-    /* botón base (sólo en esta página) */
-    .pmpro_btn {
-      @apply inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium
-             border no-underline transition;
-      border-color: var(--pmpro--color--border);
-      color: var(--pmpro--color--contrast);
-      background: color-mix(
-        in oklab,
-        var(--pmpro--color--base) 8%,
-        transparent
-      );
-    }
-    .pmpro_btn:hover {
-      @apply bg-black/30;
-    }
-
-    /* primario/destructivo: “Yes, cancel this membership” */
-    .pmpro_btn-submit {
-      @apply border-red-600 bg-red-600 text-white;
-    }
-    .pmpro_btn-submit:hover {
-      @apply bg-red-500;
-    }
-
-    /* secundario: “No, keep this membership” */
-    .pmpro_btn-cancel {
-      @apply bg-transparent;
-    }
-    /* hay un !important global: forzamos el hover aquí */
-    .pmpro_btn-cancel:hover {
-      @apply !bg-white/10;
-    }
-  }
+}
+.pmpro_table_cancel-action a {
+  @apply btn-base border-b;
 }
 
-/* @layer utilities {
-  .pmpro {
-    h2 {
-      @apply text-5xl;
-    }
+/* PMPro base.css llega sin @layer y resetea el padding de los li "plain".
+   Este override también va sin capa para competir al mismo nivel. */
+.pmpro_list.pmpro_list-plain.pmpro_list-with-labels .pmpro_list_item {
+  padding: calc(var(--spacing) * 4);
+}
+
+/* En el detalle del pedido no queremos el margen vertical automático entre items. */
+#pmpro_order_single .pmpro_list .pmpro_list_item:not(:last-child) {
+  margin-bottom: 0;
+}
+
+@media print {
+  :root {
+    --pmpro--color--accent: #000;
+    --pmpro--color--base: #fff;
+    --pmpro--color--contrast: #000;
+    --pmpro--color--border: #d1d5db;
+    --pmpro--color--border--variation: #d1d5db;
   }
-} */
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  #footer {
+    display: none !important;
+  }
+
+  #banner {
+    @apply static w-full border-b border-gray-300 bg-transparent text-black;
+  }
+
+  #brand {
+    @apply justify-start;
+  }
+
+  .brand-link {
+    @apply p-0;
+  }
+
+  #simbolo {
+    @apply my-0 mr-4 w-12;
+  }
+
+  #logotipo svg {
+    color: #000 !important;
+  }
+
+  #nav,
+  #burguer,
+  #submenu-bg,
+  #cde,
+  #linea {
+    display: none !important;
+  }
+
+  .page-header {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .page-header > .w-full.max-w-5xl {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .pmpro,
+  .pmpro * {
+    color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  .pmpro {
+    @apply space-y-0;
+    background: #fff !important;
+  }
+
+  .pmpro_section,
+  .pmpro_card,
+  .pmpro_card_content,
+  .pmpro_list_item,
+  .pmpro_message,
+  .pmpro_tag {
+    background: #fff !important;
+  }
+
+  .pmpro_card,
+  .pmpro_list_item,
+  .pmpro_message,
+  .pmpro_tag,
+  .pmpro_table th,
+  .pmpro_table td {
+    border-color: #d1d5db !important;
+  }
+
+  .pmpro_card {
+    @apply rounded-none p-0;
+    border: 0 !important;
+  }
+
+  .pmpro_card_content {
+    @apply space-y-6 py-0;
+    border: 0 !important;
+    overflow: visible !important;
+  }
+
+  .pmpro_card_actions,
+  .pmpro_btn-print {
+    display: none !important;
+  }
+
+  .pmpro_card_title,
+  .pmpro_section_title,
+  .pmpro_form_heading,
+  .pmpro_font-x-large {
+    @apply mb-4 text-2xl;
+    color: #000 !important;
+  }
+
+  .pmpro_font-large {
+    @apply text-xl;
+    color: #000 !important;
+  }
+
+  .pmpro_font-small,
+  .pmpro_list_item_label {
+    color: #4b5563 !important;
+  }
+
+  .pmpro_tag {
+    @apply mt-2 inline-flex px-2 py-1 text-xs;
+  }
+
+  .pmpro_list.pmpro_list-plain.pmpro_list-with-labels {
+    @apply grid-cols-2 gap-4;
+  }
+
+  .pmpro_list.pmpro_list-plain.pmpro_list-with-labels .pmpro_list_item {
+    @apply gap-1 p-3;
+    break-inside: avoid;
+  }
+
+  .pmpro_table {
+    @apply w-full text-sm;
+    border-collapse: collapse !important;
+  }
+
+  .pmpro_table thead {
+    display: table-header-group;
+  }
+
+  .pmpro_table tr,
+  .pmpro_list_item,
+  #pmpro_order_single-items {
+    break-inside: avoid;
+  }
+
+  .pmpro_table th,
+  .pmpro_table td {
+    @apply px-3 py-2 align-top;
+    background: #fff !important;
+  }
+
+  a,
+  a:visited {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+}

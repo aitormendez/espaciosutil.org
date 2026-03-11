@@ -137,7 +137,7 @@
 }
 
 @utility prose-cde {
-  @apply font-sans font-light leading-relaxed text-gris2;
+  @apply font-sans font-light leading-relaxed text-white/60;
   font-size: 1rem;
 
   & > * + * {
