@@ -276,6 +276,93 @@ La página de suscripción se ha rehecho como landing editorial dentro de `site/
 - La sección FAQ usa `faq-item.blade.php`, basada en `<details>/<summary>` sin JS adicional.
 - El cierre de la landing repite los dos CTAs principales del hero para reforzar la conversión al final de la página.
 
+### Trial gratuito personalizado en PMPro (sin add-on)
+
+Se ha implementado un periodo de prueba gratuito propio para evitar el coste del add-on `Subscription Delays`.
+
+- Archivo principal: `site/web/app/mu-plugins/espaciosutil-pmpro-trials.php`.
+- La configuración actual vive en código, en `espaciosutil_pmpro_trial_configs()`.
+- La prueba está vinculada al usuario, no a la suscripción.
+- Se usa la user meta `espaciosutil_pmpro_trial_used` para recordar si una cuenta ya consumió su prueba.
+- Estado actual:
+  - nivel mensual PMPro `ID 11`: `7` días gratis.
+  - niveles semestral (`ID 12`) y anual (`ID 13`): sin trial personalizado.
+
+#### Cómo funciona técnicamente
+
+- Se usa `pmpro_checkout_order` para modificar el pedido solo cuando PMPro ya conoce el `user_id` real del checkout (incluyendo cuentas recién creadas).
+- Para un usuario elegible en el nivel mensual:
+  - `initial_payment` se fuerza a `0`.
+  - `trial_amount` y `trial_limit` se fuerzan a `0` para no mezclar este trial personalizado con el trial nativo de PMPro.
+  - se asigna `profile_start_date = now + 7 days`.
+  - el pedido queda con `subtotal = 0`, `tax = 0`, `total = 0`.
+- Para un usuario que ya consumió la prueba:
+  - no se aplica ninguna modificación,
+  - el checkout sigue con el precio normal del plan.
+- PMPro usa `profile_start_date` para calcular el retraso del primer cobro en los gateways. En Stripe esto acaba traducido a `trial_period_days` al crear la suscripción.
+- El acceso se concede desde el alta, pero el primer cargo de Stripe queda diferido hasta el final del trial.
+- Tras un checkout correcto con trial aplicado, `pmpro_after_checkout` marca la user meta `espaciosutil_pmpro_trial_used = 1`.
+
+#### Copy visible al usuario
+
+- Checkout PMPro:
+  - se filtra `pmpro_level_cost_text` para mostrar un mensaje explícito del estilo, pero solo a usuarios todavía elegibles:
+    - `Incluye 7 dias de prueba gratuita. El primer cobro sera de 5.00€ al mes al terminar la prueba.`
+- Landing de suscripción:
+  - `pricing-table.blade.php` detecta si un nivel tiene trial configurado y si el usuario actual sigue siendo elegible.
+  - `pricing-package.blade.php` y `pricing-plan-card.blade.php` muestran una nota extra bajo el precio del plan mensual.
+  - `template-suscripcion.blade.php` refuerza el mensaje en el encabezado de la sección de planes.
+
+#### Limitaciones y decisiones deliberadas
+
+- La configuración del trial no se gestiona desde el admin de PMPro: está codificada por nivel en el mu-plugin.
+- Este enfoque está pensado para Stripe y para el caso “acceso inmediato + primer cobro diferido”.
+- El criterio de “solo una vez” depende de la cuenta WordPress, no del email escrito libremente en una pantalla externa.
+- No se ha aplicado a semestral/anual para evitar regalar por error periodos demasiado largos.
+- Si en el futuro cambia el ID del nivel mensual, hay que actualizar `espaciosutil_pmpro_trial_configs()`.
+
+#### Verificación determinista antes de producción
+
+Hay dos capas de verificación recomendadas:
+
+1. Verificación de configuración/lógica vía `wp-cli`:
+   - Script: `site/scripts/verify-pmpro-trial.php`
+   - Ejecución desde la raíz `site/`:
+   - `wp eval-file scripts/verify-pmpro-trial.php`
+   - Este script falla con código `1` si:
+     - el trial del nivel mensual no existe,
+     - el retraso no es de 7 días,
+     - un usuario nuevo no recibe `initial_payment = 0`,
+     - un usuario marcado como “trial usado” vuelve a recibir el trial,
+     - el texto de coste no cambia según elegibilidad,
+     - o el nivel semestral se ve alterado por error.
+
+2. Verificación de integración en Stripe test mode:
+   - poner PMPro/Stripe en modo pruebas,
+   - crear una suscripción real al nivel mensual con tarjeta de test,
+   - comprobar en Stripe que la suscripción queda creada con periodo de prueba y sin cobro inmediato,
+   - comprobar en WordPress:
+     - que el usuario obtiene la membresía nada más completar checkout,
+     - que la orden inicial queda a `0`,
+     - que no aparecen errores de webhook ni de renovación.
+
+#### Procedimiento recomendado de preproducción
+
+Antes de desplegar a producción:
+
+1. Ejecutar `wp eval-file scripts/verify-pmpro-trial.php`.
+2. Hacer un checkout completo en test mode con Stripe sobre el nivel mensual.
+3. Confirmar en Stripe Dashboard:
+   - suscripción creada,
+   - `trial end` en la fecha esperada,
+   - ningún cargo capturado en el alta.
+4. Confirmar en WordPress/PMPro:
+   - acceso concedido,
+   - texto correcto en checkout/confirmación,
+   - cuenta de miembro operativa,
+   - sin efecto colateral en semestral/anual.
+5. Solo después repetir el mismo flujo en staging con credenciales equivalentes al entorno final.
+
 ### Responsive y layout
 
 - Se ajustó la responsividad del banner global y de la landing de suscripción:

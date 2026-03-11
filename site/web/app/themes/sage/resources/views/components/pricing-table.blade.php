@@ -201,6 +201,7 @@
 
                 $groupName = isset($levelGroup->name) ? trim((string) $levelGroup->name) : '';
                 $name = $groupName !== '' ? $groupName : ($base->name ?? '');
+                $subtitle = 'Empieza con 7 días gratis en cualquier plan. El primer cobro se realiza al terminar la prueba.';
                 $monthlyDescription = $mLevel && isset($mLevel->description) ? (string) $mLevel->description : '';
                 $semiDescription = $sLevel && isset($sLevel->description) ? (string) $sLevel->description : '';
                 $yearlyDescription = $yLevel && isset($yLevel->description) ? (string) $yLevel->description : '';
@@ -208,6 +209,16 @@
                 $priceMonthly = $extractRecurringAmount($mLevel, 'month');
                 $priceSemi = $extractRecurringAmount($sLevel, 'semi');
                 $priceYearly = $extractRecurringAmount($yLevel, 'year');
+                $monthlyPriceNote = '';
+
+                if ($mLevel && function_exists('espaciosutil_pmpro_should_show_trial_for_level') && espaciosutil_pmpro_should_show_trial_for_level($mLevel)) {
+                    $monthlyTrialLabel = function_exists('espaciosutil_pmpro_get_trial_label')
+                        ? espaciosutil_pmpro_get_trial_label((int) $mLevel->id)
+                        : '';
+                    if ($monthlyTrialLabel !== '') {
+                        $monthlyPriceNote = $monthlyTrialLabel . '. Primer cobro al terminar la prueba.';
+                    }
+                }
 
                 $allowMonthly = $isSignupAllowed($mLevel);
                 $allowSemi = $isSignupAllowed($sLevel);
@@ -270,10 +281,10 @@
                 }
             @endphp
 
-            <x-pricing-package :id="$base->id" :name="$name" :monthly-description="$monthlyDescription"
+            <x-pricing-package :id="$base->id" :name="$name" :subtitle="$subtitle" :monthly-description="$monthlyDescription"
                 :semi-description="$semiDescription" :yearly-description="$yearlyDescription" :price-monthly="$priceMonthly"
                 :price-semi="$priceSemi" :price-yearly="$priceYearly" :checkout-monthly-url="$checkoutMonthlyUrl"
-                :checkout-semi-url="$checkoutSemiUrl" :checkout-yearly-url="$checkoutYearlyUrl"
+                :checkout-semi-url="$checkoutSemiUrl" :checkout-yearly-url="$checkoutYearlyUrl" :monthly-price-note="$monthlyPriceNote"
                 :monthly-label="$monthlyLabel" :semi-label="$semiLabel" :yearly-label="$yearlyLabel"
                 :monthly-subscribed="$monthlySubscribed" :semi-subscribed="$semiSubscribed"
                 :yearly-subscribed="$yearlySubscribed" />

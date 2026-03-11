@@ -3,6 +3,7 @@
     'descriptionHtml' => '',
     'priceValue' => null,
     'priceSuffix' => '',
+    'priceNote' => '',
     'savingsPercent' => null,
     'checkoutUrl' => null,
     'buttonText' => '',
@@ -15,6 +16,7 @@
   $descriptionHtml = trim((string) $descriptionHtml);
   $hasPrice = !is_null($priceValue) && $priceValue !== '';
   $formattedPrice = $hasPrice ? number_format((float) $priceValue, 2) : null;
+  $priceNote = trim((string) $priceNote);
 @endphp
 
 <div class="bg-negro/70 flex h-full flex-col justify-between rounded-lg pb-4">
@@ -28,6 +30,11 @@
         @if (!is_null($savingsPercent) && (int) $savingsPercent > 0)
           <div class="mt-2 inline-block rounded-sm border border-red-600 px-3 font-thin text-red-600">
             Ahorra {{ (int) $savingsPercent }}%
+          </div>
+        @endif
+        @if ($priceNote !== '')
+          <div class="mx-4 mt-2 inline-block rounded-sm border border-red-600 p-2 text-sm font-thin text-red-600">
+            {{ $priceNote }}
           </div>
         @endif
       </div>

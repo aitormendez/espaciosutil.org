@@ -1,11 +1,15 @@
 @props([
     'id' => 0,
     'name' => '',
+    'subtitle' => '',
     'monthlyDescription' => '',
     'semiDescription' => '',
     'yearlyDescription' => '',
     'priceMonthly' => null,
     'priceYearly' => null,
+    'monthlyPriceNote' => '',
+    'semiPriceNote' => '',
+    'yearlyPriceNote' => '',
     'checkoutMonthlyUrl' => null,
     'checkoutYearlyUrl' => null,
     'monthlyLabel' => null,
@@ -79,6 +83,7 @@
           'descriptionHtml' => $monthlyDescriptionHtml,
           'priceValue' => $priceMonthly,
           'priceSuffix' => '€/mes',
+          'priceNote' => $monthlyPriceNote,
           'savingsPercent' => null,
           'checkoutUrl' => $checkoutMonthlyUrl,
           'buttonText' => $monthlyText,
@@ -95,6 +100,7 @@
           'descriptionHtml' => $semiDescriptionHtml,
           'priceValue' => $priceSemi,
           'priceSuffix' => '€/6 meses',
+          'priceNote' => $semiPriceNote,
           'savingsPercent' => $semiSavingsPercent,
           'checkoutUrl' => $checkoutSemiUrl,
           'buttonText' => $semiText,
@@ -111,6 +117,7 @@
           'descriptionHtml' => $yearlyDescriptionHtml,
           'priceValue' => $priceYearly,
           'priceSuffix' => '€/año',
+          'priceNote' => $yearlyPriceNote,
           'savingsPercent' => $savingsPercent,
           'checkoutUrl' => $checkoutYearlyUrl,
           'buttonText' => $yearlyText,
@@ -126,10 +133,13 @@
 
 <div class="pricing-package mx-auto mb-6 mt-10 flex max-w-4xl flex-col items-center rounded-lg bg-white/5 p-6">
   <h3 class="text-2xl font-semibold">{{ $name }}</h3>
+  @if ($subtitle !== '')
+    <p class="text-gris2 mt-3 max-w-2xl text-center text-base font-light leading-relaxed">{{ $subtitle }}</p>
+  @endif
 
   <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
     @foreach ($plans as $plan)
-      <x-pricing-plan-card :title="$plan['title']" :description-html="$plan['descriptionHtml']" :price-value="$plan['priceValue']" :price-suffix="$plan['priceSuffix']" :savings-percent="$plan['savingsPercent']"
+      <x-pricing-plan-card :title="$plan['title']" :description-html="$plan['descriptionHtml']" :price-value="$plan['priceValue']" :price-suffix="$plan['priceSuffix']" :price-note="$plan['priceNote']" :savings-percent="$plan['savingsPercent']"
         :checkout-url="$plan['checkoutUrl']" :button-text="$plan['buttonText']" :button-aria="$plan['buttonAria']" :button-state="$plan['buttonState']" :button-subscribed="$plan['buttonSubscribed']" :button-state-class="$plan['buttonStateClass']" />
     @endforeach
   </div>

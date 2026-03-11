@@ -92,6 +92,15 @@
       ],
   ];
   $membership_account_url = function_exists('pmpro_url') ? pmpro_url('account') : home_url('/mi-cuenta/');
+  $monthly_trial_label = '';
+  if (function_exists('pmpro_getLevel') && function_exists('espaciosutil_pmpro_should_show_trial_for_level')) {
+      $monthly_level = pmpro_getLevel(11);
+      if ($monthly_level && espaciosutil_pmpro_should_show_trial_for_level($monthly_level)) {
+          $monthly_trial_label = function_exists('espaciosutil_pmpro_get_trial_label')
+              ? espaciosutil_pmpro_get_trial_label(11)
+              : '';
+      }
+  }
   $faq_items = [
       [
           'question' => '¿Puedo cancelar cuando quiera?',
@@ -142,7 +151,12 @@
       </div>
       <div id="planes" class="mx-auto mt-16 max-w-2xl px-6 md:px-0">
         <h2 class="text-gris1 mb-3 text-4xl font-light">Elige tu frecuencia de pago</h2>
-        <p class="text-gris2 font-light">Misma membresía, distinto ritmo de cobro.</p>
+        <p class="text-gris2 font-light">
+          Misma membresía, distinto ritmo de cobro.
+          @if ($monthly_trial_label !== '')
+            El plan mensual incluye {{ strtolower($monthly_trial_label) }}.
+          @endif
+        </p>
       </div>
       <x-pricing-table />
 

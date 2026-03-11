@@ -1,6 +1,7 @@
 @props([
     'href' => '#',
     'text' => '',
+    'microcopy' => '',
     'clases' => 'bg-morado5/90',
     'icon' => null,
     'iconClases' => 'h-14 w-14',
@@ -15,5 +16,8 @@
   {{ $text }}
   @if (!empty($icon))
     <x-dynamic-component :component="$icon" class="{{ $iconClases }}" />
+  @endif
+  @if (!empty($microcopy))
+    <span class="mt-2 text-center text-sm font-normal leading-snug opacity-85">{{ $microcopy }}</span>
   @endif
 </a>

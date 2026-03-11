@@ -142,7 +142,8 @@
           <x-cta href="{{ $free_lesson_url }}" text="Ver lección gratuita"
             clases="bg-cde hover:text-morado5 font-semibold text-gray-200" icon="tabler-eye-filled" />
           <x-cta href="{{ $membership_url }}" text="Suscripción"
-            clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200" icon="tabler-key-filled" />
+            microcopy="Prueba 7 días gratis" clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200"
+            icon="tabler-key-filled" />
         </div>
         <div class="mt-8 text-center">
           <a href="{{ $lesson_index_url }}"
@@ -234,7 +235,8 @@
         <x-cta href="{{ $free_lesson_url }}" text="Ver lección gratuita"
           clases="bg-cde hover:text-morado5 font-semibold text-gray-200" icon="tabler-eye-filled" />
         <x-cta href="{{ $membership_url }}" text="Suscripción"
-          clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200" icon="tabler-key-filled" />
+          microcopy="Prueba 7 días gratis" clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200"
+          icon="tabler-key-filled" />
         <x-cta href="{{ $lesson_index_url }}" text="Explorar series y lecciones"
           clases="bg-white/5 hover:text-morado5 font-semibold text-gray-500" icon="tabler-binary-tree-filled" />
         <x-cta href="{{ $telegram_url }}" text="Unirme a Telegram" target="_blank" rel="noopener noreferrer"
