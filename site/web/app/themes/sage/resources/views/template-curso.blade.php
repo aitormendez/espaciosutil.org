@@ -8,20 +8,23 @@
   @while (have_posts())
     @php
       the_post();
+      $hasEditorContent = trim((string) get_the_content()) !== '';
     @endphp
     @include('partials.page-header')
 
-    <div class="border-blanco bg-morado5/90 prose-cde flex justify-center border-t pb-12 pt-44">
-      <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
-        <div class="">
-          @php
-            the_content();
-          @endphp
+    @if ($hasEditorContent)
+      <div class="border-blanco bg-morado5/90 prose-cde flex justify-center border-t pb-12 pt-44">
+        <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
+          <div class="">
+            @php
+              the_content();
+            @endphp
+          </div>
         </div>
       </div>
-    </div>
+    @endif
 
-    <div id="contenido" class="bg-morado5/90 flex justify-center pb-20 font-sans">
+    <div id="contenido" class="bg-morado5/90 flex justify-center border-t border-white/30 pb-20 pt-20 font-sans">
       <div class="mx-auto w-full max-w-4xl px-6 md:flex md:space-x-12 md:px-0">
         <aside class="md:w-1/3">
           <h2 class="mb-6 font-sans text-2xl">Series</h2>
