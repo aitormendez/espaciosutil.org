@@ -14,10 +14,10 @@
 
     @if (!empty($cde_breadcrumb))
       <nav aria-label="Miga de pan"
-        class="not-prose bg-negro/80 leading- mb-6 flex w-full border-y px-6 py-4 text-left font-sans text-sm/4 font-light uppercase tracking-wide">
+        class="not-prose bg-negro/80 mb-6 flex w-full border-y px-6 py-4 text-left font-sans text-sm/4 font-light uppercase tracking-wide">
         <ol class="flex w-full flex-col items-start gap-2 md:flex-row md:flex-wrap md:gap-1">
           @foreach ($cde_breadcrumb as $index => $crumb)
-            <li class="flex gap-2 {{ $loop->last ? 'current' : '' }}">
+            <li class="{{ $loop->last ? 'current' : '' }} flex gap-2">
               @if ($index > 0)
                 <span class="text-gris3">&gt;</span>
               @endif
