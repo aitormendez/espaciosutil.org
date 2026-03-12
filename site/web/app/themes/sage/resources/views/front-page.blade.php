@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-  <div id="cosmos" class="hidden lg:block"></div>
-  <div class="loading-label absolute left-0 top-0 hidden h-screen w-full items-center justify-center p-6 lg:flex">
+  <div id="cosmos" class="hidden xl:block"></div>
+  <div class="loading-label absolute left-0 top-0 hidden h-screen w-full items-center justify-center p-6 xl:flex">
     <div
       class="bg-negro/80 border-blanco relative top-32 mx-auto rounded border p-6 text-center text-2xl font-thin md:top-40 md:text-3xl">
       Construyendo Sistema Sutil
