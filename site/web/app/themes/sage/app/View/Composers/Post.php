@@ -118,8 +118,8 @@ class Post extends Composer
 
         $breadcrumb = [
             [
-                'label' => 'Curso de Desarrollo Espiritual',
-                'url' => home_url('/curso-de-desarrollo-espiritual/'),
+                'label' => 'CDE',
+                'url' => home_url('/indice-de-lecciones/'),
             ],
         ];
 

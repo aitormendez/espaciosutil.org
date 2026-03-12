@@ -14,17 +14,17 @@
 
     @if (!empty($cde_breadcrumb))
       <nav aria-label="Miga de pan"
-        class="not-prose bg-negro/80 leading-2 mb-6 flex w-full border-y px-6 py-4 font-sans text-sm font-light uppercase tracking-wide">
-        <ol class="flex w-full flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center md:gap-3">
+        class="not-prose bg-negro/80 leading- mb-6 flex w-full border-y px-6 py-4 text-left font-sans text-sm/4 font-light uppercase tracking-wide">
+        <ol class="flex w-full flex-col items-start gap-2 md:flex-row md:flex-wrap md:gap-1">
           @foreach ($cde_breadcrumb as $index => $crumb)
-            <li class="flex items-center gap-2">
+            <li class="flex gap-2 {{ $loop->last ? 'current' : '' }}">
               @if ($index > 0)
                 <span class="text-gris3">&gt;</span>
               @endif
               @if (!empty($crumb['url']))
                 <a href="{{ $crumb['url'] }}" class="text-morado2 hover:text-blanco">{{ $crumb['label'] }}</a>
               @else
-                <span class="text-gris3">{{ $crumb['label'] }}</span>
+                <span class="{{ $loop->last ? 'text-cde-light' : 'text-gris3' }}">{{ $crumb['label'] }}</span>
               @endif
             </li>
           @endforeach
