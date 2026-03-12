@@ -127,13 +127,13 @@ class Post extends Composer
 
         foreach ($ancestors as $ancestor_id) {
             $breadcrumb[] = [
-                'label' => get_the_title($ancestor_id),
+                'label' => $this->decodeBreadcrumbLabel(get_the_title($ancestor_id)),
                 'url' => $this->isLessonActive($ancestor_id) ? get_permalink($ancestor_id) : null,
             ];
         }
 
         $breadcrumb[] = [
-            'label' => get_the_title($post_id),
+            'label' => $this->decodeBreadcrumbLabel(get_the_title($post_id)),
             'url' => null,
         ];
 
@@ -159,6 +159,17 @@ class Post extends Composer
         $value = get_field('active_lesson', $postId);
 
         return $value === null ? true : (bool) $value;
+    }
+
+    /**
+     * Decode HTML entities in breadcrumb labels.
+     *
+     * @param string $label
+     * @return string
+     */
+    protected function decodeBreadcrumbLabel(string $label): string
+    {
+        return html_entity_decode($label, ENT_QUOTES | ENT_HTML5, get_bloginfo('charset'));
     }
 
     /**
