@@ -27,6 +27,12 @@ function espaciosutil_pmpro_trial_configs(): array
         11 => [
             'delay_days' => 7,
         ],
+        12 => [
+            'delay_days' => 7,
+        ],
+        13 => [
+            'delay_days' => 7,
+        ],
     ];
 
     return apply_filters('espaciosutil_pmpro_trial_configs', $configs);

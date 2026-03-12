@@ -18,7 +18,8 @@ $assert = static function ($condition, string $message) use (&$errors): void {
 };
 
 $trial_level_id = 11;
-$control_level_id = 12;
+$second_trial_level_id = 12;
+$third_trial_level_id = 13;
 $expected_delay_days = 7;
 $expected_billing_amount = 5.0;
 $max_time_drift = 180;
@@ -40,15 +41,29 @@ $assert(function_exists('espaciosutil_pmpro_user_is_eligible_for_trial'), 'No ex
 $assert(function_exists('pmpro_getLevel'), 'No existe la función pmpro_getLevel().');
 
 $trial_level = function_exists('pmpro_getLevel') ? pmpro_getLevel($trial_level_id) : null;
-$control_level = function_exists('pmpro_getLevel') ? pmpro_getLevel($control_level_id) : null;
+$second_trial_level = function_exists('pmpro_getLevel') ? pmpro_getLevel($second_trial_level_id) : null;
+$third_trial_level = function_exists('pmpro_getLevel') ? pmpro_getLevel($third_trial_level_id) : null;
 
 $assert(is_object($trial_level), 'No se ha encontrado el nivel mensual de prueba (ID 11).');
-$assert(is_object($control_level), 'No se ha encontrado el nivel de control (ID 12).');
+$assert(is_object($second_trial_level), 'No se ha encontrado el nivel semestral con trial (ID 12).');
+$assert(is_object($third_trial_level), 'No se ha encontrado el nivel anual con trial (ID 13).');
 
 if (is_object($trial_level)) {
     $config = espaciosutil_pmpro_get_trial_config($trial_level);
     $assert(is_array($config), 'El nivel mensual no tiene configuración de trial.');
     $assert((int) ($config['delay_days'] ?? 0) === $expected_delay_days, 'La duración del trial no es de 7 días.');
+}
+
+if (is_object($second_trial_level)) {
+    $config = espaciosutil_pmpro_get_trial_config($second_trial_level);
+    $assert(is_array($config), 'El nivel semestral no tiene configuración de trial.');
+    $assert((int) ($config['delay_days'] ?? 0) === $expected_delay_days, 'La duración del trial semestral no es de 7 días.');
+}
+
+if (is_object($third_trial_level)) {
+    $config = espaciosutil_pmpro_get_trial_config($third_trial_level);
+    $assert(is_array($config), 'El nivel anual no tiene configuración de trial.');
+    $assert((int) ($config['delay_days'] ?? 0) === $expected_delay_days, 'La duración del trial anual no es de 7 días.');
 }
 
 $timestamp = time();
@@ -131,16 +146,29 @@ if (is_object($trial_level) && !is_wp_error($ineligible_user_id)) {
     );
 }
 
-if (is_object($control_level) && !is_wp_error($eligible_user_id)) {
+if (is_object($second_trial_level) && !is_wp_error($eligible_user_id)) {
     wp_set_current_user((int) $eligible_user_id);
-    $control_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $control_level));
+    $second_trial_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $second_trial_level));
     $assert(
-        (float) $control_order->total === (float) $control_level->initial_payment,
-        'El nivel semestral ha sido modificado por error.'
+        (float) $second_trial_order->total === 0.0,
+        'El pedido del nivel semestral no queda a total 0 para un usuario elegible.'
     );
     $assert(
-        empty($control_order->membership_level->profile_start_date),
-        'El nivel semestral no debería tener profile_start_date diferida.'
+        !empty($second_trial_order->membership_level->profile_start_date),
+        'El nivel semestral no recibe profile_start_date diferida para un usuario elegible.'
+    );
+}
+
+if (is_object($third_trial_level) && !is_wp_error($eligible_user_id)) {
+    wp_set_current_user((int) $eligible_user_id);
+    $third_trial_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $third_trial_level));
+    $assert(
+        (float) $third_trial_order->total === 0.0,
+        'El pedido del nivel anual no queda a total 0 para un usuario elegible.'
+    );
+    $assert(
+        !empty($third_trial_order->membership_level->profile_start_date),
+        'El nivel anual no recibe profile_start_date diferida para un usuario elegible.'
     );
 }
 
@@ -161,4 +189,4 @@ if (!empty($errors)) {
 fwrite(STDOUT, "PMPro trial verification passed.\n");
 fwrite(STDOUT, "Usuario nuevo: trial aplicado una sola vez.\n");
 fwrite(STDOUT, "Usuario con trial consumido: sin trial en nuevas suscripciones.\n");
-fwrite(STDOUT, "Nivel de control (ID 12): sin cambios.\n");
+fwrite(STDOUT, "Niveles con trial verificados: 11, 12 y 13.\n");
