@@ -67,12 +67,10 @@
           <p class="text-morado1 mt-1 text-base">Responde las preguntas. Puede haber varias opciones
             correctas.</p>
           <div
-            class="bg-sol mt-6 inline-block h-[80px] w-[80px] rounded-full p-4 shadow-[0_0_20px_rgb(255_255_255_/0.5)]"
+            class="bg-sol text-cde mt-6 inline-flex h-[80px] w-[80px] items-center justify-center rounded-full p-4 text-2xl font-bold leading-none"
             data-quiz-counter>
-            <div class="text-2xl font-bold leading-none text-red-500" data-quiz-counter-current>1</div>
-            <div class="text-shadow-[0_0_15px_rgb(255_0_0_/_1)]">de
-              <span data-quiz-counter-total>3</span>
-            </div>
+            <span data-quiz-counter-current>1</span><span class="text-cde/50">/</span><span
+              class="text-cde/50" data-quiz-counter-total>0</span>
           </div>
         </header>
         <div data-quiz-target class="text-morado1">
