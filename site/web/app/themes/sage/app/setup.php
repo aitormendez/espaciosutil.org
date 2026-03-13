@@ -335,11 +335,60 @@ function replace_cde_membership_placeholders(string $message): string
             $attributes .= sprintf(' rel="%s"', esc_attr((string) $link['rel']));
         }
 
+        $attributes .= ' style="color:#b50000;text-decoration:none;"';
+
         $anchor = sprintf('<a %s>%s</a>', $attributes, $label);
         $message = str_replace(sprintf('[%s]', $token), $anchor, $message);
     }
 
     return $message;
+}
+
+/**
+ * Normalize editorial PMPro HTML for email clients.
+ *
+ * We keep the richer HTML for the web experience, but flatten list markup in emails
+ * to avoid relying on inconsistent list rendering across email clients.
+ */
+function normalize_cde_membership_email_html(string $message): string
+{
+    if (trim($message) === '') {
+        return $message;
+    }
+
+    $message = preg_replace_callback(
+        '/<ul[^>]*>(.*?)<\/ul>/is',
+        static function (array $matches): string {
+            if (empty($matches[1]) || !is_string($matches[1])) {
+                return '';
+            }
+
+            preg_match_all('/<li[^>]*>(.*?)<\/li>/is', $matches[1], $items);
+            $list_items = array_values(
+                array_filter(
+                    array_map(
+                        static fn($item) => is_string($item) ? trim($item) : '',
+                        $items[1] ?? []
+                    ),
+                    static fn(string $item): bool => $item !== ''
+                )
+            );
+
+            if ($list_items === []) {
+                return '';
+            }
+
+            $lines = array_map(
+                static fn(string $item): string => '- ' . $item,
+                $list_items
+            );
+
+            return '<p style="margin:0 0 24px;">' . implode('<br />', $lines) . '</p>';
+        },
+        $message
+    );
+
+    return is_string($message) ? $message : '';
 }
 
 /**
@@ -357,11 +406,11 @@ function render_cde_membership_account_level_message(object $level): void
     }
 
     $message = replace_cde_membership_placeholders($message);
-    ?>
+?>
     <div class="<?php echo esc_attr(pmpro_get_element_class('pmpro_account-membership-message')); ?>">
         <?php echo wpautop(wp_kses_post($message)); ?>
     </div>
-    <?php
+<?php
 }
 
 /**
@@ -376,7 +425,9 @@ function replace_cde_membership_placeholders_in_pmpro_email_data($data, $email)
     $message = $data['membership_level_confirmation_message'] ?? null;
 
     if (is_string($message) && trim($message) !== '') {
-        $data['membership_level_confirmation_message'] = replace_cde_membership_placeholders($message);
+        $data['membership_level_confirmation_message'] = normalize_cde_membership_email_html(
+            replace_cde_membership_placeholders($message)
+        );
     }
 
     return $data;
@@ -392,6 +443,38 @@ function replace_cde_membership_placeholders_in_pmpro_confirmation_message(strin
     }
 
     return replace_cde_membership_placeholders($message);
+}
+
+/**
+ * Load a PMPro email partial from the theme if it exists.
+ */
+function get_pmpro_email_partial_from_theme(string $template): ?string
+{
+    $path = get_stylesheet_directory() . '/paid-memberships-pro/email/' . $template . '.html';
+    if (! file_exists($path)) {
+        return null;
+    }
+
+    $contents = file_get_contents($path);
+
+    return is_string($contents) && trim($contents) !== '' ? $contents : null;
+}
+
+/**
+ * Use theme files for PMPro email header/footer, which otherwise fall back to
+ * PMPro's built-in defaults before checking the theme directory.
+ */
+function override_pmpro_email_header_from_theme(string $header): string
+{
+    return get_pmpro_email_partial_from_theme('header') ?? $header;
+}
+
+/**
+ * Use the theme footer partial for PMPro emails when present.
+ */
+function override_pmpro_email_footer_from_theme(string $footer): string
+{
+    return get_pmpro_email_partial_from_theme('footer') ?? $footer;
 }
 
 add_action('after_setup_theme', function () {
@@ -420,6 +503,18 @@ add_filter(
 add_filter(
     'pmpro_confirmation_message',
     __NAMESPACE__ . '\\replace_cde_membership_placeholders_in_pmpro_confirmation_message',
+    20
+);
+
+add_filter(
+    'pmpro_email_header',
+    __NAMESPACE__ . '\\override_pmpro_email_header_from_theme',
+    20
+);
+
+add_filter(
+    'pmpro_email_footer',
+    __NAMESPACE__ . '\\override_pmpro_email_footer_from_theme',
     20
 );
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Espacio Sutil PMPro Trials
  * Description: Configura pruebas gratuitas por codigo para niveles concretos de Paid Memberships Pro.
@@ -203,6 +204,251 @@ function espaciosutil_pmpro_get_recurring_phrase($level): string
 }
 
 /**
+ * Get the checkout level snapshot stored on an order.
+ *
+ * @param mixed $order
+ * @return object|null
+ */
+function espaciosutil_pmpro_get_order_level_snapshot($order): ?object
+{
+    if (!is_object($order)) {
+        return null;
+    }
+
+    if (!empty($order->id)) {
+        $checkout_level = get_pmpro_membership_order_meta((int) $order->id, 'checkout_level', true);
+        if (is_array($checkout_level) && !empty($checkout_level['id'])) {
+            return (object) $checkout_level;
+        }
+    }
+
+    if (method_exists($order, 'getMembershipLevelAtCheckout')) {
+        $level = $order->getMembershipLevelAtCheckout();
+        if (is_object($level)) {
+            return $level;
+        }
+    }
+
+    if (!empty($order->membership_level) && is_object($order->membership_level)) {
+        return $order->membership_level;
+    }
+
+    return null;
+}
+
+/**
+ * Build order-specific trial details from the level snapshot stored at checkout.
+ *
+ * @param mixed $order
+ * @return array<string, string|int>|null
+ */
+function espaciosutil_pmpro_get_order_trial_details($order): ?array
+{
+    $level = espaciosutil_pmpro_get_order_level_snapshot($order);
+    if (!is_object($level)) {
+        return null;
+    }
+
+    $config = espaciosutil_pmpro_get_trial_config($level);
+    if ($config === null) {
+        return null;
+    }
+
+    $profile_start_date = empty($level->profile_start_date) ? 0 : strtotime((string) $level->profile_start_date);
+    $billing_amount = isset($level->billing_amount) ? (float) $level->billing_amount : 0.0;
+    if ($profile_start_date <= 0 || $billing_amount <= 0) {
+        return null;
+    }
+
+    $next_charge_date = wp_date('j \\d\\e F \\d\\e Y', $profile_start_date);
+    $next_charge_amount = pmpro_formatPrice($billing_amount);
+    $recurring_phrase = espaciosutil_pmpro_get_recurring_phrase($level);
+
+    return [
+        'delay_days' => (int) $config['delay_days'],
+        'next_charge_date' => $next_charge_date,
+        'next_charge_amount' => $next_charge_amount,
+        'recurring_phrase' => $recurring_phrase,
+    ];
+}
+
+/**
+ * Build a short HTML summary for a trial-enabled order.
+ *
+ * @param mixed $order
+ * @param bool $include_manage_link
+ * @return string
+ */
+function espaciosutil_pmpro_get_order_trial_summary_html($order, bool $include_manage_link = false): string
+{
+    $details = espaciosutil_pmpro_get_order_trial_details($order);
+    if ($details === null) {
+        return '';
+    }
+
+    $trial_label = sprintf(
+        _n('%d dia gratis', '%d dias gratis', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
+        (int) $details['delay_days']
+    );
+
+    $summary = sprintf(
+        '<p><strong style="font-weight:200;">Prueba activada:</strong> %1$s desde hoy. El primer cobro sera el <strong style="font-weight:200;">%2$s</strong> por <strong style="font-weight:200;">%3$s</strong>%4$s.</p>',
+        esc_html($trial_label),
+        esc_html((string) $details['next_charge_date']),
+        wp_kses_post((string) $details['next_charge_amount']),
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+    );
+
+    if (!$include_manage_link) {
+        return $summary;
+    }
+
+    return $summary . sprintf(
+        '<p>Puedes gestionar tu membresia desde <a href="%1$s" style="color:#b50000;text-decoration:none;">tu cuenta</a>.</p>',
+        esc_url(pmpro_url('account'))
+    );
+}
+
+/**
+ * Build an email-only conditions block for trial-enabled orders.
+ *
+ * @param mixed $order
+ * @param string $fallback_cost_text
+ * @return string
+ */
+function espaciosutil_pmpro_get_order_trial_conditions_email_html($order, string $fallback_cost_text = ''): string
+{
+    $details = espaciosutil_pmpro_get_order_trial_details($order);
+    if ($details === null) {
+        if ($fallback_cost_text === '') {
+            return '';
+        }
+
+        return sprintf(
+            '<p style="margin:0 0 24px;"><strong style="color:#c7c3c3;font-weight:200;">Condiciones:</strong> %1$s</p>',
+            wp_kses_post($fallback_cost_text)
+        );
+    }
+
+    $trial_label = sprintf(
+        _n('%d dia de prueba gratuita.', '%d dias de prueba gratuita.', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
+        (int) $details['delay_days']
+    );
+
+    $first_charge_line = sprintf(
+        'El primer cobro sera de %1$s%2$s al terminar la prueba.',
+        wp_kses_post((string) $details['next_charge_amount']),
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+    );
+
+    return sprintf(
+        '<p style="margin:0 0 8px;color:#c7c3c3;">Condiciones</p><p style="margin:0 0 24px;">- %1$s<br />- %2$s</p>',
+        esc_html($trial_label),
+        $first_charge_line
+    );
+}
+
+/**
+ * Build an email-only activation block for trial-enabled orders.
+ *
+ * @param mixed $order
+ * @param bool $include_manage_link
+ * @return string
+ */
+function espaciosutil_pmpro_get_order_trial_summary_email_html($order, bool $include_manage_link = false): string
+{
+    $details = espaciosutil_pmpro_get_order_trial_details($order);
+    if ($details === null) {
+        return '';
+    }
+
+    $trial_label = sprintf(
+        _n('%d dia gratis desde hoy.', '%d dias gratis desde hoy.', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
+        (int) $details['delay_days']
+    );
+
+    $first_charge_line = sprintf(
+        'El primer cobro sera el %1$s por %2$s%3$s.',
+        esc_html((string) $details['next_charge_date']),
+        wp_kses_post((string) $details['next_charge_amount']),
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+    );
+
+    $summary = sprintf(
+        '<p style="margin:0 0 8px;color:#c7c3c3;">Prueba activada</p><p style="margin:0 0 24px;">- %1$s<br />- %2$s</p>',
+        esc_html($trial_label),
+        $first_charge_line
+    );
+
+    if (!$include_manage_link) {
+        return $summary;
+    }
+
+    return $summary . sprintf(
+        '<p>Puedes gestionar tu membresia desde <a href="%1$s" style="color:#b50000;text-decoration:none;">tu cuenta</a>.</p>',
+        esc_url(pmpro_url('account'))
+    );
+}
+
+/**
+ * Determine whether the current environment should auto-complete Stripe token orders.
+ */
+function espaciosutil_pmpro_should_autocomplete_stripe_token_orders(): bool
+{
+    $enabled = defined('WP_ENV') && WP_ENV === 'development';
+
+    return (bool) apply_filters('espaciosutil_pmpro_autocomplete_stripe_token_orders', $enabled);
+}
+
+/**
+ * Complete a Stripe Checkout token order on the confirmation page when webhooks
+ * are unavailable in local development.
+ */
+function espaciosutil_pmpro_maybe_complete_stripe_token_order_on_confirmation(): void
+{
+    if (!espaciosutil_pmpro_should_autocomplete_stripe_token_orders()) {
+        return;
+    }
+
+    if (is_admin() || !is_user_logged_in() || !function_exists('is_page')) {
+        return;
+    }
+
+    $confirmation_page_id = (int) get_option('pmpro_confirmation_page_id');
+    if ($confirmation_page_id < 1 || !is_page($confirmation_page_id)) {
+        return;
+    }
+
+    if (!empty($_GET['pmpro_rechecked'])) {
+        return;
+    }
+
+    $level_id = 0;
+    if (!empty($_REQUEST['pmpro_level'])) {
+        $level_id = (int) $_REQUEST['pmpro_level'];
+    } elseif (!empty($_REQUEST['level'])) {
+        $level_id = (int) $_REQUEST['level'];
+    }
+
+    $order = new MemberOrder();
+    $order->getLastMemberOrder(get_current_user_id(), 'token', $level_id > 0 ? $level_id : null);
+    if (empty($order->id) || $order->gateway !== 'stripe') {
+        return;
+    }
+
+    $gateway = new PMProGateway_stripe();
+    $result = $gateway->check_token_order($order);
+    if ($result !== true) {
+        return;
+    }
+
+    $redirect_url = add_query_arg('pmpro_rechecked', '1');
+    wp_safe_redirect($redirect_url);
+    exit;
+}
+add_action('template_redirect', 'espaciosutil_pmpro_maybe_complete_stripe_token_order_on_confirmation', 1);
+
+/**
  * Apply the trial to the checkout order only if the member is eligible.
  *
  * This runs after PMPro has already created/logged in the user, so we can make
@@ -295,7 +541,7 @@ function espaciosutil_pmpro_append_trial_notice_to_cost_text($cost_text, $level,
 
     $billing_amount = pmpro_formatPrice($level->billing_amount);
     if ($tags) {
-        $billing_amount = '<strong>' . $billing_amount . '</strong>';
+        $billing_amount = '<strong style="font-weight:200;">' . $billing_amount . '</strong>';
     }
 
     return sprintf(
@@ -306,6 +552,98 @@ function espaciosutil_pmpro_append_trial_notice_to_cost_text($cost_text, $level,
     );
 }
 add_filter('pmpro_level_cost_text', 'espaciosutil_pmpro_append_trial_notice_to_cost_text', 20, 4);
+
+/**
+ * Explain the trial on the confirmation page once the order exists.
+ *
+ * @param string $message
+ * @param mixed $invoice
+ * @return string
+ */
+function espaciosutil_pmpro_append_trial_summary_to_confirmation_message(string $message, $invoice): string
+{
+    $trial_summary = espaciosutil_pmpro_get_order_trial_summary_html($invoice, true);
+    if ($trial_summary === '') {
+        return $message;
+    }
+
+    return $message . $trial_summary;
+}
+add_filter('pmpro_confirmation_message', 'espaciosutil_pmpro_append_trial_summary_to_confirmation_message', 30, 2);
+
+/**
+ * Add trial-specific placeholders to PMPro emails for orders that started at 0.
+ *
+ * @param mixed $data
+ * @param mixed $email
+ * @return mixed
+ */
+function espaciosutil_pmpro_add_trial_summary_to_email_data($data, $email)
+{
+    if (!is_array($data)) {
+        return $data;
+    }
+
+    $data['trial_summary'] = '';
+    $data['trial_conditions'] = '';
+
+    if (empty($data['order_id']) || !is_string($data['order_id'])) {
+        return $data;
+    }
+
+    $order = new MemberOrder();
+    if (!$order->getMemberOrderByCode($data['order_id'])) {
+        return $data;
+    }
+
+    $data['trial_conditions'] = espaciosutil_pmpro_get_order_trial_conditions_email_html(
+        $order,
+        isset($data['membership_cost']) && is_string($data['membership_cost']) ? $data['membership_cost'] : ''
+    );
+    $data['trial_summary'] = espaciosutil_pmpro_get_order_trial_summary_email_html($order, true);
+
+    return $data;
+}
+add_filter('pmpro_email_data', 'espaciosutil_pmpro_add_trial_summary_to_email_data', 20, 2);
+
+/**
+ * Add trial details to the invoice details list to clarify the 0 EUR initial order.
+ *
+ * @param mixed $invoice
+ * @return void
+ */
+function espaciosutil_pmpro_render_trial_invoice_bullets($invoice): void
+{
+    $details = espaciosutil_pmpro_get_order_trial_details($invoice);
+    if ($details === null) {
+        return;
+    }
+
+?>
+    <li class="<?php echo esc_attr(pmpro_get_element_class('pmpro_list_item')); ?>">
+        <strong>Periodo de prueba:</strong>
+        <?php
+        echo esc_html(
+            sprintf(
+                _n('%d dia gratis', '%d dias gratis', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
+                (int) $details['delay_days']
+            )
+        );
+        ?>
+    </li>
+    <li class="<?php echo esc_attr(pmpro_get_element_class('pmpro_list_item')); ?>">
+        <strong>Primer cobro:</strong>
+        <?php
+        echo wp_kses_post((string) $details['next_charge_amount']);
+        if ($details['recurring_phrase'] !== '') {
+            echo ' ' . esc_html((string) $details['recurring_phrase']);
+        }
+        echo esc_html(' el ' . (string) $details['next_charge_date']);
+        ?>
+    </li>
+<?php
+}
+add_action('pmpro_invoice_bullets_top', 'espaciosutil_pmpro_render_trial_invoice_bullets', 10, 1);
 
 /**
  * Persist the one-time trial consumption after a successful checkout.
