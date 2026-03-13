@@ -278,90 +278,153 @@ La página de suscripción se ha rehecho como landing editorial dentro de `site/
 
 ### Trial gratuito personalizado en PMPro (sin add-on)
 
-Se ha implementado un periodo de prueba gratuito propio para evitar el coste del add-on `Subscription Delays`.
+Se ha implementado un periodo de prueba gratuito propio para evitar el coste del add-on `Subscription Delays` y conservar el modelo “acceso inmediato + primer cobro diferido”.
 
 - Archivo principal: `site/web/app/mu-plugins/espaciosutil-pmpro-trials.php`.
-- La configuración actual vive en código, en `espaciosutil_pmpro_trial_configs()`.
+- La configuración vive en código, en `espaciosutil_pmpro_trial_configs()`.
 - La prueba está vinculada al usuario, no a la suscripción.
 - Se usa la user meta `espaciosutil_pmpro_trial_used` para recordar si una cuenta ya consumió su prueba.
 - Estado actual:
   - nivel mensual PMPro `ID 11`: `7` días gratis.
-  - niveles semestral (`ID 12`) y anual (`ID 13`): sin trial personalizado.
+  - nivel semestral PMPro `ID 12`: `7` días gratis.
+  - nivel anual PMPro `ID 13`: `7` días gratis.
 
 #### Cómo funciona técnicamente
 
-- Se usa `pmpro_checkout_order` para modificar el pedido solo cuando PMPro ya conoce el `user_id` real del checkout (incluyendo cuentas recién creadas).
-- Para un usuario elegible en el nivel mensual:
+- Se usa `pmpro_checkout_order` para modificar el pedido solo cuando PMPro ya conoce el `user_id` real del checkout, incluyendo cuentas recién creadas.
+- Para un usuario elegible:
   - `initial_payment` se fuerza a `0`.
   - `trial_amount` y `trial_limit` se fuerzan a `0` para no mezclar este trial personalizado con el trial nativo de PMPro.
   - se asigna `profile_start_date = now + 7 days`.
   - el pedido queda con `subtotal = 0`, `tax = 0`, `total = 0`.
 - Para un usuario que ya consumió la prueba:
   - no se aplica ninguna modificación,
-  - el checkout sigue con el precio normal del plan.
+  - el checkout sigue con el precio normal del plan correspondiente.
 - PMPro usa `profile_start_date` para calcular el retraso del primer cobro en los gateways. En Stripe esto acaba traducido a `trial_period_days` al crear la suscripción.
 - El acceso se concede desde el alta, pero el primer cargo de Stripe queda diferido hasta el final del trial.
 - Tras un checkout correcto con trial aplicado, `pmpro_after_checkout` marca la user meta `espaciosutil_pmpro_trial_used = 1`.
+- En desarrollo, la confirmación de pedido Stripe puede completar automáticamente pedidos en estado `token` si el webhook todavía no ha consolidado la orden, para evitar falsos negativos durante pruebas locales.
 
 #### Copy visible al usuario
 
 - Checkout PMPro:
-  - se filtra `pmpro_level_cost_text` para mostrar un mensaje explícito del estilo, pero solo a usuarios todavía elegibles:
-    - `Incluye 7 dias de prueba gratuita. El primer cobro sera de 5.00€ al mes al terminar la prueba.`
+  - se filtra `pmpro_level_cost_text` para mostrar un mensaje explícito solo a usuarios todavía elegibles para trial.
 - Landing de suscripción:
   - `pricing-table.blade.php` detecta si un nivel tiene trial configurado y si el usuario actual sigue siendo elegible.
-  - `pricing-package.blade.php` y `pricing-plan-card.blade.php` muestran una nota extra bajo el precio del plan mensual.
+  - `pricing-package.blade.php` y `pricing-plan-card.blade.php` muestran una nota extra bajo el precio del plan.
   - `template-suscripcion.blade.php` refuerza el mensaje en el encabezado de la sección de planes.
+- Confirmación de compra y emails:
+  - se inyectan bloques dinámicos de condiciones del trial y de primer cobro real a partir de los datos del pedido.
 
-#### Limitaciones y decisiones deliberadas
+#### Decisiones operativas
 
 - La configuración del trial no se gestiona desde el admin de PMPro: está codificada por nivel en el mu-plugin.
-- Este enfoque está pensado para Stripe y para el caso “acceso inmediato + primer cobro diferido”.
-- El criterio de “solo una vez” depende de la cuenta WordPress, no del email escrito libremente en una pantalla externa.
-- No se ha aplicado a semestral/anual para evitar regalar por error periodos demasiado largos.
-- Si en el futuro cambia el ID del nivel mensual, hay que actualizar `espaciosutil_pmpro_trial_configs()`.
+- El criterio de “solo una vez” depende de la cuenta WordPress.
+- El trial no usa el “primer ciclo gratis” nativo de PMPro, sino un retraso real del primer cobro.
+- Si cambian los IDs de los niveles de PMPro, hay que actualizar `espaciosutil_pmpro_trial_configs()`.
 
-#### Verificación determinista antes de producción
+### Emails transaccionales PMPro
 
-Hay dos capas de verificación recomendadas:
+El sistema de emails de membresía usa una estrategia mixta:
 
-1. Verificación de configuración/lógica vía `wp-cli`:
-   - Script: `site/scripts/verify-pmpro-trial.php`
-   - Ejecución desde la raíz `site/`:
-   - `wp eval-file scripts/verify-pmpro-trial.php`
-   - Este script falla con código `1` si:
-     - el trial del nivel mensual no existe,
-     - el retraso no es de 7 días,
-     - un usuario nuevo no recibe `initial_payment = 0`,
-     - un usuario marcado como “trial usado” vuelve a recibir el trial,
-     - el texto de coste no cambia según elegibilidad,
-     - o el nivel semestral se ve alterado por error.
+- una capa visual común controlada en código,
+- plantillas clave controladas en código,
+- y plantillas secundarias gestionadas desde el editor de PMPro.
 
-2. Verificación de integración en Stripe test mode:
-   - poner PMPro/Stripe en modo pruebas,
-   - crear una suscripción real al nivel mensual con tarjeta de test,
-   - comprobar en Stripe que la suscripción queda creada con periodo de prueba y sin cobro inmediato,
-   - comprobar en WordPress:
-     - que el usuario obtiene la membresía nada más completar checkout,
-     - que la orden inicial queda a `0`,
-     - que no aparecen errores de webhook ni de renovación.
+#### Arquitectura
 
-#### Procedimiento recomendado de preproducción
+- Cabecera y pie globales:
+  - `site/web/app/themes/sage/paid-memberships-pro/email/header.html`
+  - `site/web/app/themes/sage/paid-memberships-pro/email/footer.html`
+- Plantillas clave en código:
+  - `default.html`
+  - `checkout_paid.html`
+  - `checkout_paid_admin.html`
+  - `invoice.html`
+  - `membership_recurring_trial.html`
+- El resto de plantillas activas de PMPro se gestionan desde `Memberships > Settings > Email Templates`.
+- Regla operativa:
+  - si una plantilla se controla en código, no debe guardarse su `body` en PMPro;
+  - si una plantilla se controla en el editor, no debe tener override paralelo en el tema.
 
-Antes de desplegar a producción:
+#### Diseño y assets
+
+- Los emails usan fondo oscuro en sintonía con el sitio (`#150b17`) y tipografía clara.
+- La cabecera incluye branding de Espacio Sutil y del CDE.
+- El footer común ya incorpora los datos legales actuales de `Libranzai, SL` y mantiene `siteemail` / `site_url` como variables dinámicas.
+- Los logos del email están rasterizados en PNG y viven en `site/web/app/themes/sage/resources/images/email`.
+- Los enlaces del entorno CDE usan `#b50000`.
+
+#### Plantillas clave personalizadas
+
+- `checkout_paid`:
+  - email principal de alta para miembro,
+  - incluye bienvenida, siguientes pasos, resumen del plan, condiciones del trial, prueba activada y card del pedido.
+- `checkout_paid_admin`:
+  - aviso interno de alta con foco operativo.
+- `invoice`:
+  - confirmación/recibo del pago con CTA para revisar el pedido.
+- `membership_recurring_trial`:
+  - plantilla propia para el primer cobro tras trial.
+
+#### Mensajes por nivel y placeholders editoriales
+
+- El mensaje editorial por nivel sigue usando `!!membership_level_confirmation_message!!`.
+- En `setup.php` se reemplazan placeholders editoriales del proyecto como:
+  - `[ENLACE_HUB]`
+  - `[ENLACE_INDICE_DE_LECCIONES]`
+  - `[ENLACE_LECCION_INICIO]`
+  - `[ENLACE_TELEGRAM]`
+  - `[ENLACE_CUENTA]`
+- Para email, ese bloque se normaliza para no depender de listas HTML frágiles en clientes de correo.
+
+#### Recordatorio recurrente y fin del trial
+
+Este punto es deliberadamente distinto del comportamiento nativo de PMPro.
+
+- PMPro envía por defecto el recordatorio recurrente con `7` días de antelación.
+- Como el trial dura también `7` días, esa regla provocaría un recordatorio inmediato tras el alta, que no es deseable.
+- Se ha sustituido el envío nativo del hook `pmpro_recurring_payment_reminder_email` por una lógica propia.
+- Estado actual:
+  - renovaciones normales: recordatorio a `7` días, usando la plantilla `membership_recurring` gestionada en el editor de PMPro;
+  - primer cobro al terminar un trial: recordatorio a `2` días, usando la plantilla custom `membership_recurring_trial`.
+- La detección de “primer cobro tras trial” se hace a nivel de suscripción y primer pedido asociado.
+- Los datos del recordatorio se construyen por código para asegurar:
+  - fecha exacta del primer cobro,
+  - importe exacto,
+  - enlace de cancelación,
+  - y diferenciación entre renovación normal y fin de trial.
+
+#### Previsualización y pruebas
+
+- En local existe una pantalla de previsualización en `Herramientas > Emails PMPro`.
+- Archivo: `site/web/app/mu-plugins/espaciosutil-pmpro-email-preview.php`.
+- La preview:
+  - solo se expone en desarrollo y para administradores,
+  - usa pedidos reales de PMPro,
+  - renderiza el HTML final sin enviar correos,
+  - se muestra en documento aislado para que el CSS de `wp-admin` no contamine el email.
+- El entorno local usa Mailpit para validar envíos reales.
+- Para plantillas soportadas por PMPro, también puede usarse el botón nativo “Save Template and Send Email” del editor.
+
+#### Verificación recomendada antes de producción
 
 1. Ejecutar `wp eval-file scripts/verify-pmpro-trial.php`.
-2. Hacer un checkout completo en test mode con Stripe sobre el nivel mensual.
+2. Hacer un checkout completo en test mode con Stripe sobre mensual, semestral y anual.
 3. Confirmar en Stripe Dashboard:
    - suscripción creada,
    - `trial end` en la fecha esperada,
    - ningún cargo capturado en el alta.
 4. Confirmar en WordPress/PMPro:
    - acceso concedido,
-   - texto correcto en checkout/confirmación,
-   - cuenta de miembro operativa,
-   - sin efecto colateral en semestral/anual.
-5. Solo después repetir el mismo flujo en staging con credenciales equivalentes al entorno final.
+   - orden inicial a `0`,
+   - membresía activa,
+   - textos correctos en checkout, confirmación y emails.
+5. Confirmar en Mailpit o equivalente:
+   - `checkout_paid`,
+   - `invoice`,
+   - y, cuando corresponda, `membership_recurring_trial`.
+6. Solo después repetir el mismo flujo en staging con credenciales equivalentes al entorno final.
 
 ### Responsive y layout
 

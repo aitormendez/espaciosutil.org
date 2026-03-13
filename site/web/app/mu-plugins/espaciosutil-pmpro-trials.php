@@ -266,6 +266,7 @@ function espaciosutil_pmpro_get_order_trial_details($order): ?array
 
     return [
         'delay_days' => (int) $config['delay_days'],
+        'next_charge_timestamp' => $profile_start_date,
         'next_charge_date' => $next_charge_date,
         'next_charge_amount' => $next_charge_amount,
         'recurring_phrase' => $recurring_phrase,
@@ -389,6 +390,205 @@ function espaciosutil_pmpro_get_order_trial_summary_email_html($order, bool $inc
         esc_url(pmpro_url('account'))
     );
 }
+
+/**
+ * Add a dedicated template for reminders before the first paid cycle after a trial.
+ *
+ * @param array<string, array<string, string>> $templates
+ * @return array<string, array<string, string>>
+ */
+function espaciosutil_pmpro_add_trial_recurring_email_template(array $templates): array
+{
+    $templates['membership_recurring_trial'] = [
+        'subject' => __('Tu periodo de prueba en !!sitename!! termina pronto', 'espaciosutil-pmpro-trials'),
+        'description' => __('Recordatorio de fin de prueba', 'espaciosutil-pmpro-trials'),
+        'body' => wp_kses_post(
+            '<p>Tu periodo de prueba en !!sitename!! termina pronto.</p>
+<p>El primer cobro de tu plan !!membership_level_name!! se realizara el !!renewaldate!! por !!billing_amount!!.</p>
+<p>Si no deseas continuar, puedes cancelar tu suscripcion aqui: !!cancel_url!!</p>'
+        ),
+        'help_text' => __('Este correo se envia 2 dias antes del primer cobro posterior al periodo de prueba.', 'espaciosutil-pmpro-trials'),
+    ];
+
+    return $templates;
+}
+add_filter('pmproet_templates', 'espaciosutil_pmpro_add_trial_recurring_email_template');
+
+/**
+ * Get the first checkout order associated with a subscription.
+ */
+function espaciosutil_pmpro_get_first_order_for_subscription(PMPro_Subscription $subscription): ?MemberOrder
+{
+    global $wpdb;
+
+    $subscription_transaction_id = (string) $subscription->get_subscription_transaction_id();
+    if ($subscription_transaction_id === '') {
+        return null;
+    }
+
+    $order_id = $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT id
+            FROM {$wpdb->pmpro_membership_orders}
+            WHERE subscription_transaction_id = %s
+                AND user_id = %d
+                AND membership_id = %d
+                AND status NOT IN ('token', 'error', 'review')
+            ORDER BY timestamp ASC, id ASC
+            LIMIT 1",
+            $subscription_transaction_id,
+            (int) $subscription->get_user_id(),
+            (int) $subscription->get_membership_level_id()
+        )
+    );
+
+    if (empty($order_id)) {
+        return null;
+    }
+
+    $order = new MemberOrder();
+    if (!$order->getMemberOrderByID((int) $order_id) || empty($order->id)) {
+        return null;
+    }
+
+    return $order;
+}
+
+/**
+ * Determine whether a subscription is still awaiting its first paid charge after a trial.
+ */
+function espaciosutil_pmpro_subscription_is_waiting_for_first_trial_charge(PMPro_Subscription $subscription): bool
+{
+    $initial_order = espaciosutil_pmpro_get_first_order_for_subscription($subscription);
+    if (!$initial_order instanceof MemberOrder) {
+        return false;
+    }
+
+    $trial_details = espaciosutil_pmpro_get_order_trial_details($initial_order);
+    if ($trial_details === null) {
+        return false;
+    }
+
+    $next_payment_timestamp = (int) $subscription->get_next_payment_date();
+    if ($next_payment_timestamp <= 0) {
+        return false;
+    }
+
+    return wp_date('Y-m-d', $next_payment_timestamp) === wp_date('Y-m-d', (int) $trial_details['next_charge_timestamp']);
+}
+
+/**
+ * Register recurring payment reminders:
+ * - 7 days for regular renewals
+ * - 2 days for the first paid charge after a trial
+ *
+ * @param array<int, string> $emails
+ * @return array<int, string>
+ */
+function espaciosutil_pmpro_customize_recurring_payment_reminders($emails): array
+{
+    if (!is_array($emails)) {
+        $emails = [];
+    }
+
+    $emails[2] = 'membership_recurring_trial';
+    ksort($emails, SORT_NUMERIC);
+
+    return $emails;
+}
+add_filter('pmpro_upcoming_recurring_payment_reminder', 'espaciosutil_pmpro_customize_recurring_payment_reminders');
+
+/**
+ * Build PMPro email data for recurring reminder emails.
+ *
+ * @return array<string, string|int>
+ */
+function espaciosutil_pmpro_get_recurring_reminder_email_data(PMPro_Subscription $subscription, WP_User $user): array
+{
+    $membership_level = pmpro_getLevel($subscription->get_membership_level_id());
+
+    return [
+        'subject' => '',
+        'name' => $user->display_name,
+        'user_login' => $user->user_login,
+        'sitename' => get_option('blogname'),
+        'site_url' => home_url('/'),
+        'membership_id' => $subscription->get_membership_level_id(),
+        'membership_level_name' => empty($membership_level)
+            ? sprintf(esc_html__('[Deleted level #%d]', 'paid-memberships-pro'), $subscription->get_membership_level_id())
+            : $membership_level->name,
+        'membership_cost' => $subscription->get_cost_text(),
+        'billing_amount' => pmpro_formatPrice($subscription->get_billing_amount()),
+        'renewaldate' => date_i18n(get_option('date_format'), $subscription->get_next_payment_date()),
+        'siteemail' => get_option('pmpro_from_email'),
+        'login_link' => wp_login_url(),
+        'login_url' => wp_login_url(),
+        'display_name' => $user->display_name,
+        'user_email' => $user->user_email,
+        'cancel_link' => wp_login_url(pmpro_url('cancel')),
+        'cancel_url' => wp_login_url(pmpro_url('cancel')),
+    ];
+}
+
+/**
+ * Replace PMPro's recurring reminder sender so we can treat trial endings separately
+ * without affecting normal renewal reminders.
+ */
+function espaciosutil_pmpro_send_recurring_payment_reminder_email($subscription_id, $template, $days = null): void
+{
+    $subscription = new PMPro_Subscription((int) $subscription_id);
+    $user = get_userdata($subscription->get_user_id());
+
+    $days_until_payment = floor(($subscription->get_next_payment_date() - current_time('timestamp')) / DAY_IN_SECONDS);
+
+    if (empty($user)) {
+        update_pmpro_subscription_meta((int) $subscription_id, 'pmprorm_last_next_payment_date', $subscription->get_next_payment_date('Y-m-d', false));
+        update_pmpro_subscription_meta((int) $subscription_id, 'pmprorm_last_days', $days_until_payment);
+        return;
+    }
+
+    $is_first_trial_charge = espaciosutil_pmpro_subscription_is_waiting_for_first_trial_charge($subscription);
+    $should_send = match ((string) $template) {
+        'membership_recurring_trial' => $is_first_trial_charge,
+        'membership_recurring' => !$is_first_trial_charge,
+        default => true,
+    };
+
+    if ($should_send) {
+        $email = new PMProEmail();
+        $email->email = $user->user_email;
+        $email->template = (string) $template;
+        $email->data = espaciosutil_pmpro_get_recurring_reminder_email_data($subscription, $user);
+        $email->sendEmail();
+    }
+
+    update_pmpro_subscription_meta((int) $subscription_id, 'pmprorm_last_next_payment_date', $subscription->get_next_payment_date('Y-m-d', false));
+    update_pmpro_subscription_meta((int) $subscription_id, 'pmprorm_last_days', $days_until_payment);
+}
+
+/**
+ * Override PMPro's recurring reminder sender with Espacio Sutil's trial-aware version.
+ */
+function espaciosutil_pmpro_override_recurring_payment_reminder_sender(): void
+{
+    if (!class_exists('PMPro_Recurring_Actions')) {
+        return;
+    }
+
+    remove_action(
+        'pmpro_recurring_payment_reminder_email',
+        [PMPro_Recurring_Actions::instance(), 'send_recurring_payment_reminder_email'],
+        10
+    );
+
+    add_action(
+        'pmpro_recurring_payment_reminder_email',
+        'espaciosutil_pmpro_send_recurring_payment_reminder_email',
+        10,
+        3
+    );
+}
+add_action('plugins_loaded', 'espaciosutil_pmpro_override_recurring_payment_reminder_sender', 30);
 
 /**
  * Determine whether the current environment should auto-complete Stripe token orders.
@@ -594,6 +794,10 @@ function espaciosutil_pmpro_add_trial_summary_to_email_data($data, $email)
     $order = new MemberOrder();
     if (!$order->getMemberOrderByCode($data['order_id'])) {
         return $data;
+    }
+
+    if (empty($order->discount_code) && !$order->getDiscountCode()) {
+        $data['discount_code'] = '';
     }
 
     $data['trial_conditions'] = espaciosutil_pmpro_get_order_trial_conditions_email_html(
