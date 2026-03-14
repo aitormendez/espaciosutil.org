@@ -1,6 +1,6 @@
 # Plan de implantación: Stripe + Paid Memberships Pro
 
-Fecha: 2026-03-11
+Fecha: 2026-03-12
 Estado: Propuesto
 Alcance actual: entornos `development` y `staging`
 
@@ -87,6 +87,49 @@ Tareas:
 Salida:
 - matriz simple de planes y reglas comerciales aprobada.
 
+### Estado validado de Fase 0 (2026-03-12)
+
+Decisiones ya confirmadas en reunión:
+- Existe cuenta de Stripe y tanto cliente como equipo tienen acceso.
+- Están disponibles los datos de la empresa que facturará.
+- El modelo comercial es una única suscripción con acceso a todo el contenido.
+- La suscripción tendrá tres frecuencias de pago:
+  - mensual,
+  - semestral,
+  - anual.
+- Habrá periodo de prueba de `7 días`.
+- Habrá cupones, pero su implementación queda para una fase posterior.
+- Habrá promoción de lanzamiento del `50%` sobre el cobro aplicable durante la ventana comercial de lanzamiento.
+- La cancelación será al final del periodo ya pagado.
+- El precio se mostrará con IVA incluido.
+
+Cierre operativo de Fase 0:
+- IVA confirmado: `21%`.
+- Frecuencias confirmadas:
+  - mensual,
+  - semestral,
+  - anual.
+- Promoción de lanzamiento definida en términos comerciales:
+  - descuento del `50%`,
+  - fecha de inicio: cuando salga la web,
+  - fecha concreta de lanzamiento: pendiente,
+  - se aplica al cobro,
+  - aplica como porcentaje, sin reglas distintas por frecuencia.
+- Regla comercial confirmada:
+  - las ofertas no pueden superponerse,
+  - el usuario deberá acogerse a una sola oferta.
+- Pendiente único de Fase 0:
+  - redactar el texto legal y comercial.
+  - ese texto debe explicar prueba de 7 días, cobro posterior, cancelación al final del periodo e IVA incluido.
+
+Nota operativa sobre la promoción:
+- A efectos de implementación, se tomará como hipótesis de trabajo que durante la ventana de lanzamiento habrá un único descuento del `50%` sobre el cobro aplicable a la suscripción contratada, independientemente de la frecuencia elegida.
+- La fecha exacta de inicio y fin de la campaña queda pendiente hasta fijar la salida.
+
+Estado de Fase 0:
+- Cerrada a falta de redacción legal/comercial final.
+- El proyecto puede avanzar ya a Fase 1: preparación de Stripe.
+
 ## Fase 1. Preparación de Stripe
 
 Objetivo:
@@ -108,6 +151,12 @@ Tareas:
 
 Validación:
 - Stripe debe mostrar la cuenta como apta para operar o indicar únicamente pendientes menores no bloqueantes.
+
+### Estado de Fase 1 (2026-03-12)
+
+Situación actual:
+- Se ha iniciado la preparación de Stripe.
+- Se están completando los datos del negocio en la cuenta.
 
 ## Fase 2. Preparación de PMPro en WordPress
 
