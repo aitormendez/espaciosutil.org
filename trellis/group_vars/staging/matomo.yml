@@ -8,8 +8,8 @@ matomo_db_password: "{{ vault_matomo_db_password }}"
 matomo_admin_email: analytics@espaciosutil.org
 matomo_admin_password: "{{ vault_matomo_admin_password }}"
 
-matomo_cli_install: true
-matomo_cli_manage_sites: true
+matomo_cli_install: false
+matomo_cli_manage_sites: false
 
 matomo_cert_name: matomo.stage.espaciosutil.org
 matomo_archive_url: "https://matomo.stage.espaciosutil.org"

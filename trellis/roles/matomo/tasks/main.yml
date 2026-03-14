@@ -225,6 +225,18 @@
   register: matomo_config
   tags: [matomo]
 
+- name: Check whether Matomo exposes a CLI installer
+  command: php console list --raw
+  args:
+    chdir: "{{ matomo_public_path }}"
+  become_user: "{{ web_user }}"
+  register: matomo_console_commands
+  changed_when: false
+  when:
+    - matomo_cli_install
+    - not matomo_config.stat.exists
+  tags: [matomo]
+
 - name: Install Matomo via CLI
   command: >
     php console core:install
@@ -248,12 +260,34 @@
   when:
     - matomo_cli_install
     - not matomo_config.stat.exists
+    - "'core:install' in matomo_console_commands.stdout"
+  tags: [matomo]
+
+- name: Warn when Matomo CLI installer is unavailable
+  debug:
+    msg: >
+      Matomo {{ matomo_version }} does not expose `core:install` in this environment.
+      Complete the initial setup through the web installer at
+      {{ (matomo_use_https | bool) | ternary('https', 'http') }}://{{ matomo_site_hosts | first }}.
+  when:
+    - matomo_cli_install
+    - not matomo_config.stat.exists
+    - "'core:install' not in matomo_console_commands.stdout"
   tags: [matomo]
 
 - name: Refresh Matomo installation state
   stat:
     path: "{{ matomo_public_path }}/config/config.ini.php"
   register: matomo_config_current
+  tags: [matomo]
+
+- name: Remind that Matomo still needs the first web setup
+  debug:
+    msg: >
+      Matomo is provisioned but not installed yet.
+      Finish the installation at
+      {{ (matomo_use_https | bool) | ternary('https', 'http') }}://{{ matomo_site_hosts | first }}.
+  when: not matomo_config_current.stat.exists
   tags: [matomo]
 
 - name: Add additional Matomo sites

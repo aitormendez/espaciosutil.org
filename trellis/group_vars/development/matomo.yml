@@ -12,8 +12,8 @@ matomo_admin_password: "{{ vault_matomo_admin_password }}"
 matomo_use_https: false
 matomo_use_letsencrypt: false
 
-matomo_cli_install: true
-matomo_cli_manage_sites: true
+matomo_cli_install: false
+matomo_cli_manage_sites: false
 
 matomo_archive_url: "http://matomo.espaciosutil.test"
 
