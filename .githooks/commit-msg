@@ -12,6 +12,86 @@ fi
 line_count="$(printf '%s\n' "$filtered" | wc -l | tr -d ' ')"
 subject="$(printf '%s\n' "$filtered" | head -n 1)"
 
+infer_type() {
+  first_word="$(printf '%s\n' "$1" | awk '{print tolower($1)}')"
+
+  case "$first_word" in
+    anade|agrega|crea|implementa|integra|habilita)
+      printf '%s\n' "feat"
+      ;;
+    ajusta|arregla|corrige|evita|oculta|repara|resuelve|soluciona|actualiza)
+      printf '%s\n' "fix"
+      ;;
+    documenta)
+      printf '%s\n' "docs"
+      ;;
+    refactoriza|reorganiza|simplifica)
+      printf '%s\n' "refactor"
+      ;;
+    estiliza)
+      printf '%s\n' "style"
+      ;;
+    prueba|testea|valida|verifica)
+      printf '%s\n' "test"
+      ;;
+    *)
+      staged_files="$(git diff --cached --name-only)"
+
+      if [ -n "$staged_files" ] && printf '%s\n' "$staged_files" | grep -Eqv '^docs/'; then
+        :
+      else
+        printf '%s\n' "docs"
+        return
+      fi
+
+      if printf '%s\n' "$staged_files" | grep -Eq '(^|/)(composer\.json|composer\.lock|package\.json|package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$'; then
+        printf '%s\n' "chore"
+      else
+        printf '%s\n' "chore"
+      fi
+      ;;
+  esac
+}
+
+infer_scope() {
+  explicit_scope="$(printf '%s\n' "$1" | sed -n 's/.* en \([A-Za-z0-9_-][A-Za-z0-9_-]*\)$/\1/p' | tail -n 1 | tr '[:upper:]' '[:lower:]')"
+  if [ -n "$explicit_scope" ]; then
+    printf '%s\n' "$explicit_scope"
+    return
+  fi
+
+  staged_count="$(git diff --cached --name-only | wc -l | tr -d ' ')"
+  if [ "$staged_count" -eq 1 ]; then
+    only_file="$(git diff --cached --name-only | head -n 1)"
+    basename_scope="$(basename "$only_file")"
+    basename_scope="${basename_scope%%.*}"
+    case "$basename_scope" in
+      index|app|main|setup|helpers|footer)
+        printf '%s\n' ""
+        ;;
+      *)
+        printf '%s\n' "$basename_scope" | tr '[:upper:]' '[:lower:]'
+        ;;
+    esac
+  else
+    printf '%s\n' ""
+  fi
+}
+
+normalize_subject() {
+  raw_subject="$1"
+  raw_subject="$(printf '%s\n' "$raw_subject" | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')"
+  normalized_type="$(infer_type "$raw_subject")"
+  normalized_scope="$(infer_scope "$raw_subject")"
+  normalized_desc="$(printf '%s\n' "$raw_subject" | sed 's/ en [A-Za-z0-9_-][A-Za-z0-9_-]*$//')"
+
+  if [ -n "$normalized_scope" ]; then
+    printf '%s(%s): %s\n' "$normalized_type" "$normalized_scope" "$normalized_desc"
+  else
+    printf '%s: %s\n' "$normalized_type" "$normalized_desc"
+  fi
+}
+
 if [ "$line_count" -ne 1 ]; then
   echo "Error: el mensaje de commit debe ocupar una sola linea." >&2
   echo "Formato esperado: tipo(scope): descripcion en espanol" >&2
@@ -25,6 +105,11 @@ case "$subject" in
 esac
 
 pattern='^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\))?: .+'
+
+if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
+  subject="$(normalize_subject "$subject")"
+  printf '%s\n' "$subject" > "$msg_file"
+fi
 
 if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
   echo "Error: el mensaje no sigue Conventional Commits." >&2
