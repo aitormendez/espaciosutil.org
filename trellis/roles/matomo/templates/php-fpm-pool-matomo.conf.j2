@@ -14,7 +14,9 @@ pm.max_spare_servers = {{ matomo_php_fpm_pm_max_spare_servers }}
 pm.max_requests = {{ matomo_php_fpm_pm_max_requests }}
 chdir = {{ matomo_root }}/
 php_flag[log_errors] = on
-php_flag[display_errors] = {{ php_display_errors }}
+php_admin_value[error_reporting] = {{ matomo_php_error_reporting }}
+php_flag[display_errors] = {{ matomo_php_display_errors }}
+php_flag[display_startup_errors] = {{ matomo_php_display_startup_errors }}
 php_admin_value[open_basedir] = {{ matomo_php_open_basedir }}
 {% if memcached_sessions %}
 php_value[session.save_handler] = memcached

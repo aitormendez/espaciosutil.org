@@ -70,6 +70,46 @@
     - { path: "{{ matomo_acme_webroot }}", owner: "root", group: "root", mode: "0755" }
   tags: [matomo]
 
+- name: Check if Matomo is already installed
+  stat:
+    path: "{{ matomo_public_path }}/config/config.ini.php"
+  register: matomo_config
+  tags: [matomo]
+
+- name: Check installed Matomo version marker
+  stat:
+    path: "{{ matomo_public_path }}/.matomo-version"
+  register: matomo_version_marker
+  tags: [matomo]
+
+- name: Read installed Matomo version marker
+  slurp:
+    src: "{{ matomo_public_path }}/.matomo-version"
+  register: matomo_version_marker_content
+  when: matomo_version_marker.stat.exists
+  tags: [matomo]
+
+- name: Reset Matomo code when upgrading an uninstalled instance
+  file:
+    path: "{{ matomo_public_path }}"
+    state: absent
+  when:
+    - not matomo_config.stat.exists
+    - not matomo_version_marker.stat.exists or (matomo_version_marker_content.content | b64decode | trim) != matomo_version
+  tags: [matomo]
+
+- name: Recreate Matomo public path after reset
+  file:
+    path: "{{ matomo_public_path }}"
+    state: directory
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: "0755"
+  when:
+    - not matomo_config.stat.exists
+    - not matomo_version_marker.stat.exists or (matomo_version_marker_content.content | b64decode | trim) != matomo_version
+  tags: [matomo]
+
 - name: Download Matomo {{ matomo_version }}
   get_url:
     url: "{{ matomo_download_url }}"
@@ -84,6 +124,15 @@
     remote_src: true
     extra_opts: [--strip-components=1]
     creates: "{{ matomo_public_path }}/index.php"
+  tags: [matomo]
+
+- name: Record installed Matomo code version
+  copy:
+    dest: "{{ matomo_public_path }}/.matomo-version"
+    content: "{{ matomo_version }}\n"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+    mode: "0644"
   tags: [matomo]
 
 - name: Set ownership on Matomo files
@@ -217,12 +266,6 @@
     state: link
     force: true
   notify: reload nginx
-  tags: [matomo]
-
-- name: Check if Matomo is already installed
-  stat:
-    path: "{{ matomo_public_path }}/config/config.ini.php"
-  register: matomo_config
   tags: [matomo]
 
 - name: Check whether Matomo exposes a CLI installer

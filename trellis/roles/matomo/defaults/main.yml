@@ -2,7 +2,7 @@
 matomo_enabled: false
 
 # Matomo version and download
-matomo_version: "5.0.3"
+matomo_version: "5.8.0"
 matomo_download_url: "https://builds.matomo.org/matomo-{{ matomo_version }}.tar.gz"
 
 # Paths
@@ -44,6 +44,9 @@ matomo_php_fpm_pm_min_spare_servers: "{{ php_fpm_pm_min_spare_servers }}"
 matomo_php_fpm_pm_max_spare_servers: "{{ php_fpm_pm_max_spare_servers }}"
 matomo_php_fpm_pm_max_requests: "{{ php_fpm_pm_max_requests }}"
 matomo_php_open_basedir: "{{ matomo_root }}/:/tmp"
+matomo_php_error_reporting: 'E_ALL & ~E_DEPRECATED & ~E_STRICT'
+matomo_php_display_errors: 'Off'
+matomo_php_display_startup_errors: 'Off'
 
 # SSL
 matomo_use_https: true

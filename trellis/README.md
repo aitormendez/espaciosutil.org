@@ -81,6 +81,7 @@ Notas:
 - El rol evita modificar `acme-challenge-location.conf` para no interferir con los certificados Let's Encrypt del WordPress principal.
 - `matomo_cli_install` y `matomo_cli_manage_sites` están desactivados por defecto.
 - En Matomo 5 la instalación inicial se completa por web; el rol aprovisiona la instancia, pero no fuerza un `core:install` inexistente.
+- El pool PHP de Matomo fuerza `display_errors=Off` y excluye `E_DEPRECATED`/`E_STRICT` para no romper el instalador en desarrollo.
 
 ## Solución de problemas
 
