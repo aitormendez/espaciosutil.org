@@ -19,6 +19,7 @@
 @import './commons/navigation.css';
 @import './commons/variables.css';
 @import './components/timeline-card.css';
+@import './components/cookie-consent.css';
 @import './blocks/responsive-cols.css';
 @import './comments.css';
 @import './pmp.css';

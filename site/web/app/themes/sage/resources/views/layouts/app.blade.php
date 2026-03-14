@@ -47,6 +47,7 @@
   </div>
 
   @include('sections.footer')
+  @include('partials.cookie-consent')
 
   @php
     do_action('get_footer');

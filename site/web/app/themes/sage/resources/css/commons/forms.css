@@ -82,6 +82,12 @@
     --btn-text: var(--color-gris1);
   }
 
+  .btn--morado3 {
+    --btn-bg: var(--color-morado3);
+    --btn-border: var(--color-morado3);
+    --btn-text: var(--color-gris1);
+  }
+
   .btn--danger {
     --btn-bg: #b91c1c;
     --btn-border: #b91c1c;

@@ -64,7 +64,6 @@
     "wpackagist-plugin/post-types-order": "*",
     "wpackagist-plugin/favicon-by-realfavicongenerator": "*",
     "wpackagist-plugin/query-monitor": "*",
-    "wpackagist-plugin/gdpr-cookie-compliance": "*",
     "wpackagist-plugin/autodescription": "*",
     "log1x/acf-composer": "^3.4",
     "blade-ui-kit/blade-icons": "^1.8",

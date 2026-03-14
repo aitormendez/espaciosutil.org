@@ -3,6 +3,7 @@ import {gsap} from 'gsap';
 import {transitionScriptsAfter, transitionScriptsEnter} from './transitionScripts.js';
 import {ScrollToPlugin} from 'gsap/ScrollToPlugin.js';
 import {setBgColorAtLoadPage, syncActiveMenuState} from './nav.js';
+import {trackAnalyticsPageView} from './cookieConsent.js';
 gsap.registerPlugin(ScrollToPlugin);
 
 function normalizePath(pathname) {
@@ -106,6 +107,7 @@ export function barbaInit() {
     let parser = new DOMParser();
     let htmlDoc = parser.parseFromString(data.next.html, 'text/html');
     let nextBody = htmlDoc.querySelector('body');
+    let nextTitle = htmlDoc.querySelector('title');
     if (!nextBody) {
       return;
     }
@@ -114,6 +116,9 @@ export function barbaInit() {
     body.dataset.navContext = nextBody.dataset.navContext || 'es';
     body.dataset.section = nextBody.dataset.section || '';
     body.dataset.sectionColor = nextBody.dataset.sectionColor || '#000000';
+    if (nextTitle?.textContent) {
+      document.title = nextTitle.textContent.trim();
+    }
     setBgColorAtLoadPage();
   });
 
@@ -124,5 +129,6 @@ export function barbaInit() {
   barba.hooks.after(() => {
     syncActiveMenuState();
     transitionScriptsAfter();
+    trackAnalyticsPageView();
   });
 }

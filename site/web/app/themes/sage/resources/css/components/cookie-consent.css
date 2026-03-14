@@ -1,0 +1,36 @@
+@layer components {
+  .cookie-consent-panel[hidden],
+  .cookie-consent-banner[hidden] {
+    display: none;
+  }
+
+  .cookie-consent-toggle {
+    @apply relative inline-flex h-8 w-14 shrink-0 cursor-pointer items-center;
+  }
+
+  .cookie-consent-toggle input {
+    @apply sr-only;
+  }
+
+  .cookie-consent-toggle span:not(.sr-only) {
+    @apply relative inline-flex h-8 w-14 items-center rounded-full border border-white/15 bg-white/10 transition;
+  }
+
+  .cookie-consent-toggle span:not(.sr-only)::after {
+    @apply absolute left-1 h-5 w-5 rounded-full bg-white shadow transition;
+    content: '';
+  }
+
+  .cookie-consent-toggle input:checked + span {
+    @apply border-cde/60 bg-cde/40;
+  }
+
+  .cookie-consent-toggle input:checked + span::after {
+    transform: translateX(1.45rem);
+    background: rgb(28 27 25 / 1);
+  }
+
+  .cookie-consent-card {
+    backdrop-filter: blur(16px);
+  }
+}

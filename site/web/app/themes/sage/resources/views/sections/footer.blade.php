@@ -26,4 +26,12 @@
   @php(dynamic_sidebar('sidebar-footer'))
 
   <x-navigation-footer name="footer_navigation" />
+
+  <div class="mx-auto flex max-w-6xl justify-center px-6 pb-8 pt-2 lg:px-0">
+    <button type="button"
+      class="text-gris2 hover:text-blanco rounded border border-white/20 px-4 py-2 text-xs uppercase tracking-[0.18em] transition hover:border-white/45"
+      data-cookie-preferences-trigger>
+      Configurar cookies
+    </button>
+  </div>
 </footer>

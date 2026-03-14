@@ -4,7 +4,88 @@ function js_data()
 {
     return [
         'ytKey' => env('YOUTUBE_API_KEY'),
+        'cookieConsent' => [
+            'storageKey' => 'es_cookie_consent_v1',
+            'cookieName' => 'es_cookie_consent',
+            'version' => 'v1',
+            'legalUrls' => legal_page_urls(),
+            'matomo' => [
+                'url' => matomo_tracking_url(),
+                'siteId' => matomo_tracking_site_id(),
+            ],
+        ],
     ];
+}
+
+/**
+ * Return the canonical URLs of the legal pages.
+ *
+ * @return array{legal:string,privacy:string,cookies:string,terms:string}
+ */
+function legal_page_urls(): array
+{
+    $privacyUrl = function_exists('get_privacy_policy_url')
+        ? get_privacy_policy_url()
+        : '';
+
+    return [
+        'legal' => legal_page_url('aviso-legal', '/aviso-legal/'),
+        'privacy' => is_string($privacyUrl) && $privacyUrl !== ''
+            ? $privacyUrl
+            : legal_page_url('politica-de-privacidad', '/politica-de-privacidad/'),
+        'cookies' => legal_page_url('politica-de-cookies', '/politica-de-cookies/'),
+        'terms' => legal_page_url('condiciones-de-contratacion-y-suscripcion', '/condiciones-de-contratacion-y-suscripcion/'),
+    ];
+}
+
+/**
+ * Resolve a legal page by path and fall back to a canonical URL.
+ */
+function legal_page_url(string $path, string $fallbackPath): string
+{
+    $page = get_page_by_path($path);
+
+    if ($page instanceof WP_Post) {
+        $url = get_permalink($page);
+
+        if (is_string($url) && $url !== '') {
+            return $url;
+        }
+    }
+
+    return home_url($fallbackPath);
+}
+
+/**
+ * Resolve the Matomo base URL for the current environment.
+ */
+function matomo_tracking_url(): string
+{
+    $configuredUrl = env('MATOMO_URL');
+
+    if (is_string($configuredUrl) && $configuredUrl !== '') {
+        return untrailingslashit($configuredUrl);
+    }
+
+    $homeHost = wp_parse_url(home_url(), PHP_URL_HOST);
+
+    if (! is_string($homeHost) || $homeHost === '') {
+        return '';
+    }
+
+    $scheme = is_ssl() ? 'https' : 'http';
+
+    return sprintf('%s://matomo.%s', $scheme, $homeHost);
+}
+
+/**
+ * Resolve the Matomo site ID used by this WordPress site.
+ */
+function matomo_tracking_site_id(): int
+{
+    $configuredSiteId = (int) env('MATOMO_SITE_ID', 1);
+
+    return $configuredSiteId > 0 ? $configuredSiteId : 1;
 }
 
 /**

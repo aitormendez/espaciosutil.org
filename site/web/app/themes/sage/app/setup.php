@@ -213,6 +213,11 @@ add_filter('hf_validate_form', function ($error, $form, $data) {
         return 'invalid_captcha';
     }
 
+    $privacyAccepted = ! empty($data['PRIVACY_CONSENT']);
+    if (! $privacyAccepted) {
+        return 'invalid_privacy_consent';
+    }
+
     return '';
 }, 10, 3);
 
@@ -222,7 +227,7 @@ add_filter('hf_form_response', function ($response, $form, $data) {
     }
 
     if (isset($response['message']['type']) && $response['message']['type'] === 'error') {
-        $response['message']['text'] = __('No pudimos verificar que eres humano. Inténtalo de nuevo.', 'sage');
+        $response['message']['text'] = __('No pudimos enviar el formulario. Revisa la prueba de seguridad y la aceptación de privacidad.', 'sage');
     }
 
     return $response;
@@ -230,6 +235,77 @@ add_filter('hf_form_response', function ($response, $form, $data) {
 
 // HTML Forms: permitir campos extra (p. ej. antispam) sin marcar como spam por tamaño del POST.
 add_filter('hf_validate_form_request_size', '__return_false');
+
+/**
+ * PMPro: personalizar el texto de aceptación de condiciones.
+ */
+add_filter('pmpro_tos_field_label', function ($label, $tospage) {
+    if (! is_object($tospage) || empty($tospage->ID)) {
+        return $label;
+    }
+
+    return sprintf(
+        __('He leído y acepto las <a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>.', 'sage'),
+        esc_url(get_permalink((int) $tospage->ID)),
+        esc_html(get_the_title((int) $tospage->ID))
+    );
+}, 10, 2);
+
+/**
+ * PMPro: checkbox expreso para inicio inmediato del contenido digital.
+ */
+add_action('pmpro_checkout_before_submit_button', function ($level = null) {
+    global $pmpro_review;
+
+    if (! empty($pmpro_review)) {
+        return;
+    }
+
+    $checked = ! empty($_REQUEST['legal_immediate_access']);
+    ?>
+    <fieldset id="pmpro_legal_immediate_access"
+        class="<?php echo esc_attr(pmpro_get_element_class('pmpro_form_fieldset', 'pmpro_legal_immediate_access')); ?>">
+        <div class="<?php echo esc_attr(pmpro_get_element_class('pmpro_form_fields')); ?>">
+            <div
+                class="<?php echo esc_attr(pmpro_get_element_class('pmpro_form_field pmpro_form_field-checkbox pmpro_form_field-required')); ?>">
+                <label class="<?php echo esc_attr(pmpro_get_element_class('pmpro_form_label pmpro_clickable', 'legal_immediate_access')); ?>"
+                    for="legal_immediate_access">
+                    <input type="checkbox" name="legal_immediate_access" value="1" id="legal_immediate_access"
+                        <?php checked(true, $checked); ?>
+                        class="<?php echo esc_attr(pmpro_get_element_class('pmpro_form_input pmpro_form_input-checkbox pmpro_form_input-required', 'legal_immediate_access')); ?>" />
+                    <?php esc_html_e('Solicito el acceso inmediato al contenido digital y soy consciente de que, una vez iniciada la ejecución del servicio, puedo perder mi derecho de desistimiento en los términos legalmente aplicables.', 'sage'); ?>
+                </label>
+            </div>
+        </div>
+    </fieldset>
+    <?php
+}, 6);
+
+/**
+ * PMPro: validar la aceptación del inicio inmediato del servicio digital.
+ */
+$validateImmediateAccessConsent = function ($pmproContinueRegistration) {
+    global $pmpro_error_fields;
+
+    if (! $pmproContinueRegistration) {
+        return $pmproContinueRegistration;
+    }
+
+    if (! isset($_REQUEST['legal_immediate_access']) || empty($_REQUEST['legal_immediate_access'])) {
+        $pmpro_error_fields[] = 'legal_immediate_access';
+        pmpro_setMessage(
+            __('Debes aceptar el inicio inmediato del contenido digital para continuar con la suscripción.', 'sage'),
+            'pmpro_error'
+        );
+
+        return false;
+    }
+
+    return $pmproContinueRegistration;
+};
+
+add_filter('pmpro_checkout_user_creation_checks', $validateImmediateAccessConsent);
+add_filter('pmpro_checkout_order_creation_checks', $validateImmediateAccessConsent);
 
 /**
  * Return core PMPro page IDs configured in options.

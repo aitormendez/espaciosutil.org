@@ -11,6 +11,7 @@ import {
 import { coloresHover } from './colores.js';
 import { toc } from './toc.js';
 import { cosmos } from './cosmos/cosmos.jsx';
+import { initCookieConsent } from './cookieConsent.js';
 
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   const devtoolsHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let navMode = null;
   let destroyNavigation = () => {};
 
+  initCookieConsent();
   syncActiveMenuState();
 
   if (!document.getElementById('wpadminbar')) {
