@@ -52,6 +52,14 @@ function pmpro_report_memberships_widget() {
 			'all time'   => __( 'All Time', 'paid-memberships-pro' ),
 		);
 
+		/**
+		 * Filter the periods for the memberships widget.
+		 * @since TBD
+		 * @param array $reports The array of periods.
+		 * @return array $reports The array of periods.
+		 */
+		$reports = apply_filters( 'pmpro_memberships_widget_periods', $reports );
+
 		foreach ( $reports as $report_type => $report_name ) {
 			$signups       = number_format_i18n( pmpro_getSignups( $report_type ) );
 			$cancellations = number_format_i18n( pmpro_getCancellations( $report_type ) );
@@ -99,27 +107,7 @@ function pmpro_report_memberships_widget() {
 		</p>
 	<?php } ?>
 </span>
-<script>
-	jQuery(document).ready(function() {
-		jQuery('.pmpro_report_th ').on('click',function(event) {
-			//prevent form submit onclick
-			event.preventDefault();
-
-			//toggle sub rows
-			jQuery(this).closest('tbody').find('.pmpro_report_tr_sub').toggle();
-
-			//change arrow
-			if(jQuery(this).hasClass('pmpro_report_th_closed')) {
-				jQuery(this).removeClass('pmpro_report_th_closed');
-				jQuery(this).addClass('pmpro_report_th_opened');
-			} else {
-				jQuery(this).removeClass('pmpro_report_th_opened');
-				jQuery(this).addClass('pmpro_report_th_closed');
-			}
-		});
-	});
-</script>
-	<?php
+<?php
 }
 
 function pmpro_report_memberships_page() {

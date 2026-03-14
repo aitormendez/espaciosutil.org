@@ -228,10 +228,10 @@ function pmpro_display_fields_in_group( $group, $scope = 'checkout' ) {
 		'after_tos_fields',
 	);
 	if ( ! in_array( $group, $valid_groups ) ) {
-		_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( 'The group %s should not be passed into %s. Use PMPro_Field_Group::display() instead.', 'paid-memberships-pro' ), $group, __FUNCTION__ ), '2.9.3' );
+		_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( 'The group %s should not be passed into %s. Use PMPro_Field_Group::display() instead.', 'paid-memberships-pro' ), esc_html( $group ), __FUNCTION__ ), '2.9.3' );
 	}
 	if ( $scope !== 'checkout' ) {
-		_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( 'The scope %s should not be passed into %s. Use PMPro_Field_Group::display() instead.', 'paid-memberships-pro' ), $scope, __FUNCTION__ ), '2.9.3' );
+		_doing_it_wrong( __FUNCTION__, sprintf( esc_html__( 'The scope %s should not be passed into %s. Use PMPro_Field_Group::display() instead.', 'paid-memberships-pro' ), esc_html( $scope ), __FUNCTION__ ), '2.9.3' );
 	}
 
     // Get the field group.
@@ -1050,6 +1050,23 @@ function pmpro_get_user_fields_settings() {
     
     return $settings;
 }
+
+/**
+ * Clear cached user field settings in object cache when adding, updating or deleting option.
+ * 
+ * @since TBD
+ * @param mixed $old_value The old value of the option.
+ * @param mixed $value The new value of the option.
+ * @param string $option The name of the option.
+ * @return void
+ */
+function pmpro_clear_user_fields_settings_cache( $old_value = null, $value = null, $option = null ) {
+	wp_cache_delete( 'pmpro_user_fields_settings', 'options' );
+	wp_cache_delete( 'alloptions', 'options' );
+}
+add_action( 'add_option_pmpro_user_fields_settings', 'pmpro_clear_user_fields_settings_cache', 10, 2 );
+add_action( 'update_option_pmpro_user_fields_settings', 'pmpro_clear_user_fields_settings_cache', 10, 3 );
+add_action( 'delete_option_pmpro_user_fields_settings', 'pmpro_clear_user_fields_settings_cache' );
 
 /**
  * Load user field settings into the fields global var.

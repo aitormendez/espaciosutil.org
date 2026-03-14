@@ -16,7 +16,7 @@ use Stripe\StripeClient as Stripe_Client; // Used for deleting webhook as of 2.4
 use Stripe\Account as Stripe_Account;
 use Stripe\Checkout\Session as Stripe_Checkout_Session;
 
-define( "PMPRO_STRIPE_API_VERSION", "2022-11-15" );
+define( "PMPRO_STRIPE_API_VERSION", "2025-09-30.clover" );
 
 //include pmprogateway
 require_once( dirname( __FILE__ ) . "/class.pmprogateway.php" );
@@ -132,16 +132,6 @@ class PMProGateway_stripe extends PMProGateway {
 		add_action( 'wp_ajax_pmpro_stripe_delete_webhook', array( 'PMProGateway_stripe', 'wp_ajax_pmpro_stripe_delete_webhook' ) );
 		add_action( 'wp_ajax_pmpro_stripe_rebuild_webhook', array( 'PMProGateway_stripe', 'wp_ajax_pmpro_stripe_rebuild_webhook' ) );
 
-		/*
-            Filter pmpro_next_payment to get actual value
-            via the Stripe API. This is disabled by default
-            for performance reasons, but you can enable it
-            by copying this line into a custom plugin or
-            your active theme's functions.php and uncommenting
-            it there.
-        */
-		//add_filter('pmpro_next_payment', array('PMProGateway_stripe', 'pmpro_next_payment'), 10, 3);
-
 		//code to add at checkout if Stripe is the current gateway
 		$default_gateway = get_option( 'pmpro_gateway' );
 		$current_gateway = pmpro_getGateway();
@@ -177,6 +167,7 @@ class PMProGateway_stripe extends PMProGateway {
 		add_action( 'pmpro_payment_option_fields', array( 'PMProGateway_stripe', 'pmpro_set_up_apple_pay' ), 10, 2 );
 		add_action( 'init', array( 'PMProGateway_stripe', 'clear_saved_subscriptions' ) );
 		add_action( 'pmpro_billing_preheader', array( 'PMProGateway_stripe', 'pmpro_billing_preheader_stripe_customer_portal' ), 5 );
+		add_action( 'wp_update_user', array( 'PMProGateway_stripe', 'update_customer_for_user' ), 10, 1 );
 
 		// Stripe Connect functions.
 		add_action( 'admin_init', array( 'PMProGateway_stripe', 'stripe_connect_save_options' ) );
@@ -397,7 +388,7 @@ class PMProGateway_stripe extends PMProGateway {
 							<p id="pmpro_stripe_webhook_notice" class="pmpro_stripe_webhook_notice"><?php esc_html_e( 'A webhook is set up in Stripe, but it is disabled.', 'paid-memberships-pro' ); ?> <a id="pmpro_stripe_rebuild_webhook" href="#"><?php esc_html_e( 'Rebuild Webhook', 'paid-memberships-pro' ); ?></a></p>
 						</div>
 						<?php
-					} elseif ( $webhook['api_version'] < PMPRO_STRIPE_API_VERSION ) {
+					} elseif ( $webhook['api_version'] !== PMPRO_STRIPE_API_VERSION ) {
 						// Check webhook API version.
 						?>
 						<div class="notice error inline">
@@ -643,7 +634,7 @@ class PMProGateway_stripe extends PMProGateway {
 						),
 					);
 				?>
-				<p class="description"><?php echo sprintf( wp_kses( __( 'Stripe Tax is only available when using Stripe Checkout (the Stripe-hosted payment page). You must <a target="_blank" href="%s">activate Stripe Tax</a> in your Stripe dashboard. <a target="_blank" href="%s">More information about Stripe Tax »</a>', 'paid-memberships-pro' ), $allowed_stripe_tax_description_html ), 'https://stripe.com/tax', 'https://dashboard.stripe.com/settings/tax/activate' ); ?></p>
+				<p class="description"><?php echo sprintf( wp_kses( __( 'Stripe Tax is only available when using Stripe Checkout (the Stripe-hosted payment page). You must <a target="_blank" href="%1$s">activate Stripe Tax</a> in your Stripe dashboard. <a target="_blank" href="%2$s">More information about Stripe Tax »</a>', 'paid-memberships-pro' ), $allowed_stripe_tax_description_html ), 'https://dashboard.stripe.com/settings/tax/activate', 'https://stripe.com/tax' ); ?></p>
 			</td>
 		</tr>
 		<tr class="gateway gateway_stripe gateway_stripe_checkout_fields" <?php if ( $gateway != "stripe"  ) { ?>style="display: none;"<?php } ?>>
@@ -746,7 +737,7 @@ class PMProGateway_stripe extends PMProGateway {
 												<p id="pmpro_stripe_webhook_notice" class="pmpro_stripe_webhook_notice"><?php esc_html_e( 'A webhook is set up in Stripe, but it is disabled.', 'paid-memberships-pro' ); ?> <a id="pmpro_stripe_rebuild_webhook" href="#"><?php esc_html_e( 'Rebuild Webhook', 'paid-memberships-pro' ); ?></a></p>
 											</div>
 											<?php
-										} elseif ( $webhook['api_version'] < PMPRO_STRIPE_API_VERSION ) {
+										} elseif ( $webhook['api_version'] !== PMPRO_STRIPE_API_VERSION ) {
 											// Check webhook API version.
 											?>
 											<div class="notice error inline">
@@ -1012,7 +1003,7 @@ class PMProGateway_stripe extends PMProGateway {
 										),
 									);
 								?>
-								<p class="description"><?php echo sprintf( wp_kses( __( 'Stripe Tax is only available when using Stripe Checkout (the Stripe-hosted payment page). You must <a target="_blank" href="%s">activate Stripe Tax</a> in your Stripe dashboard. <a target="_blank" href="%s">More information about Stripe Tax »</a>', 'paid-memberships-pro' ), $allowed_stripe_tax_description_html ), 'https://stripe.com/tax', 'https://dashboard.stripe.com/settings/tax/activate' ); ?></p>
+								<p class="description"><?php echo sprintf( wp_kses( __( 'Stripe Tax is only available when using Stripe Checkout (the Stripe-hosted payment page). You must <a target="_blank" href="%1$s">activate Stripe Tax</a> in your Stripe dashboard. <a target="_blank" href="%2$s">More information about Stripe Tax »</a>', 'paid-memberships-pro' ), $allowed_stripe_tax_description_html ), 'https://dashboard.stripe.com/settings/tax/activate', 'https://stripe.com/tax' ); ?></p>
 							</td>
 						</tr>
 						<tr class="gateway_stripe_checkout_fields">
@@ -1459,8 +1450,11 @@ class PMProGateway_stripe extends PMProGateway {
 	 * Filter pmpro_next_payment to get date via API if possible
 	 *
 	 * @since 1.8.6
+	 * @deprecated 3.6 In favor of using the PMPro_Subscriptions class.
 	 */
 	public static function pmpro_next_payment( $timestamp, $user_id, $order_status ) {
+		_deprecated_function( __METHOD__, '3.6' );
+
 		//find the last order for this user
 		if ( ! empty( $user_id ) ) {
 			//get last order
@@ -1999,9 +1993,24 @@ class PMProGateway_stripe extends PMProGateway {
 		// Used to calculate Stripe Connect fees.
 		$application_fee_percentage = $stripe->get_application_fee_percentage();
 
-		// First, let's handle the initial payment.
-		if ( ! empty( $morder->subtotal ) ) {
-			$initial_subtotal       = $morder->subtotal;
+		// If the level is recurring, check if we can combine the initial and recurring payments.
+		$level = $morder->getMembershipLevelAtCheckout();
+		if ( pmpro_isLevelRecurring( $level ) ) {
+			$filtered_trial_period_days = $stripe->calculate_trial_period_days( $morder );
+			$unfiltered_trial_period_days = $stripe->calculate_trial_period_days( $morder, false );
+
+			$combine_initial_and_recurring = (
+				empty( $level->trial_limit ) && // Check if there is a trial period.
+				$filtered_trial_period_days === $unfiltered_trial_period_days && // Check if the trial period is the same as the filtered trial period.
+				empty( $level->profile_start_date ) && // Check if the profile start date set directly on the level is empty.
+				! empty( $level->initial_payment ) && // Check if there is an initial payment.
+				$level->initial_payment === $level->billing_amount // Check if the initial payment and recurring payment prices are the same.
+			);
+		}
+
+		// If we have an initial payment that is not being combined into a recurring payment, we need to build the initial payment line item.
+		if ( ! empty( $level->initial_payment ) && empty( $combine_initial_and_recurring ) ) {
+			$initial_subtotal       = $level->initial_payment;
 			$initial_tax            = $morder->getTaxForPrice( $initial_subtotal );
 			$initial_payment_amount = pmpro_round_price( (float) $initial_subtotal + (float) $initial_tax );
 			$initial_payment_price  = $stripe->get_price_for_product( $product_id, $initial_payment_amount );
@@ -2026,7 +2035,6 @@ class PMProGateway_stripe extends PMProGateway {
 		}
 
 		// Now, let's handle the recurring payments.
-		$level = $morder->getMembershipLevelAtCheckout();
 		if ( pmpro_isLevelRecurring( $level ) ) {
 			$recurring_subtotal       = $level->billing_amount;
 			$recurring_tax            = $morder->getTaxForPrice( $recurring_subtotal );
@@ -2045,20 +2053,8 @@ class PMProGateway_stripe extends PMProGateway {
 				'description' => self::get_order_description( $morder ),
 			);
 
-			// Check if we can combine initial and recurring payments.
-			$filtered_trial_period_days = $stripe->calculate_trial_period_days( $morder );
-			$unfiltered_trial_period_days = $stripe->calculate_trial_period_days( $morder, false );
-
-			if (
-				empty( $level->trial_limit ) && // Check if there is a trial period.
-				$filtered_trial_period_days === $unfiltered_trial_period_days && // Check if the trial period is the same as the filtered trial period.
-				empty( $level->profile_start_date ) && // Check if the profile start date set directly on the level is empty.
-				( ! empty( $initial_payment_amount ) && $initial_payment_amount === $recurring_payment_amount ) // Check if the initial payment and recurring payment prices are the same.
-				) {
-				// We can combine the initial payment and the recurring payment.
-				array_shift( $line_items );
-				$payment_intent_data = null;
-			} else {
+			// If we're sending an initial payment and a recurring payment separately, we need to set a trial period.
+			if ( empty( $combine_initial_and_recurring ) ) {
 				// We need to set the trial period days and send initial and recurring payments as separate line items.
 				$subscription_data['trial_period_days'] = $filtered_trial_period_days;
 			}
@@ -2299,13 +2295,14 @@ class PMProGateway_stripe extends PMProGateway {
 	 * @since 2.7.0
 	 *
 	 * @param int $user_id to get Stripe_Customer for.
+	 * @param bool $find_existing If true, will try to find an existing customer for the user if one does not exist in user meta.
 	 * @return Stripe_Customer|null
 	 */
-	public function get_customer_for_user( $user_id ) {
+	public function get_customer_for_user( $user_id, $find_existing = true ) {
 		// Pull Stripe customer ID from user meta.
 		$customer_id = get_user_meta( $user_id, 'pmpro_stripe_customerid', true );
 
-		if ( empty( $customer_id ) ) {
+		if ( empty( $customer_id ) && $find_existing ) {
 			// Try to figure out the customer ID from their subscription.
 			$subscription_search_params = array(
 				'user_id' => $user_id,
@@ -2383,11 +2380,25 @@ class PMProGateway_stripe extends PMProGateway {
 	 * Create/Update Stripe customer for a user.
 	 *
 	 * @since 2.7.0
+	 * @deprecated 3.6
 	 *
 	 * @param int $user_id to create/update Stripe customer for.
 	 * @return Stripe_Customer|false
 	 */
 	public function update_customer_from_user( $user_id ) {
+		_deprecated_function( __METHOD__, '3.6', 'PMProGateway_stripe::update_customer_for_user()' );
+		return self::update_customer_for_user( $user_id );
+	}
+
+	/**
+	 * Create/Update Stripe customer for a user.
+	 *
+	 * @since 3.6
+	 *
+	 * @param int $user_id to create/update Stripe customer for.
+	 * @return Stripe_Customer|false
+	 */
+	public static function update_customer_for_user( $user_id ) {
 		$user = get_userdata( $user_id );
 
 		if ( empty( $user->ID ) ) {
@@ -2395,8 +2406,15 @@ class PMProGateway_stripe extends PMProGateway {
 			return false;
 		}
 
+		$stripe = new PMProGateway_stripe();
+
 		// Get the existing customer from Stripe.
-		$customer = $this->get_customer_for_user( $user_id );
+		$customer = $stripe->get_customer_for_user( $user_id, false ); // False to improve performance if customer ID does not exist in user meta.
+		if ( empty( $customer ) ) {
+			// If we don't have a customer, don't update.
+			// This is important in case Stripe isn't used on the site.
+			return false;
+		}
 
 		// Get the name for the customer.
 		$name = trim( $user->first_name . " " . $user->last_name );
@@ -2407,30 +2425,22 @@ class PMProGateway_stripe extends PMProGateway {
 
 		// Get data to update customer with.
 		$customer_args = array(
+			'name'        => $name,
 			'email'       => $user->user_email,
 			'description' => $name . ' (' . $user->user_email . ')',
 		);
 
-		// Maybe update billing address for customer.
-		if (
-			! $this->customer_has_billing_address( $customer ) &&
-			! empty( $user->pmpro_baddress1 ) &&
-			! empty( $user->pmpro_bcity ) &&
-			! empty( $user->pmpro_bstate ) &&
-			! empty( $user->pmpro_bzipcode ) &&
-			! empty( $user->pmpro_bcountry )
-		) {
-			// We have an address in user meta and there is
-			// no address in Stripe. May as well send it.
-			$customer_args['address'] = array(
-				'city'        => $user->pmpro_bcity,
-				'country'     => $user->pmpro_bcountry,
-				'line1'       => $user->pmpro_baddress1,
-				'line2'       => $user->pmpro_baddress2,
-				'postal_code' => $user->pmpro_bzipcode,
-				'state'       => $user->pmpro_bstate,
-			);
-		}
+		/**
+		 * Change the information that is sent when updating/creating
+		 * a Stripe_Customer from a user.
+		 *
+		 * @since 2.7.0
+		 * @deprecated 3.6
+		 *
+		 * @param array       $customer_args to be sent.
+		 * @param WP_User     $user being used to create/update customer.
+		 */
+		$customer_args = apply_filters_deprecated( 'pmpro_stripe_update_customer_from_user', array( $customer_args, $user ), '3.6', 'pmpro_stripe_update_customer_for_user' );
 
 		/**
 		 * Change the information that is sent when updating/creating
@@ -2441,16 +2451,10 @@ class PMProGateway_stripe extends PMProGateway {
 		 * @param array       $customer_args to be sent.
 		 * @param WP_User     $user being used to create/update customer.
 		 */
-		$customer_args = apply_filters( 'pmpro_stripe_update_customer_from_user', $customer_args, $user );
+		$customer_args = apply_filters( 'pmpro_stripe_update_customer_for_user', $customer_args, $user );
 
 		// Update the customer.
-		if ( empty( $customer ) ) {
-			// We need to build a new customer.
-			$customer = $this->create_customer( $customer_args );
-		} else {
-			// Update the existing customer.
-			$customer = $this->update_customer( $customer->ID, $customer_args );
-		}
+		$customer = $stripe->update_customer( $customer->id, $customer_args );
 		return is_string( $customer ) ? false : $customer;
 	}
 
@@ -2622,11 +2626,9 @@ class PMProGateway_stripe extends PMProGateway {
 				// Subscription is active.
 				$update_array['status'] = 'active';
 
-				// Get the next payment date. If the last invoice is not paid, that invoice date is the next payment date. Otherwise, the next payment date is the current_period_end.
-				if ( ! empty( $stripe_subscription->latest_invoice ) && empty( $stripe_subscription->latest_invoice->paid ) ) {
-					$update_array['next_payment_date'] = date( 'Y-m-d H:i:s', intval( $stripe_subscription->latest_invoice->period_end ) );
-				} else {
-					$update_array['next_payment_date'] = date( 'Y-m-d H:i:s', intval( $stripe_subscription->current_period_end ) );
+				// Get the next payment date.
+				if ( ! empty( $stripe_subscription->items->data[0]->current_period_end ) ) {
+					$update_array['next_payment_date'] = date( 'Y-m-d H:i:s', intval( $stripe_subscription->items->data[0]->current_period_end ) );
 				}
 
 				// Get the billing amount and cycle.
@@ -2685,7 +2687,7 @@ class PMProGateway_stripe extends PMProGateway {
 		if ( empty( $portal_configuration_id ) ) {
 			$portal_configuration_params = array(
 				'business_profile' => array(
-					'headline' => esc_html__( 'Manage billing', 'woocommerce-gateway-stripe' ),
+					'headline' => esc_html__( 'Manage billing', 'paid-memberships-pro' ),
 				),
 				'features' => array(
 					'customer_update' => array( 'enabled' => true, 'allowed_updates' => array( 'address', 'phone', 'tax_id' ) ),
@@ -3604,9 +3606,6 @@ class PMProGateway_stripe extends PMProGateway {
 					'pending_setup_intent.payment_method',
 				),
 			);
-			if ( ! self::using_api_keys() ) {
-		    $subscription_params['application_fee_percent'] = $this->get_application_fee_percentage();
-			}
 			$subscription_params = apply_filters( 'pmpro_stripe_create_subscription_array', $subscription_params );
 			$subscription = Stripe_Subscription::create( $subscription_params );
 		} catch ( Stripe\Error\Base $e ) {
@@ -3729,6 +3728,7 @@ class PMProGateway_stripe extends PMProGateway {
 	private static function webhook_events() {
 		$events = array(
 			'invoice.created',
+			'invoice.upcoming',
 			'invoice.payment_succeeded',
 			'invoice.payment_action_required',
 			'customer.subscription.deleted',
@@ -4031,7 +4031,8 @@ class PMProGateway_stripe extends PMProGateway {
 			// Find any open invoices for this subscription and forgive them.
 			if ( ! empty( $invoices ) ) {
 				foreach ( $invoices->data as $invoice ) {
-					if ( 'open' == $invoice->status && $invoice->subscription == $subscription->id ) {
+					$invoice_subscription_id = ! empty( $invoice->parent->subscription_details->subscription ) ? $invoice->parent->subscription_details->subscription : null;
+					if ( 'open' == $invoice->status && $invoice_subscription_id == $subscription->id ) {
 						$invoice->voidInvoice();
 					}
 				}
@@ -4255,6 +4256,7 @@ class PMProGateway_stripe extends PMProGateway {
 		// countries, we should set the percentage to 0. This is a temporary fix until we
 		// have a better solution or until all countries allow us to use application fees.
 		$countries_to_disable_application_fees = array(
+			'BR', // Brazil.
 			'IN', // India.
 			'MX', // Mexico.
 			'MY', // Malaysia.
@@ -4471,19 +4473,19 @@ class PMProGateway_stripe extends PMProGateway {
 
 		//if an invoice ID is passed, get the charge/payment id
 		if ( strpos( $transaction_id, "in_" ) !== false ) {
-			$invoice = Stripe_Invoice::retrieve( $transaction_id );
+			$invoice = Stripe_Invoice::retrieve(
+				array(
+					'id' => $transaction_id,
+					'expand' => array( 'payments', 'payments.data.payment.payment_intent' )
+				)
+			);
 
-			if ( ! empty( $invoice ) && ! empty( $invoice->charge ) ) {
-				$transaction_id = $invoice->charge;
+			if ( ! empty( $invoice ) && ! empty( $invoice->payments->data[0]->payment->payment_intent->latest_charge ) ) {
+				$transaction_id = $invoice->payments->data[0]->payment->payment_intent->latest_charge;
 			}
 		}
 
 		$success = false;
-
-		// Add new lines to order notes if not empty.
-		if ( ! empty( $order->notes ) ) {
-			$order->notes .= "\n\n";
-		}
 
 		//attempt refund
 		try {
@@ -4515,8 +4517,8 @@ class PMProGateway_stripe extends PMProGateway {
 			
 				global $current_user;
 
-				// translators: %1$s is the date. %2$s is the Transaction ID. %3$s is the user display name that initiated the refund.
-				$order->notes = trim( $order->notes . sprintf( __('Admin: Order successfully refunded on %1$s for transaction ID %2$s by %3$s.', 'paid-memberships-pro' ), date_i18n('Y-m-d H:i:s'), $transaction_id, $current_user->display_name ) );
+				// translators: %1$s is the Transaction ID. %2$s is the user display name that initiated the refund.
+				$order->add_order_note( sprintf( __('Admin: Order successfully refunded for transaction ID %1$s by %2$s.', 'paid-memberships-pro' ), $transaction_id, $current_user->display_name ) );
 
 				$user = get_user_by( 'id', $order->user_id );
 				//send an email to the member
@@ -4528,13 +4530,13 @@ class PMProGateway_stripe extends PMProGateway {
 				$myemail->sendRefundedAdminEmail( $user, $order );
 
 			} else {
-				$order->notes = trim( $order->notes . __('Admin: An error occurred while attempting to process this refund.', 'paid-memberships-pro' ) );
+				$order->add_order_note( __('Admin: An error occurred while attempting to process this refund.', 'paid-memberships-pro' ) );
 			}
 
-		} catch ( \Throwable $e ) {			
-			$order->notes = trim( $order->notes . __( 'Admin: There was a problem processing the refund', 'paid-memberships-pro' ) . ' ' . $e->getMessage() );
+		} catch ( \Throwable $e ) {
+			$order->add_order_note( __( 'Admin: There was a problem processing the refund', 'paid-memberships-pro' ) . ' ' . $e->getMessage() );
 		} catch ( \Exception $e ) {
-			$order->notes = trim( $order->notes . __( 'Admin: There was a problem processing the refund', 'paid-memberships-pro' ) . ' ' . $e->getMessage() );
+			$order->add_order_note( __( 'Admin: There was a problem processing the refund', 'paid-memberships-pro' ) . ' ' . $e->getMessage() );
 		}
 
 		$order->saveOrder();

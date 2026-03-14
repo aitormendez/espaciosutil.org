@@ -404,7 +404,7 @@ class PMPro_Field_Group {
 			?>
 			<h2><?php echo wp_kses_post( $this->label ); ?></h2>
 			<?php
-			if ( ! empty( $box->description ) ) {
+			if ( ! empty( $this->description ) ) {
 				?>
 				<p><?php echo wp_kses_post( $this->description ); ?></p>
 				<?php
@@ -423,7 +423,7 @@ class PMPro_Field_Group {
 		}
 
 		// Output the group header.
-		echo $group_header;
+		echo wp_kses_post( $group_header );
 
 		// Display the fields.
 		foreach ( $fields_to_display as $field ) {
@@ -519,7 +519,7 @@ class PMPro_Field_Group {
 		}
 
 		// Output the group footer.
-		echo $group_footer;
+		echo wp_kses_post( $group_footer );
 	}
 
 	/**

@@ -1803,7 +1803,7 @@ function pmpro_calculateInitialPaymentRevenue( $s = null, $l = null ) {
 
 	$total = $wpdb->get_var( $sqlQuery );
 
-	return (double) $total;
+	return (float) $total;
 }
 
 function pmpro_calculateRecurringRevenue( $s, $l ) {
@@ -1975,8 +1975,8 @@ function pmpro_checkDiscountCode( $code, $level_id = null, $return_errors = fals
 	// check if the code has started
 	if ( ! $error ) {
 		// fix the date timestamps
-		$dbcode->starts = strtotime( date_i18n( 'm/d/Y', $dbcode->starts ) );
-		$dbcode->expires = strtotime( date_i18n( 'm/d/Y', $dbcode->expires ) );
+		$dbcode->starts = strtotime( date_i18n( 'm/d/Y 00:00:00', $dbcode->starts ) );
+		$dbcode->expires = strtotime( date_i18n( 'm/d/Y 23:59:59', $dbcode->expires ) );
 
 		// today
 		$today = strtotime( date_i18n( 'm/d/Y H:i:00', current_time( 'timestamp' ) ) );
@@ -3520,7 +3520,7 @@ function pmpro_round_price( $price, $currency = '' ) {
 		$decimals = intval( $pmpro_currencies[ $currency ]['decimals'] );
 	}
 
-	$rounded = round( (double) $price, $decimals );
+	$rounded = round( (float) $price, $decimals );
 
 	/**
 	 * Filter for result of pmpro_round_price.
@@ -3875,7 +3875,7 @@ function pmpro_sanitize_with_safelist( $needle, $safelist ) {
 function pmpro_sanitize( $value, $field = null ) {
 	if ( null !== $field ) {
 		// This argument is deprecated. User fields now have sanitization logic in the field class.
-		_deprecated_argument( __FUNCTION__, '3.4', __( 'The $field argument is deprecated. The sanitization logic is now built into the PMPro_Field class.', 'paid-memberships-pro' ) );
+		_deprecated_argument( __FUNCTION__, '3.4', esc_html__( 'The $field argument is deprecated. The sanitization logic is now built into the PMPro_Field class.', 'paid-memberships-pro' ) );
 	}
 
 	if ( is_array( $value ) ) {
@@ -4577,6 +4577,7 @@ function pmpro_allowed_refunds( $order ) {
 	 * @param array $allowed_gateways A list of allowed gateways to work with refunds
 	 */
 	$allowed_gateways = apply_filters( 'pmpro_allowed_refunds_gateways', array( 'stripe', 'paypalexpress' ) );
+
 	//Only apply to these gateways
 	if( in_array( $order->gateway, $allowed_gateways, true ) ) {
 		$okay = true;
@@ -5135,9 +5136,77 @@ function pmpro_display_member_account_level_message( $level ) {
 	if ( $membership_account_message ) {
 		?>
 		<div class="<?php echo esc_attr( pmpro_get_element_class( 'pmpro_account-membership-message' ) ); ?>">
-			<?php echo wpautop( wp_kses_post( $membership_account_message ) ); ?>
+			<?php echo wp_kses_post( wpautop( $membership_account_message ) ); ?>
 		</div>
 		<?php
 	}
 }
 add_action( 'pmpro_membership_account_after_level_card_content', 'pmpro_display_member_account_level_message' );
+
+/**
+ * Update the level restrictions for a post.
+ *
+ * @since 3.6
+ *
+ * @param int $post_id The ID of the post to update.
+ * @param array $level_ids The IDs of the levels to restrict the post to.
+ */
+function pmpro_update_post_level_restrictions( $post_id, $level_ids ) {
+	global $wpdb;
+
+	// Get the current level IDs for the post.
+	$current_level_ids = $wpdb->get_col( $wpdb->prepare(
+		"SELECT membership_id FROM {$wpdb->pmpro_memberships_pages} WHERE page_id = %d",
+		intval( $post_id )
+	) );
+
+	// Get the list of level IDs to remove.
+	$level_ids_to_remove = array_diff( $current_level_ids, $level_ids );
+	if ( ! empty( $level_ids_to_remove ) ) {
+		// Delete the restrictions for the levels that are being removed.
+		foreach( $level_ids_to_remove as $level_id ) {
+			$wpdb->delete(
+				$wpdb->pmpro_memberships_pages,
+				array(
+					'membership_id' => intval( $level_id ),
+					'page_id'       => intval( $post_id ),
+				),
+				array(
+					'%d',
+					'%d',
+				)
+			);
+		}
+	}
+
+	// Get the list of level IDs to insert.
+	$level_ids_to_insert = array_diff( $level_ids, $current_level_ids );
+	if ( ! empty( $level_ids_to_insert ) ) {
+		// Insert the restrictions for the new levels.
+		foreach ( $level_ids_to_insert as $level_id ) {
+			$wpdb->insert(
+				$wpdb->pmpro_memberships_pages,
+				array(
+					'membership_id' => intval( $level_id ),
+					'page_id'       => intval( $post_id ),
+				),
+				array(
+					'%d',
+					'%d',
+				)
+			);
+		}
+	}
+
+	// If we made changes, run an action.
+	if ( ! empty( $level_ids_to_remove ) || ! empty( $level_ids_to_insert ) ) {
+		/**
+		 * Action triggered after updating post level restrictions.
+		 *
+		 * @since 3.6
+		 *
+		 * @param int $post_id The ID of the post that was updated.
+		 */
+		do_action( 'pmpro_after_updating_post_level_restrictions', $post_id );
+	}
+}
