@@ -15,6 +15,7 @@ php_extensions_default:
   "php{{ php_version }}-curl": "{{ apt_package_state }}"
   "php{{ php_version }}-dev": "{{ apt_package_state }}"
   "php{{ php_version }}-fpm": "{{ apt_package_state }}"
+  "php{{ php_version }}-gd": "{{ apt_package_state }}"
   "php{{ php_version }}-imagick": "{{ apt_package_state }}"
   "php{{ php_version }}-intl": "{{ apt_package_state }}"
   "php{{ php_version }}-mbstring": "{{ apt_package_state }}"
