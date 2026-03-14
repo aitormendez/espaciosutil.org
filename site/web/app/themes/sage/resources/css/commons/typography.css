@@ -207,7 +207,7 @@
   }
 
   a:not(:where(.not-prose, .not-prose *)) {
-    color: var(--color-cde-light);
+    color: var(--color-cde-light-2);
     text-decoration-line: underline;
     text-decoration-color: theme('colors.blanco / 0.3');
     text-underline-offset: 0.2em;
