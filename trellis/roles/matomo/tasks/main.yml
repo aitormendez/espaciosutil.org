@@ -78,13 +78,13 @@
 
 - name: Check installed Matomo version marker
   stat:
-    path: "{{ matomo_public_path }}/.matomo-version"
+    path: "{{ matomo_version_marker_path }}"
   register: matomo_version_marker
   tags: [matomo]
 
 - name: Read installed Matomo version marker
   slurp:
-    src: "{{ matomo_public_path }}/.matomo-version"
+    src: "{{ matomo_version_marker_path }}"
   register: matomo_version_marker_content
   when: matomo_version_marker.stat.exists
   tags: [matomo]
@@ -128,11 +128,17 @@
 
 - name: Record installed Matomo code version
   copy:
-    dest: "{{ matomo_public_path }}/.matomo-version"
+    dest: "{{ matomo_version_marker_path }}"
     content: "{{ matomo_version }}\n"
     owner: "{{ web_user }}"
     group: "{{ web_group }}"
     mode: "0644"
+  tags: [matomo]
+
+- name: Remove legacy Matomo version marker from app tree
+  file:
+    path: "{{ matomo_public_path }}/.matomo-version"
+    state: absent
   tags: [matomo]
 
 - name: Set ownership on Matomo files

@@ -9,6 +9,7 @@ matomo_download_url: "https://builds.matomo.org/matomo-{{ matomo_version }}.tar.
 matomo_root: "{{ www_root }}/matomo"
 matomo_public_path: "{{ matomo_root }}/current"
 matomo_acme_webroot: "{{ www_root }}/matomo-acme"
+matomo_version_marker_path: "{{ matomo_root }}/.matomo-version"
 
 # CLI automation toggles
 matomo_cli_install: false
