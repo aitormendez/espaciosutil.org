@@ -1,0 +1,20 @@
+matomo_enabled: true
+
+matomo_site_hosts:
+  - matomo.stage.espaciosutil.org
+
+matomo_db_password: "{{ vault_matomo_db_password }}"
+
+matomo_admin_email: analytics@espaciosutil.org
+matomo_admin_password: "{{ vault_matomo_admin_password }}"
+
+matomo_cli_install: true
+matomo_cli_manage_sites: true
+
+matomo_cert_name: matomo.stage.espaciosutil.org
+matomo_archive_url: "https://matomo.stage.espaciosutil.org"
+
+matomo_sites:
+  - name: "Espacio Sutil (staging)"
+    url: "https://stage.espaciosutil.org"
+    slug: espaciosutil-staging

@@ -1,0 +1,33 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
+
+      - name: Configure known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
+      - name: Setup Trellis CLI
+        uses: roots/setup-trellis-cli@v1
+        with:
+          ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to production
+        run: trellis deploy production espaciosutil.org

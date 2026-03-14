@@ -1,0 +1,24 @@
+---
+- name: Check marker for Matomo site {{ matomo_site.slug | default(matomo_site.name | regex_replace('[^A-Za-z0-9]+', '-') | lower) }}
+  stat:
+    path: "{{ matomo_root }}/.matomo-site-{{ matomo_site.slug | default(matomo_site.name | regex_replace('[^A-Za-z0-9]+', '-') | lower) }}"
+  register: matomo_site_marker
+  tags: [matomo]
+
+- name: Create Matomo site {{ matomo_site.name }}
+  command: >
+    php console site:add
+    --name="{{ matomo_site.name }}"
+    --urls="{{ matomo_site.url }}"
+  args:
+    chdir: "{{ matomo_public_path }}"
+  when: not matomo_site_marker.stat.exists
+  become_user: "{{ web_user }}"
+  tags: [matomo]
+
+- name: Record creation of Matomo site {{ matomo_site.name }}
+  file:
+    path: "{{ matomo_root }}/.matomo-site-{{ matomo_site.slug | default(matomo_site.name | regex_replace('[^A-Za-z0-9]+', '-') | lower) }}"
+    state: touch
+  when: not matomo_site_marker.stat.exists
+  tags: [matomo]

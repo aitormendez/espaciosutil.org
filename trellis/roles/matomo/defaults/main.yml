@@ -1,0 +1,58 @@
+---
+matomo_enabled: false
+
+# Matomo version and download
+matomo_version: "5.0.3"
+matomo_download_url: "https://builds.matomo.org/matomo-{{ matomo_version }}.tar.gz"
+
+# Paths
+matomo_root: "{{ www_root }}/matomo"
+matomo_public_path: "{{ matomo_root }}/current"
+matomo_acme_webroot: "{{ www_root }}/matomo-acme"
+
+# CLI automation toggles
+matomo_cli_install: false
+matomo_cli_manage_sites: false
+
+# Domain / hosts (required per environment)
+matomo_site_hosts: []
+
+# Database
+matomo_db_name: matomo
+matomo_db_user: matomo
+matomo_db_password: "{{ vault_matomo_db_password | default('') }}"
+matomo_db_prefix: matomo_
+matomo_db_charset: utf8mb4
+matomo_db_adapter: Pdo\\Mysql
+matomo_db_host: "localhost"
+
+# Admin user for initial CLI install
+matomo_admin_login: matomo
+matomo_admin_password: "{{ vault_matomo_admin_password | default('') }}"
+matomo_admin_email: ""
+
+# Sites to create. The first entry seeds core:install; the rest are added afterwards.
+matomo_sites: []
+
+# PHP-FPM pool
+matomo_php_pool: matomo
+matomo_php_listen: /var/run/php-fpm-matomo.sock
+matomo_php_fpm_pm: "{{ php_fpm_pm }}"
+matomo_php_fpm_pm_max_children: "{{ php_fpm_pm_max_children }}"
+matomo_php_fpm_pm_start_servers: "{{ php_fpm_pm_start_servers }}"
+matomo_php_fpm_pm_min_spare_servers: "{{ php_fpm_pm_min_spare_servers }}"
+matomo_php_fpm_pm_max_spare_servers: "{{ php_fpm_pm_max_spare_servers }}"
+matomo_php_fpm_pm_max_requests: "{{ php_fpm_pm_max_requests }}"
+matomo_php_open_basedir: "{{ matomo_root }}/:/tmp"
+
+# SSL
+matomo_use_https: true
+matomo_use_letsencrypt: true
+matomo_cert_name: "{{ matomo_site_hosts | first | default('matomo') }}"
+matomo_cert_fullchain: "{{ '/etc/letsencrypt/live/' + matomo_cert_name + '/fullchain.pem' if matomo_use_letsencrypt else '' }}"
+matomo_cert_privkey: "{{ '/etc/letsencrypt/live/' + matomo_cert_name + '/privkey.pem' if matomo_use_letsencrypt else '' }}"
+
+# Archiver cron (Matomo recommends hourly)
+matomo_archive_minute: "5"
+matomo_archive_hour: "*"
+matomo_archive_url: "https://{{ matomo_site_hosts | first | default('example.com') }}"

@@ -1,0 +1,16 @@
+# {{ ansible_managed }}
+
+server {
+  listen [::]:80;
+  listen 80;
+  server_name {{ matomo_site_hosts | join(' ') }};
+
+  location ^~ /.well-known/acme-challenge/ {
+    root {{ matomo_acme_webroot }};
+    try_files $uri =404;
+  }
+
+  location / {
+    return 404;
+  }
+}

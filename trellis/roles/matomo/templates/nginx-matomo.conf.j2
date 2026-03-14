@@ -1,0 +1,80 @@
+# {{ ansible_managed }}
+
+{% set server_names = matomo_site_hosts | join(' ') %}
+
+{% if matomo_use_https %}
+server {
+  listen [::]:80;
+  listen 80;
+  server_name {{ server_names }};
+
+  location ^~ /.well-known/acme-challenge/ {
+    root {{ matomo_acme_webroot }};
+    try_files $uri =404;
+  }
+
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+{% endif %}
+
+server {
+  listen {{ matomo_use_https | ternary('[::]:443 ssl', '[::]:80') }};
+  listen {{ matomo_use_https | ternary('443 ssl', '80') }};
+  {% if matomo_use_https %}
+  http2 {{ nginx_http2_enabled | default(false) | ternary('on', 'off') }};
+  http3 {{ nginx_http3_enabled | default(false) | ternary('on', 'off') }};
+  {% endif %}
+  server_name {{ server_names }};
+
+  root {{ matomo_public_path }};
+  index index.php index.html;
+
+  access_log {{ matomo_root }}/logs/access.log;
+  error_log {{ matomo_root }}/logs/error.log;
+
+  charset utf-8;
+  client_max_body_size {{ php_post_max_size | default('25m') | lower }};
+
+  {% if matomo_use_https %}
+  ssl_certificate {{ matomo_cert_fullchain }};
+  ssl_certificate_key {{ matomo_cert_privkey }};
+  ssl_buffer_size 1400;
+  add_header Strict-Transport-Security "max-age=31536000" always;
+  include h5bp/directive-only/ssl.conf;
+  {% endif %}
+
+  add_header X-Content-Type-Options nosniff;
+  add_header Referrer-Policy "strict-origin-when-cross-origin";
+
+  location ^~ /.well-known/acme-challenge/ {
+    root {{ matomo_acme_webroot }};
+    try_files $uri =404;
+  }
+
+  location = /favicon.ico { log_not_found off; access_log off; }
+  location = /robots.txt { allow all; log_not_found off; access_log off; }
+
+  location ~ ^/(config|tmp|core|lang)/ {
+    deny all;
+  }
+
+  location ~ \.(tpl|twig|git|sh|ini)$ {
+    deny all;
+  }
+
+  location / {
+    try_files $uri $uri/ /index.php$is_args$args;
+  }
+
+  location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param DOCUMENT_ROOT $document_root;
+    fastcgi_index index.php;
+    fastcgi_pass unix:{{ matomo_php_listen }};
+    fastcgi_intercept_errors on;
+    fastcgi_buffers 16 16k;
+  }
+}

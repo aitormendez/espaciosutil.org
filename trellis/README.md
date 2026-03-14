@@ -60,6 +60,27 @@ El sistema compila los assets en GitHub Actions antes de hacer `rsync` al servid
 
 Pendiente de implementar (por ahora, la sincronización se realiza manualmente mediante WP-CLI o herramientas gráficas).
 
+### 4. Matomo
+
+El proyecto incluye un rol opcional `matomo` para aprovisionar una instancia de Matomo en el mismo servidor gestionado por Trellis.
+
+Para activarlo:
+
+1. Define la configuración del entorno en `group_vars/staging/matomo.yml` o `group_vars/production/matomo.yml`.
+2. Guarda las credenciales sensibles en el vault correspondiente (`vault_matomo_db_password` y, si usas instalación CLI, `vault_matomo_admin_password`).
+3. Activa `matomo_enabled: true`.
+4. Ejecuta el aprovisionamiento del entorno:
+
+```bash
+cd trellis
+trellis provision <entorno> --tags matomo
+```
+
+Notas:
+
+- El rol evita modificar `acme-challenge-location.conf` para no interferir con los certificados Let's Encrypt del WordPress principal.
+- `matomo_cli_install` y `matomo_cli_manage_sites` están desactivados por defecto.
+
 ## Solución de problemas
 
 ### Error de acceso a MariaDB en Ubuntu 24.04 durante el aprovisionamiento

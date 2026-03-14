@@ -1,0 +1,280 @@
+---
+- name: Ensure matomo_site_hosts is set
+  assert:
+    that:
+      - matomo_site_hosts | length > 0
+    fail_msg: "Define matomo_site_hosts in the environment group_vars before enabling the Matomo role."
+  tags: [matomo]
+
+- name: Ensure Matomo database secret is set
+  assert:
+    that:
+      - matomo_db_password | length > 0
+    fail_msg: "Set matomo_db_password (prefer vault variables) before provisioning."
+  tags: [matomo]
+
+- name: Ensure Matomo CLI install secrets are set
+  assert:
+    that:
+      - matomo_admin_password | length > 0
+      - matomo_admin_email | length > 0
+      - matomo_sites | length > 0
+    fail_msg: "Set matomo_admin_password, matomo_admin_email and at least one entry in matomo_sites before enabling matomo_cli_install."
+  when: matomo_cli_install
+  tags: [matomo]
+
+- name: Ensure Matomo certificate email is set
+  assert:
+    that:
+      - matomo_admin_email | length > 0
+    fail_msg: "Set matomo_admin_email before enabling HTTPS with Let's Encrypt for Matomo."
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  tags: [matomo]
+
+- name: Ensure manual HTTPS certificate paths are set
+  assert:
+    that:
+      - matomo_cert_fullchain | length > 0
+      - matomo_cert_privkey | length > 0
+    fail_msg: "Set matomo_cert_fullchain and matomo_cert_privkey when matomo_use_https is true and matomo_use_letsencrypt is false."
+  when:
+    - matomo_use_https
+    - not matomo_use_letsencrypt
+  tags: [matomo]
+
+- name: Install Matomo certificate dependency
+  apt:
+    name:
+      - certbot
+    state: present
+    cache_valid_time: "{{ apt_cache_valid_time | default(3600) }}"
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  tags: [matomo]
+
+- name: Ensure Matomo directories exist
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner | default(web_user) }}"
+    group: "{{ item.group | default(web_group) }}"
+    mode: "{{ item.mode | default('0755') }}"
+  loop:
+    - { path: "{{ matomo_root }}" }
+    - { path: "{{ matomo_public_path }}" }
+    - { path: "{{ matomo_root }}/logs" }
+    - { path: "{{ matomo_root }}/tmp" }
+    - { path: "{{ matomo_acme_webroot }}", owner: "root", group: "root", mode: "0755" }
+  tags: [matomo]
+
+- name: Download Matomo {{ matomo_version }}
+  get_url:
+    url: "{{ matomo_download_url }}"
+    dest: "/tmp/matomo-{{ matomo_version }}.tar.gz"
+    mode: '0644'
+  tags: [matomo]
+
+- name: Unarchive Matomo
+  unarchive:
+    src: "/tmp/matomo-{{ matomo_version }}.tar.gz"
+    dest: "{{ matomo_public_path }}"
+    remote_src: true
+    extra_opts: [--strip-components=1]
+    creates: "{{ matomo_public_path }}/index.php"
+  tags: [matomo]
+
+- name: Set ownership on Matomo files
+  file:
+    path: "{{ matomo_public_path }}"
+    state: directory
+    recurse: true
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  tags: [matomo]
+
+- name: Ensure Matomo database exists
+  mysql_db:
+    name: "{{ matomo_db_name }}"
+    encoding: "{{ matomo_db_charset }}"
+    collation: "{{ matomo_db_charset }}_unicode_ci"
+    login_user: "{{ mysql_root_user | default('root') }}"
+    login_password: "{{ mysql_root_password }}"
+  tags: [matomo]
+
+- name: Ensure Matomo database user exists
+  mysql_user:
+    name: "{{ matomo_db_user }}"
+    password: "{{ matomo_db_password }}"
+    host: "{{ matomo_db_host }}"
+    priv: "{{ matomo_db_name }}.*:ALL"
+    state: present
+    login_user: "{{ mysql_root_user | default('root') }}"
+    login_password: "{{ mysql_root_password }}"
+  tags: [matomo]
+
+- name: Configure PHP-FPM pool for Matomo
+  template:
+    src: php-fpm-pool-matomo.conf.j2
+    dest: "/etc/php/{{ php_version }}/fpm/pool.d/{{ matomo_php_pool }}.conf"
+    mode: '0644'
+  notify: reload php-fpm
+  tags: [matomo]
+
+- name: Check if Matomo certificate exists
+  stat:
+    path: "{{ matomo_cert_fullchain }}"
+  register: matomo_cert
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  tags: [matomo]
+
+- name: Create temporary HTTP config for certificate issuance
+  template:
+    src: nginx-matomo-challenge.conf.j2
+    dest: "{{ nginx_path }}/sites-available/matomo-challenge.conf"
+    mode: '0644'
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+    - not matomo_cert.stat.exists
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Enable temporary challenge site
+  file:
+    src: "{{ nginx_path }}/sites-available/matomo-challenge.conf"
+    dest: "{{ nginx_path }}/sites-enabled/matomo-challenge.conf"
+    state: link
+    force: true
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+    - not matomo_cert.stat.exists
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Flush handlers to load challenge site
+  meta: flush_handlers
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+    - not matomo_cert.stat.exists
+  tags: [matomo]
+
+- name: Obtain or renew Matomo certificate via certbot
+  command: >
+    certbot certonly --webroot
+    -w {{ matomo_acme_webroot }}
+    -d {{ matomo_site_hosts | join(' -d ') }}
+    --email {{ matomo_admin_email }}
+    --agree-tos
+    --non-interactive
+    --keep-until-expiring
+    --expand
+    --cert-name {{ matomo_cert_name }}
+    --deploy-hook "systemctl reload nginx"
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  tags: [matomo]
+
+- name: Disable temporary challenge site
+  file:
+    path: "{{ nginx_path }}/sites-enabled/matomo-challenge.conf"
+    state: absent
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Remove temporary challenge config
+  file:
+    path: "{{ nginx_path }}/sites-available/matomo-challenge.conf"
+    state: absent
+  when:
+    - matomo_use_https
+    - matomo_use_letsencrypt
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Configure Nginx for Matomo
+  template:
+    src: nginx-matomo.conf.j2
+    dest: "{{ nginx_path }}/sites-available/matomo.conf"
+    mode: '0644'
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Enable Matomo site
+  file:
+    src: "{{ nginx_path }}/sites-available/matomo.conf"
+    dest: "{{ nginx_path }}/sites-enabled/matomo.conf"
+    state: link
+    force: true
+  notify: reload nginx
+  tags: [matomo]
+
+- name: Check if Matomo is already installed
+  stat:
+    path: "{{ matomo_public_path }}/config/config.ini.php"
+  register: matomo_config
+  tags: [matomo]
+
+- name: Install Matomo via CLI
+  command: >
+    php console core:install
+    --quiet
+    --matomo-domain={{ matomo_site_hosts | first }}
+    --admin-login={{ matomo_admin_login }}
+    --admin-password={{ matomo_admin_password }}
+    --admin-email={{ matomo_admin_email }}
+    --db-host={{ matomo_db_host }}
+    --db-username={{ matomo_db_user }}
+    --db-password={{ matomo_db_password }}
+    --db-name={{ matomo_db_name }}
+    --db-prefix={{ matomo_db_prefix }}
+    --db-type={{ matomo_db_adapter }}
+    --site-name="{{ (matomo_sites | first).name }}"
+    --site-url={{ (matomo_sites | first).url }}
+  args:
+    chdir: "{{ matomo_public_path }}"
+  become_user: "{{ web_user }}"
+  register: matomo_install
+  when:
+    - matomo_cli_install
+    - not matomo_config.stat.exists
+  tags: [matomo]
+
+- name: Refresh Matomo installation state
+  stat:
+    path: "{{ matomo_public_path }}/config/config.ini.php"
+  register: matomo_config_current
+  tags: [matomo]
+
+- name: Add additional Matomo sites
+  include_tasks: add_site.yml
+  loop: "{{ matomo_sites[1:] }}"
+  loop_control:
+    loop_var: matomo_site
+    label: "{{ matomo_site.name }}"
+  when:
+    - matomo_cli_manage_sites
+    - matomo_sites | length > 1
+    - matomo_config_current.stat.exists
+  tags: [matomo]
+
+- name: Ensure Matomo archiver cron is present
+  cron:
+    name: "Matomo core:archive"
+    minute: "{{ matomo_archive_minute }}"
+    hour: "{{ matomo_archive_hour }}"
+    user: "{{ web_user }}"
+    job: "cd {{ matomo_public_path }} && php console core:archive --url={{ matomo_archive_url }} > /dev/null 2>&1"
+    cron_file: matomo-archive
+  when: matomo_config_current.stat.exists
+  tags: [matomo]
