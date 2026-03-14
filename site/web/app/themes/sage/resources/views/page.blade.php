@@ -22,7 +22,7 @@
                 <div class="flex items-start">
                     <div id="toc-content" class="relative flex w-full justify-center pr-6 md:ml-80">
                         <div
-                            class="main-content-wrap {{ $is_pmpro_page ? 'font-sans' : 'prose prose-xl lg:prose-2xl' }} w-full max-w-3xl !leading-tight">
+                            class="main-content-wrap {{ $is_pmpro_page ? 'font-sans' : 'prose font-sans' }} w-full max-w-3xl !leading-tight">
                             @includeFirst(['partials.content-page', 'partials.content'])
                         </div>
                     </div>
@@ -30,7 +30,7 @@
             @else
                 <div class="flex justify-center">
                     <div
-                        class="{{ $is_pmpro_page ? 'font-sans' : 'prose prose-xl lg:prose-2xl' }} relative w-full max-w-4xl px-6 py-20 !leading-tight md:px-0">
+                        class="{{ $is_pmpro_page ? 'font-sans' : 'prose font-sans' }} relative w-full max-w-4xl px-6 py-20 !leading-tight md:px-0">
                         @includeFirst(['partials.content-page', 'partials.content'])
                     </div>
                 </div>
