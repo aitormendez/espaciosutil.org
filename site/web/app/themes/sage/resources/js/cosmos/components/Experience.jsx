@@ -282,10 +282,15 @@ export default function Experience() {
     }
   });
 
-  const labelLoading = document.querySelector('.loading-label');
-
   useEffect(() => {
-    labelLoading.classList.remove('lg:flex');
+    const labelLoading = document.querySelector('.loading-label');
+
+    if (!labelLoading) {
+      return;
+    }
+
+    labelLoading.classList.remove('xl:flex');
+    labelLoading.classList.add('hidden');
   }, []);
 
   return (
