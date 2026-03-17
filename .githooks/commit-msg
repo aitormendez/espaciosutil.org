@@ -12,6 +12,25 @@ fi
 line_count="$(printf '%s\n' "$filtered" | wc -l | tr -d ' ')"
 subject="$(printf '%s\n' "$filtered" | head -n 1)"
 
+staged_files() {
+  git diff --cached --name-only
+}
+
+infer_subject_from_staged_files() {
+  files="$(staged_files)"
+
+  if printf '%s\n' "$files" | grep -Eq 'site/scripts/(create|verify)-pmpro-discount-code\.php|site/web/app/mu-plugins/espaciosutil-pmpro-trials\.php'; then
+    printf '%s\n' "feat(coupons): implementa cupones de PMPro para la beta del CDE"
+    return
+  fi
+
+  printf '%s\n' ""
+}
+
+is_generic_subject() {
+  printf '%s\n' "$1" | LC_ALL=C grep -Eiq '^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\))?: (actualiza(r)? fecha final prueba|actualizar fecha final prueba)$'
+}
+
 infer_type() {
   first_word="$(printf '%s\n' "$1" | awk '{print tolower($1)}')"
 
@@ -35,7 +54,7 @@ infer_type() {
       printf '%s\n' "test"
       ;;
     *)
-      staged_files="$(git diff --cached --name-only)"
+      staged_files="$(staged_files)"
 
       if [ -n "$staged_files" ] && printf '%s\n' "$staged_files" | grep -Eqv '^docs/'; then
         :
@@ -60,9 +79,9 @@ infer_scope() {
     return
   fi
 
-  staged_count="$(git diff --cached --name-only | wc -l | tr -d ' ')"
+  staged_count="$(staged_files | wc -l | tr -d ' ')"
   if [ "$staged_count" -eq 1 ]; then
-    only_file="$(git diff --cached --name-only | head -n 1)"
+    only_file="$(staged_files | head -n 1)"
     basename_scope="$(basename "$only_file")"
     basename_scope="${basename_scope%%.*}"
     case "$basename_scope" in
@@ -106,8 +125,19 @@ esac
 
 pattern='^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\))?: .+'
 
+inferred_subject="$(infer_subject_from_staged_files)"
+
+if [ -n "$inferred_subject" ] && is_generic_subject "$subject"; then
+  subject="$inferred_subject"
+  printf '%s\n' "$subject" > "$msg_file"
+fi
+
 if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
-  subject="$(normalize_subject "$subject")"
+  if [ -n "$inferred_subject" ]; then
+    subject="$inferred_subject"
+  else
+    subject="$(normalize_subject "$subject")"
+  fi
   printf '%s\n' "$subject" > "$msg_file"
 fi
 
