@@ -10,7 +10,6 @@ import {
 } from './nav.js';
 import { coloresHover } from './colores.js';
 import { toc } from './toc.js';
-import { cosmos } from './cosmos/cosmos.jsx';
 import { initCookieConsent } from './cookieConsent.js';
 
 if (import.meta.env.DEV && typeof window !== 'undefined') {
@@ -85,6 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (document.body.classList.contains('home') && xlMin.matches) {
+    const { cosmos } = await import('./cosmos/cosmos.jsx');
     cosmos();
   }
 

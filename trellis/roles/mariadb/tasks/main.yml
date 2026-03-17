@@ -36,14 +36,6 @@
       when: mysql_binary_logging_disabled | bool
       notify: restart mysql server
 
-    - name: Copy .my.cnf file with root password credentials.
-      template:
-        src: my.cnf.j2
-        dest: ~/.my.cnf
-        owner: root
-        group: root
-        mode: "0600"
-
     - name: Copy server config file with MariaDB optimisations.
       template:
         src: 50-server.cnf.j2
@@ -51,11 +43,23 @@
         mode: "0644"
       notify: restart mysql server
 
+    - name: Flush MariaDB handlers before database configuration
+      meta: flush_handlers
+
+    - name: Ensure MariaDB service is enabled and started
+      service:
+        name: "{{ mariadb_service_name }}"
+        state: started
+        enabled: true
+
     - name: Set root user password
       mysql_user:
         name: root
         host: "{{ item }}"
         password: "{{ mysql_root_password }}"
+        plugin: mysql_native_password
+        login_unix_socket: "{{ mariadb_login_unix_socket }}"
+        config_file: ""
         check_implicit_admin: yes
         state: present
       no_log: false
@@ -64,6 +68,14 @@
         - 127.0.0.1
         - ::1
         - localhost
+
+    - name: Copy .my.cnf file with root password credentials
+      template:
+        src: my.cnf.j2
+        dest: ~/.my.cnf
+        owner: root
+        group: root
+        mode: "0600"
 
     - name: Delete anonymous MySQL server users
       mysql_user:

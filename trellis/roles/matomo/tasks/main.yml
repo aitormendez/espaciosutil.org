@@ -155,6 +155,7 @@
     name: "{{ matomo_db_name }}"
     encoding: "{{ matomo_db_charset }}"
     collation: "{{ matomo_db_charset }}_unicode_ci"
+    login_host: "{{ matomo_db_host }}"
     login_user: "{{ mysql_root_user | default('root') }}"
     login_password: "{{ mysql_root_password }}"
   tags: [matomo]
@@ -166,6 +167,7 @@
     host: "{{ matomo_db_host }}"
     priv: "{{ matomo_db_name }}.*:ALL"
     state: present
+    login_host: "{{ matomo_db_host }}"
     login_user: "{{ mysql_root_user | default('root') }}"
     login_password: "{{ mysql_root_password }}"
   tags: [matomo]

@@ -3,6 +3,7 @@ matomo_enabled: true
 matomo_site_hosts:
   - matomo.espaciosutil.org
 
+matomo_db_host: 127.0.0.1
 matomo_db_password: "{{ vault_matomo_db_password }}"
 
 matomo_admin_email: analytics@espaciosutil.org
