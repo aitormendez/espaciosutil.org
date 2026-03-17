@@ -9,14 +9,7 @@ if [ -z "$filtered" ]; then
   exit 0
 fi
 
-line_count="$(printf '%s\n' "$filtered" | wc -l | tr -d ' ')"
 subject="$(printf '%s\n' "$filtered" | head -n 1)"
-
-if [ "$line_count" -ne 1 ]; then
-  echo "Error: el mensaje de commit debe ocupar una sola linea." >&2
-  echo "Formato esperado: tipo(scope): descripcion en espanol" >&2
-  exit 1
-fi
 
 case "$subject" in
   Merge\ *|Revert\ *)
@@ -28,7 +21,7 @@ pattern='^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\
 
 if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
   echo "Error: el mensaje no sigue Conventional Commits." >&2
-  echo "Usa: tipo(scope): descripcion en espanol" >&2
+  echo "Usa en la primera linea: tipo(scope): descripcion en espanol" >&2
   echo "Ejemplo: feat(coupons): implementa cupones de PMPro para la beta del CDE" >&2
   exit 1
 fi

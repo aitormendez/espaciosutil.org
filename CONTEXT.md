@@ -56,7 +56,8 @@ default_api.run_shell_command(
 - El flujo completo de Git funciona en este repositorio.
 - Los mensajes de commit deben seguir **Conventional Commits**.
 - La descripción del commit debe ir en español.
-- El mensaje debe ser de una sola línea.
+- La primera línea del commit debe seguir el formato `tipo(scope): descripcion en espanol` o `tipo: descripcion en espanol`.
+- Se permite añadir un cuerpo descriptivo debajo cuando ayude a explicar cambios complejos.
 
 ### Vaults
 
