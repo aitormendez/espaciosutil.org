@@ -63,6 +63,8 @@ default_api.run_shell_command(
 
 Antes de añadir o commitear archivos `vault.yml`, verificar su estado. Si están modificados y desencriptados, re-encriptarlos con `trellis vault encrypt <entorno>` antes de continuar.
 
+Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/group_vars/*/vault.yml` staged no está cifrado con Ansible Vault.
+
 ## 4. Estado Operativo Actual
 
 - El entorno local está estable y operativo.

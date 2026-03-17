@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+
+has_error=0
+
+for path in $(git diff --cached --name-only --diff-filter=ACMR); do
+  case "$path" in
+    trellis/group_vars/*/vault.yml)
+      header="$(git show ":$path" | head -n 1 || true)"
+
+      case "$header" in
+        '$ANSIBLE_VAULT;'*)
+          ;;
+        *)
+          echo "Error: hay un vault desencriptado en el indice: $path" >&2
+          echo "Re-cifralo antes de hacer commit con: trellis vault encrypt" >&2
+          has_error=1
+          ;;
+      esac
+      ;;
+  esac
+done
+
+if [ "$has_error" -ne 0 ]; then
+  exit 1
+fi
