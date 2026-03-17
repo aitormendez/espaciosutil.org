@@ -4,7 +4,8 @@
 
 - Usa mensajes de commit con formato Conventional Commits.
 - La descripción del commit debe estar en español.
-- La primera línea del commit debe seguir el formato `tipo(scope): descripcion en espanol` o `tipo: descripcion en espanol`.
+- El `scope` es obligatorio.
+- La primera línea del commit debe seguir el formato `tipo(scope): descripcion en espanol`.
 - Se permite añadir un cuerpo descriptivo debajo cuando ayude a explicar cambios complejos.
 - No hagas commits si hay archivos `trellis/group_vars/*/vault.yml` desencriptados en el índice; re-cífralos antes con `trellis vault encrypt`.
 - No uses mensajes libres como `Actualizar...`, `Refactoriza...` o similares sin prefijo convencional.
