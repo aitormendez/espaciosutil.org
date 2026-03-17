@@ -12,105 +12,6 @@ fi
 line_count="$(printf '%s\n' "$filtered" | wc -l | tr -d ' ')"
 subject="$(printf '%s\n' "$filtered" | head -n 1)"
 
-staged_files() {
-  git diff --cached --name-only
-}
-
-infer_subject_from_staged_files() {
-  files="$(staged_files)"
-
-  if printf '%s\n' "$files" | grep -Eq 'site/scripts/(create|verify)-pmpro-discount-code\.php|site/web/app/mu-plugins/espaciosutil-pmpro-trials\.php'; then
-    printf '%s\n' "feat(coupons): implementa cupones de PMPro para la beta del CDE"
-    return
-  fi
-
-  printf '%s\n' ""
-}
-
-is_generic_subject() {
-  printf '%s\n' "$1" | LC_ALL=C grep -Eiq '^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\))?: (actualiza(r)? fecha final prueba|actualizar fecha final prueba)$'
-}
-
-infer_type() {
-  first_word="$(printf '%s\n' "$1" | awk '{print tolower($1)}')"
-
-  case "$first_word" in
-    anade|agrega|crea|implementa|integra|habilita)
-      printf '%s\n' "feat"
-      ;;
-    ajusta|arregla|corrige|evita|oculta|repara|resuelve|soluciona|actualiza)
-      printf '%s\n' "fix"
-      ;;
-    documenta)
-      printf '%s\n' "docs"
-      ;;
-    refactoriza|reorganiza|simplifica)
-      printf '%s\n' "refactor"
-      ;;
-    estiliza)
-      printf '%s\n' "style"
-      ;;
-    prueba|testea|valida|verifica)
-      printf '%s\n' "test"
-      ;;
-    *)
-      staged_files="$(staged_files)"
-
-      if [ -n "$staged_files" ] && printf '%s\n' "$staged_files" | grep -Eqv '^docs/'; then
-        :
-      else
-        printf '%s\n' "docs"
-        return
-      fi
-
-      if printf '%s\n' "$staged_files" | grep -Eq '(^|/)(composer\.json|composer\.lock|package\.json|package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$'; then
-        printf '%s\n' "chore"
-      else
-        printf '%s\n' "chore"
-      fi
-      ;;
-  esac
-}
-
-infer_scope() {
-  explicit_scope="$(printf '%s\n' "$1" | sed -n 's/.* en \([A-Za-z0-9_-][A-Za-z0-9_-]*\)$/\1/p' | tail -n 1 | tr '[:upper:]' '[:lower:]')"
-  if [ -n "$explicit_scope" ]; then
-    printf '%s\n' "$explicit_scope"
-    return
-  fi
-
-  staged_count="$(staged_files | wc -l | tr -d ' ')"
-  if [ "$staged_count" -eq 1 ]; then
-    only_file="$(staged_files | head -n 1)"
-    basename_scope="$(basename "$only_file")"
-    basename_scope="${basename_scope%%.*}"
-    case "$basename_scope" in
-      index|app|main|setup|helpers|footer)
-        printf '%s\n' ""
-        ;;
-      *)
-        printf '%s\n' "$basename_scope" | tr '[:upper:]' '[:lower:]'
-        ;;
-    esac
-  else
-    printf '%s\n' ""
-  fi
-}
-
-normalize_subject() {
-  raw_subject="$1"
-  raw_subject="$(printf '%s\n' "$raw_subject" | sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//')"
-  normalized_type="$(infer_type "$raw_subject")"
-  normalized_scope="$(infer_scope "$raw_subject")"
-  normalized_desc="$(printf '%s\n' "$raw_subject" | sed 's/ en [A-Za-z0-9_-][A-Za-z0-9_-]*$//')"
-
-  if [ -n "$normalized_scope" ]; then
-    printf '%s(%s): %s\n' "$normalized_type" "$normalized_scope" "$normalized_desc"
-  else
-    printf '%s: %s\n' "$normalized_type" "$normalized_desc"
-  fi
-}
-
 if [ "$line_count" -ne 1 ]; then
   echo "Error: el mensaje de commit debe ocupar una sola linea." >&2
   echo "Formato esperado: tipo(scope): descripcion en espanol" >&2
@@ -125,25 +26,30 @@ esac
 
 pattern='^(build|chore|ci|docs|feat|fix|refactor|style|test)(\([[:alnum:]._/-]+\))?: .+'
 
-inferred_subject="$(infer_subject_from_staged_files)"
-
-if [ -n "$inferred_subject" ] && is_generic_subject "$subject"; then
-  subject="$inferred_subject"
-  printf '%s\n' "$subject" > "$msg_file"
-fi
-
-if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
-  if [ -n "$inferred_subject" ]; then
-    subject="$inferred_subject"
-  else
-    subject="$(normalize_subject "$subject")"
-  fi
-  printf '%s\n' "$subject" > "$msg_file"
-fi
-
 if ! printf '%s\n' "$subject" | LC_ALL=C grep -Eq "$pattern"; then
   echo "Error: el mensaje no sigue Conventional Commits." >&2
   echo "Usa: tipo(scope): descripcion en espanol" >&2
-  echo "Ejemplo: fix(page): ajusta clases tipograficas en la plantilla" >&2
+  echo "Ejemplo: feat(coupons): implementa cupones de PMPro para la beta del CDE" >&2
+  exit 1
+fi
+
+description="$(printf '%s\n' "$subject" | sed -E 's/^[^:]+: //')"
+
+low_signal_pattern='^(cambios|ajustes|mejoras|misc|wip|tmp|update|fix|chore|refactor)$'
+
+if printf '%s\n' "$description" | LC_ALL=C grep -Eiq "$low_signal_pattern"; then
+  echo "Error: la descripcion del commit es demasiado generica." >&2
+  echo "Describe el conjunto real de cambios incluidos." >&2
+  echo "Ejemplo: feat(coupons): implementa cupones de PMPro para la beta del CDE" >&2
+  exit 1
+fi
+
+generic_verb_pattern='^(actualiza(r)?|cambia(r)?|ajusta(r)?|mejora(r)?|corrige(r)?|refactoriza(r)?)\b'
+word_count="$(printf '%s\n' "$description" | awk '{print NF}')"
+
+if [ "$word_count" -le 4 ] && printf '%s\n' "$description" | LC_ALL=C grep -Eiq "$generic_verb_pattern"; then
+  echo "Error: la descripcion del commit es demasiado generica." >&2
+  echo "Describe el conjunto real de cambios incluidos." >&2
+  echo "Ejemplo: feat(coupons): implementa cupones de PMPro para la beta del CDE" >&2
   exit 1
 fi
