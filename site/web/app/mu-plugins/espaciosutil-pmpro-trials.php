@@ -152,6 +152,115 @@ function espaciosutil_pmpro_get_checkout_context_user_id(): int
 }
 
 /**
+ * Resolve a numeric level ID from a level object or level ID.
+ *
+ * @param mixed $level
+ */
+function espaciosutil_pmpro_get_level_id($level): int
+{
+    if (is_object($level) && isset($level->id)) {
+        return (int) $level->id;
+    }
+
+    if (is_numeric($level)) {
+        return (int) $level;
+    }
+
+    return 0;
+}
+
+/**
+ * Resolve the active discount code attached to a level snapshot.
+ *
+ * @param mixed $level
+ */
+function espaciosutil_pmpro_get_level_discount_code($level): string
+{
+    if (!is_object($level)) {
+        return '';
+    }
+
+    if (!empty($level->discount_code) && is_string($level->discount_code)) {
+        return sanitize_text_field($level->discount_code);
+    }
+
+    return '';
+}
+
+/**
+ * Return the requested discount code in the current checkout request.
+ */
+function espaciosutil_pmpro_get_requested_discount_code(): string
+{
+    foreach (['pmpro_discount_code', 'discount_code'] as $request_key) {
+        if (empty($_REQUEST[$request_key])) {
+            continue;
+        }
+
+        return preg_replace('/[^A-Za-z0-9\\-]/', '', sanitize_text_field(wp_unslash($_REQUEST[$request_key])));
+    }
+
+    return '';
+}
+
+/**
+ * Return whether the current checkout context is using a valid discount code for the level.
+ *
+ * @param mixed $level
+ */
+function espaciosutil_pmpro_level_has_active_discount_code($level): bool
+{
+    if (espaciosutil_pmpro_get_level_discount_code($level) !== '') {
+        return true;
+    }
+
+    $level_id = espaciosutil_pmpro_get_level_id($level);
+    $discount_code = espaciosutil_pmpro_get_requested_discount_code();
+    if ($level_id < 1 || $discount_code === '' || !function_exists('pmpro_checkDiscountCode')) {
+        return false;
+    }
+
+    $code_check = pmpro_checkDiscountCode($discount_code, $level_id, true);
+
+    return is_array($code_check) && !empty($code_check[0]);
+}
+
+/**
+ * Return the dynamic flag stored on checkout level snapshots when the one-time trial was applied.
+ */
+function espaciosutil_pmpro_trial_applied_flag_name(): string
+{
+    return 'espaciosutil_trial_applied';
+}
+
+/**
+ * Return whether the stored level snapshot represents an applied one-time trial.
+ *
+ * @param mixed $level
+ */
+function espaciosutil_pmpro_level_trial_was_applied($level): bool
+{
+    if (!is_object($level)) {
+        return false;
+    }
+
+    $flag_name = espaciosutil_pmpro_trial_applied_flag_name();
+    if (property_exists($level, $flag_name)) {
+        return (bool) $level->{$flag_name};
+    }
+
+    if (espaciosutil_pmpro_get_trial_config($level) === null) {
+        return false;
+    }
+
+    if (espaciosutil_pmpro_get_level_discount_code($level) !== '') {
+        return false;
+    }
+
+    return !empty($level->profile_start_date);
+}
+
+/**
  * Build the delayed start date used by PMPro gateways such as Stripe.
  */
 function espaciosutil_pmpro_get_trial_start_date(int $delay_days): string
@@ -245,7 +354,7 @@ function espaciosutil_pmpro_get_order_level_snapshot($order): ?object
 function espaciosutil_pmpro_get_order_trial_details($order): ?array
 {
     $level = espaciosutil_pmpro_get_order_level_snapshot($order);
-    if (!is_object($level)) {
+    if (!is_object($level) || !espaciosutil_pmpro_level_trial_was_applied($level)) {
         return null;
     }
 
@@ -670,8 +779,19 @@ function espaciosutil_pmpro_apply_trial_to_checkout_order($order)
         return $order;
     }
 
+    $trial_applied_flag = espaciosutil_pmpro_trial_applied_flag_name();
+    $level->{$trial_applied_flag} = 0;
+
     $config = espaciosutil_pmpro_get_trial_config($level);
     if ($config === null || !espaciosutil_pmpro_user_is_eligible_for_trial((int) $order->user_id, $level)) {
+        $order->membership_level = $level;
+
+        return $order;
+    }
+
+    if (espaciosutil_pmpro_level_has_active_discount_code($level)) {
+        $order->membership_level = $level;
+
         return $order;
     }
 
@@ -679,6 +799,7 @@ function espaciosutil_pmpro_apply_trial_to_checkout_order($order)
     $level->trial_amount = 0;
     $level->trial_limit = 0;
     $level->profile_start_date = espaciosutil_pmpro_get_trial_start_date((int) $config['delay_days']);
+    $level->{$trial_applied_flag} = 1;
 
     $order->membership_level = $level;
     $order->subtotal = 0;
@@ -697,6 +818,10 @@ function espaciosutil_pmpro_should_show_trial_for_level($level): bool
 {
     $config = espaciosutil_pmpro_get_trial_config($level);
     if ($config === null) {
+        return false;
+    }
+
+    if (espaciosutil_pmpro_level_has_active_discount_code($level)) {
         return false;
     }
 
@@ -863,16 +988,7 @@ function espaciosutil_pmpro_mark_trial_as_consumed_after_checkout($user_id, $ord
         return;
     }
 
-    $config = espaciosutil_pmpro_get_trial_config($level);
-    if ($config === null) {
-        return;
-    }
-
-    if ((float) $order->total !== 0.0) {
-        return;
-    }
-
-    if (empty($level->profile_start_date)) {
+    if (!espaciosutil_pmpro_level_trial_was_applied($level)) {
         return;
     }
 

@@ -83,7 +83,7 @@ class RouteServiceProvider extends ServiceProvider
 
                     $serie_name = isset($_GET['serie_name']) ? sanitize_text_field($_GET['serie_name']) : '';
 
-                    $html = view('partials.course-index-item', [
+                    $html = \Roots\view('partials.course-index-item', [
                         'items' => $course_tree,
                         'level' => 0,
                         'completed_lessons' => $completed_lessons,
