@@ -221,7 +221,7 @@
         class="membership-hero-ctas mx-auto mt-16 flex w-full max-w-2xl flex-col justify-center gap-4 px-6 sm:flex-row md:px-0">
         <x-cta href="#planes" text="Elegir plan" clases="bg-cde hover:text-morado5 font-semibold text-gray-200"
           icon="tabler-arrow-badge-up-filled" />
-        <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
+        <x-cta href="{{ home_url('/lecciones-del-cde/seth/quien-es-seth/') }}" text="Ver lección gratuita"
           icon="tabler-arrow-badge-right-filled" clases="bg-cde/50 hover:text-morado5 font-semibold text-gray-200" />
       </div>
 
