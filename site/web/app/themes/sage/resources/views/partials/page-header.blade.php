@@ -33,7 +33,7 @@
                   <x-cta href="#planes" text="Elegir plan"
                     clases="bg-morado5/90 hover:text-morado5 font-semibold text-gray-200"
                     icon="tabler-arrow-badge-down-filled" />
-                  <x-cta href="{{ home_url('/leccion-gratuita/') }}" text="Ver lección gratuita"
+                  <x-cta href="{{ home_url('/lecciones-del-cde/seth/quien-es-seth/') }}" text="Ver lección gratuita"
                     icon="tabler-arrow-badge-right-filled"
                     clases="bg-morado5/30 hover:text-morado5 font-semibold text-gray-200" />
                 </div>

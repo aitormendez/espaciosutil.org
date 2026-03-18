@@ -11,12 +11,27 @@ function runAfterFirstPaint(callback) {
   });
 }
 
+function runAfterWindowLoad(callback, delay = 0) {
+  const run = () => {
+    window.setTimeout(() => {
+      runAfterFirstPaint(callback);
+    }, delay);
+  };
+
+  if (document.readyState === 'complete') {
+    run();
+    return;
+  }
+
+  window.addEventListener('load', run, {once: true});
+}
+
 export function initHomeEnhancements() {
   if (!document.body.classList.contains('home')) {
     return;
   }
 
-  runAfterFirstPaint(async () => {
+  runAfterWindowLoad(async () => {
     const latestVideos = document.querySelector('#ultimos-videos-subidos');
 
     if (latestVideos && latestVideos.dataset.initialized !== '1') {
@@ -31,8 +46,8 @@ export function initHomeEnhancements() {
     return;
   }
 
-  runAfterFirstPaint(async () => {
+  runAfterWindowLoad(async () => {
     const {cosmos} = await import('./cosmos/cosmos.jsx');
     cosmos();
-  });
+  }, 1200);
 }

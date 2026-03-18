@@ -2,7 +2,7 @@
   Template Name: CDE Hub
 --}}
 @php
-  $free_lesson_url = home_url('/leccion-gratuita/');
+  $free_lesson_url = home_url('/lecciones-del-cde/seth/quien-es-seth/');
   $membership_url = get_permalink(2242) ?: home_url('/suscripcion/');
   $lesson_index_url = get_permalink(2648) ?: home_url('/indice-de-lecciones/');
   $telegram_url = 'https://t.me/+RJCRMR-axzzgR2Ej';

@@ -15,12 +15,10 @@ export function RunningProvider({ children }) {
 
   const stopRunning = () => {
     running = false;
-    console.log(running);
   };
 
   const startRunning = () => {
     running = true;
-    console.log(running);
   };
 
   return (

@@ -24,7 +24,6 @@ export const SubsistemaPlanetario = function SubsistemaPlanetario(props) {
 
         // Inicializa las referencias una vez que subsistemaPlanetario está disponible
         fetchedSubsistemaPlanetario.forEach((planeta) => {
-          console.log(planeta);
           const camelCaseSlug = planeta.padre.slug.replace(
             /-([a-z])/g,
             (_, letter) => letter.toUpperCase()
