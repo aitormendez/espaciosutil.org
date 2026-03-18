@@ -21,8 +21,7 @@ wordpress_sites:
       enabled: true
       duration: 30s
       skip_cache_uri: >-
-        /wp-admin/|/wp-json/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml|
-        /login/|/cuenta-de-membresia/|/pago-de-membresia/|/confirmacion-de-membresia/
+        /wp-admin/|/wp-json/|/xmlrpc.php|wp-.*.php|/feed/|index.php|sitemap(_index)?.xml|/login/|/cuenta-de-membresia/|/pago-de-membresia/|/confirmacion-de-membresia/
       skip_cache_cookie: >-
         comment_author|wordpress_[a-f0-9]+|wordpress_sec_[a-f0-9]+|wp-postpass|
         wordpress_no_cache|wordpress_logged_in
