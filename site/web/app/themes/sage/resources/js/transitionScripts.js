@@ -1,6 +1,7 @@
 import {coloresHover} from './colores.js';
 import {gsap} from 'gsap';
 import {toc} from './toc.js';
+import {initHomeEnhancements} from './home.js';
 
 export function transitionScriptsEnter() {
   const xlMin = window.matchMedia('(min-width: 1280px)');
@@ -16,8 +17,6 @@ export function transitionScriptsEnter() {
 }
 
 export async function transitionScriptsAfter() {
-  const xlMin = window.matchMedia('(min-width: 1280px)');
-
   toc();
 
   if (document.body.classList.contains('page-template-series')) {
@@ -31,12 +30,6 @@ export async function transitionScriptsAfter() {
   }
 
   if (document.body.classList.contains('home')) {
-    const {ultimosVideosSubidos} = await import('./youTubeApi.js');
-    ultimosVideosSubidos();
-
-    if (xlMin.matches) {
-      const {cosmos} = await import('./cosmos/cosmos.jsx');
-      cosmos();
-    }
+    initHomeEnhancements();
   }
 }

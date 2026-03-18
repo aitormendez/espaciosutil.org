@@ -11,6 +11,7 @@ import {
 import { coloresHover } from './colores.js';
 import { toc } from './toc.js';
 import { initCookieConsent } from './cookieConsent.js';
+import { initHomeEnhancements } from './home.js';
 
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   const devtoolsHook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -83,15 +84,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     infiniteScrollSeries();
   }
 
-  if (document.body.classList.contains('home') && xlMin.matches) {
-    const { cosmos } = await import('./cosmos/cosmos.jsx');
-    cosmos();
-  }
-
-  if (document.body.classList.contains('home')) {
-    const { ultimosVideosSubidos } = await import('./youTubeApi.js');
-    ultimosVideosSubidos();
-  }
+  initHomeEnhancements();
 
   if (document.body.classList.contains('page-template-template-curso')) {
     const initCourseIndexModule = await import('./courses/course-index.js');

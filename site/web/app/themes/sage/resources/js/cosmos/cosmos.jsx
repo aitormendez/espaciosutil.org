@@ -10,8 +10,15 @@ import { PlanetRefsProvider } from './components/utils/PlanetRefsContext.jsx';
 import { ConfiguracionRenderer } from './components/ConfiguracionRenderer';
 
 export function cosmos() {
-  console.log('🚀 Ejecutando cosmos()');
-  const root = ReactDOM.createRoot(document.querySelector('#cosmos'));
+  const mountNode = document.querySelector('#cosmos');
+
+  if (!mountNode || mountNode.dataset.initialized === '1') {
+    return;
+  }
+
+  mountNode.dataset.initialized = '1';
+
+  const root = ReactDOM.createRoot(mountNode);
 
   const cameraSettings = {
     fov: 45,
