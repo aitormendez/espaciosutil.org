@@ -348,6 +348,64 @@ function is_pmpro_core_page(int $pageId = 0): bool
 }
 
 /**
+ * Normalize a request path so cache-sensitive prefixes are easy to match.
+ */
+function normalize_fastcgi_cache_path(?string $path): string
+{
+    $path = is_string($path) ? trim($path) : '';
+
+    if ($path === '') {
+        return '/';
+    }
+
+    $normalized = '/' . ltrim($path, '/');
+
+    return str_ends_with($normalized, '/') ? $normalized : "{$normalized}/";
+}
+
+/**
+ * Detect frontend membership routes that should never be cached.
+ */
+function is_fastcgi_uncacheable_membership_request(): bool
+{
+    $requestPath = wp_parse_url(
+        (string) wp_unslash($_SERVER['REQUEST_URI'] ?? ''),
+        PHP_URL_PATH
+    );
+
+    $normalizedPath = normalize_fastcgi_cache_path(is_string($requestPath) ? $requestPath : '');
+    $sensitivePrefixes = [
+        '/login/',
+        '/cuenta-de-membresia/',
+        '/pago-de-membresia/',
+        '/confirmacion-de-membresia/',
+    ];
+
+    foreach ($sensitivePrefixes as $prefix) {
+        if (str_starts_with($normalizedPath, $prefix)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+add_action('send_headers', function () {
+    if (is_admin()) {
+        return;
+    }
+
+    $pageId = (int) get_queried_object_id();
+    if (! is_pmpro_core_page($pageId) && ! is_fastcgi_uncacheable_membership_request()) {
+        return;
+    }
+
+    // Trellis respects Cache-Control, so this keeps auth and PMPro flows out of FastCGI cache.
+    nocache_headers();
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+}, 0);
+
+/**
  * Resolve runtime URLs used inside PMPro account messages.
  */
 function cde_membership_placeholder_links(): array
