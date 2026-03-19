@@ -110,6 +110,11 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 - `docs/context/suscripcion-pmpro-y-emails.md`
 - Cargar si la tarea afecta a suscripción, checkout, trial, Stripe o emails.
 
+### Email transaccional Mailgun
+
+- `docs/context/email-transaccional-mailgun.md`
+- Cargar si la tarea afecta a SMTP, remitente transaccional, Trellis mail, Mailgun o validación de entrega.
+
 ### Estructura legal y cookies
 
 - `docs/context/legal-y-cookies.md`

@@ -620,6 +620,10 @@ function replace_cde_membership_placeholders_in_pmpro_email_data($data, $email)
         return $data;
     }
 
+    $data['email_es_symbol_url'] = Vite::asset('resources/images/email/simbolo-espacio-sutil-email.png');
+    $data['email_es_logotype_url'] = Vite::asset('resources/images/email/logotipo-espacio-sutil-email.png');
+    $data['email_cde_symbol_url'] = Vite::asset('resources/images/email/simbolo-cde-email.png');
+
     $message = $data['membership_level_confirmation_message'] ?? null;
 
     if (is_string($message) && trim($message) !== '') {

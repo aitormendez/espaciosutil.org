@@ -22,6 +22,10 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Landing de suscripción, trial gratuito personalizado, checkout/membresía y emails transaccionales de PMPro.
   - Cargar cuando la tarea afecte a suscripción, Stripe/PMPro o copy/flujo de emails.
 
+- `email-transaccional-mailgun.md`
+  - Implementación SMTP con Mailgun, override del remitente transaccional y validación operativa de entrega.
+  - Cargar cuando la tarea afecte a Mailgun, `ssmtp`, remitente `From`, `.env` de correo o pruebas de entrega.
+
 - `legal-y-cookies.md`
   - Estructura legal publicada, integración en formularios/checkout y banner de cookies propio.
   - Cargar cuando la tarea afecte a textos legales, consentimiento o páginas legales.
