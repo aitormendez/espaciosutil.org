@@ -252,6 +252,70 @@ add_filter('pmpro_tos_field_label', function ($label, $tospage) {
 }, 10, 2);
 
 /**
+ * PMPro ships several frontend strings untranslated in its Spanish catalog.
+ * Override them locally until the upstream translation is fixed.
+ */
+add_filter('gettext', function ($translation, $text, $domain) {
+    if ($domain !== 'paid-memberships-pro') {
+        return $translation;
+    }
+
+    return match ($text) {
+        'Invalid Level' => 'Nivel no valido',
+        'Do not fill this field out. Leave this blank.' => 'No rellenes este campo. Dejalo en blanco.',
+        'Yes, cancel this membership' => 'Si, cancelar esta membresia',
+        'Yes, cancel my membership' => 'Si, cancelar mi membresia',
+        'No, keep this membership' => 'No, mantener esta membresia',
+        'No, keep my membership' => 'No, mantener mi membresia',
+        default => $translation,
+    };
+}, 10, 3);
+
+add_filter('ngettext', function ($translation, $single, $plural, $number, $domain) {
+    if ($domain !== 'paid-memberships-pro') {
+        return $translation;
+    }
+
+    if ($single === 'Yes, cancel this membership' && $plural === 'Yes, cancel these memberships') {
+        return $number === 1
+            ? 'Si, cancelar esta membresia'
+            : 'Si, cancelar estas membresias';
+    }
+
+    if ($single === 'Yes, cancel my membership' && $plural === 'Yes, cancel all of my memberships') {
+        return $number === 1
+            ? 'Si, cancelar mi membresia'
+            : 'Si, cancelar todas mis membresias';
+    }
+
+    if ($single === 'No, keep this membership' && $plural === 'No, keep these memberships') {
+        return $number === 1
+            ? 'No, mantener esta membresia'
+            : 'No, mantener estas membresias';
+    }
+
+    if ($single === 'No, keep my membership' && $plural === 'No, keep my memberships') {
+        return $number === 1
+            ? 'No, mantener mi membresia'
+            : 'No, mantener mis membresias';
+    }
+
+    if ($single === 'Are you sure you want to cancel your %s membership?' && $plural === 'Are you sure you want to cancel your %s memberships?') {
+        return $number === 1
+            ? 'Seguro que quieres cancelar tu membresia de %s?'
+            : 'Seguro que quieres cancelar tus membresias de %s?';
+    }
+
+    if ($single === 'Are you sure you want to cancel your membership?' && $plural === 'Are you sure you want to cancel all of your memberships?') {
+        return $number === 1
+            ? 'Seguro que quieres cancelar tu membresia?'
+            : 'Seguro que quieres cancelar todas tus membresias?';
+    }
+
+    return $translation;
+}, 10, 5);
+
+/**
  * PMPro: checkbox expreso para inicio inmediato del contenido digital.
  */
 add_action('pmpro_checkout_before_submit_button', function ($level = null) {
