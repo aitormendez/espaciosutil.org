@@ -27,3 +27,5 @@ wordpress_sites:
         wordpress_no_cache|wordpress_logged_in
     env:
       db_host: 127.0.0.1
+      transactional_email_from: admin@espaciosutil.org
+      transactional_email_name: Espacio Sutil

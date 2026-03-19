@@ -17,3 +17,6 @@ wordpress_sites:
       provider: letsencrypt
     cache:
       enabled: false
+    env:
+      transactional_email_from: admin@espaciosutil.org
+      transactional_email_name: Espacio Sutil
