@@ -37,3 +37,7 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
 - `paginas-cde.md`
   - Panorama de plantillas editoriales CDE y componentes Blade reutilizables.
   - Cargar cuando la tarea afecte a landings/páginas editoriales del curso.
+
+- `estrategia-comunicacion-multicanal.md`
+  - Estrategia operativa para Telegram, Instagram, TikTok, YouTube Shorts, episodios de Iván y lecciones CDE.
+  - Cargar cuando la tarea afecte a automatización editorial, fuentes de verdad, campañas o distribución por canales.

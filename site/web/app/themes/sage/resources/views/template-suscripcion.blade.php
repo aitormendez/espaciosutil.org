@@ -104,7 +104,7 @@
   $faq_items = [
       [
           'question' => '¿Puedo cancelar cuando quiera?',
-          'answer' => 'Sí. Puedes cancelar desde tu cuenta. (Ajustar según condiciones reales.)',
+          'answer' => 'Sí. Puedes cancelar desde tu cuenta.',
       ],
       [
           'question' => '¿El acceso es el mismo en mensual, semestral y anual?',
@@ -112,11 +112,11 @@
       ],
       [
           'question' => '¿Qué pasa si cancelo?',
-          'answer' => 'Mantienes el acceso hasta el final del periodo ya pagado. (Confirmar.)',
+          'answer' => 'Mantienes el acceso hasta el final del periodo ya pagado.',
       ],
       [
           'question' => '¿Puedo cambiar de plan más adelante?',
-          'answer' => 'Sí. (Confirmar el flujo: cambio inmediato vs al final del ciclo.)',
+          'answer' => 'Sí.',
       ],
       [
           'question' => '¿Hay contenido nuevo?',

@@ -8,7 +8,7 @@ Documento de referencia para la estructura legal publicada, su integración en e
 
 - El plugin `gdpr-cookie-compliance` ya no se usa.
 - El consentimiento de cookies se gestiona desde el tema Sage.
-- El email legal y de privacidad actualmente usado es `contacto@espaciosutil.org`.
+- El email legal y de privacidad actualmente usado es `admin@espaciosutil.org`.
 
 ## Páginas legales publicadas
 
