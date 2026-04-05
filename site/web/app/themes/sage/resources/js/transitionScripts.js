@@ -29,6 +29,13 @@ export async function transitionScriptsAfter() {
     initCourseIndexModule.default();
   }
 
+  if (document.querySelector('[data-media-props]')) {
+    const initFeaturedVideoPlayerModule = await import(
+      './initFeaturedVideoPlayer.jsx'
+    );
+    initFeaturedVideoPlayerModule.default();
+  }
+
   if (document.body.classList.contains('home')) {
     initHomeEnhancements();
   }

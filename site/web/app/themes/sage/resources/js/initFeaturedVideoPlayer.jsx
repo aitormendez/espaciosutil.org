@@ -3,32 +3,35 @@ import { createRoot } from 'react-dom/client';
 import FeaturedLessonMedia from './components/FeaturedLessonMedia.jsx';
 
 const initFeaturedVideoPlayer = () => {
-  const container = document.getElementById('featured-lesson-media');
+  const containers = document.querySelectorAll('[data-media-props]');
 
-  if (!container) {
-    return;
-  }
+  containers.forEach((container) => {
+    if (container.dataset.mediaMounted === 'true') {
+      return;
+    }
 
-  const rawProps = container.dataset.mediaProps;
-  if (!rawProps) {
-    return;
-  }
+    const rawProps = container.dataset.mediaProps;
+    if (!rawProps) {
+      return;
+    }
 
-  let parsedProps = null;
+    let parsedProps = null;
 
-  try {
-    parsedProps = JSON.parse(rawProps);
-  } catch (error) {
-    console.error('No se pudo parsear la configuración del reproductor.', error);
-    return;
-  }
+    try {
+      parsedProps = JSON.parse(rawProps);
+    } catch (error) {
+      console.error('No se pudo parsear la configuración del reproductor.', error);
+      return;
+    }
 
-  if (!parsedProps) {
-    return;
-  }
+    if (!parsedProps) {
+      return;
+    }
 
-  const root = createRoot(container);
-  root.render(<FeaturedLessonMedia {...parsedProps} />);
+    const root = createRoot(container);
+    root.render(<FeaturedLessonMedia {...parsedProps} />);
+    container.dataset.mediaMounted = 'true';
+  });
 };
 
 export default initFeaturedVideoPlayer;

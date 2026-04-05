@@ -16,6 +16,12 @@
         @include('partials.programa.block-1')
       </section>
 
+      @if (!empty($program_guide_lesson))
+        <section id="programa-video-guia" class="mt-24">
+          @include('partials.programa.guide-video')
+        </section>
+      @endif
+
       <section id="programa-fases" class="mt-24">
         @include('partials.programa.block-2')
       </section>

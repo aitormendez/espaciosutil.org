@@ -9,12 +9,16 @@ Documento de referencia para el frontend del Curso de Desarrollo Espiritual: rep
 - El reproductor del curso se resuelve con componentes React/JSX, no con JS imperativo en Blade.
 - El vídeo principal usa `@vidstack/react`.
 - La miniatura correcta de Bunny.net sigue el patrón `thumbnail.jpg`, no `poster.jpg`.
+- El montaje del player se activa sobre cualquier contenedor con `data-media-props`, no solo en `single-cde`.
+- `App\View\Composers\Concerns\InteractsWithCdeMedia` centraliza la preparación de `featured_media` y capítulos para reutilizarla entre vistas.
 
 ## Selector vídeo/audio
 
 - El grupo de campos `Cde` incluye pares `featured_audio_*` para soportar audio alternativo.
 - `App\View\Composers\SingleCde` expone `featured_media`.
+- `App\View\Composers\TemplateCurso` puede exponer `program_guide_lesson` para renderizar una lección guía dentro de `template-programa`.
 - `resources/views/partials/content-single-cde.blade.php` serializa props en `data-media-props`.
+- `resources/views/partials/programa/guide-video.blade.php` reutiliza el mismo contrato para insertar el vídeo guía en “El curso en profundidad”.
 - `resources/js/initFeaturedVideoPlayer.jsx` monta el wrapper React.
 - `FeaturedLessonMedia.jsx` decide si mostrar vídeo, audio o ambos.
 - `FeaturedVideo.jsx` y `FeaturedAudio.jsx` comparten resolución de metadatos y capítulos.
@@ -27,7 +31,10 @@ Documento de referencia para el frontend del Curso de Desarrollo Espiritual: rep
 - `SingleCde` expone:
   - `lesson_subindex['items']` para render de árbol
   - `lesson_subindex['chapters']` para la pista de capítulos
-- Las vistas del subíndice renderizan botones `data-video-seek`.
+- El parcial `lesson-subindex` separa dos capacidades:
+  - `link_titles` para decidir si el título se renderiza como enlace al ancla
+  - `enable_seek_buttons` para decidir si se muestran botones `data-video-seek`
+- En `single-cde` se usan ambas interacciones; en `template-programa` se desactivan los enlaces de título y se mantienen los timestamps.
 - El reproductor genera una pista WebVTT de capítulos a partir de esos datos.
 
 ## Cuestionario por lección
@@ -54,11 +61,14 @@ Documento de referencia para el frontend del Curso de Desarrollo Espiritual: rep
 ## Archivos clave
 
 - `site/web/app/themes/sage/app/Fields/Cde.php`
+- `site/web/app/themes/sage/app/View/Composers/Concerns/InteractsWithCdeMedia.php`
 - `site/web/app/themes/sage/app/View/Composers/SingleCde.php`
 - `site/web/app/themes/sage/app/View/Composers/TemplateCurso.php`
 - `site/web/app/themes/sage/resources/views/partials/content-single-cde.blade.php`
+- `site/web/app/themes/sage/resources/views/partials/programa/guide-video.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/lesson-subindex.blade.php`
 - `site/web/app/themes/sage/resources/views/template-curso.blade.php`
+- `site/web/app/themes/sage/resources/views/template-programa.blade.php`
 - `site/web/app/themes/sage/resources/js/initFeaturedVideoPlayer.jsx`
 - `site/web/app/themes/sage/resources/js/components/FeaturedLessonMedia.jsx`
 - `site/web/app/themes/sage/resources/js/components/FeaturedVideo.jsx`

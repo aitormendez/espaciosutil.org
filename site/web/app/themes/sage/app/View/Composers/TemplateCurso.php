@@ -2,10 +2,13 @@
 
 namespace App\View\Composers;
 
+use App\View\Composers\Concerns\InteractsWithCdeMedia;
 use Roots\Acorn\View\Composer;
 
 class TemplateCurso extends Composer
 {
+    use InteractsWithCdeMedia;
+
     /**
      * List of views served by this composer.
      *
@@ -26,6 +29,53 @@ class TemplateCurso extends Composer
     {
         return [
             'series_cde_lessons' => $this->getSeriesWithBlocks(),
+            'program_guide_lesson' => $this->getProgramGuideLesson(),
+        ];
+    }
+
+    /**
+     * Resolve the guide lesson rendered in the Programa template.
+     *
+     * @return array|null
+     */
+    protected function getProgramGuideLesson(): ?array
+    {
+        $slug = apply_filters('espacio_sutil/program_guide_lesson_slug', 'presentacion-del-curso');
+        $slug = is_string($slug) ? trim($slug) : '';
+
+        if ($slug === '') {
+            return null;
+        }
+
+        $posts = get_posts([
+            'name' => $slug,
+            'post_type' => 'cde',
+            'post_status' => ['publish', 'future', 'draft', 'pending', 'private'],
+            'posts_per_page' => 1,
+            'orderby' => 'date',
+            'order' => 'DESC',
+            'suppress_filters' => false,
+        ]);
+
+        if (empty($posts) || !$posts[0] instanceof \WP_Post) {
+            return null;
+        }
+
+        $post = $posts[0];
+        $subindex = $this->buildLessonSubindex($post->ID);
+        $featuredMedia = $this->prepareFeaturedMedia($subindex['chapters'] ?? [], $post->ID);
+
+        if (!($featuredMedia['has_video'] ?? false) && !($featuredMedia['has_audio'] ?? false)) {
+            return null;
+        }
+
+        return [
+            'post_id' => $post->ID,
+            'title' => get_the_title($post->ID),
+            'permalink' => $post->post_status === 'publish' ? get_permalink($post->ID) : null,
+            'status' => $post->post_status,
+            'subindex' => $subindex,
+            'featured_media' => $featuredMedia,
         ];
     }
 

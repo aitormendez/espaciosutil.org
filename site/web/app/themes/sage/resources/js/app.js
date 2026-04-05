@@ -91,12 +91,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     initCourseIndexModule.default();
   }
 
-  if (document.body.classList.contains('single-cde')) {
+  if (document.querySelector('[data-media-props]')) {
     const initFeaturedVideoPlayerModule = await import(
       './initFeaturedVideoPlayer.jsx'
     );
     initFeaturedVideoPlayerModule.default();
+  }
 
+  if (document.body.classList.contains('single-cde')) {
     const markCompleteModule = await import('./courses/mark-complete.js');
     markCompleteModule.default();
 
