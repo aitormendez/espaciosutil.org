@@ -4,7 +4,7 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
 
 ## Cómo usarlo
 
-- Leer primero `CONTEXT.md` para obtener el marco general del proyecto.
+- Leer primero `AGENTS.md` para obtener el marco general del proyecto.
 - Abrir después solo los documentos especializados que apliquen al trabajo en curso.
 - Tratar estos archivos como contexto operativo vivo: si una implementación cambia, actualizar el documento temático correspondiente.
 

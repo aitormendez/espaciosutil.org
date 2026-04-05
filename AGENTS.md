@@ -83,7 +83,7 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 
 ## 7. Contexto Especializado
 
-`CONTEXT.md` debe ser solo el punto de entrada general. Para trabajo específico, cargar después únicamente los documentos necesarios en `docs/context/`.
+`AGENTS.md` debe actuar como punto de entrada general. Para trabajo específico, cargar después únicamente los documentos necesarios en `docs/context/`.
 
 Índice principal:
 
