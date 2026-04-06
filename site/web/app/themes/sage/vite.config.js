@@ -6,6 +6,31 @@ import path from 'path';
 
 export default defineConfig({
   base: '/app/themes/sage/public/build/',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('@react-three/') || id.includes('/three/') || id.includes('/postprocessing/')) {
+            return 'vendor-cosmos';
+          }
+
+          if (id.includes('@vidstack/')) {
+            return 'vendor-vidstack';
+          }
+
+          if (id.includes('/react/') || id.includes('/react-dom/')) {
+            return 'vendor-react';
+          }
+
+          if (id.includes('/gsap/')) {
+            return 'vendor-gsap';
+          }
+
+          return undefined;
+        },
+      },
+    },
+  },
   plugins: [
     tailwindcss(),
     laravel({

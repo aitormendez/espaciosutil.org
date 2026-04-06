@@ -1,8 +1,6 @@
 import React from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Bloom, EffectComposer } from '@react-three/postprocessing';
-import * as THREE from 'three';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Sol } from './Sol.jsx';
 import { Planet } from './Planet.jsx';
@@ -15,6 +13,7 @@ import {
 } from './utils/cosmosConfig.js';
 import { getCosmosData } from './utils/getCosmosData.js';
 
+const CosmosEffects = lazy(() => import('./CosmosEffects.jsx'));
 const SUN_RADIUS = 0.5;
 const EMPTY_COSMOS_DATA = {
   terapias: [],
@@ -30,7 +29,7 @@ function setObjectPosition(target, orbit) {
   target.angle = orbit.angle;
 }
 
-export default function Experience() {
+export default function Experience({ qualityProfile }) {
   const runningRef = useRef(true);
   const sunRef = useRef();
   const planetReveladoresRef = useRef();
@@ -205,13 +204,11 @@ export default function Experience() {
 
   return (
     <>
-      <EffectComposer multisampling={4} frameBufferType={THREE.HalfFloatType}>
-        <Bloom
-          luminanceSmoothing={0.7}
-          intensity={0.35}
-          luminanceThreshold={1.05}
-        />
-      </EffectComposer>
+      {qualityProfile?.enableEffects ? (
+        <Suspense fallback={null}>
+          <CosmosEffects multisampling={qualityProfile.multisampling} />
+        </Suspense>
+      ) : null}
       <Sol ref={sunRef} />
       {planetConfigs.map((planet) => (
         <Planet

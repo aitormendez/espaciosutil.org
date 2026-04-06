@@ -5,23 +5,13 @@ import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import barba from '@barba/core';
 import { solapaContentAbrir, solapaContentCerrar } from './utils/solapa.js';
-import { planets } from './utils/arrayTexturas.js';
 import { getPlanetRotationConfig } from './utils/cosmosConfig.js';
-
-// Define un objeto que mapea los tipos de textura a las rutas de los archivos de textura.
-const textureMap = {};
-
-for (const planet of planets) {
-  textureMap[
-    planet
-  ] = `./app/themes/sage/resources/js/cosmos/components/textures/${planet}-512.jpg`;
-}
+import { getTexturePath } from './utils/textureMap.js';
 
 export const Planet = memo(
   forwardRef(function Planet(props, ref) {
   // Obtén la ruta de la textura según el tipo especificado en props.textureType.
-  const texturePath = textureMap[props.textureType] || textureMap.mars;
-  const texture = useTexture(texturePath);
+  const texture = useTexture(getTexturePath(props.textureType));
   const rotationConfig = useRef(getPlanetRotationConfig(props.name));
 
   useEffect(() => {
