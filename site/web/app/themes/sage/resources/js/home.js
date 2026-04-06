@@ -49,5 +49,5 @@ export function initHomeEnhancements() {
   runAfterWindowLoad(async () => {
     const {cosmos} = await import('./cosmos/cosmos.jsx');
     cosmos();
-  }, 1200);
+  });
 }

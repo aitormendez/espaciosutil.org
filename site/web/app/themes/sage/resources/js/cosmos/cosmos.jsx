@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Canvas } from '@react-three/fiber';
-import { StrictMode, Suspense } from 'react';
+import { Suspense } from 'react';
 import Experience from './components/Experience.jsx';
 import { Loading } from './components/Loading.jsx';
-import { RunningProvider } from './components/utils/RunningContext.jsx';
-import { InitialPositionsProvider } from './components/utils/InitialPositionsContext.jsx';
-import { PlanetRefsProvider } from './components/utils/PlanetRefsContext.jsx';
 import { ConfiguracionRenderer } from './components/ConfiguracionRenderer';
 
 export function cosmos() {
@@ -28,18 +25,16 @@ export function cosmos() {
   };
 
   root.render(
-    <StrictMode>
-      <InitialPositionsProvider>
-        <RunningProvider>
-          <PlanetRefsProvider>
-            <Canvas camera={cameraSettings} shadows>
-              <Suspense fallback={<Loading />}>
-                <Experience />
-              </Suspense>
-            </Canvas>
-          </PlanetRefsProvider>
-        </RunningProvider>
-      </InitialPositionsProvider>
-    </StrictMode>
+    <Canvas
+      camera={cameraSettings}
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, powerPreference: 'high-performance' }}
+      shadows={false}
+    >
+      <ConfiguracionRenderer />
+      <Suspense fallback={<Loading />}>
+        <Experience />
+      </Suspense>
+    </Canvas>
   );
 }

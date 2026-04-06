@@ -1,13 +1,14 @@
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Html, useTexture } from '@react-three/drei';
+import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { Orbiter } from './utils/orbiter.js';
 import { calculateSatelliteOrbitalPeriod } from './utils/calculateSatelliteOrbitalPeriod.js';
 import barba from '@barba/core';
 import { solapaContentAbrir, solapaContentCerrar } from './utils/solapa.js';
 import { planets } from './utils/arrayTexturas.js';
+import { getSatelliteMotionConfig } from './utils/cosmosConfig.js';
 
 // Define un objeto que mapea los tipos de textura a las rutas de los archivos de textura.
 const textureMap = {};
@@ -18,50 +19,45 @@ for (const planet of planets) {
   ] = `./app/themes/sage/resources/js/cosmos/components/textures/${planet}-512.jpg`;
 }
 
-export const Satellite = function Satellite(props) {
-  let running = true;
-
+export const Satellite = memo(function Satellite(props) {
   // Obtén la ruta de la textura según el tipo especificado en props.textureType.
-  const texturePath = textureMap[props.textureType] || textureMap.sand;
+  const texturePath = textureMap[props.textureType] || textureMap.mars;
   const texture = useTexture(texturePath);
-
-  // Crea una referencia para el satélite
   const satelliteRef = useRef();
-
-  let rotationX = Math.random();
-  let rotationY = Math.random();
-
-  useFrame((state, delta) => {
-    satelliteRef.current.rotation.x += rotationX * delta;
-    satelliteRef.current.rotation.y += rotationY * delta;
-  });
-
-  const orbitParameters = {
-    orbitAlt: Math.random() + 0.7, // Altitud orbital aleatoria
-    initialPos: Math.random() * 360, // Posición inicial aleatoria en grados
-    inclination: Math.random() * 180, // Inclinación orbital aleatoria en grados
-    speed: Math.random() + 0.5, // Variación de la velocidad
-  };
-
-  // Crea un Orbiter para el satélite
-  const satelliteOrbiter = new Orbiter();
-  satelliteOrbiter.setOrbitParameters(
-    orbitParameters.orbitAlt,
-    orbitParameters.initialPos,
-    orbitParameters.inclination,
-    orbitParameters.speed
+  const runningRef = useRef(true);
+  const motionConfig = useRef(
+    getSatelliteMotionConfig(
+      props.itemJson,
+      props.itemIndex ?? 0,
+      props.sessionSeed,
+      props.orbitName
+    )
+  );
+  const satelliteOrbiterRef = useRef(new Orbiter());
+  const orbitalPeriod = useMemo(
+    () =>
+      calculateSatelliteOrbitalPeriod(
+        props.centerPlanetRef,
+        motionConfig.current.orbitAlt
+      ),
+    [props.centerPlanetRef]
   );
 
-  const orbitalPeriod = calculateSatelliteOrbitalPeriod(
-    props.centerPlanetRef,
-    orbitParameters.orbitAlt
-  );
+  if (!satelliteOrbiterRef.current.orbitAlt) {
+    satelliteOrbiterRef.current.setOrbitParameters(
+      motionConfig.current.orbitAlt,
+      motionConfig.current.initialPos,
+      motionConfig.current.inclination,
+      motionConfig.current.speed
+    );
+  }
 
   useEffect(() => {
     // Actualiza las órbitas y posiciones del satélite
-    const satellite = satelliteOrbiter.orbit(
+    const satellite = satelliteOrbiterRef.current.orbit(
       props.centerPlanetRef,
-      orbitalPeriod
+      orbitalPeriod,
+      0
     );
 
     // Actualiza la posición del satélite en la escena
@@ -70,41 +66,49 @@ export const Satellite = function Satellite(props) {
       satelliteRef.current.position.y = satellite.y;
       satelliteRef.current.position.z = satellite.z;
     }
-  }, [props.centerPlanetRef, props.orbitalPeriod]);
+  }, [orbitalPeriod, props.centerPlanetRef]);
 
   useFrame((state, delta) => {
-    if (running === true) {
-      // Calcula la nueva posición del satélite en cada frame
-      const satellite = satelliteOrbiter.orbit(
-        props.centerPlanetRef,
-        orbitalPeriod
-      );
-
-      // Actualiza la posición del satélite en la escena
-      if (satelliteRef.current) {
-        satelliteRef.current.position.x = satellite.x;
-        satelliteRef.current.position.y = satellite.y;
-        satelliteRef.current.position.z = satellite.z;
-      }
+    if (!satelliteRef.current) {
+      return;
     }
+
+    satelliteRef.current.rotation.x += motionConfig.current.rotationX * delta;
+    satelliteRef.current.rotation.y += motionConfig.current.rotationY * delta;
+
+    if (!runningRef.current) {
+      return;
+    }
+
+    // Calcula la nueva posición del satélite en cada frame
+    const satellite = satelliteOrbiterRef.current.orbit(
+      props.centerPlanetRef,
+      orbitalPeriod,
+      delta
+    );
+
+    // Actualiza la posición del satélite en la escena
+    satelliteRef.current.position.x = satellite.x;
+    satelliteRef.current.position.y = satellite.y;
+    satelliteRef.current.position.z = satellite.z;
   });
 
   return (
     <mesh
       {...props}
       ref={satelliteRef}
-      castShadow
-      receiveShadow
+      castShadow={false}
+      receiveShadow={false}
       onPointerEnter={(event) => {
         props.stopRunning();
-        running = false;
+        runningRef.current = false;
         document.body.style.cursor = 'pointer';
         event.stopPropagation();
         solapaContentAbrir(props.epigrafe, props.titulo);
       }}
       onPointerLeave={(event) => {
         props.startRunning();
-        running = true;
+        runningRef.current = true;
         document.body.style.cursor = 'default';
         event.stopPropagation();
         solapaContentCerrar();
@@ -118,7 +122,7 @@ export const Satellite = function Satellite(props) {
       <meshStandardMaterial map={texture} />
     </mesh>
   );
-};
+});
 
 Satellite.propTypes = {
   stopRunning: PropTypes.func,
@@ -136,6 +140,9 @@ Satellite.propTypes = {
   centerPlanetRef: PropTypes.object,
   orbitalPeriod: PropTypes.number,
   itemJson: PropTypes.object,
+  itemIndex: PropTypes.number,
+  orbitName: PropTypes.string,
+  sessionSeed: PropTypes.string,
   epigrafe: PropTypes.string,
   titulo: PropTypes.string,
 };

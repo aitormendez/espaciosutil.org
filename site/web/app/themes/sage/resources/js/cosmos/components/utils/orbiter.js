@@ -1,8 +1,14 @@
-// https://chat.openai.com/c/dbf7c030-265c-4ff1-bcde-e5e53cdb0013
-
-Math.radians = function (degrees) {
+function radians(degrees) {
   return (degrees * Math.PI) / 180;
-};
+}
+
+function getPrimaryPosition(primary) {
+  return primary?.current?.position ?? { x: 0, y: 0, z: 0 };
+}
+
+function isValidOrbitalPeriod(orbitalPeriod) {
+  return Number.isFinite(orbitalPeriod) && orbitalPeriod > 0;
+}
 
 export class Orbiter {
   constructor() {
@@ -23,22 +29,23 @@ export class Orbiter {
     this.speed = speed;
   }
 
-  orbit(primary, orbitalPeriod) {
-    // Calcula el ángulo actual de la órbita teniendo en cuenta la velocidad.
-    this.orbitAngle += this.orbitAngleMod * this.speed * (1 / orbitalPeriod);
+  orbit(primary, orbitalPeriod, delta = 1) {
+    if (isValidOrbitalPeriod(orbitalPeriod)) {
+      this.orbitAngle +=
+        this.orbitAngleMod * this.speed * (delta / orbitalPeriod);
+    }
 
-    // Calcula el ángulo actual de la órbita teniendo en cuenta la velocidad.
-    this.orbitAngle += this.orbitAngleMod * this.speed * (1 / orbitalPeriod);
+    const primaryPosition = getPrimaryPosition(primary);
 
     // Aplica la inclinación orbital a las coordenadas x y z.
-    const xOrbital = this.orbitAlt * Math.cos(Math.radians(this.orbitAngle + this.initialPos));
-    const zOrbital = this.orbitAlt * Math.sin(Math.radians(this.orbitAngle + this.initialPos));
-    const xInclined = xOrbital * Math.cos(Math.radians(this.inclination));
-    const zInclined = xOrbital * Math.sin(Math.radians(this.inclination));
+    const xOrbital = this.orbitAlt * Math.cos(radians(this.orbitAngle + this.initialPos));
+    const zOrbital = this.orbitAlt * Math.sin(radians(this.orbitAngle + this.initialPos));
+    const xInclined = xOrbital * Math.cos(radians(this.inclination));
+    const zInclined = xOrbital * Math.sin(radians(this.inclination));
 
-    this.y = primary.current.position.y + zInclined;
-    this.x = primary.current.position.x + xInclined;
-    this.z = primary.current.position.z + zOrbital;
+    this.y = primaryPosition.y + zInclined;
+    this.x = primaryPosition.x + xInclined;
+    this.z = primaryPosition.z + zOrbital;
 
     return {
       x: this.x,

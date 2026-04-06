@@ -1,11 +1,12 @@
 import React from 'react';
-import { forwardRef, useRef, useEffect, useContext, useState } from 'react';
+import { forwardRef, memo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import barba from '@barba/core';
 import { solapaContentAbrir, solapaContentCerrar } from './utils/solapa.js';
 import { planets } from './utils/arrayTexturas.js';
+import { getPlanetRotationConfig } from './utils/cosmosConfig.js';
 
 // Define un objeto que mapea los tipos de textura a las rutas de los archivos de textura.
 const textureMap = {};
@@ -16,32 +17,28 @@ for (const planet of planets) {
   ] = `./app/themes/sage/resources/js/cosmos/components/textures/${planet}-512.jpg`;
 }
 
-export const Planet = forwardRef(function Planet(props, ref) {
+export const Planet = memo(
+  forwardRef(function Planet(props, ref) {
   // Obtén la ruta de la textura según el tipo especificado en props.textureType.
-  const texturePath = textureMap[props.textureType] || textureMap.sand;
+  const texturePath = textureMap[props.textureType] || textureMap.mars;
   const texture = useTexture(texturePath);
-
-  let rotationX;
-  let rotationY;
-  let rotationZ;
-
-  if (props.name === 'planetFormaciones') {
-    rotationX = 0;
-    rotationY = -0.2;
-    rotationZ = 90;
-  } else {
-    rotationX = Math.random();
-    rotationY = Math.random();
-    rotationZ = 0;
-  }
+  const rotationConfig = useRef(getPlanetRotationConfig(props.name));
 
   useEffect(() => {
-    ref.current.rotation.x += rotationZ;
+    if (!ref?.current) {
+      return;
+    }
+
+    ref.current.rotation.x += rotationConfig.current.rotationZ;
   }, []);
 
   useFrame((state, delta) => {
-    ref.current.rotation.x += rotationX * delta;
-    ref.current.rotation.y += rotationY * delta;
+    if (!ref?.current) {
+      return;
+    }
+
+    ref.current.rotation.x += rotationConfig.current.rotationX * delta;
+    ref.current.rotation.y += rotationConfig.current.rotationY * delta;
   });
 
   return (
@@ -71,7 +68,8 @@ export const Planet = forwardRef(function Planet(props, ref) {
       <meshStandardMaterial map={texture} />
     </mesh>
   );
-});
+  })
+);
 
 Planet.propTypes = {
   stopRunning: PropTypes.func,

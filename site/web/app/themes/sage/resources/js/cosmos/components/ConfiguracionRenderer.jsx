@@ -6,7 +6,7 @@ export function ConfiguracionRenderer() {
   const { gl } = useThree();
 
   useEffect(() => {
-    gl.outputEncoding = THREE.sRGBEncoding;
+    gl.outputColorSpace = THREE.SRGBColorSpace;
     gl.toneMapping = THREE.ACESFilmicToneMapping;
     gl.toneMappingExposure = 1.0;
   }, [gl]);
