@@ -197,6 +197,8 @@ Texto propuesto:
 >
 > En caso de estar inscrita en el Registro Mercantil, se hara constar aqui la informacion registral completa: [CONFIRMAR DATOS REGISTRALES].
 >
+> La aplicacion web `Espacio Sutil Publisher`, accesible actualmente en https://tiktok.espaciosutil.org/tiktok, forma parte de los servicios digitales operados por Libranzai, SL para la gestion y publicacion asistida de contenidos editoriales en plataformas de terceros, incluyendo TikTok. Salvo que se indique expresamente otra cosa, las presentes condiciones de uso y el resto de textos legales del sitio resultan tambien aplicables a dicha aplicacion en lo que corresponda por su naturaleza y funcionalidad.
+>
 > El acceso y uso de este sitio web atribuye la condicion de usuario e implica la aceptacion de las presentes condiciones de uso. El usuario se compromete a utilizar la web, sus contenidos y sus servicios de forma licita, diligente y conforme a la buena fe, al orden publico y a la normativa aplicable.
 >
 > Queda prohibido utilizar el sitio web con fines ilicitos, lesivos de derechos o intereses de terceros, o que puedan danar, inutilizar, sobrecargar o deteriorar el normal funcionamiento del sitio, sus servicios o sus contenidos.
@@ -219,7 +221,7 @@ Titulo sugerido:
 
 Texto propuesto:
 
-> En esta politica de privacidad te explicamos como tratamos tus datos personales cuando navegas por este sitio web, contactas con Espacio Sutil, creas una cuenta, contratas una suscripcion o utilizas el area privada del Curso de Desarrollo Espiritual.
+> En esta politica de privacidad te explicamos como tratamos tus datos personales cuando navegas por este sitio web, contactas con Espacio Sutil, creas una cuenta, contratas una suscripcion, utilizas el area privada del Curso de Desarrollo Espiritual o interactuas con la aplicacion web `Espacio Sutil Publisher` para conectar una cuenta de TikTok y gestionar publicaciones asistidas.
 >
 > ### 1. Responsable del tratamiento
 >
@@ -237,6 +239,7 @@ Texto propuesto:
 > - datos de facturacion y estado de la suscripcion;
 > - informacion aportada por el usuario en formularios o comunicaciones;
 > - datos de uso del area privada, como progreso de lecciones, resultados de quiz y acciones necesarias para prestar el servicio;
+> - datos tecnicos y operativos asociados al uso de `Espacio Sutil Publisher`, como identificadores de cuenta de TikTok, datos basicos de perfil autorizados por el usuario, tokens de acceso o renovacion, configuracion de privacidad de la publicacion y estados tecnicos de envio o publicacion;
 > - datos tecnicos y de seguridad derivados de la navegacion;
 > - datos de analitica web, solo cuando el usuario lo autorice.
 >
@@ -249,6 +252,7 @@ Texto propuesto:
 > - gestionar la contratacion, pago, renovacion, cancelacion y soporte de la suscripcion;
 > - permitir el acceso al contenido del curso y a sus funciones asociadas;
 > - mantener un registro funcional del progreso del alumno y de determinadas interacciones necesarias para la prestacion del servicio;
+> - permitir la conexion autorizada de una cuenta de TikTok con `Espacio Sutil Publisher`, mostrar la cuenta conectada, guardar de forma segura los tokens necesarios para mantener la autorizacion y ejecutar publicaciones asistidas en nombre del usuario cuando este las confirme expresamente;
 > - enviar comunicaciones de servicio relacionadas con la cuenta, los pagos, la membresia o incidencias;
 > - cumplir obligaciones legales, contables, fiscales y de seguridad;
 > - obtener estadisticas de uso y mejorar el sitio, unicamente si has consentido la analitica.
@@ -269,6 +273,7 @@ Texto propuesto:
 > - proveedores de alojamiento, mantenimiento tecnico, correo y seguridad;
 > - Stripe, como proveedor de pagos y gestion de cobros recurrentes;
 > - proveedores estrictamente necesarios para la entrega tecnica de contenidos digitales, como servicios de streaming o CDN;
+> - TikTok y sus servicios para desarrolladores, cuando el usuario utilice `Espacio Sutil Publisher` para autorizar una cuenta o publicar contenido mediante dicha plataforma;
 > - autoridades u organismos publicos cuando exista obligacion legal.
 >
 > Cuando la analitica este activada, los datos se trataran conforme a la configuracion de Matomo y a lo indicado en la politica de cookies.
