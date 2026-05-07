@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e07216f2b36fb1cb6b17489284ca162",
+    "content-hash": "578ac8796a91a77d015a13685852557e",
     "packages": [
         {
             "name": "blade-ui-kit/blade-icons",
@@ -4285,7 +4285,7 @@
             "time": "2024-11-21T01:49:47+00:00"
         },
         {
-            "name": "wpackagist-plugin/autodescription",
+            "name": "wp-plugin/autodescription",
             "version": "5.1.4",
             "source": {
                 "type": "svn",
@@ -4297,13 +4297,26 @@
                 "url": "https://downloads.wordpress.org/plugin/autodescription.5.1.4.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/autodescription/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Sybre Waaijer"
+                }
+            ],
+            "description": "The fastest feature-complete SEO plugin for professional WordPress websites. Secure, fast, unbranded, and automated SEO. Do less; get better results.",
+            "homepage": "https://theseoframework.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/autodescription/#developers",
+                "issues": "https://wordpress.org/support/plugin/autodescription",
+                "source": "https://plugins.svn.wordpress.org/autodescription"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/favicon-by-realfavicongenerator",
+            "name": "wp-plugin/favicon-by-realfavicongenerator",
             "version": "1.3.46",
             "source": {
                 "type": "svn",
@@ -4315,13 +4328,26 @@
                 "url": "https://downloads.wordpress.org/plugin/favicon-by-realfavicongenerator.1.3.46.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/favicon-by-realfavicongenerator/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "phbernard"
+                }
+            ],
+            "description": "Create and install your favicon for all platforms: PC/Mac, iPhone/iPad, Android devices, Windows 8 tablets...",
+            "homepage": "http://realfavicongenerator.net/extensions/wordpress",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/favicon-by-realfavicongenerator/#developers",
+                "issues": "https://wordpress.org/support/plugin/favicon-by-realfavicongenerator",
+                "source": "https://plugins.svn.wordpress.org/favicon-by-realfavicongenerator"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/html-forms",
+            "name": "wp-plugin/html-forms",
             "version": "1.6.4",
             "source": {
                 "type": "svn",
@@ -4333,13 +4359,26 @@
                 "url": "https://downloads.wordpress.org/plugin/html-forms.1.6.4.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/html-forms/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Link Software LLC"
+                }
+            ],
+            "description": "A simpler, faster, and smarter WordPress forms plugin.",
+            "homepage": "https://htmlformsplugin.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/html-forms/#developers",
+                "issues": "https://wordpress.org/support/plugin/html-forms",
+                "source": "https://plugins.svn.wordpress.org/html-forms"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/mammoth-docx-converter",
+            "name": "wp-plugin/mammoth-docx-converter",
             "version": "1.22.0",
             "source": {
                 "type": "svn",
@@ -4351,13 +4390,26 @@
                 "url": "https://downloads.wordpress.org/plugin/mammoth-docx-converter.1.22.0.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/mammoth-docx-converter/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "Michael Williamson"
+                }
+            ],
+            "description": "Mammoth converts semantically marked up .docx documents to simple and clean HTML, allowing pasting from Word and Google Docs without the usual mess.",
+            "homepage": "https://github.com/mwilliamson/mammoth-wordpress-plugin",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/mammoth-docx-converter/#developers",
+                "issues": "https://wordpress.org/support/plugin/mammoth-docx-converter",
+                "source": "https://plugins.svn.wordpress.org/mammoth-docx-converter"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/post-types-order",
+            "name": "wp-plugin/post-types-order",
             "version": "2.4.6",
             "source": {
                 "type": "svn",
@@ -4369,49 +4421,88 @@
                 "url": "https://downloads.wordpress.org/plugin/post-types-order.2.4.6.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/post-types-order/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "nsp-code"
+                }
+            ],
+            "description": "Sort posts and custom post type objects using a drag-and-drop, sortable JavaScript AJAX interface, or through the default WordPress dashboard",
+            "homepage": "http://www.nsp-code.com",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/post-types-order/#developers",
+                "issues": "https://wordpress.org/support/plugin/post-types-order",
+                "source": "https://plugins.svn.wordpress.org/post-types-order"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-plugin/query-monitor",
-            "version": "3.20.2",
+            "name": "wp-plugin/query-monitor",
+            "version": "4.0.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/query-monitor/",
-                "reference": "tags/3.20.2"
+                "reference": "tags/4.0.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/query-monitor.3.20.2.zip"
+                "url": "https://downloads.wordpress.org/plugin/query-monitor.4.0.6.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/query-monitor/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "John Blackbourn"
+                }
+            ],
+            "description": "Query Monitor is the developer tools panel for WordPress and WooCommerce.",
+            "homepage": "https://querymonitor.com/",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/query-monitor/#developers",
+                "issues": "https://wordpress.org/support/plugin/query-monitor",
+                "source": "https://plugins.svn.wordpress.org/query-monitor"
+            },
+            "time": "2026-04-11T11:56:17+00:00"
         },
         {
-            "name": "wpackagist-plugin/taxonomy-terms-order",
-            "version": "1.9.4",
+            "name": "wp-plugin/taxonomy-terms-order",
+            "version": "1.9.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/taxonomy-terms-order/",
-                "reference": "tags/1.9.4"
+                "reference": "tags/1.9.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.9.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/taxonomy-terms-order.1.9.5.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/taxonomy-terms-order/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "authors": [
+                {
+                    "name": "nsp-code"
+                }
+            ],
+            "description": "Drag-and-drop ordering for Categories & any taxonomy (hierarchically) using a Drag and Drop Sortable JavaScript capability.",
+            "homepage": "http://www.nsp-code.com",
+            "support": {
+                "changelog": "https://wordpress.org/plugins/taxonomy-terms-order/#developers",
+                "issues": "https://wordpress.org/support/plugin/taxonomy-terms-order",
+                "source": "https://plugins.svn.wordpress.org/taxonomy-terms-order"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
-            "name": "wpackagist-theme/twentytwentyfive",
+            "name": "wp-theme/twentytwentyfive",
             "version": "1.4",
             "source": {
                 "type": "svn",
@@ -4423,10 +4514,18 @@
                 "url": "https://downloads.wordpress.org/theme/twentytwentyfive.1.4.zip"
             },
             "require": {
-                "composer/installers": "^1.0 || ^2.0"
+                "composer/installers": "~1.0|~2.0"
             },
             "type": "wordpress-theme",
-            "homepage": "https://wordpress.org/themes/twentytwentyfive/"
+            "notification-url": "https://wp-packages.org/downloads",
+            "description": "Twenty Twenty-Five emphasizes simplicity and adaptability. It offers flexible design options, supported by a variety of patterns for different page types, such as services and landing pages, making it ideal for building personal blogs, professional portfolios, online magazines, or business websites. Its templates cater to various blog styles, from text-focused to image-heavy layouts. Additionally, it supports international typography and diverse color palettes, ensuring accessibility and customization for users worldwide.",
+            "homepage": "https://wordpress.org/themes/twentytwentyfive/",
+            "support": {
+                "changelog": "https://wordpress.org/themes/twentytwentyfive/#developers",
+                "issues": "https://wordpress.org/support/theme/twentytwentyfive",
+                "source": "https://themes.svn.wordpress.org/twentytwentyfive"
+            },
+            "time": "2026-03-23T19:23:21+00:00"
         },
         {
             "name": "wpengine/advanced-custom-fields-pro",

@@ -34,12 +34,9 @@
       "url": "https://composer.advancedcustomfields.com"
     },
     {
+      "name": "wp-packages",
       "type": "composer",
-      "url": "https://wpackagist.org",
-      "only": [
-        "wpackagist-plugin/*",
-        "wpackagist-theme/*"
-      ]
+      "url": "https://repo.wp-packages.org"
     }
   ],
   "require": {
@@ -51,20 +48,20 @@
     "roots/bedrock-disallow-indexing": "^2.0",
     "roots/wordpress": "6.9.4",
     "roots/wp-config": "1.0.0",
-    "wpackagist-theme/twentytwentyfive": "^1.0",
+    "wp-theme/twentytwentyfive": "^1.0",
     "wpengine/advanced-custom-fields-pro": "*",
     "log1x/navi": "^3.1",
     "johnbillion/extended-cpts": "^5.0",
     "roots/acorn-post-types": "^1.0",
     "log1x/crumb": "^1.1",
     "log1x/sage-html-forms": "^1.0",
-    "wpackagist-plugin/taxonomy-terms-order": "*",
-    "wpackagist-plugin/html-forms": "*",
-    "wpackagist-plugin/mammoth-docx-converter": "*",
-    "wpackagist-plugin/post-types-order": "*",
-    "wpackagist-plugin/favicon-by-realfavicongenerator": "*",
-    "wpackagist-plugin/query-monitor": "*",
-    "wpackagist-plugin/autodescription": "*",
+    "wp-plugin/taxonomy-terms-order": "*",
+    "wp-plugin/html-forms": "*",
+    "wp-plugin/mammoth-docx-converter": "*",
+    "wp-plugin/post-types-order": "*",
+    "wp-plugin/favicon-by-realfavicongenerator": "*",
+    "wp-plugin/query-monitor": "*",
+    "wp-plugin/autodescription": "*",
     "log1x/acf-composer": "^3.4",
     "blade-ui-kit/blade-icons": "^1.8",
     "codeat3/blade-coolicons": "^1.6",
