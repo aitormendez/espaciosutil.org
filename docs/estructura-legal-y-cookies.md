@@ -187,192 +187,192 @@ Titulo sugerido:
 
 Texto propuesto:
 
-> En cumplimiento de lo dispuesto en la Ley 34/2002, de 11 de julio, de servicios de la sociedad de la informacion y de comercio electronico, se informa a los usuarios de este sitio web de los siguientes datos de identificacion:
+> En cumplimiento de lo dispuesto en la Ley 34/2002, de 11 de julio, de servicios de la sociedad de la información y de comercio electrónico, se informa a los usuarios de este sitio web de los siguientes datos de identificación:
 >
 > Titular: Libranzai, SL  
 > CIF: B84372218  
-> Domicilio social: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), Espana  
+> Domicilio social: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), España<br>
 > Sitio web: https://espaciosutil.org  
-> Email de contacto: [CONFIRMAR EMAIL LEGAL]
+> Email de contacto: admin@espaciosutil.org
 >
-> En caso de estar inscrita en el Registro Mercantil, se hara constar aqui la informacion registral completa: [CONFIRMAR DATOS REGISTRALES].
+> Inscrita en el Registro Mercantil de Madrid, Tomo 21487, Folio 115, Hoja M-382155.
 >
-> La aplicacion web `Espacio Sutil Publisher`, accesible actualmente en https://tiktok.espaciosutil.org/tiktok, forma parte de los servicios digitales operados por Libranzai, SL para la gestion y publicacion asistida de contenidos editoriales en plataformas de terceros, incluyendo TikTok. Salvo que se indique expresamente otra cosa, las presentes condiciones de uso y el resto de textos legales del sitio resultan tambien aplicables a dicha aplicacion en lo que corresponda por su naturaleza y funcionalidad.
+> La aplicación web `Espacio Sutil Publisher`, accesible actualmente en https://tiktok.espaciosutil.org/tiktok, forma parte de los servicios digitales operados por Libranzai, SL para la gestión y publicación asistida de contenidos editoriales en plataformas de terceros, incluyendo TikTok. Salvo que se indique expresamente otra cosa, las presentes condiciones de uso y el resto de textos legales del sitio resultan también aplicables a dicha aplicación en lo que corresponda por su naturaleza y funcionalidad.
 >
-> El acceso y uso de este sitio web atribuye la condicion de usuario e implica la aceptacion de las presentes condiciones de uso. El usuario se compromete a utilizar la web, sus contenidos y sus servicios de forma licita, diligente y conforme a la buena fe, al orden publico y a la normativa aplicable.
+> El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación de las presentes condiciones de uso. El usuario se compromete a utilizar la web, sus contenidos y sus servicios de forma lícita, diligente y conforme a la buena fe, al orden público y a la normativa aplicable.
 >
-> Queda prohibido utilizar el sitio web con fines ilicitos, lesivos de derechos o intereses de terceros, o que puedan danar, inutilizar, sobrecargar o deteriorar el normal funcionamiento del sitio, sus servicios o sus contenidos.
+> Queda prohibido utilizar el sitio web con fines ilícitos, lesivos de derechos o intereses de terceros, o que puedan dañar, inutilizar, sobrecargar o deteriorar el normal funcionamiento del sitio, sus servicios o sus contenidos.
 >
-> Los contenidos de esta web, incluyendo textos, imagenes, diseno, estructura, logotipos, marcas, codigo y demas elementos, son titularidad de Libranzai, SL o se utilizan con la debida autorizacion, y se encuentran protegidos por la normativa sobre propiedad intelectual e industrial. Queda prohibida su reproduccion, distribucion, comunicacion publica, transformacion o cualquier otro uso no autorizado expresamente por escrito.
+> Los contenidos de esta web, incluyendo textos, imágenes, diseño, estructura, logotipos, marcas, código y demás elementos, son titularidad de Libranzai, SL o se utilizan con la debida autorización, y se encuentran protegidos por la normativa sobre propiedad intelectual e industrial. Queda prohibida su reproducción, distribución, comunicación pública, transformación o cualquier otro uso no autorizado expresamente por escrito.
 >
-> El titular podra enlazar a paginas o servicios de terceros unicamente con finalidad informativa o funcional. Libranzai, SL no se responsabiliza del contenido, disponibilidad, politicas o practicas de sitios externos ajenos a su control.
+> El titular podrá enlazar a páginas o servicios de terceros únicamente con finalidad informativa o funcional. Libranzai, SL no se responsabiliza del contenido, disponibilidad, políticas o prácticas de sitios externos ajenos a su control.
 >
-> Libranzai, SL se reserva el derecho a modificar, actualizar o retirar, en cualquier momento y sin necesidad de previo aviso, contenidos, servicios, diseno, estructura o condiciones de uso de la web.
+> Libranzai, SL se reserva el derecho a modificar, actualizar o retirar, en cualquier momento y sin necesidad de previo aviso, contenidos, servicios, diseño, estructura o condiciones de uso de la web.
 >
-> La informacion y contenidos ofrecidos en el area divulgativa y formativa del sitio tienen caracter informativo y educativo. Salvo indicacion expresa en contrario, no constituyen asesoramiento medico, psicologico, psiquiatrico o sanitario, ni sustituyen la atencion profesional individualizada que pudiera resultar necesaria en cada caso.
+> La información y contenidos ofrecidos en el área divulgativa y formativa del sitio tienen carácter informativo y educativo. Salvo indicación expresa en contrario, no constituyen asesoramiento médico, psicológico, psiquiátrico o sanitario, ni sustituyen la atención profesional individualizada que pudiera resultar necesaria en cada caso.
 >
-> Para cualquier controversia relacionada con este sitio web sera de aplicacion la legislacion espanola. Siempre que la normativa de consumo no disponga otra cosa, las partes se someteran a los juzgados y tribunales del domicilio del consumidor o usuario, y en su defecto a los de Madrid.
+> Para cualquier controversia relacionada con este sitio web será de aplicación la legislación española. Siempre que la normativa de consumo no disponga otra cosa, las partes se someterán a los juzgados y tribunales del domicilio del consumidor o usuario, y en su defecto a los de Madrid.
 
 ## 4.2. Politica de privacidad
 
 Titulo sugerido:
 
-`Politica de privacidad`
+`Política de privacidad`
 
 Texto propuesto:
 
-> En esta politica de privacidad te explicamos como tratamos tus datos personales cuando navegas por este sitio web, contactas con Espacio Sutil, creas una cuenta, contratas una suscripcion, utilizas el area privada del Curso de Desarrollo Espiritual o interactuas con la aplicacion web `Espacio Sutil Publisher` para conectar una cuenta de TikTok y gestionar publicaciones asistidas.
+> En esta política de privacidad te explicamos cómo tratamos tus datos personales cuando navegas por este sitio web, contactas con Espacio Sutil, creas una cuenta, contratas una suscripción, utilizas el área privada del Curso de Desarrollo Espiritual o interactúas con la aplicación web `Espacio Sutil Publisher` para conectar una cuenta de TikTok y gestionar publicaciones asistidas.
 >
 > ### 1. Responsable del tratamiento
 >
 > Responsable: Libranzai, SL  
 > CIF: B84372218  
-> Domicilio: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), Espana  
-> Email de contacto para privacidad: [CONFIRMAR EMAIL LEGAL]
+> Domicilio: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), España<br>
+> Email de contacto para privacidad: admin@espaciosutil.org
 >
-> ### 2. Que datos tratamos
+> ### 2. Qué datos tratamos
 >
-> Podemos tratar las siguientes categorias de datos:
+> Podemos tratar las siguientes categorías de datos:
 >
-> - datos identificativos y de contacto, como nombre y correo electronico;
-> - datos de cuenta, acceso y membresia;
-> - datos de facturacion y estado de la suscripcion;
-> - informacion aportada por el usuario en formularios o comunicaciones;
-> - datos de uso del area privada, como progreso de lecciones, resultados de quiz y acciones necesarias para prestar el servicio;
-> - datos tecnicos y operativos asociados al uso de `Espacio Sutil Publisher`, como identificadores de cuenta de TikTok, datos basicos de perfil autorizados por el usuario, tokens de acceso o renovacion, configuracion de privacidad de la publicacion y estados tecnicos de envio o publicacion;
-> - datos tecnicos y de seguridad derivados de la navegacion;
-> - datos de analitica web, solo cuando el usuario lo autorice.
+> - datos identificativos y de contacto, como nombre y correo electrónico;
+> - datos de cuenta, acceso y membresía;
+> - datos de facturación y estado de la suscripción;
+> - información aportada por el usuario en formularios o comunicaciones;
+> - datos de uso del área privada, como progreso de lecciones, resultados de quiz y acciones necesarias para prestar el servicio;
+> - datos técnicos y operativos asociados al uso de `Espacio Sutil Publisher`, como identificadores de cuenta de TikTok, datos básicos de perfil autorizados por el usuario, tokens de acceso o renovación, configuración de privacidad de la publicación y estados técnicos de envío o publicación;
+> - datos técnicos y de seguridad derivados de la navegación;
+> - datos de analítica web, solo cuando el usuario lo autorice.
 >
 > ### 3. Finalidades del tratamiento
 >
 > Tratamos tus datos para:
 >
-> - atender solicitudes enviadas a traves del formulario de contacto o por correo;
+> - atender solicitudes enviadas a través del formulario de contacto o por correo;
 > - crear y gestionar tu cuenta de usuario;
-> - gestionar la contratacion, pago, renovacion, cancelacion y soporte de la suscripcion;
+> - gestionar la contratación, pago, renovación, cancelación y soporte de la suscripción;
 > - permitir el acceso al contenido del curso y a sus funciones asociadas;
-> - mantener un registro funcional del progreso del alumno y de determinadas interacciones necesarias para la prestacion del servicio;
-> - permitir la conexion autorizada de una cuenta de TikTok con `Espacio Sutil Publisher`, mostrar la cuenta conectada, guardar de forma segura los tokens necesarios para mantener la autorizacion y ejecutar publicaciones asistidas en nombre del usuario cuando este las confirme expresamente;
-> - enviar comunicaciones de servicio relacionadas con la cuenta, los pagos, la membresia o incidencias;
+> - mantener un registro funcional del progreso del alumno y de determinadas interacciones necesarias para la prestación del servicio;
+> - permitir la conexión autorizada de una cuenta de TikTok con `Espacio Sutil Publisher`, mostrar la cuenta conectada, guardar de forma segura los tokens necesarios para mantener la autorización y ejecutar publicaciones asistidas en nombre del usuario cuando este las confirme expresamente;
+> - enviar comunicaciones de servicio relacionadas con la cuenta, los pagos, la membresía o incidencias;
 > - cumplir obligaciones legales, contables, fiscales y de seguridad;
-> - obtener estadisticas de uso y mejorar el sitio, unicamente si has consentido la analitica.
+> - obtener estadísticas de uso y mejorar el sitio, únicamente si has consentido la analítica.
 >
-> ### 4. Base juridica
+> ### 4. Base jurídica
 >
-> Las bases juridicas del tratamiento son:
+> Las bases jurídicas del tratamiento son:
 >
-> - el consentimiento del usuario, para consultas, formularios y analitica opcional;
-> - la ejecucion de un contrato o la aplicacion de medidas precontractuales, para la gestion de la suscripcion y del acceso al curso;
-> - el cumplimiento de obligaciones legales, para facturacion, contabilidad, fiscalidad, prevencion del fraude y atencion de derechos;
-> - el interes legitimo del responsable, en lo estrictamente necesario para seguridad, continuidad tecnica y defensa ante reclamaciones.
+> - el consentimiento del usuario, para consultas, formularios y analítica opcional;
+> - la ejecución de un contrato o la aplicación de medidas precontractuales, para la gestión de la suscripción y del acceso al curso;
+> - el cumplimiento de obligaciones legales, para facturación, contabilidad, fiscalidad, prevención del fraude y atención de derechos;
+> - el interés legítimo del responsable, en lo estrictamente necesario para seguridad, continuidad técnica y defensa ante reclamaciones.
 >
 > ### 5. Destinatarios
 >
-> Tus datos podran comunicarse o ponerse a disposicion de proveedores que intervienen en la prestacion del servicio, por ejemplo:
+> Tus datos podrán comunicarse o ponerse a disposición de proveedores que intervienen en la prestación del servicio, por ejemplo:
 >
-> - proveedores de alojamiento, mantenimiento tecnico, correo y seguridad;
-> - Stripe, como proveedor de pagos y gestion de cobros recurrentes;
-> - proveedores estrictamente necesarios para la entrega tecnica de contenidos digitales, como servicios de streaming o CDN;
+> - proveedores de alojamiento, mantenimiento técnico, correo y seguridad;
+> - Stripe, como proveedor de pagos y gestión de cobros recurrentes;
+> - proveedores estrictamente necesarios para la entrega técnica de contenidos digitales, como servicios de streaming o CDN;
 > - TikTok y sus servicios para desarrolladores, cuando el usuario utilice `Espacio Sutil Publisher` para autorizar una cuenta o publicar contenido mediante dicha plataforma;
-> - autoridades u organismos publicos cuando exista obligacion legal.
+> - autoridades u organismos públicos cuando exista obligación legal.
 >
-> Cuando la analitica este activada, los datos se trataran conforme a la configuracion de Matomo y a lo indicado en la politica de cookies.
+> Cuando la analítica esté activada, los datos se tratarán conforme a la configuración de Matomo y a lo indicado en la política de cookies.
 >
-> ### 6. Conservacion
+> ### 6. Conservación
 >
 > Conservaremos los datos durante el tiempo necesario para cada finalidad:
 >
-> - datos de contacto: durante el tiempo necesario para atender la solicitud y, despues, mientras puedan derivarse responsabilidades;
-> - datos de cuenta y membresia: mientras la cuenta permanezca activa y durante los plazos legales posteriores;
-> - datos de facturacion y pagos: durante los plazos exigidos por la normativa fiscal y contable;
-> - datos funcionales del curso, como progreso y quiz: mientras exista la cuenta o hasta que el usuario solicite su supresion, salvo que deban mantenerse por obligacion legal o para defensa ante reclamaciones;
-> - datos de analitica: segun los plazos indicados en la politica de cookies.
+> - datos de contacto: durante el tiempo necesario para atender la solicitud y, después, mientras puedan derivarse responsabilidades;
+> - datos de cuenta y membresía: mientras la cuenta permanezca activa y durante los plazos legales posteriores;
+> - datos de facturación y pagos: durante los plazos exigidos por la normativa fiscal y contable;
+> - datos funcionales del curso, como progreso y quiz: mientras exista la cuenta o hasta que el usuario solicite su supresión, salvo que deban mantenerse por obligación legal o para defensa ante reclamaciones;
+> - datos de analítica: según los plazos indicados en la política de cookies.
 >
 > ### 7. Derechos
 >
-> Puedes ejercer tus derechos de acceso, rectificacion, supresion, oposicion, limitacion y portabilidad, asi como retirar en cualquier momento los consentimientos otorgados, enviando una solicitud a [CONFIRMAR EMAIL LEGAL] e identificandote adecuadamente.
+> Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad, así como retirar en cualquier momento los consentimientos otorgados, enviando una solicitud a admin@espaciosutil.org e identificándote adecuadamente.
 >
-> Si consideras que tus derechos no han sido atendidos correctamente, puedes presentar una reclamacion ante la Agencia Espanola de Proteccion de Datos: https://www.aepd.es
+> Si consideras que tus derechos no han sido atendidos correctamente, puedes presentar una reclamación ante la Agencia Española de Protección de Datos: https://www.aepd.es
 >
 > ### 8. Menores
 >
-> Los servicios de suscripcion y el area privada del curso no estan dirigidos a menores de edad sin la intervencion de sus padres, madres o representantes legales. Si detectamos datos de un menor obtenidos sin autorizacion valida, podremos eliminarlos.
+> Los servicios de suscripción y el área privada del curso no están dirigidos a menores de edad sin la intervención de sus padres, madres o representantes legales. Si detectamos datos de un menor obtenidos sin autorización válida, podremos eliminarlos.
 >
 > ### 9. Seguridad
 >
-> Libranzai, SL aplica medidas tecnicas y organizativas razonables para proteger los datos personales y reducir el riesgo de acceso no autorizado, perdida, alteracion o tratamiento indebido.
+> Libranzai, SL aplica medidas técnicas y organizativas razonables para proteger los datos personales y reducir el riesgo de acceso no autorizado, pérdida, alteración o tratamiento indebido.
 >
-> ### 10. Cambios en esta politica
+> ### 10. Cambios en esta política
 >
-> Esta politica de privacidad puede actualizarse para reflejar cambios legales, tecnicos o funcionales del servicio. La version publicada en cada momento sera la vigente.
+> Esta política de privacidad puede actualizarse para reflejar cambios legales, técnicos o funcionales del servicio. La versión publicada en cada momento será la vigente.
 
 ## 4.3. Politica de cookies
 
 Titulo sugerido:
 
-`Politica de cookies`
+`Política de cookies`
 
 Texto propuesto:
 
-> Este sitio web utiliza cookies y tecnologias similares propias y, en su caso, de terceros estrictamente necesarios para su funcionamiento. Ademas, puede utilizar cookies o identificadores de analitica, pero solo si el usuario los acepta expresamente.
+> Este sitio web utiliza cookies y tecnologías similares propias y, en su caso, de terceros estrictamente necesarias para su funcionamiento. Además, puede utilizar cookies o identificadores de analítica, pero solo si el usuario los acepta expresamente.
 >
-> ### 1. Que son las cookies
+> ### 1. Qué son las cookies
 >
-> Las cookies son pequenos archivos o identificadores que se almacenan en tu dispositivo al visitar una pagina web y que permiten recordar informacion sobre tu visita, tu sesion o tus preferencias. Tambien pueden emplearse tecnologias similares, como almacenamiento local del navegador.
+> Las cookies son pequeños archivos o identificadores que se almacenan en tu dispositivo al visitar una página web y que permiten recordar información sobre tu visita, tu sesión o tus preferencias. También pueden emplearse tecnologías similares, como el almacenamiento local del navegador.
 >
-> ### 2. Que categorias usamos
+> ### 2. Qué categorías usamos
 >
-> #### Cookies tecnicas o necesarias
+> #### Cookies técnicas o necesarias
 >
 > Son imprescindibles para que la web funcione correctamente y para prestar servicios solicitados por el usuario. Incluyen, entre otras:
 >
-> - cookies tecnicas de WordPress para inicio de sesion, sesion, seguridad y preferencias basicas;
-> - cookies funcionales necesarias para el area privada y la membresia;
-> - identificadores tecnicos asociados a la gestion del checkout y de la cuenta;
-> - el identificador necesario para recordar tu eleccion sobre cookies.
+> - cookies técnicas de WordPress para inicio de sesión, sesión, seguridad y preferencias básicas;
+> - cookies funcionales necesarias para el área privada y la membresía;
+> - identificadores técnicos asociados a la gestión del checkout y de la cuenta;
+> - el identificador de consentimiento `es_cookie_consent`, junto con su reflejo técnico en almacenamiento local `es_cookie_consent_v1`, necesarios para recordar tu elección sobre cookies.
 >
-> Estas cookies no requieren consentimiento previo en la medida en que sean estrictamente necesarias para prestar el servicio solicitado o permitir la comunicacion entre el dispositivo y la red.
+> Estas cookies no requieren consentimiento previo en la medida en que sean estrictamente necesarias para prestar el servicio solicitado o permitir la comunicación entre el dispositivo y la red.
 >
-> #### Cookies de analitica
+> #### Cookies de analítica
 >
-> Si las aceptas, utilizaremos Matomo para obtener estadisticas agregadas de uso del sitio, como paginas visitadas, procedencia del trafico, acciones realizadas y rendimiento general de la web. Estas cookies o identificadores no se activaran hasta que el usuario preste su consentimiento.
+> Si las aceptas, utilizaremos una instancia propia de Matomo para obtener estadísticas agregadas de uso del sitio, como páginas visitadas, procedencia del tráfico, parámetros UTM de campaña, pasos relevantes del embudo de conversión y rendimiento general de la web. Estas cookies o identificadores no se activarán hasta que el usuario preste su consentimiento.
 >
-> En una implementacion tipica de Matomo pueden aparecer identificadores como `_pk_id*`, `_pk_ses*` u otros equivalentes segun la configuracion tecnica vigente en cada momento.
+> En la implementación actual pueden aparecer identificadores como `_pk_id*`, `_pk_ses*` u otros equivalentes de Matomo según la configuración técnica vigente en cada momento. Si el usuario rechaza la analítica o retira posteriormente su consentimiento, el sitio desactiva Matomo y elimina esas cookies analíticas del navegador.
 >
-> ### 3. Base juridica
+> ### 3. Base jurídica
 >
-> La base juridica para las cookies tecnicas es su necesidad para el funcionamiento del sitio y para prestar servicios expresamente solicitados por el usuario. La base juridica para las cookies de analitica es el consentimiento.
+> La base jurídica para las cookies técnicas es su necesidad para el funcionamiento del sitio y para prestar servicios expresamente solicitados por el usuario. La base jurídica para las cookies de analítica es el consentimiento.
 >
-> ### 4. Como puedes gestionar tus preferencias
+> ### 4. Cómo puedes gestionar tus preferencias
 >
 > Al acceder al sitio puedes:
 >
-> - aceptar la analitica,
-> - rechazar la analitica,
+> - aceptar la analítica,
+> - rechazar la analítica,
 > - configurar tus preferencias.
 >
-> Puedes cambiar tu decision en cualquier momento desde el enlace `Configurar cookies` disponible en el pie de pagina.
+> Puedes cambiar tu decisión en cualquier momento desde el enlace `Configurar cookies` disponible en el pie de página.
 >
-> Tambien puedes bloquear o eliminar cookies desde la configuracion de tu navegador, aunque hacerlo puede afectar al funcionamiento del area privada, del acceso a la cuenta o del proceso de contratacion.
+> También puedes bloquear o eliminar cookies desde la configuración de tu navegador, aunque hacerlo puede afectar al funcionamiento del área privada, del acceso a la cuenta o del proceso de contratación.
 >
-> ### 5. Vigencia de la eleccion
+> ### 5. Vigencia de la elección
 >
-> La eleccion sobre cookies se conservara durante el plazo configurado en el sistema de consentimiento y se volvera a solicitar transcurrido dicho plazo o cuando se produzcan cambios relevantes en el uso de cookies.
+> La elección sobre cookies se conserva durante un plazo máximo de 12 meses desde su última actualización. Transcurrido ese plazo, o cuando se produzcan cambios relevantes en el uso de cookies, el sitio volverá a solicitar la configuración de preferencias.
 >
 > ### 6. Tabla orientativa de cookies
 >
-> La siguiente relacion es orientativa y debera ajustarse a la implementacion final:
+> La siguiente relación es orientativa y deberá ajustarse si cambia la implementación técnica del sitio:
 >
-> - `wordpress_test_cookie`: comprobacion tecnica de compatibilidad del navegador.
-> - `wordpress_logged_in_*`, `wordpress_sec_*`: autenticacion y seguridad de usuarios registrados.
-> - `wp-settings-*`, `wp-settings-time-*`: preferencias tecnicas del usuario autenticado.
-> - `pmpro_visit` y otras tecnicas equivalentes de PMPro: soporte funcional del area privada y de determinados registros tecnicos de uso cuando el usuario esta autenticado.
-> - identificador propio de consentimiento: almacenamiento de la eleccion sobre cookies.
-> - `_pk_id*`, `_pk_ses*` u otras de Matomo: analitica, solo con consentimiento.
+> - `wordpress_test_cookie`: comprobación técnica de compatibilidad del navegador.
+> - `wordpress_logged_in_*`, `wordpress_sec_*`: autenticación y seguridad de usuarios registrados.
+> - `wp-settings-*`, `wp-settings-time-*`: preferencias técnicas del usuario autenticado.
+> - `pmpro_visit` y otras técnicas equivalentes de PMPro: soporte funcional del área privada y de determinados registros técnicos de uso cuando el usuario está autenticado.
+> - `es_cookie_consent`: almacenamiento de la elección sobre cookies en el navegador.
+> - `_pk_id*`, `_pk_ses*` u otras de Matomo: analítica, solo con consentimiento.
 >
 > ### 7. Actualizaciones
 >
-> Esta politica podra actualizarse cuando cambien las cookies utilizadas, la configuracion tecnica del sitio o las exigencias legales aplicables.
+> Esta política podrá actualizarse cuando cambien las cookies utilizadas, la configuración técnica del sitio o las exigencias legales aplicables.
 
 ## 4.4. Condiciones de contratacion y suscripcion
 
