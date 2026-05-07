@@ -30,6 +30,7 @@ class ThemeServiceProvider extends SageServiceProvider
         add_action('acf/save_post', [$this, 'importLessonSubindexFromJson'], 20);
         add_action('acf/save_post', [$this, 'importLessonQuizFromJson'], 20);
         add_action('admin_notices', [$this, 'renderAcfFallbackNotices']);
+        add_action('restrict_manage_posts', [$this, 'renderCdeStatusAdminFilter'], 10, 2);
     }
 
     public function asignarRolEstudiantePorCategoria($order_id)
@@ -323,6 +324,48 @@ class ThemeServiceProvider extends SageServiceProvider
 
             printf('<div class="%1$s"><p>%2$s</p></div>', \esc_attr($class), \esc_html($message));
         }
+    }
+
+    public function renderCdeStatusAdminFilter(string $postType, string $which): void
+    {
+        if ($postType !== 'cde' || $which !== 'top') {
+            return;
+        }
+
+        $currentStatus = \sanitize_key(\wp_unslash($_GET['post_status'] ?? ''));
+
+        if ($currentStatus === 'trash') {
+            return;
+        }
+
+        $statuses = [
+            'publish',
+            'draft',
+            'future',
+            'pending',
+            'private',
+        ];
+
+        echo '<label for="filter-by-cde-status" class="screen-reader-text">Filtrar por estado</label>';
+        echo '<select name="post_status" id="filter-by-cde-status">';
+        echo '<option value="">Todos los estados</option>';
+
+        foreach ($statuses as $statusName) {
+            $status = \get_post_status_object($statusName);
+
+            if (!$status) {
+                continue;
+            }
+
+            printf(
+                '<option value="%1$s" %2$s>%3$s</option>',
+                \esc_attr($statusName),
+                \selected($currentStatus, $statusName, false),
+                \esc_html($status->label)
+            );
+        }
+
+        echo '</select>';
     }
 
     protected function normalizeLevel($value): int
