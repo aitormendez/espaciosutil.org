@@ -28,6 +28,14 @@ class Cde extends Field
                 'label' => 'General',
                 'placement' => 'top',
             ])
+            ->addText('clave_leccion', [
+                'label' => 'Clave técnica de la lección',
+                'instructions' => 'Identidad técnica estable para reconciliar la lección entre NocoDB y WordPress. Debe coincidir exactamente con clave_leccion (por ejemplo: cde:01:00:0.3.2).',
+                'required' => 0,
+                'wrapper' => [
+                    'width' => '50',
+                ],
+            ])
             ->addTrueFalse('active_lesson', [
                 'label' => 'Lección activa',
                 'instructions' => 'Desactívalo para mostrar la lección sin enlace en el índice y en la miga de pan, marcándola como pendiente u organizativa.',
