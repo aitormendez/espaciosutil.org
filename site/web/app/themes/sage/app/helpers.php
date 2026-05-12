@@ -61,23 +61,7 @@ function legal_page_url(string $path, string $fallbackPath): string
  */
 function cde_free_lesson_url(): string
 {
-    $lessonIds = get_posts([
-        'fields' => 'ids',
-        'name' => 'planteamiento-general-que-es-la-realidad',
-        'numberposts' => 1,
-        'post_status' => 'publish',
-        'post_type' => 'cde',
-    ]);
-
-    if (! empty($lessonIds)) {
-        $url = get_permalink((int) $lessonIds[0]);
-
-        if (is_string($url) && $url !== '') {
-            return $url;
-        }
-    }
-
-    return home_url('/lecciones-del-cde/planteamiento-general-que-es-la-realidad/');
+    return home_url('/lecciones-del-cde/seth/planteamiento-general-que-es-la-realidad/');
 }
 
 /**
