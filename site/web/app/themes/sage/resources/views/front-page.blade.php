@@ -1,5 +1,5 @@
 @php
-  $cde_free_lesson_url = home_url('/lecciones-del-cde/seth/quien-es-seth/');
+  $cde_free_lesson_url = cde_free_lesson_url();
   $cde_membership_url = get_permalink(2242) ?: home_url('/suscripcion/');
   $cde_index_url = get_permalink(2648) ?: home_url('/indice-de-lecciones/');
   $cde_program_url = get_permalink(2288) ?: home_url('/el-curso-en-profundidad/');

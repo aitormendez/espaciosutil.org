@@ -57,6 +57,24 @@ function legal_page_url(string $path, string $fallbackPath): string
 }
 
 /**
+ * Resolve the public CDE free lesson URL.
+ */
+function cde_free_lesson_url(): string
+{
+    $lesson = get_page_by_path('planteamiento-general-que-es-la-realidad', OBJECT, 'cde');
+
+    if ($lesson instanceof WP_Post) {
+        $url = get_permalink($lesson);
+
+        if (is_string($url) && $url !== '') {
+            return $url;
+        }
+    }
+
+    return home_url('/lecciones-del-cde/planteamiento-general-que-es-la-realidad/');
+}
+
+/**
  * Resolve the Matomo base URL for the current environment.
  */
 function matomo_tracking_url(): string
