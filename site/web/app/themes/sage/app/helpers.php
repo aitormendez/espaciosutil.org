@@ -61,10 +61,16 @@ function legal_page_url(string $path, string $fallbackPath): string
  */
 function cde_free_lesson_url(): string
 {
-    $lesson = get_page_by_path('planteamiento-general-que-es-la-realidad', OBJECT, 'cde');
+    $lessonIds = get_posts([
+        'fields' => 'ids',
+        'name' => 'planteamiento-general-que-es-la-realidad',
+        'numberposts' => 1,
+        'post_status' => 'publish',
+        'post_type' => 'cde',
+    ]);
 
-    if ($lesson instanceof WP_Post) {
-        $url = get_permalink($lesson);
+    if (! empty($lessonIds)) {
+        $url = get_permalink((int) $lessonIds[0]);
 
         if (is_string($url) && $url !== '') {
             return $url;
