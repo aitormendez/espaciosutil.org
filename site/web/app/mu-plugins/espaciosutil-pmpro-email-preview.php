@@ -305,10 +305,10 @@ function espaciosutil_pmpro_render_email_preview_page(): void
                                 <?php foreach (array_keys($templates) as $slug) { ?>
                                     <a
                                         href="<?php echo esc_url(add_query_arg([
-                                                'page' => 'espaciosutil-pmpro-email-preview',
-                                                'template' => $slug,
-                                                'order_id' => (int) $recent_order->id,
-                                            ], admin_url('tools.php'))); ?>">
+                                            'page' => 'espaciosutil-pmpro-email-preview',
+                                            'template' => $slug,
+                                            'order_id' => (int) $recent_order->id,
+                                        ], admin_url('tools.php'))); ?>">
                                         <?php echo esc_html($slug); ?>
                                     </a>
                                     <?php if ($slug !== array_key_last($templates)) { ?>
