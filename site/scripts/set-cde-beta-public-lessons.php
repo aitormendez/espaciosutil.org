@@ -95,8 +95,8 @@ if (function_exists('pmpro_update_post_level_restrictions')) {
         $restriction_rows = (int) $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$wpdb->pmpro_memberships_pages} WHERE page_id = %d",
-                $post_id
-            )
+                $post_id,
+            ),
         );
 
         $restriction_rows_by_post[$post_id] = $restriction_rows;

@@ -5,7 +5,6 @@ namespace App\View\Composers;
 use App\View\Composers\Concerns\InteractsWithCdeMedia;
 use Roots\Acorn\View\Composer;
 
-
 class SingleCde extends Composer
 {
     use InteractsWithCdeMedia;

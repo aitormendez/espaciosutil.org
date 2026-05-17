@@ -361,7 +361,7 @@ class ThemeServiceProvider extends SageServiceProvider
                 '<option value="%1$s" %2$s>%3$s</option>',
                 \esc_attr($statusName),
                 \selected($currentStatus, $statusName, false),
-                \esc_html($status->label)
+                \esc_html($status->label),
             );
         }
 

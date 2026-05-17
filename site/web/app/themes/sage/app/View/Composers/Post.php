@@ -38,7 +38,7 @@ class Post extends Composer
                 $thumb['url'] = get_the_post_thumbnail_url();
                 $thumb['id'] = get_post_thumbnail_id();
                 $thumb['srcset'] = wp_get_attachment_image_srcset($thumb['id']);
-                $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', TRUE);
+                $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', true);
 
                 return $thumb;
             },
@@ -46,10 +46,10 @@ class Post extends Composer
                 $thumb['url'] = get_the_post_thumbnail_url($post);
                 $thumb['id'] = get_post_thumbnail_id($post);
                 $thumb['srcset'] = wp_get_attachment_image_srcset($thumb['id']);
-                $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', TRUE);
+                $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', true);
 
                 return $thumb;
-            }
+            },
         ];
     }
 
@@ -88,7 +88,7 @@ class Post extends Composer
             return sprintf(
                 /* translators: %s is replaced with the search query */
                 __('Search Results for %s', 'sage'),
-                get_search_query()
+                get_search_query(),
             );
         }
 
@@ -182,7 +182,7 @@ class Post extends Composer
         $thumb['url'] = get_the_post_thumbnail_url();
         $thumb['id'] = get_post_thumbnail_id();
         $thumb['srcset'] = wp_get_attachment_image_srcset($thumb['id']);
-        $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', TRUE);
+        $thumb['alt'] = get_post_meta($thumb['id'], '_wp_attachment_image_alt', true);
 
         return $thumb;
     }

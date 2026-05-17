@@ -87,13 +87,13 @@ if (!is_wp_error($ineligible_user_id)) {
 if (is_object($trial_level) && !is_wp_error($eligible_user_id)) {
     $assert(
         espaciosutil_pmpro_user_is_eligible_for_trial((int) $eligible_user_id, $trial_level),
-        'El usuario nuevo debería ser elegible para el trial.'
+        'El usuario nuevo debería ser elegible para el trial.',
     );
 
     wp_set_current_user((int) $eligible_user_id);
     $assert(
         espaciosutil_pmpro_should_show_trial_for_level($trial_level),
-        'El trial debería mostrarse para un usuario elegible.'
+        'El trial debería mostrarse para un usuario elegible.',
     );
 
     $eligible_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $trial_level));
@@ -113,36 +113,36 @@ if (is_object($trial_level) && !is_wp_error($eligible_user_id)) {
     $eligible_cost_text = pmpro_getLevelCost($trial_level, false);
     $assert(
         strpos($eligible_cost_text, 'Incluye 7 dias de prueba gratuita.') !== false,
-        'El usuario elegible no ve el mensaje del trial en el texto de coste.'
+        'El usuario elegible no ve el mensaje del trial en el texto de coste.',
     );
 }
 
 if (is_object($trial_level) && !is_wp_error($ineligible_user_id)) {
     $assert(
         !espaciosutil_pmpro_user_is_eligible_for_trial((int) $ineligible_user_id, $trial_level),
-        'El usuario que ya usó el trial sigue marcado como elegible.'
+        'El usuario que ya usó el trial sigue marcado como elegible.',
     );
 
     wp_set_current_user((int) $ineligible_user_id);
     $assert(
         !espaciosutil_pmpro_should_show_trial_for_level($trial_level),
-        'El trial no debería mostrarse para un usuario que ya lo consumió.'
+        'El trial no debería mostrarse para un usuario que ya lo consumió.',
     );
 
     $ineligible_order = apply_filters('pmpro_checkout_order', $build_order((int) $ineligible_user_id, $trial_level));
     $assert(
         (float) $ineligible_order->total === (float) $trial_level->initial_payment,
-        'El pedido del usuario no elegible no debería quedar a total 0.'
+        'El pedido del usuario no elegible no debería quedar a total 0.',
     );
     $assert(
         empty($ineligible_order->membership_level->profile_start_date),
-        'El usuario no elegible no debería recibir profile_start_date diferida.'
+        'El usuario no elegible no debería recibir profile_start_date diferida.',
     );
 
     $ineligible_cost_text = pmpro_getLevelCost($trial_level, false);
     $assert(
         strpos($ineligible_cost_text, 'Incluye 7 dias de prueba gratuita.') === false,
-        'El usuario no elegible sigue viendo el copy del trial.'
+        'El usuario no elegible sigue viendo el copy del trial.',
     );
 }
 
@@ -151,11 +151,11 @@ if (is_object($second_trial_level) && !is_wp_error($eligible_user_id)) {
     $second_trial_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $second_trial_level));
     $assert(
         (float) $second_trial_order->total === 0.0,
-        'El pedido del nivel semestral no queda a total 0 para un usuario elegible.'
+        'El pedido del nivel semestral no queda a total 0 para un usuario elegible.',
     );
     $assert(
         !empty($second_trial_order->membership_level->profile_start_date),
-        'El nivel semestral no recibe profile_start_date diferida para un usuario elegible.'
+        'El nivel semestral no recibe profile_start_date diferida para un usuario elegible.',
     );
 }
 
@@ -164,11 +164,11 @@ if (is_object($third_trial_level) && !is_wp_error($eligible_user_id)) {
     $third_trial_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $third_trial_level));
     $assert(
         (float) $third_trial_order->total === 0.0,
-        'El pedido del nivel anual no queda a total 0 para un usuario elegible.'
+        'El pedido del nivel anual no queda a total 0 para un usuario elegible.',
     );
     $assert(
         !empty($third_trial_order->membership_level->profile_start_date),
-        'El nivel anual no recibe profile_start_date diferida para un usuario elegible.'
+        'El nivel anual no recibe profile_start_date diferida para un usuario elegible.',
     );
 }
 

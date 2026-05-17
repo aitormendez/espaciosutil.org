@@ -21,7 +21,7 @@ class LoginServiceProvider extends ServiceProvider
             $redirectPath = wp_parse_url($redirect, PHP_URL_PATH);
             $requestPath = wp_parse_url(
                 (string) wp_unslash($_SERVER['REQUEST_URI'] ?? ''),
-                PHP_URL_PATH
+                PHP_URL_PATH,
             );
 
             $shouldUseDefaultLogin = is_admin()

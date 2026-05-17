@@ -69,7 +69,7 @@ if ($levels !== []) {
 $eligible_user_id = wp_create_user(
     'discount-eligible-' . $timestamp,
     wp_generate_password(20, true),
-    'discount-eligible-' . $timestamp . '@example.com'
+    'discount-eligible-' . $timestamp . '@example.com',
 );
 
 if (!is_wp_error($eligible_user_id)) {
@@ -102,32 +102,32 @@ if (!is_wp_error($eligible_user_id)) {
 
         $assert(
             !espaciosutil_pmpro_should_show_trial_for_level($discounted_level),
-            "El trial sigue mostrándose para el nivel {$level_id} con cupón activo."
+            "El trial sigue mostrándose para el nivel {$level_id} con cupón activo.",
         );
 
         $discounted_order = apply_filters('pmpro_checkout_order', $build_order((int) $eligible_user_id, $discounted_level));
 
         $assert(
             abs((float) $discounted_order->total - $discounted_initial_payment) < 0.00001,
-            "El total del pedido con cupón no respeta el importe descontado en el nivel {$level_id}."
+            "El total del pedido con cupón no respeta el importe descontado en el nivel {$level_id}.",
         );
         $assert(
             empty($discounted_order->membership_level->profile_start_date),
-            "El pedido con cupón todavía recibe profile_start_date de trial en el nivel {$level_id}."
+            "El pedido con cupón todavía recibe profile_start_date de trial en el nivel {$level_id}.",
         );
 
         $trial_flag_name = espaciosutil_pmpro_trial_applied_flag_name();
         $assert(
             property_exists($discounted_order->membership_level, $trial_flag_name)
                 && !$discounted_order->membership_level->{$trial_flag_name},
-            "El pedido con cupón marca erróneamente el trial como aplicado en el nivel {$level_id}."
+            "El pedido con cupón marca erróneamente el trial como aplicado en el nivel {$level_id}.",
         );
     }
 
     do_action('pmpro_after_checkout', (int) $eligible_user_id, $discounted_order);
     $assert(
         !espaciosutil_pmpro_user_has_used_trial((int) $eligible_user_id),
-        'El usuario quedó marcado como si hubiera consumido el trial después de usar un cupón.'
+        'El usuario quedó marcado como si hubiera consumido el trial después de usar un cupón.',
     );
 }
 

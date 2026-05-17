@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Espacio Sutil PMPro Cleanup
  * Description: Corrige incompatibilidades de limpieza de usuarios en PMPro.

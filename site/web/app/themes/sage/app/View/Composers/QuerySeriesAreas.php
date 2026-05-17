@@ -35,7 +35,7 @@ class QuerySeriesAreas extends Composer
             'thumbnail_meta' => function ($post) {
                 $image_id = get_post_thumbnail_id($post);
                 return [
-                    'alt' => get_post_meta($image_id, '_wp_attachment_image_alt', TRUE),
+                    'alt' => get_post_meta($image_id, '_wp_attachment_image_alt', true),
                 ];
             },
             'taxonomias' => function ($post) {
@@ -123,7 +123,7 @@ class QuerySeriesAreas extends Composer
             'enlaces' => function ($post) {
                 $enlaces = get_field('serie_enlaces', $post->ID);
                 return is_array($enlaces) ? $enlaces : [];
-            }
+            },
         ];
     }
 
@@ -136,9 +136,9 @@ class QuerySeriesAreas extends Composer
     {
         if (is_page('textos-canalizados')) {
             $terms = 'textos-canalizados';
-        } else if (is_page('otros-textos')) {
+        } elseif (is_page('otros-textos')) {
             $terms = 'otros-textos';
-        } else if (is_page('otras-series')) {
+        } elseif (is_page('otras-series')) {
             $terms = 'otras-series';
         } else {
             $terms = null;

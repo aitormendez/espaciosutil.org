@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourseController;
 
 class RouteServiceProvider extends ServiceProvider
 {

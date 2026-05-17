@@ -14,13 +14,13 @@ class LessonQuiz
         register_rest_route('cde/v1', '/quiz/result', [
             'methods' => WP_REST_Server::READABLE, // GET
             'callback' => [$this, 'getResult'],
-            'permission_callback' => fn () => is_user_logged_in(),
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
 
         register_rest_route('cde/v1', '/quiz/submit', [
             'methods' => WP_REST_Server::CREATABLE, // POST
             'callback' => [$this, 'submit'],
-            'permission_callback' => fn () => is_user_logged_in(),
+            'permission_callback' => fn() => is_user_logged_in(),
         ]);
     }
 

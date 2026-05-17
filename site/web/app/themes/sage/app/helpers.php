@@ -243,7 +243,7 @@ function fallback_navigation_section_context(string $menuLocation, array $menuIt
 
     $topLevelItems = array_values(array_filter(
         $menuItems,
-        static fn ($item) => (int) ($item->menu_item_parent ?? 0) === 0
+        static fn($item) => (int) ($item->menu_item_parent ?? 0) === 0,
     ));
 
     if ($topLevelItems === []) {
@@ -577,7 +577,7 @@ function nav_item_classes(object $item): array
         return [];
     }
 
-    return array_values(array_filter(array_map(static fn ($value) => trim((string) $value), $classes)));
+    return array_values(array_filter(array_map(static fn($value) => trim((string) $value), $classes)));
 }
 
 /**

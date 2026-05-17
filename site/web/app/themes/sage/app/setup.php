@@ -170,7 +170,7 @@ add_action('wp_enqueue_scripts', function () {
         [
             'root' => esc_url_raw(rest_url()),
             'nonce' => wp_create_nonce('wp_rest'),
-        ]
+        ],
     );
 });
 
@@ -247,7 +247,7 @@ add_filter('pmpro_tos_field_label', function ($label, $tospage) {
     return sprintf(
         __('He leído y acepto las <a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>.', 'sage'),
         esc_url(get_permalink((int) $tospage->ID)),
-        esc_html(get_the_title((int) $tospage->ID))
+        esc_html(get_the_title((int) $tospage->ID)),
     );
 }, 10, 2);
 
@@ -359,7 +359,7 @@ $validateImmediateAccessConsent = function ($pmproContinueRegistration) {
         $pmpro_error_fields[] = 'legal_immediate_access';
         pmpro_setMessage(
             __('Debes aceptar el inicio inmediato del contenido digital para continuar con la suscripción.', 'sage'),
-            'pmpro_error'
+            'pmpro_error',
         );
 
         return false;
@@ -434,7 +434,7 @@ function is_fastcgi_uncacheable_membership_request(): bool
 {
     $requestPath = wp_parse_url(
         (string) wp_unslash($_SERVER['REQUEST_URI'] ?? ''),
-        PHP_URL_PATH
+        PHP_URL_PATH,
     );
 
     $normalizedPath = normalize_fastcgi_cache_path(is_string($requestPath) ? $requestPath : '');
@@ -566,10 +566,10 @@ function normalize_cde_membership_email_html(string $message): string
                 array_filter(
                     array_map(
                         static fn($item) => is_string($item) ? trim($item) : '',
-                        $items[1] ?? []
+                        $items[1] ?? [],
                     ),
-                    static fn(string $item): bool => $item !== ''
-                )
+                    static fn(string $item): bool => $item !== '',
+                ),
             );
 
             if ($list_items === []) {
@@ -578,12 +578,12 @@ function normalize_cde_membership_email_html(string $message): string
 
             $lines = array_map(
                 static fn(string $item): string => '- ' . $item,
-                $list_items
+                $list_items,
             );
 
             return '<p style="margin:0 0 24px;">' . implode('<br />', $lines) . '</p>';
         },
-        $message
+        $message,
     );
 
     return is_string($message) ? $message : '';
@@ -604,7 +604,7 @@ function render_cde_membership_account_level_message(object $level): void
     }
 
     $message = replace_cde_membership_placeholders($message);
-?>
+    ?>
     <div class="<?php echo esc_attr(pmpro_get_element_class('pmpro_account-membership-message')); ?>">
         <?php echo wpautop(wp_kses_post($message)); ?>
     </div>
@@ -628,7 +628,7 @@ function replace_cde_membership_placeholders_in_pmpro_email_data($data, $email)
 
     if (is_string($message) && trim($message) !== '') {
         $data['membership_level_confirmation_message'] = normalize_cde_membership_email_html(
-            replace_cde_membership_placeholders($message)
+            replace_cde_membership_placeholders($message),
         );
     }
 
@@ -686,12 +686,12 @@ add_action('after_setup_theme', function () {
 
     remove_action(
         'pmpro_membership_account_after_level_card_content',
-        'pmpro_display_member_account_level_message'
+        'pmpro_display_member_account_level_message',
     );
 
     add_action(
         'pmpro_membership_account_after_level_card_content',
-        __NAMESPACE__ . '\\render_cde_membership_account_level_message'
+        __NAMESPACE__ . '\\render_cde_membership_account_level_message',
     );
 }, 30);
 
@@ -699,25 +699,25 @@ add_filter(
     'pmpro_email_data',
     __NAMESPACE__ . '\\replace_cde_membership_placeholders_in_pmpro_email_data',
     20,
-    2
+    2,
 );
 
 add_filter(
     'pmpro_confirmation_message',
     __NAMESPACE__ . '\\replace_cde_membership_placeholders_in_pmpro_confirmation_message',
-    20
+    20,
 );
 
 add_filter(
     'pmpro_email_header',
     __NAMESPACE__ . '\\override_pmpro_email_header_from_theme',
-    20
+    20,
 );
 
 add_filter(
     'pmpro_email_footer',
     __NAMESPACE__ . '\\override_pmpro_email_footer_from_theme',
-    20
+    20,
 );
 
 /**

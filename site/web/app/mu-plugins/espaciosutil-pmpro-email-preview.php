@@ -34,7 +34,7 @@ function espaciosutil_pmpro_register_pmpro_email_preview_page(): void
         'Emails PMPro',
         'manage_options',
         'espaciosutil-pmpro-email-preview',
-        'espaciosutil_pmpro_render_email_preview_page'
+        'espaciosutil_pmpro_render_email_preview_page',
     );
 }
 add_action('admin_menu', 'espaciosutil_pmpro_register_pmpro_email_preview_page');
@@ -52,7 +52,7 @@ function espaciosutil_pmpro_get_recent_preview_orders(): array
         "SELECT id, code, user_id, membership_id, status, timestamp
         FROM {$wpdb->pmpro_membership_orders}
         ORDER BY id DESC
-        LIMIT 10"
+        LIMIT 10",
     ) ?: [];
 }
 
@@ -104,7 +104,7 @@ function espaciosutil_pmpro_get_email_preview_frame_url(string $template_slug, i
             'template' => $template_slug,
             'order_id' => $order_id,
         ],
-        admin_url('admin-post.php')
+        admin_url('admin-post.php'),
     );
 }
 
@@ -174,7 +174,7 @@ function espaciosutil_pmpro_render_email_preview_frame(): void
     if ($preview === null) {
         status_header(404);
         header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
-?>
+        ?>
         <!DOCTYPE html>
         <html <?php language_attributes(); ?>>
 
@@ -199,7 +199,7 @@ function espaciosutil_pmpro_render_email_preview_frame(): void
 
         </html>
     <?php
-        exit;
+                exit;
     }
 
     header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
@@ -222,8 +222,8 @@ function espaciosutil_pmpro_render_email_preview_frame(): void
     </head>
 
     <body>
-        <?php echo $preview['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-        ?>
+        <?php echo $preview['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    ?>
     </body>
 
     </html>
@@ -249,7 +249,7 @@ function espaciosutil_pmpro_render_email_preview_page(): void
     $templates = espaciosutil_pmpro_get_previewable_email_templates();
     $recent_orders = espaciosutil_pmpro_get_recent_preview_orders();
 
-?>
+    ?>
     <div class="wrap">
         <h1>Previsualizar emails de PMPro</h1>
         <p>Render real de la plantilla, con datos de un pedido existente y sin enviar correo.</p>
@@ -305,10 +305,10 @@ function espaciosutil_pmpro_render_email_preview_page(): void
                                 <?php foreach (array_keys($templates) as $slug) { ?>
                                     <a
                                         href="<?php echo esc_url(add_query_arg([
-                                                    'page' => 'espaciosutil-pmpro-email-preview',
-                                                    'template' => $slug,
-                                                    'order_id' => (int) $recent_order->id,
-                                                ], admin_url('tools.php'))); ?>">
+                                                'page' => 'espaciosutil-pmpro-email-preview',
+                                                'template' => $slug,
+                                                'order_id' => (int) $recent_order->id,
+                                            ], admin_url('tools.php'))); ?>">
                                         <?php echo esc_html($slug); ?>
                                     </a>
                                     <?php if ($slug !== array_key_last($templates)) { ?>

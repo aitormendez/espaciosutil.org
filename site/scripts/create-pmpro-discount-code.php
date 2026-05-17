@@ -96,7 +96,7 @@ $wpdb->update(
     ['one_use_per_user' => $one_use_per_user ? 1 : 0],
     ['id' => (int) $saved_discount_code->id],
     ['%d'],
-    ['%d']
+    ['%d'],
 );
 
 fwrite(STDOUT, "Código guardado: {$code}\n");
@@ -112,7 +112,7 @@ foreach ($levels as $level_id => $level_config) {
             $level_id,
             (string) $level_config['initial_payment'],
             (string) $level_config['billing_amount'],
-            (int) $level_config['billing_limit']
-        )
+            (int) $level_config['billing_limit'],
+        ),
     );
 }

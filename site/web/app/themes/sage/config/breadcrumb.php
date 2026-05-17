@@ -29,7 +29,7 @@ return [
     */
 
     'blog' => get_the_title(
-        get_option('page_for_posts')
+        get_option('page_for_posts'),
     ),
 
     /*

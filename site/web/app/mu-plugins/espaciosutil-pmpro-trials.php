@@ -87,7 +87,7 @@ function espaciosutil_pmpro_get_trial_label(int $level_id): string
 
     return sprintf(
         _n('%d dia gratis', '%d dias gratis', (int) $config['delay_days'], 'espaciosutil-pmpro-trials'),
-        (int) $config['delay_days']
+        (int) $config['delay_days'],
     );
 }
 
@@ -398,7 +398,7 @@ function espaciosutil_pmpro_get_order_trial_summary_html($order, bool $include_m
 
     $trial_label = sprintf(
         _n('%d dia gratis', '%d dias gratis', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
-        (int) $details['delay_days']
+        (int) $details['delay_days'],
     );
 
     $summary = sprintf(
@@ -406,7 +406,7 @@ function espaciosutil_pmpro_get_order_trial_summary_html($order, bool $include_m
         esc_html($trial_label),
         esc_html((string) $details['next_charge_date']),
         wp_kses_post((string) $details['next_charge_amount']),
-        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : '',
     );
 
     if (!$include_manage_link) {
@@ -415,7 +415,7 @@ function espaciosutil_pmpro_get_order_trial_summary_html($order, bool $include_m
 
     return $summary . sprintf(
         '<p>Puedes gestionar tu membresia desde <a href="%1$s" style="color:#b50000;text-decoration:none;">tu cuenta</a>.</p>',
-        esc_url(pmpro_url('account'))
+        esc_url(pmpro_url('account')),
     );
 }
 
@@ -436,25 +436,25 @@ function espaciosutil_pmpro_get_order_trial_conditions_email_html($order, string
 
         return sprintf(
             '<p style="margin:0 0 24px;"><strong style="color:#c7c3c3;font-weight:200;">Condiciones:</strong> %1$s</p>',
-            wp_kses_post($fallback_cost_text)
+            wp_kses_post($fallback_cost_text),
         );
     }
 
     $trial_label = sprintf(
         _n('%d dia de prueba gratuita.', '%d dias de prueba gratuita.', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
-        (int) $details['delay_days']
+        (int) $details['delay_days'],
     );
 
     $first_charge_line = sprintf(
         'El primer cobro sera de %1$s%2$s al terminar la prueba.',
         wp_kses_post((string) $details['next_charge_amount']),
-        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : '',
     );
 
     return sprintf(
         '<p style="margin:0 0 8px;color:#c7c3c3;">Condiciones</p><p style="margin:0 0 24px;">- %1$s<br />- %2$s</p>',
         esc_html($trial_label),
-        $first_charge_line
+        $first_charge_line,
     );
 }
 
@@ -474,20 +474,20 @@ function espaciosutil_pmpro_get_order_trial_summary_email_html($order, bool $inc
 
     $trial_label = sprintf(
         _n('%d dia gratis desde hoy.', '%d dias gratis desde hoy.', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
-        (int) $details['delay_days']
+        (int) $details['delay_days'],
     );
 
     $first_charge_line = sprintf(
         'El primer cobro sera el %1$s por %2$s%3$s.',
         esc_html((string) $details['next_charge_date']),
         wp_kses_post((string) $details['next_charge_amount']),
-        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : ''
+        $details['recurring_phrase'] !== '' ? ' ' . esc_html((string) $details['recurring_phrase']) : '',
     );
 
     $summary = sprintf(
         '<p style="margin:0 0 8px;color:#c7c3c3;">Prueba activada</p><p style="margin:0 0 24px;">- %1$s<br />- %2$s</p>',
         esc_html($trial_label),
-        $first_charge_line
+        $first_charge_line,
     );
 
     if (!$include_manage_link) {
@@ -496,7 +496,7 @@ function espaciosutil_pmpro_get_order_trial_summary_email_html($order, bool $inc
 
     return $summary . sprintf(
         '<p>Puedes gestionar tu membresia desde <a href="%1$s" style="color:#b50000;text-decoration:none;">tu cuenta</a>.</p>',
-        esc_url(pmpro_url('account'))
+        esc_url(pmpro_url('account')),
     );
 }
 
@@ -514,7 +514,7 @@ function espaciosutil_pmpro_add_trial_recurring_email_template(array $templates)
         'body' => wp_kses_post(
             '<p>Tu periodo de prueba en !!sitename!! termina pronto.</p>
 <p>El primer cobro de tu plan !!membership_level_name!! se realizara el !!renewaldate!! por !!billing_amount!!.</p>
-<p>Si no deseas continuar, puedes cancelar tu suscripcion aqui: !!cancel_url!!</p>'
+<p>Si no deseas continuar, puedes cancelar tu suscripcion aqui: !!cancel_url!!</p>',
         ),
         'help_text' => __('Este correo se envia 2 dias antes del primer cobro posterior al periodo de prueba.', 'espaciosutil-pmpro-trials'),
     ];
@@ -547,8 +547,8 @@ function espaciosutil_pmpro_get_first_order_for_subscription(PMPro_Subscription 
             LIMIT 1",
             $subscription_transaction_id,
             (int) $subscription->get_user_id(),
-            (int) $subscription->get_membership_level_id()
-        )
+            (int) $subscription->get_membership_level_id(),
+        ),
     );
 
     if (empty($order_id)) {
@@ -687,14 +687,14 @@ function espaciosutil_pmpro_override_recurring_payment_reminder_sender(): void
     remove_action(
         'pmpro_recurring_payment_reminder_email',
         [PMPro_Recurring_Actions::instance(), 'send_recurring_payment_reminder_email'],
-        10
+        10,
     );
 
     add_action(
         'pmpro_recurring_payment_reminder_email',
         'espaciosutil_pmpro_send_recurring_payment_reminder_email',
         10,
-        3
+        3,
     );
 }
 add_action('plugins_loaded', 'espaciosutil_pmpro_override_recurring_payment_reminder_sender', 30);
@@ -854,9 +854,9 @@ function espaciosutil_pmpro_append_trial_notice_to_cost_text($cost_text, $level,
             'Incluye %d dia de prueba gratuita.',
             'Incluye %d dias de prueba gratuita.',
             (int) $config['delay_days'],
-            'espaciosutil-pmpro-trials'
+            'espaciosutil-pmpro-trials',
         ),
-        (int) $config['delay_days']
+        (int) $config['delay_days'],
     );
 
     $recurring_phrase = espaciosutil_pmpro_get_recurring_phrase($level);
@@ -873,7 +873,7 @@ function espaciosutil_pmpro_append_trial_notice_to_cost_text($cost_text, $level,
         '%1$s El primer cobro sera de %2$s %3$s al terminar la prueba.',
         $trial_notice,
         $billing_amount,
-        $recurring_phrase
+        $recurring_phrase,
     );
 }
 add_filter('pmpro_level_cost_text', 'espaciosutil_pmpro_append_trial_notice_to_cost_text', 20, 4);
@@ -927,7 +927,7 @@ function espaciosutil_pmpro_add_trial_summary_to_email_data($data, $email)
 
     $data['trial_conditions'] = espaciosutil_pmpro_get_order_trial_conditions_email_html(
         $order,
-        isset($data['membership_cost']) && is_string($data['membership_cost']) ? $data['membership_cost'] : ''
+        isset($data['membership_cost']) && is_string($data['membership_cost']) ? $data['membership_cost'] : '',
     );
     $data['trial_summary'] = espaciosutil_pmpro_get_order_trial_summary_email_html($order, true);
 
@@ -948,27 +948,27 @@ function espaciosutil_pmpro_render_trial_invoice_bullets($invoice): void
         return;
     }
 
-?>
+    ?>
     <li class="<?php echo esc_attr(pmpro_get_element_class('pmpro_list_item')); ?>">
         <strong>Periodo de prueba:</strong>
         <?php
-        echo esc_html(
-            sprintf(
-                _n('%d dia gratis', '%d dias gratis', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
-                (int) $details['delay_days']
-            )
-        );
-        ?>
+            echo esc_html(
+                sprintf(
+                    _n('%d dia gratis', '%d dias gratis', (int) $details['delay_days'], 'espaciosutil-pmpro-trials'),
+                    (int) $details['delay_days'],
+                ),
+            );
+    ?>
     </li>
     <li class="<?php echo esc_attr(pmpro_get_element_class('pmpro_list_item')); ?>">
         <strong>Primer cobro:</strong>
         <?php
-        echo wp_kses_post((string) $details['next_charge_amount']);
-        if ($details['recurring_phrase'] !== '') {
-            echo ' ' . esc_html((string) $details['recurring_phrase']);
-        }
-        echo esc_html(' el ' . (string) $details['next_charge_date']);
-        ?>
+    echo wp_kses_post((string) $details['next_charge_amount']);
+    if ($details['recurring_phrase'] !== '') {
+        echo ' ' . esc_html((string) $details['recurring_phrase']);
+    }
+    echo esc_html(' el ' . (string) $details['next_charge_date']);
+    ?>
     </li>
 <?php
 }
