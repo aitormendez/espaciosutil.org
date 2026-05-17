@@ -1,0 +1,111 @@
+<!-- wp:paragraph -->
+<p>En esta política de privacidad te explicamos cómo tratamos tus datos personales cuando navegas por este sitio web, contactas con Espacio Sutil, creas una cuenta, contratas una suscripción, utilizas el área privada del Curso de Desarrollo Espiritual o interactúas con la aplicación web <strong>Espacio Sutil Publisher</strong> para conectar una cuenta de TikTok y gestionar publicaciones asistidas.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">1. Responsable del tratamiento</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Responsable: Libranzai, SL<br>CIF: B84372218<br>Domicilio: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), España<br>Email de contacto para privacidad: admin@espaciosutil.org</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">2. Qué datos tratamos</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Podemos tratar las siguientes categorías de datos:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>datos identificativos y de contacto, como nombre y correo electrónico;</li><li>datos de cuenta, acceso y membresía;</li><li>datos de facturación y estado de la suscripción;</li><li>información aportada por el usuario en formularios o comunicaciones;</li><li>datos de uso del área privada, como progreso de lecciones, resultados de quiz y acciones necesarias para prestar el servicio;</li><li>datos técnicos y operativos asociados al uso de <strong>Espacio Sutil Publisher</strong>, como identificadores de cuenta de TikTok, datos básicos de perfil autorizados por el usuario, tokens de acceso o renovación, configuración de privacidad de la publicación y estados técnicos de envío o publicación;</li><li>datos técnicos y de seguridad derivados de la navegación;</li><li>datos de analítica web, solo cuando el usuario lo autorice.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">3. Finalidades del tratamiento</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Tratamos tus datos para:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>atender solicitudes enviadas a través del formulario de contacto o por correo;</li><li>crear y gestionar tu cuenta de usuario;</li><li>gestionar la contratación, pago, renovación, cancelación y soporte de la suscripción;</li><li>permitir el acceso al contenido del curso y a sus funciones asociadas;</li><li>mantener un registro funcional del progreso del alumno y de determinadas interacciones necesarias para la prestación del servicio;</li><li>permitir la conexión autorizada de una cuenta de TikTok con <strong>Espacio Sutil Publisher</strong>, mostrar la cuenta conectada, guardar de forma segura los tokens necesarios para mantener la autorización y ejecutar publicaciones asistidas en nombre del usuario cuando este las confirme expresamente;</li><li>enviar comunicaciones de servicio relacionadas con la cuenta, los pagos, la membresía o incidencias;</li><li>cumplir obligaciones legales, contables, fiscales y de seguridad;</li><li>obtener estadísticas de uso y mejorar el sitio, únicamente si has consentido la analítica.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">4. Base jurídica</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Las bases jurídicas del tratamiento son:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>el consentimiento del usuario, para consultas, formularios y analítica opcional;</li><li>la ejecución de un contrato o la aplicación de medidas precontractuales, para la gestión de la suscripción y del acceso al curso;</li><li>el cumplimiento de obligaciones legales, para facturación, contabilidad, fiscalidad, prevención del fraude y atención de derechos;</li><li>el interés legítimo del responsable, en lo estrictamente necesario para seguridad, continuidad técnica y defensa ante reclamaciones.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">5. Destinatarios</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Tus datos podrán comunicarse o ponerse a disposición de proveedores que intervienen en la prestación del servicio, por ejemplo:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>proveedores de alojamiento, mantenimiento técnico, correo y seguridad;</li><li>Stripe, como proveedor de pagos y gestión de cobros recurrentes;</li><li>proveedores estrictamente necesarios para la entrega técnica de contenidos digitales, como servicios de streaming o CDN;</li><li>TikTok y sus servicios para desarrolladores, cuando el usuario utilice <strong>Espacio Sutil Publisher</strong> para autorizar una cuenta o publicar contenido mediante dicha plataforma;</li><li>autoridades u organismos públicos cuando exista obligación legal.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Cuando la analítica esté activada, los datos se tratarán conforme a la configuración de Matomo y a lo indicado en la política de cookies.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">6. Conservación</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Conservaremos los datos durante el tiempo necesario para cada finalidad:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>datos de contacto: durante el tiempo necesario para atender la solicitud y, después, mientras puedan derivarse responsabilidades;</li><li>datos de cuenta y membresía: mientras la cuenta permanezca activa y durante los plazos legales posteriores;</li><li>datos de facturación y pagos: durante los plazos exigidos por la normativa fiscal y contable;</li><li>datos funcionales del curso, como progreso y quiz: mientras exista la cuenta o hasta que el usuario solicite su supresión, salvo que deban mantenerse por obligación legal o para defensa ante reclamaciones;</li><li>datos de analítica: según los plazos indicados en la política de cookies.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">7. Derechos</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad, así como retirar en cualquier momento los consentimientos otorgados, enviando una solicitud a admin@espaciosutil.org e identificándote adecuadamente.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Si consideras que tus derechos no han sido atendidos correctamente, puedes presentar una reclamación ante la Agencia Española de Protección de Datos: https://www.aepd.es</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">8. Menores</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Los servicios de suscripción y el área privada del curso no están dirigidos a menores de edad sin la intervención de sus padres, madres o representantes legales. Si detectamos datos de un menor obtenidos sin autorización válida, podremos eliminarlos.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">9. Seguridad</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Libranzai, SL aplica medidas técnicas y organizativas razonables para proteger los datos personales y reducir el riesgo de acceso no autorizado, pérdida, alteración o tratamiento indebido.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">10. Cambios en esta política</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Esta política de privacidad puede actualizarse para reflejar cambios legales, técnicos o funcionales del servicio. La versión publicada en cada momento será la vigente.</p>
+<!-- /wp:paragraph -->

@@ -95,6 +95,10 @@ ferm_input_list:
     # OPTIONAL: Defaults to 5.
     hits: "5"
 
+    # Should offenders be escalated into the global `badguys` list?
+    # OPTIONAL: Defaults to true. Set to false to limit the drop to this port only.
+    block_globally: true
+
     # Should this rule be disabled?
     # OPTIONAL: Defaults to false.
     disabled: false

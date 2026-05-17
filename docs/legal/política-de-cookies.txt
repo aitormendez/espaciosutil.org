@@ -1,0 +1,103 @@
+<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading">Política de cookies</h1>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Este sitio web utiliza cookies y tecnologías similares propias y, en su caso, de terceros estrictamente necesarias para su funcionamiento. Además, puede utilizar cookies o identificadores de analítica, pero solo si el usuario los acepta expresamente.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">1. Qué son las cookies</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Las cookies son pequeños archivos o identificadores que se almacenan en tu dispositivo al visitar una página web y que permiten recordar información sobre tu visita, tu sesión o tus preferencias. También pueden emplearse tecnologías similares, como el almacenamiento local del navegador.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">2. Qué categorías usamos</h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Cookies técnicas o necesarias</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Son imprescindibles para que la web funcione correctamente y para prestar servicios solicitados por el usuario. Incluyen, entre otras:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>cookies técnicas de WordPress para inicio de sesión, sesión, seguridad y preferencias básicas;</li><li>cookies funcionales necesarias para el área privada y la membresía;</li><li>identificadores técnicos asociados a la gestión del checkout y de la cuenta;</li><li>el identificador de consentimiento <code>es_cookie_consent</code>, junto con su reflejo técnico en almacenamiento local <code>es_cookie_consent_v1</code>, necesarios para recordar tu elección sobre cookies.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Estas cookies no requieren consentimiento previo en la medida en que sean estrictamente necesarias para prestar el servicio solicitado o permitir la comunicación entre el dispositivo y la red.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Cookies de analítica</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Si las aceptas, utilizaremos una instancia propia de Matomo para obtener estadísticas agregadas de uso del sitio, como páginas visitadas, procedencia del tráfico, parámetros UTM de campaña, pasos relevantes del embudo de conversión y rendimiento general de la web. Estas cookies o identificadores no se activarán hasta que el usuario preste su consentimiento.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>En la implementación actual pueden aparecer identificadores como <code>_pk_id*</code>, <code>_pk_ses*</code> u otros equivalentes de Matomo según la configuración técnica vigente en cada momento. Si el usuario rechaza la analítica o retira posteriormente su consentimiento, el sitio desactiva Matomo y elimina esas cookies analíticas del navegador.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">3. Base jurídica</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>La base jurídica para las cookies técnicas es su necesidad para el funcionamiento del sitio y para prestar servicios expresamente solicitados por el usuario. La base jurídica para las cookies de analítica es el consentimiento.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">4. Cómo puedes gestionar tus preferencias</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Al acceder al sitio puedes:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li>aceptar la analítica,</li><li>rechazar la analítica,</li><li>configurar tus preferencias.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Puedes cambiar tu decisión en cualquier momento desde el enlace <code>Configurar cookies</code> disponible en el pie de página.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>También puedes bloquear o eliminar cookies desde la configuración de tu navegador, aunque hacerlo puede afectar al funcionamiento del área privada, del acceso a la cuenta o del proceso de contratación.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">5. Vigencia de la elección</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>La elección sobre cookies se conserva durante un plazo máximo de 12 meses desde su última actualización. Transcurrido ese plazo, o cuando se produzcan cambios relevantes en el uso de cookies, el sitio volverá a solicitar la configuración de preferencias.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">6. Tabla orientativa de cookies</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>La siguiente relación es orientativa y deberá ajustarse si cambia la implementación técnica del sitio:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><li><code>wordpress_test_cookie</code>: comprobación técnica de compatibilidad del navegador.</li><li><code>wordpress_logged_in_*</code>, <code>wordpress_sec_*</code>: autenticación y seguridad de usuarios registrados.</li><li><code>wp-settings-*</code>, <code>wp-settings-time-*</code>: preferencias técnicas del usuario autenticado.</li><li><code>pmpro_visit</code> y otras técnicas equivalentes de PMPro: soporte funcional del área privada y de determinados registros técnicos de uso cuando el usuario está autenticado.</li><li><code>es_cookie_consent</code>: almacenamiento de la elección sobre cookies en el navegador.</li><li><code>_pk_id*</code>, <code>_pk_ses*</code> u otras de Matomo: analítica, solo con consentimiento.</li></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">7. Actualizaciones</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Esta política podrá actualizarse cuando cambien las cookies utilizadas, la configuración técnica del sitio o las exigencias legales aplicables.</p>
+<!-- /wp:paragraph -->

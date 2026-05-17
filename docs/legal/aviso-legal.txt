@@ -1,0 +1,47 @@
+<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading">Aviso legal</h1>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>En cumplimiento de lo dispuesto en la Ley 34/2002, de 11 de julio, de servicios de la sociedad de la información y de comercio electrónico, se informa a los usuarios de este sitio web de los siguientes datos de identificación:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Titular: Libranzai, SL<br>CIF: B84372218<br>Domicilio social: Cuesta de San Vicente, 12, 28008 Madrid (Madrid), España<br>Sitio web: https://espaciosutil.org<br>Email de contacto: admin@espaciosutil.org</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Inscrita en el Registro Mercantil de Madrid, Tomo 21487, Folio 115, Hoja M-382155.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>La aplicación web <strong>Espacio Sutil Publisher</strong>, accesible actualmente en https://tiktok.espaciosutil.org/tiktok, forma parte de los servicios digitales operados por Libranzai, SL para la gestión y publicación asistida de contenidos editoriales en plataformas de terceros, incluyendo TikTok. Salvo que se indique expresamente otra cosa, las presentes condiciones de uso y el resto de textos legales del sitio resultan también aplicables a dicha aplicación en lo que corresponda por su naturaleza y funcionalidad.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación de las presentes condiciones de uso. El usuario se compromete a utilizar la web, sus contenidos y sus servicios de forma lícita, diligente y conforme a la buena fe, al orden público y a la normativa aplicable.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Queda prohibido utilizar el sitio web con fines ilícitos, lesivos de derechos o intereses de terceros, o que puedan dañar, inutilizar, sobrecargar o deteriorar el normal funcionamiento del sitio, sus servicios o sus contenidos.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Los contenidos de esta web, incluyendo textos, imágenes, diseño, estructura, logotipos, marcas, código y demás elementos, son titularidad de Libranzai, SL o se utilizan con la debida autorización, y se encuentran protegidos por la normativa sobre propiedad intelectual e industrial. Queda prohibida su reproducción, distribución, comunicación pública, transformación o cualquier otro uso no autorizado expresamente por escrito.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>El titular podrá enlazar a páginas o servicios de terceros únicamente con finalidad informativa o funcional. Libranzai, SL no se responsabiliza del contenido, disponibilidad, políticas o prácticas de sitios externos ajenos a su control.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Libranzai, SL se reserva el derecho a modificar, actualizar o retirar, en cualquier momento y sin necesidad de previo aviso, contenidos, servicios, diseño, estructura o condiciones de uso de la web.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>La información y contenidos ofrecidos en el área divulgativa y formativa del sitio tienen carácter informativo y educativo. Salvo indicación expresa en contrario, no constituyen asesoramiento médico, psicológico, psiquiátrico o sanitario, ni sustituyen la atención profesional individualizada que pudiera resultar necesaria en cada caso.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Para cualquier controversia relacionada con este sitio web será de aplicación la legislación española. Siempre que la normativa de consumo no disponga otra cosa, las partes se someterán a los juzgados y tribunales del domicilio del consumidor o usuario, y en su defecto a los de Madrid.</p>
+<!-- /wp:paragraph -->

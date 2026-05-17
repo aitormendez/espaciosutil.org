@@ -141,6 +141,26 @@ add_action('after_setup_theme', function () {
 }, 20);
 
 /**
+ * Keep visible lesson titles aligned with the raw canonical title stored in WordPress.
+ *
+ * WordPress texturizes quotes and hyphens in rendered titles; for `cde` lessons we want
+ * the visible title to match the canonical title coming from NocoDB exactly.
+ */
+add_action('after_setup_theme', function () {
+    remove_filter('the_title', 'wptexturize');
+
+    add_filter('the_title', function ($title, $post_id = 0) {
+        $post_id = (int) $post_id;
+
+        if ($post_id > 0 && get_post_type($post_id) === 'cde') {
+            return $title;
+        }
+
+        return wptexturize($title);
+    }, 10, 2);
+}, 30);
+
+/**
  * Register REST API endpoints.
  *
  * @return void

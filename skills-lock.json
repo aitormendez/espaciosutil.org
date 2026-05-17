@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "roots-ecosystem": {
+      "source": "aitormendez/roots-ecosystem-skill",
+      "sourceType": "github",
+      "computedHash": "aff5298f7558e555bb4f895162e775857e5fd066c6437e99f0d867bcb3fd467c"
+    }
+  }
+}

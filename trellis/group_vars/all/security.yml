@@ -15,6 +15,7 @@ ferm_input_list:
     dport: [ssh]
     seconds: 300
     hits: 20
+    block_globally: false
 
 
 # Enable built-in fail2ban services or add your own custom ones
