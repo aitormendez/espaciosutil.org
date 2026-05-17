@@ -71,23 +71,30 @@ El diff queda limitado al alcance ordinario:
 
 ## Commit, integracion y despliegue
 
-- Commit creado: commit final de la rama `chore/deps-routine-2026-05-2` con asunto `chore(deps): actualiza lockfiles composer npm y auditoria sage`.
-- Integracion en `main`: bloqueada por el estado del checkout principal. `main` esta sucio con cambios ajenos y ademas desalineado de `origin/main`; no se puede actualizar/integrar desde el checkout principal sin riesgo de pisar trabajo ajeno.
-- Push a `main`: no ejecutado.
-- Deploy produccion: no ejecutado porque la regla del issue exige desplegar desde `main` tras publicar `main`.
-- Rollback: no aplica; no hubo deploy.
+- Commit de mantenimiento integrado en `main`: `9041c3c`.
+- Estado previo a deploy: checkout principal limpio; `main`, `origin/main` y `HEAD` alineados en `9041c3c`; sin stash.
+- Deploy produccion: ejecutado desde `main` con `cd trellis && trellis deploy production espaciosutil.org`.
+- Resultado Trellis: OK, `main@9041c3c deployed as release 20260517122804`.
+- Release activa verificada: `/srv/www/espaciosutil.org/releases/20260517122804`.
+- `DEPLOY_UNFINISHED`: ausente tras el deploy.
+- Rollback: no ejecutado; no fue necesario.
 
 ## Smoke checks
 
-No ejecutados porque no hubo deploy.
+- `https://espaciosutil.org/`: HTTP 200.
+- `https://espaciosutil.org/wp/wp-admin/`: HTTP 200 tras redireccion a login.
+- `https://espaciosutil.org/suscripcion/`: HTTP 200.
+- `https://espaciosutil.org/curso-de-desarrollo-espiritual/`: HTTP 200.
+- `https://espaciosutil.org/lecciones-del-cde/seth/planteamiento-general-que-es-la-realidad/`: HTTP 200.
+- Asset CSS principal `app-rxRKNocP.css`: HTTP 200.
+- Asset JS principal `app-DZR3yPMM.js`: HTTP 200.
 
 ## Estado final de produccion
 
-Sin cambios desplegados desde esta rutina.
+Produccion queda desplegada y operativa en la release `20260517122804`, generada desde `main@9041c3c`.
 
 ## Follow-ups tecnicos
 
 - Resolver o decidir el salto major de `swiper` a `12.x`; actualmente queda como vulnerabilidad critica omitida por regla de seguridad del mantenimiento ordinario.
 - Planificar `roots/acorn` `6.x` como cambio estructural separado.
 - Limpiar deuda previa de Pint y avisos PSR-4 del tema para que futuras rutinas puedan diferenciar mejor fallos nuevos de deuda existente.
-- Desbloquear el checkout principal `main`: limpiar o aparcar cambios ajenos y alinear `main` con `origin/main` antes de reintentar integracion y deploy.
