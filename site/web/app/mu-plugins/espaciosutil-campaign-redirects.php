@@ -18,11 +18,15 @@ if (! function_exists('espaciosutil_campaign_redirect_destination')) {
 
         $normalizedPath = '/'.trim($path, '/');
 
-        if ($normalizedPath !== '/cde-tiktok') {
-            return '';
+        if ($normalizedPath === '/cde') {
+            return home_url('/curso-de-desarrollo-espiritual/');
         }
 
-        return home_url('/curso-de-desarrollo-espiritual/?utm_source=tiktok&utm_medium=organic_social&utm_campaign=cde_launch_wave1&utm_content=profile_link');
+        if ($normalizedPath === '/cde-tiktok') {
+            return home_url('/curso-de-desarrollo-espiritual/?utm_source=tiktok&utm_medium=organic_social&utm_campaign=cde_launch_wave1&utm_content=profile_link');
+        }
+
+        return '';
     }
 }
 
