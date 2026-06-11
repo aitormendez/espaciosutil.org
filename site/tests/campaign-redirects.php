@@ -6,17 +6,17 @@ function add_action(string $hook_name, callable $callback, int $priority = 10, i
 
 function home_url(string $path = ''): string
 {
-    return 'https://espaciosutil.org'.$path;
+    return 'https://espaciosutil.org' . $path;
 }
 
-require __DIR__.'/../web/app/mu-plugins/espaciosutil-campaign-redirects.php';
+require __DIR__ . '/../web/app/mu-plugins/espaciosutil-campaign-redirects.php';
 
 function assert_same(string $expected, string $actual, string $message): void
 {
     if ($expected !== $actual) {
-        fwrite(STDERR, $message.PHP_EOL);
-        fwrite(STDERR, "Expected: {$expected}".PHP_EOL);
-        fwrite(STDERR, "Actual:   {$actual}".PHP_EOL);
+        fwrite(STDERR, $message . PHP_EOL);
+        fwrite(STDERR, "Expected: {$expected}" . PHP_EOL);
+        fwrite(STDERR, "Actual:   {$actual}" . PHP_EOL);
         exit(1);
     }
 }

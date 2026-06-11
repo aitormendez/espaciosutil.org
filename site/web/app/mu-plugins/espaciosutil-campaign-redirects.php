@@ -16,7 +16,7 @@ if (! function_exists('espaciosutil_campaign_redirect_destination')) {
             return '';
         }
 
-        $normalizedPath = '/'.trim($path, '/');
+        $normalizedPath = '/' . trim($path, '/');
 
         if ($normalizedPath === '/cde') {
             return home_url('/curso-de-desarrollo-espiritual/');
