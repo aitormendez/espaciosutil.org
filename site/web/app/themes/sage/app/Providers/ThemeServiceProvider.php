@@ -27,6 +27,8 @@ class ThemeServiceProvider extends SageServiceProvider
 
         // Asignar rol "estudiante" si el pedido completado incluye un curso
         add_action('woocommerce_order_status_completed', [$this, 'asignarRolEstudiantePorCategoria']);
+        add_filter('acf/load_value/name=rich_excerpt', [$this, 'normalizeRichExcerptForEditor'], 10, 3);
+        add_filter('acf/update_value/name=rich_excerpt', [$this, 'normalizeRichExcerptForEditor'], 10, 3);
         add_action('acf/save_post', [$this, 'importLessonSubindexFromJson'], 20);
         add_action('acf/save_post', [$this, 'importLessonQuizFromJson'], 20);
         add_action('admin_notices', [$this, 'renderAcfFallbackNotices']);
@@ -61,6 +63,35 @@ class ThemeServiceProvider extends SageServiceProvider
                 break;
             }
         }
+    }
+
+    /**
+     * Mantiene el WYSIWYG de ACF en formato HTML aunque el valor venga de REST
+     * o scripts, evitando texto plano que TinyMCE no rehidrata de forma fiable.
+     */
+    public function normalizeRichExcerptForEditor($value, $postId, array $field)
+    {
+        if (!is_string($value) || trim($value) === '') {
+            return $value;
+        }
+
+        if (!is_numeric($postId) || (int) $postId <= 0 || \get_post_type((int) $postId) !== 'cde') {
+            return $value;
+        }
+
+        if ($this->containsBlockHtml($value)) {
+            return $value;
+        }
+
+        return \wpautop($value);
+    }
+
+    protected function containsBlockHtml(string $value): bool
+    {
+        return (bool) preg_match(
+            '/<(address|article|aside|blockquote|div|dl|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|main|nav|ol|p|pre|section|table|ul)\b/i',
+            $value,
+        );
     }
 
     /**
