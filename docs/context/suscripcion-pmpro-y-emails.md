@@ -66,11 +66,75 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
   - `site/web/app/mu-plugins/espaciosutil-pmpro-email-preview.php`
 - El entorno local usa Mailpit para revisar envíos reales.
 
+## Endpoint privado Atlas CDE/PMPro
+
+- Archivo principal: `site/web/app/mu-plugins/espaciosutil-atlas-cde-membership.php`.
+- URL REST esperada: `POST /wp-json/espaciosutil/v1/atlas/membership`.
+- Uso previsto: consulta backend-to-backend desde Atlas para validar si un usuario WordPress/PMPro tiene acceso Atlas por membresia CDE.
+- Autenticacion: cabecera `Authorization: Bearer <token>`.
+- Secreto lado CDE: `ESPACIOSUTIL_ATLAS_CDE_MEMBERSHIP_TOKEN`, con fallback operacional a la opcion WordPress `espaciosutil_atlas_cde_membership_token`.
+- Variables lado Atlas:
+  - `ATLAS_CDE_MEMBERSHIP_URL=https://espaciosutil.org/wp-json/espaciosutil/v1/atlas/membership`
+  - `ATLAS_CDE_MEMBERSHIP_TOKEN=<mismo secreto privado>`
+  - `ATLAS_CDE_MEMBERSHIP_TIMEOUT_SECONDS`, si se quiere ajustar el timeout del adaptador Atlas.
+- Request soportado:
+
+```json
+{
+  "external_subject": "wp_user:123"
+}
+```
+
+- No se acepta email como identidad primaria ni lookup.
+- `session_token` devuelve `unsupported_session_token` mientras no exista emision/validacion de prueba de sesion CDE.
+- Respuesta normalizada:
+
+```json
+{
+  "provider": "wordpress_pmpro",
+  "subject": "wp_user:123",
+  "wordpress_user_id": 123,
+  "email": "usuario@example.com",
+  "display_name": "Nombre visible",
+  "membership_status": "active",
+  "grants_atlas": true,
+  "level_id": 11,
+  "level_name": "CDE mensual",
+  "expires_at": "2026-07-27T00:00:00+00:00",
+  "checked_at": "2026-06-27T12:00:00+00:00",
+  "source_version": "espaciosutil_atlas_cde_membership_v1"
+}
+```
+
+- Estados normalizados:
+  - `active`: existe nivel PMPro activo que concede Atlas.
+  - `expired`: ultimo estado PMPro conocido `expired`.
+  - `cancelled`: ultimo estado PMPro conocido `cancelled`, `admin_cancelled` o `inactive`.
+  - `unknown`: usuario inexistente, sin PMPro resoluble o estado no reconocido.
+- `revoked` e `invited_manual` no se emiten desde este endpoint en la primera version; quedan como estados Atlas/manuales fuera del origen PMPro.
+- Niveles PMPro que conceden Atlas: `11`, `12` y `13`, filtrables con `espaciosutil_atlas_cde_membership_level_ids`.
+- Errores esperados:
+  - `403 rest_forbidden`: token ausente, invalido o endpoint sin secreto configurado.
+  - `400 invalid_subject`: falta `external_subject` o no tiene formato `wp_user:{id}`.
+  - `400 unsupported_session_token`: se intenta resolver por token de sesion.
+- Rotacion del secreto:
+  1. Generar un token fuerte nuevo fuera del repositorio.
+  2. Configurarlo en CDE como `ESPACIOSUTIL_ATLAS_CDE_MEMBERSHIP_TOKEN`.
+  3. Configurarlo en Atlas como `ATLAS_CDE_MEMBERSHIP_TOKEN`.
+  4. Hacer smoke backend-to-backend con un usuario autorizado.
+  5. Retirar el secreto anterior de cualquier entorno.
+- Limitaciones:
+  - No activa `cde_optional` ni `cde_required` en Atlas.
+  - No crea login Atlas ni SSO.
+  - No modifica pagos, Stripe, planes ni usuarios.
+  - No expone progreso CDE, historiales ni datos editoriales.
+
 ## Verificación recomendada
 
 1. Ejecutar `wp eval-file scripts/verify-pmpro-trial.php`.
 2. Hacer checkout completo en test mode con Stripe para mensual, semestral y anual.
 3. Verificar alta, orden inicial a cero, trial y emails.
+4. Ejecutar `php site/tests/atlas-cde-membership-endpoint.php`.
 
 ## Archivos clave
 
@@ -79,6 +143,7 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
 - `site/web/app/themes/sage/resources/views/partials/pricing-table.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/pricing-package.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/pricing-plan-card.blade.php`
+- `site/web/app/mu-plugins/espaciosutil-atlas-cde-membership.php`
 - `site/web/app/mu-plugins/espaciosutil-pmpro-trials.php`
 - `site/web/app/mu-plugins/espaciosutil-pmpro-email-preview.php`
 - `site/web/app/themes/sage/paid-memberships-pro/email/header.html`
