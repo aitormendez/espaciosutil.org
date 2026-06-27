@@ -14,7 +14,7 @@ ferm_input_list:
   - type: dport_limit
     dport: [ssh]
     seconds: 300
-    hits: 20
+    hits: 120
     block_globally: false
 
 
@@ -31,6 +31,14 @@ fail2ban_services_custom:
     port: http,https
     logpath: "{{ www_root }}/**/logs/access.log"
 
+fail2ban_services_ssh:
+  - name: sshd
+    port: ssh
+    filter: sshd
+    logpath: /var/log/auth.log
+
+fail2ban_services: "{{ fail2ban_services_ssh + fail2ban_services_custom }}"
+
 # If sshd_permit_root_login: false, admin_user must be in 'users' (`group_vars/all/users.yml`) with sudo group
 # and in 'vault_users' (`group_vars/staging/vault.yml`, `group_vars/production/vault.yml`)
 sshd_permit_root_login: true
@@ -39,3 +47,4 @@ sshd_password_authentication: false
 ip_whitelist:
   - 127.0.0.0/8
   - "{{ ipify_public_ip | default('') }}"
+  - 82.213.243.193
