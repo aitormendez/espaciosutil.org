@@ -34,6 +34,10 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Aprovisionamiento con Trellis, dominios por entorno, DNS, variables de entorno e integración del tracking.
   - Cargar cuando la tarea afecte a analítica, infraestructura Matomo o tracking.
 
+- `monitorizacion-operativa.md`
+  - Monitorizacion externa de disponibilidad publica del sitio con HetrixTools y criterio de actuacion ante alerta.
+  - Cargar cuando la tarea afecte a disponibilidad externa, alertas de caida o monitorizacion operativa del sitio.
+
 - `paginas-cde.md`
   - Panorama de plantillas editoriales CDE y componentes Blade reutilizables.
   - Cargar cuando la tarea afecte a landings/páginas editoriales del curso.
