@@ -33,7 +33,7 @@
           <p class="text-cde-light text-sm font-semibold uppercase tracking-normal">Acceso activo</p>
           <h2 class="text-gris1 mt-4 text-4xl font-light">Atlas esta incluido en tu membresia CDE.</h2>
           <p class="text-gris2 mt-6 text-xl font-light leading-relaxed">
-            Puedes entrar a la beta cerrada con tu acceso actual del Curso de Desarrollo Espiritual.
+            Puedes entrar con tu acceso actual del Curso de Desarrollo Espiritual.
           </p>
           <div class="mt-10 flex flex-col gap-4 sm:flex-row">
             <x-cta href="{{ $atlas_access['atlas_url'] }}" text="Abrir Atlas"
