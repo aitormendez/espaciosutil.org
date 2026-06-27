@@ -77,7 +77,7 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
   - `ATLAS_CDE_MEMBERSHIP_URL=https://espaciosutil.org/wp-json/espaciosutil/v1/atlas/membership`
   - `ATLAS_CDE_MEMBERSHIP_TOKEN=<mismo secreto privado>`
   - `ATLAS_CDE_MEMBERSHIP_TIMEOUT_SECONDS`, si se quiere ajustar el timeout del adaptador Atlas.
-- Request soportado:
+- Requests soportados:
 
 ```json
 {
@@ -85,8 +85,14 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
 }
 ```
 
+```json
+{
+  "session_token": "<cde_access_token emitido por /atlas/>"
+}
+```
+
 - No se acepta email como identidad primaria ni lookup.
-- `session_token` devuelve `unsupported_session_token` mientras no exista emision/validacion de prueba de sesion CDE.
+- `session_token` debe ser una prueba CDE efimera emitida por la puerta `/atlas/`. El endpoint valida firma HMAC SHA-256, TTL, `issuer=espaciosutil_cde`, `audience=atlas`, `version=1` y correspondencia `external_subject`/`wordpress_user_id` antes de resolver la membresia actual.
 - Respuesta normalizada:
 
 ```json
@@ -115,8 +121,8 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
 - Niveles PMPro que conceden Atlas: `11`, `12` y `13`, filtrables con `espaciosutil_atlas_cde_membership_level_ids`.
 - Errores esperados:
   - `403 rest_forbidden`: token ausente, invalido o endpoint sin secreto configurado.
+  - `403 invalid_session_token`: `session_token` ausente de contrato, manipulado, caducado o con claims invalidos.
   - `400 invalid_subject`: falta `external_subject` o no tiene formato `wp_user:{id}`.
-  - `400 unsupported_session_token`: se intenta resolver por token de sesion.
 - Rotacion del secreto:
   1. Generar un token fuerte nuevo fuera del repositorio.
   2. Configurarlo en CDE como `ESPACIOSUTIL_ATLAS_CDE_MEMBERSHIP_TOKEN`.
@@ -129,16 +135,60 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
   - No modifica pagos, Stripe, planes ni usuarios.
   - No expone progreso CDE, historiales ni datos editoriales.
 
+## Puerta minima Atlas en CDE
+
+- Plantilla WordPress/Sage: `site/web/app/themes/sage/resources/views/template-atlas.blade.php`.
+- Ruta operativa esperada: pagina WordPress con slug `/atlas/` y plantilla `Atlas`.
+- La pagina es una puerta funcional para miembros CDE, no una landing comercial de producto.
+- Estados resueltos:
+  - usuario CDE con membresia activa: muestra "Abrir Atlas" y emite una prueba CDE de corta duracion;
+  - usuario logueado sin membresia activa: no emite prueba y enlaza a `Suscripcion`/`Mi cuenta`;
+  - usuario no logueado: no emite prueba y enlaza a login con retorno a `/atlas/` y a `Suscripcion`;
+  - token no configurable: informa indisponibilidad temporal sin abrir Atlas.
+- Helper principal: `espaciosutil_atlas_cde_access_state()`.
+- La emision usa `espaciosutil_atlas_cde_issue_access_token()` con payload JSON firmado por HMAC SHA-256.
+- TTL por defecto: 5 minutos, filtrable con `espaciosutil_atlas_cde_access_token_ttl` y limitado a un maximo operativo de 15 minutos.
+- Secreto recomendado para la firma: `ESPACIOSUTIL_ATLAS_CDE_ACCESS_TOKEN_SECRET`, con fallback a la opcion WordPress `espaciosutil_atlas_cde_access_token_secret`.
+- Fallback transitorio: si no existe secreto especifico de acceso, se reutiliza el secreto del endpoint privado de membresia. En produccion conviene separar ambos secretos.
+- URL Atlas configurable: `ESPACIOSUTIL_ATLAS_URL`, con fallback `https://atlas.espaciosutil.org/`.
+- Parametro emitido hacia Atlas: `cde_access_token`.
+- El token incluye sujeto `wp_user:{id}`, estado PMPro normalizado, `level_id`, `issued_at`, `expires_at`, `nonce`, issuer `espaciosutil_cde` y audience `atlas`.
+- La ruta `/atlas/` pertenece al contexto CDE y se marca como sensible para evitar transiciones Barba con una prueba efimera en la UI.
+- Atlas consume el token limpiandolo de la URL y enviandolo como `session_token` al endpoint privado de membresia; la validacion criptografica vive en WordPress/CDE.
+
+## Navegacion CDE con Atlas
+
+Estructura conceptual aprobada para el menu CDE:
+
+```text
+Curso
+  Lecciones
+  Programa
+  Suscripcion
+Atlas
+Mi cuenta
+Switch Espacio Sutil / CDE
+```
+
+Notas operativas:
+
+- `Atlas` debe apuntar a `/atlas/` como item top-level del menu CDE.
+- `Lecciones` puede reemplazar a `Indice de lecciones` como etiqueta si se hace desde WordPress sin cambiar la URL.
+- El switch ES/CDE mantiene su funcion de cruce de contexto y no debe mezclarse con enlaces de cuenta.
+- La modificacion de items del menu se hace en WordPress; no se fuerza por codigo desde esta plantilla.
+
 ## Verificación recomendada
 
 1. Ejecutar `wp eval-file scripts/verify-pmpro-trial.php`.
 2. Hacer checkout completo en test mode con Stripe para mensual, semestral y anual.
 3. Verificar alta, orden inicial a cero, trial y emails.
 4. Ejecutar `php site/tests/atlas-cde-membership-endpoint.php`.
+5. Verificar `/atlas/` como anonimo, usuario logueado sin membresia y usuario con nivel CDE activo.
 
 ## Archivos clave
 
 - `site/web/app/themes/sage/resources/views/template-suscripcion.blade.php`
+- `site/web/app/themes/sage/resources/views/template-atlas.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/page-header.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/pricing-table.blade.php`
 - `site/web/app/themes/sage/resources/views/partials/pricing-package.blade.php`

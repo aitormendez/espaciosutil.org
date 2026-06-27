@@ -10,6 +10,7 @@ Documento de referencia para navegación global, contextos ES/CDE, color de secc
 - Si la URL pertenece al ámbito CDE, se usa `cde_navigation`.
 - Si la URL pertenece al ámbito ES, se usa `primary_navigation`.
 - El cambio de contexto se hace desde el menú principal mediante el ítem de cruce con clase `switch`.
+- `/atlas/` pertenece al ámbito CDE y debe aparecer como item top-level del menú CDE.
 
 ## Color de fondo por sección
 
@@ -33,6 +34,7 @@ Documento de referencia para navegación global, contextos ES/CDE, color de secc
 - Se mantiene Barba en navegación interna del mismo contexto.
 - Se evita Barba en rutas sensibles:
   - login
+  - atlas
   - cuenta
   - checkout/confirmación PMPro
   - admin
@@ -57,6 +59,7 @@ Documento de referencia para navegación global, contextos ES/CDE, color de secc
 
 - `site/web/app/themes/sage/app/helpers.php`
 - `site/web/app/themes/sage/app/Fields/MenuItems.php`
+- `site/web/app/themes/sage/resources/views/template-atlas.blade.php`
 - `site/web/app/themes/sage/resources/views/layouts/app.blade.php`
 - `site/web/app/themes/sage/resources/views/components/navigation.blade.php`
 - `site/web/app/themes/sage/resources/js/nav.js`

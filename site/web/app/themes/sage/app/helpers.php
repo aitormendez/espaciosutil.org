@@ -413,6 +413,7 @@ function nav_context_from_path(string $path): string
         '/indice-de-lecciones/',
         '/suscripcion/',
         '/el-curso-en-profundidad/',
+        '/atlas/',
         '/bases-de-colaboracion/',
         '/login/',
         '/cuenta-de-membresia/',
@@ -438,6 +439,7 @@ function is_barba_sensitive_path(string $path): bool
 
     $sensitivePrefixes = [
         '/login/',
+        '/atlas/',
         '/cuenta-de-membresia/',
         '/pago-de-membresia/',
         '/confirmacion-de-membresia/',
