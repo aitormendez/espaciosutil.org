@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Ejecucion asistida de mantenimiento ordinario de dependencias de espaciosutil.org, con actualizaciones patch/minor de bajo riesgo, auditorias, verificacion de build y preparacion para integracion en `main`.
+Ejecucion asistida de mantenimiento ordinario de dependencias de espaciosutil.org, con actualizaciones patch/minor de bajo riesgo, auditorias, verificacion de build, integracion en `main`, despliegue de produccion y smoke checks.
 
 ## Rama y worktree
 
@@ -40,6 +40,10 @@ Ejecucion asistida de mantenimiento ordinario de dependencias de espaciosutil.or
   - `npm ci` en `site/web/app/themes/sage`
   - `npm audit` en `site/web/app/themes/sage`
   - `npm run build` en `site/web/app/themes/sage`
+- `git cherry-pick 6d97096` en checkout principal
+- `git push origin main`
+- `trellis deploy production espaciosutil.org` en `trellis`
+- Smoke checks HTTP con `curl` sobre home, login/wp-admin, suscripcion, leccion CDE y assets principales del tema
 
 ## Paquetes actualizados
 
@@ -87,29 +91,35 @@ Ejecucion asistida de mantenimiento ordinario de dependencias de espaciosutil.or
 - `npm audit` en Sage: correcto, `found 0 vulnerabilities`.
 - `npm run build` en Sage: correcto. Vite mostro advertencias conocidas de `use client` de Vidstack y chunk grande `vendor-cosmos`, sin fallo.
 
-## Commit
+## Commits
 
 - Commit creado en la rama temporal `chore/deps-routine-2026-07` con asunto `chore(deps): actualiza locks composer y npm de julio`.
-
-## Integracion, deploy y smoke checks
-
-- Integracion en `main`: bloqueada.
-- Motivo: el checkout principal esta limpio, pero `main` local esta `ahead 3` respecto a `origin/main`. Los commits locales no publicados son:
+- Commit integrado en `main` mediante cherry-pick limpio: `164d617 chore(deps): actualiza locks composer y npm de julio`.
+- La integracion se hizo despues de aceptar publicar los 3 commits locales que `main` tenia pendientes:
   - `3b55283 chore(trellis): ajusta reglas de seguridad ssh`
   - `9763bda docs(contexto): documenta monitorizacion operativa externa`
   - `b5b7315 fix(atlas): elimina referencia a beta cerrada en acceso cde`
-- Decision tomada: no se hizo push ni deploy para no publicar commits ajenos a esta rutina junto con el mantenimiento de dependencias.
-- Push a `origin/main`: no ejecutado.
-- Deploy produccion: no ejecutado.
-- Smoke checks: no ejecutados.
+
+## Integracion, deploy y smoke checks
+
+- Integracion en `main`: correcta.
+- Push a `origin/main`: correcto, `fe75c60..164d617`.
+- Deploy produccion: correcto, `main@164d617` desplegado como release `20260702115530`.
+- Smoke checks:
+  - Home publica `https://espaciosutil.org/`: `200`.
+  - Login/wp-admin `https://espaciosutil.org/wp/wp-admin/`: `200`, redirige correctamente a `wp-login.php`.
+  - Suscripcion `https://espaciosutil.org/suscripcion/`: `200`.
+  - Leccion CDE publica `https://espaciosutil.org/lecciones-del-cde/seth/planteamiento-general-que-es-la-realidad/`: `200`, redirige a canonical `/lecciones-del-cde/seth-realidad-y-existencia/planteamiento-general-que-es-la-realidad/`.
+  - CSS principal Sage `app-BXWJp7kO.css`: `200 text/css`.
+  - JS principal Sage `app-jL6j0S5N.js`: `200 text/javascript`.
 - Rollback: no ejecutado.
 
 ## Estado final de produccion
 
-Sin cambios. Produccion no fue desplegada en esta ejecucion.
+Produccion actualizada correctamente con release `20260702115530` y commit de sitio `main@164d617`. No hubo rollback.
 
 ## Follow-ups tecnicos
 
-- Desbloquear la integracion decidiendo que hacer con los 3 commits locales de `main`: publicarlos, moverlos a otra rama o realinear `main` con `origin/main` mediante una accion explicita del owner del repositorio.
 - Evaluar en issue separado los majors sensibles: WordPress `7.0`, Acorn `6.x`, toolchain Vite/Tailwind/Roots y runtime React/Three/Swiper/Vidstack.
 - Corregir la advertencia PSR-4 preexistente de `App\View\Composers\ContentSerie` cuando se trabaje en deuda tecnica del tema.
+- Retirar o proteger la salida de debug del hook de deploy que imprime estructura de `auth.json` de Composer, para evitar exposicion accidental en logs operativos.
