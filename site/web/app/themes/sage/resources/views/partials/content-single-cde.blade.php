@@ -4,9 +4,9 @@
   </header>
 
   <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-6">
-    <div class="contenido prose-xl md:prose-2xl mt-18 mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
+    <div class="contenido prose md:prose-2xl md:mt-18 mx-auto mt-6 w-full max-w-4xl px-6 !leading-tight md:px-0">
       {{-- Parte 1: Extracto (visible para todos) --}}
-      <div class="px-6 lg:px-0">
+      <div>
         @php the_field('rich_excerpt') @endphp
       </div>
 
@@ -69,8 +69,8 @@
           <div
             class="bg-sol text-cde mt-6 inline-flex h-[80px] w-[80px] items-center justify-center rounded-full p-4 text-2xl font-bold leading-none"
             data-quiz-counter>
-            <span data-quiz-counter-current>1</span><span class="text-cde/50">/</span><span
-              class="text-cde/50" data-quiz-counter-total>0</span>
+            <span data-quiz-counter-current>1</span><span class="text-cde/50">/</span><span class="text-cde/50"
+              data-quiz-counter-total>0</span>
           </div>
         </header>
         <div data-quiz-target class="text-morado1">
