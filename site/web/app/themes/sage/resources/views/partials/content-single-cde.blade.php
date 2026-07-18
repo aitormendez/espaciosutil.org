@@ -11,17 +11,37 @@
       </div>
 
       @if (!empty($lesson_subindex['items']))
-        <nav class="bg-morado4/90 not-prose mt-12 rounded-sm px-6 py-5 font-sans text-base"
-          aria-labelledby="lesson-subindex-title">
-          <p id="lesson-subindex-title" class="font-display text-morado1 font-medium tracking-wide">
+        @php
+          $countSubindexItems = function ($items) use (&$countSubindexItems) {
+              return array_reduce($items, function ($count, $item) use (&$countSubindexItems) {
+                  $children = is_array($item['children'] ?? null) ? $item['children'] : [];
+
+                  return $count + 1 + $countSubindexItems($children);
+              }, 0);
+          };
+          $subindexItemCount = $countSubindexItems($lesson_subindex['items']);
+          $subindexPanelId = 'lesson-subindex-panel-' . get_the_ID();
+        @endphp
+        <nav class="not-prose mt-12 font-sans text-base md:bg-morado4/90 md:rounded-sm md:px-6 md:py-5"
+          data-lesson-subindex>
+          <p class="font-display text-morado1 hidden font-medium tracking-wide md:block">
             Subíndice de la lección: {{ $lesson_subindex_root_title }}
           </p>
-          <div class="mt-4">
-            @include('partials.lesson-subindex', [
-                'items' => $lesson_subindex['items'],
-                'interactive' => $has_access,
-                'is_nested' => false,
-            ])
+          <button type="button" class="font-display text-morado1 flex w-full items-center justify-between py-2 text-left font-medium tracking-wide md:hidden"
+            id="lesson-subindex-toggle" data-lesson-subindex-toggle aria-expanded="false" aria-controls="{{ $subindexPanelId }}">
+            <span data-lesson-subindex-label data-closed-label="Índice de la lección · {{ $subindexItemCount }} {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}"
+              data-open-label="Ocultar índice">Índice de la lección · {{ $subindexItemCount }} {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}</span>
+            <span aria-hidden="true" data-lesson-subindex-icon>+</span>
+          </button>
+          <div id="{{ $subindexPanelId }}" class="mt-0 grid grid-rows-[0fr] opacity-0 transition-all duration-200 ease-out md:mt-4 md:block md:opacity-100"
+            data-lesson-subindex-panel>
+            <div class="overflow-hidden">
+              @include('partials.lesson-subindex', [
+                  'items' => $lesson_subindex['items'],
+                  'interactive' => $has_access,
+                  'is_nested' => false,
+              ])
+            </div>
           </div>
         </nav>
       @endif

@@ -31,7 +31,7 @@
           : $plainTitleClasses;
     @endphp
     <li class="border-b last:border-none" data-level="{{ $level }}">
-      <div class="{{ $indentMargin }} {{ $indentPad }} grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 py-2">
+      <div class="{{ $indentMargin }} {{ $indentPad }} grid grid-cols-[minmax(0,1fr)_auto] items-start gap-x-3 py-1.5 md:py-2">
         @if ($shouldLinkTitle)
           <a href="#{{ $item['anchor'] }}" class="{{ $titleClasses }} min-w-0">
             {{ $item['title'] }}
@@ -44,7 +44,7 @@
 
         @if ($enableSeekButtons && $item['timecode'])
           <button type="button"
-            class="border-morado2/30 bg-morado2/20 text-morado1 hover:border-morado1/80 hover:text-blanco col-start-2 h-full min-w-[65px] cursor-pointer self-start justify-self-end whitespace-nowrap rounded border px-3 py-1 text-xs font-bold uppercase tracking-wide transition lg:min-w-[80px]"
+            class="border-morado2/30 bg-morado2/20 text-morado1 hover:border-morado1/80 hover:text-blanco col-start-2 cursor-pointer self-start justify-self-end whitespace-nowrap rounded border px-2 py-1 text-xs font-bold uppercase tracking-wide transition md:min-w-[65px] md:px-3 lg:min-w-[80px]"
             data-video-seek="{{ $item['timecode']['seconds'] ?? null }}"
             data-video-time-label="{{ $item['timecode']['label'] ?? null }}"
             aria-label="Ir al minuto {{ $item['timecode']['label'] ?? '' }}"

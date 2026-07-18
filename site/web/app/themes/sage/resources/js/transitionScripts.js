@@ -36,6 +36,11 @@ export async function transitionScriptsAfter() {
     initFeaturedVideoPlayerModule.default();
   }
 
+  if (document.body.classList.contains('single-cde')) {
+    const lessonSubindexModule = await import('./lessons/subindex.js');
+    lessonSubindexModule.default();
+  }
+
   if (document.body.classList.contains('home')) {
     initHomeEnhancements();
   }

@@ -102,6 +102,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const markCompleteModule = await import('./courses/mark-complete.js');
     markCompleteModule.default();
 
+    const lessonSubindexModule = await import('./lessons/subindex.js');
+    lessonSubindexModule.default();
+
     const lessonQuizModule = await import('./lessons/quiz.js');
     lessonQuizModule.default();
   }
