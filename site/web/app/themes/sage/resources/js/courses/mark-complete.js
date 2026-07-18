@@ -29,14 +29,14 @@ export default function initMarkComplete() {
           text.textContent = 'Marcar como vista';
           iconShow.classList.add('hidden');
           iconHide.classList.remove('hidden');
-          btn.classList.remove('completed', 'bg-sol');
-          btn.classList.add('bg-morado2');
+          btn.classList.remove('completed', 'text-sol');
+          btn.classList.add('text-gris2');
         } else {
           text.textContent = 'Vista';
           iconShow.classList.remove('hidden');
           iconHide.classList.add('hidden');
-          btn.classList.add('completed', 'bg-sol');
-          btn.classList.remove('bg-morado2');
+          btn.classList.add('completed', 'text-sol');
+          btn.classList.remove('text-gris2');
         }
       }
     });
