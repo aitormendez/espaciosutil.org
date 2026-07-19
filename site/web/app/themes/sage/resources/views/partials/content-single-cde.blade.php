@@ -3,8 +3,8 @@
     @include('partials.post-header')
   </header>
 
-  <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-6">
-    <div class="contenido prose md:prose-2xl md:mt-18 mx-auto mt-6 w-full max-w-4xl px-6 !leading-tight md:px-0">
+  <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-4">
+    <div class="contenido prose md:prose-2xl md:mt-18 mx-auto mt-6 w-full max-w-4xl px-4 !leading-tight md:px-0">
       {{-- Parte 1: Extracto (visible para todos) --}}
       <div>
         @php the_field('rich_excerpt') @endphp
@@ -13,27 +13,36 @@
       @if (!empty($lesson_subindex['items']))
         @php
           $countSubindexItems = function ($items) use (&$countSubindexItems) {
-              return array_reduce($items, function ($count, $item) use (&$countSubindexItems) {
-                  $children = is_array($item['children'] ?? null) ? $item['children'] : [];
+              return array_reduce(
+                  $items,
+                  function ($count, $item) use (&$countSubindexItems) {
+                      $children = is_array($item['children'] ?? null) ? $item['children'] : [];
 
-                  return $count + 1 + $countSubindexItems($children);
-              }, 0);
+                      return $count + 1 + $countSubindexItems($children);
+                  },
+                  0,
+              );
           };
           $subindexItemCount = $countSubindexItems($lesson_subindex['items']);
           $subindexPanelId = 'lesson-subindex-panel-' . get_the_ID();
         @endphp
-        <nav class="not-prose mt-12 font-sans text-base md:bg-morado4/90 md:rounded-sm md:px-6 md:py-5"
+        <nav class="not-prose md:bg-morado4/90 mt-12 font-sans text-sm md:rounded-sm md:px-6 md:py-5 md:text-base"
           data-lesson-subindex>
-          <p class="font-display text-morado1 hidden font-medium tracking-wide md:block">
+          <p class="font-display text-morado1 hidden tracking-wide md:block">
             Subíndice de la lección: {{ $lesson_subindex_root_title }}
           </p>
-          <button type="button" class="font-display text-morado1 flex w-full items-center justify-between py-2 text-left font-medium tracking-wide md:hidden"
-            id="lesson-subindex-toggle" data-lesson-subindex-toggle aria-expanded="false" aria-controls="{{ $subindexPanelId }}">
-            <span data-lesson-subindex-label data-closed-label="Índice de la lección · {{ $subindexItemCount }} {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}"
-              data-open-label="Ocultar índice">Índice de la lección · {{ $subindexItemCount }} {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}</span>
+          <button type="button"
+            class="font-display text-morado1 border-morado2/30 flex w-full items-center justify-between rounded border px-3 py-2 text-left tracking-wide md:hidden"
+            id="lesson-subindex-toggle" data-lesson-subindex-toggle aria-expanded="false"
+            aria-controls="{{ $subindexPanelId }}">
+            <span data-lesson-subindex-label
+              data-closed-label="Índice de la lección · {{ $subindexItemCount }} {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}"
+              data-open-label="Ocultar índice">Índice de la lección · {{ $subindexItemCount }}
+              {{ $subindexItemCount === 1 ? 'capítulo' : 'capítulos' }}</span>
             <span aria-hidden="true" data-lesson-subindex-icon>+</span>
           </button>
-          <div id="{{ $subindexPanelId }}" class="mt-0 grid grid-rows-[0fr] opacity-0 transition-all duration-200 ease-out md:mt-4 md:block md:opacity-100"
+          <div id="{{ $subindexPanelId }}"
+            class="mt-0 grid grid-rows-[0fr] opacity-0 transition-all duration-200 ease-out md:mt-4 md:block md:opacity-100"
             data-lesson-subindex-panel>
             <div class="overflow-hidden">
               @include('partials.lesson-subindex', [
@@ -62,12 +71,12 @@
 
     @if ($has_featured_media)
       <div id="featured-lesson-media" data-media-props='@json($media_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'
-        class="featured-media-container flex w-full justify-center p-6">
+        class="featured-media-container flex w-full justify-center p-4 md:p-6">
       </div>
     @endif
 
-    <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-6 md:px-0">
-      <div class="prose prose-xl md:prose-2xl mx-auto w-full max-w-4xl px-6 !leading-tight md:px-0">
+    <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-4 md:p-6 md:px-0">
+      <div class="prose md:prose-2xl mx-auto w-full max-w-4xl md:px-0">
         @php the_content() @endphp
       </div>
     </div>
