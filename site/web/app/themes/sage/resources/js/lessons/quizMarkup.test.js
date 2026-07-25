@@ -38,10 +38,30 @@ test('garantiza un área táctil mínima en cada respuesta móvil', () => {
   assert.match(optionRule, /min-height:\s*44px/);
 });
 
-test('asigna a las respuestas el espacio móvil restante', () => {
+test('permite que las preguntas móviles crezcan en el scroll de página', () => {
+  const questionStateRule = getRuleBody(
+    "#lesson-quiz[data-quiz-state='questions']"
+  );
+  const targetRule = getRuleBody(
+    "#lesson-quiz[data-quiz-state='questions'] [data-quiz-target]"
+  );
   const optionsRule = getRuleBody(
     "#lesson-quiz[data-quiz-state='questions'] .quiz-options"
   );
 
-  assert.match(optionsRule, /flex:\s*1 1 auto/);
+  assert.doesNotMatch(questionStateRule, /height:\s*min\(42rem,\s*100svh\)/);
+  assert.match(targetRule, /overflow:\s*visible/);
+  assert.doesNotMatch(targetRule, /flex:\s*1 1 auto/);
+  assert.doesNotMatch(optionsRule, /overflow-y:\s*auto/);
+  assert.doesNotMatch(optionsRule, /overscroll-behavior:\s*contain/);
+});
+
+test('mantiene la botonera móvil pegada al borde inferior', () => {
+  const footerRule = getRuleBody(
+    "#lesson-quiz[data-quiz-state='questions'] .quiz-footer"
+  );
+
+  assert.match(footerRule, /position:\s*sticky/);
+  assert.match(footerRule, /bottom:\s*0/);
+  assert.match(footerRule, /z-index:\s*1/);
 });
