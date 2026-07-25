@@ -36,10 +36,6 @@
     class="bg-negro text-blanco {{ is_admin_bar_showing() ? 'xl:top-[57px]' : 'xl:top-[26px]' }} fixed top-0 z-40 min-h-screen w-screen xl:right-6 xl:min-h-0 xl:w-auto xl:bg-transparent">
     <ul class="my-menu flex flex-wrap items-center p-6 text-2xl xl:px-0 xl:pb-[23px] xl:pt-0">
       <x-navigation name="{{ $navContextData['primary_menu_name'] }}" class="flex font-extralight" />
-
-      @if ($navContextData['is_pmpro_page'])
-        <x-navigation name="membresia_navigation" class="flex xl:hidden" />
-      @endif
     </ul>
     <div id="linea" class="bg-gris3 absolute bottom-0 left-0 hidden h-1 w-0 xl:block"></div>
   </nav>

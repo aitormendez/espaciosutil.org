@@ -467,7 +467,7 @@ export function navegacion() {
 
 export function navegacionMovil() {
   const cleanups = [];
-  const mobileMenus = gsap.utils.toArray('.my-menu-item');
+  const mobileMenus = gsap.utils.toArray('#nav .my-menu-item');
   const burguer = document.getElementById('burguer');
   const nav = document.getElementById('nav');
 
