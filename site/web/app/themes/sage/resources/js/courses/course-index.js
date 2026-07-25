@@ -1,7 +1,12 @@
 import { gsap } from 'gsap';
+import {
+  MOBILE_COURSE_INDEX_QUERY,
+  shouldScrollToCourseTopics,
+} from './courseIndexScroll.js';
 
 export default function initCourseIndex() {
   const container = document.getElementById('indice-ajax-container');
+  const topicsHeading = document.getElementById('course-topics-heading');
   const seriesToggles = document.querySelectorAll('.serie-accordion-toggle');
   const blockButtons = document.querySelectorAll('.serie-cde-button');
 
@@ -17,6 +22,19 @@ export default function initCourseIndex() {
 
   const panelMap = new Map();
   let activeBlockButton = null;
+
+  const scrollToTopicsOnMobile = () => {
+    const isMobile =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia(MOBILE_COURSE_INDEX_QUERY).matches;
+
+    if (!shouldScrollToCourseTopics(isMobile, Boolean(topicsHeading))) {
+      return;
+    }
+
+    topicsHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   const updateToggleIcon = (toggle, symbol) => {
     const icon = toggle.querySelector('.serie-accordion-icon');
@@ -241,6 +259,7 @@ export default function initCourseIndex() {
         const data = await response.json();
         container.innerHTML = data.html;
         initializeCourseIndexChildren(container);
+        scrollToTopicsOnMobile();
       } catch (error) {
         container.innerHTML = '<p>Ha ocurrido un error al cargar el índice.</p>';
         console.error('Error fetching course index:', error);

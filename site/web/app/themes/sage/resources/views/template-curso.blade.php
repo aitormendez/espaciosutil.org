@@ -70,7 +70,7 @@
           </ul>
         </aside>
         <main class="mt-12 md:mt-0 md:w-2/3">
-          <h2 class="mb-6 font-sans text-2xl">Temas</h2>
+          <h2 id="course-topics-heading" class="mb-6 font-sans text-2xl">Temas</h2>
           <div id="indice-ajax-container" class="course-index prose-cde">
             <p>Selecciona un bloque de la serie para ver sus temas.</p>
           </div>
