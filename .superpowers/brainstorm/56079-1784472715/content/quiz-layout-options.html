@@ -1,0 +1,109 @@
+<style>
+  .quiz-intro { max-width: 820px; margin-bottom: 24px; }
+  .quiz-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px; align-items:start; }
+  .quiz-card { cursor:pointer; border:2px solid var(--border); border-radius:16px; overflow:hidden; background:var(--surface); transition:.18s ease; }
+  .quiz-card:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .quiz-card.selected { outline:3px solid var(--accent); outline-offset:3px; }
+  .quiz-card-meta { padding:16px 18px 18px; }
+  .quiz-card-meta h3 { margin:0 0 6px; display:flex; align-items:center; gap:8px; }
+  .quiz-card-meta p { margin:0; color:var(--text-secondary); font-size:14px; line-height:1.45; }
+  .badge { display:inline-flex; align-items:center; border-radius:999px; background:#d4ff84; color:#290511; padding:3px 8px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+  .phone { width:100%; height:568px; background:#4d183d; color:white; display:flex; flex-direction:column; font-family:system-ui,sans-serif; overflow:hidden; }
+  .q-top { padding:13px 15px 9px; flex:0 0 auto; }
+  .q-eyebrow { display:flex; justify-content:space-between; align-items:center; color:#d9bbd3; font-size:11px; text-transform:uppercase; letter-spacing:.13em; font-weight:700; }
+  .q-title { font-size:19px; line-height:1.18; margin:5px 0 4px; font-weight:750; }
+  .q-help { color:#dec8da; font-size:12px; line-height:1.35; margin:0; }
+  .q-counter { color:#d4ff84; letter-spacing:0; font-size:12px; }
+  .q-progress { height:4px; background:rgba(255,255,255,.14); margin-top:9px; border-radius:99px; overflow:hidden; }
+  .q-progress > i { display:block; width:8.3%; height:100%; background:#d4ff84; }
+  .q-question { padding:11px 15px 8px; font-size:17px; line-height:1.3; font-weight:760; flex:0 0 auto; }
+  .q-answers { padding:4px 15px 12px; display:flex; flex-direction:column; gap:7px; overflow:auto; min-height:0; flex:1 1 auto; position:relative; }
+  .q-answer { display:grid; grid-template-columns:19px 1fr; gap:8px; align-items:start; padding:9px 10px; border:1px solid rgba(255,255,255,.18); border-radius:6px; background:rgba(255,255,255,.055); font-size:13px; line-height:1.32; }
+  .check { width:15px; height:15px; margin-top:1px; border:1px solid #eadce7; border-radius:2px; background:white; }
+  .q-footer { flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 15px calc(10px + env(safe-area-inset-bottom)); border-top:1px solid rgba(255,255,255,.13); background:#411231; }
+  .q-btn { min-height:40px; border:1px solid rgba(255,255,255,.3); border-radius:5px; padding:8px 12px; color:white; background:transparent; font-size:13px; font-weight:700; }
+  .q-btn.primary { background:#d4ff84; color:#290511; border-color:#d4ff84; flex:1; }
+  .q-dots { display:flex; gap:4px; align-items:center; justify-content:center; padding:8px; }
+  .q-dots i { width:5px; height:5px; border-radius:50%; background:#bfa5ba; }
+  .q-dots i:first-child { background:#d4ff84; }
+  .legacy-head { text-align:center; padding:15px 15px 8px; }
+  .legacy-head .circle { margin:9px auto 3px; width:46px; height:46px; border-radius:50%; display:grid; place-items:center; background:#d4ff84; color:#8f0000; font-weight:800; }
+  .legacy-head .q-title { margin-top:2px; }
+  .legacy .q-question { padding-top:7px; }
+  .legacy .q-footer { flex-wrap:wrap; justify-content:center; }
+  .legacy .q-footer .q-btn.primary { flex-basis:100%; }
+  .one-answer .q-answers { justify-content:center; padding-top:8px; }
+  .one-answer .q-answer { font-size:15px; line-height:1.45; padding:18px 14px; }
+  .answer-step { text-align:center; color:#d9bbd3; font-size:12px; padding:5px 0 0; }
+  @media (max-width:700px) { .quiz-cards { grid-template-columns:1fr; } }
+</style>
+
+<div class="quiz-intro">
+  <h2>¿Qué estructura móvil funciona mejor?</h2>
+  <p class="subtitle">Las tres caben en una pantalla de 320 × 568 px. Pulsa una propuesta para seleccionarla.</p>
+</div>
+
+<div class="quiz-cards">
+  <div class="quiz-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="phone legacy">
+      <div class="legacy-head">
+        <div class="q-eyebrow" style="justify-content:center">Cuestionario</div>
+        <div class="q-title">Refuerza lo aprendido</div>
+        <div class="circle">1/12</div>
+      </div>
+      <div class="q-progress" style="margin:2px 15px 7px"><i></i></div>
+      <div class="q-question">¿Qué diferencia a la Trinidad del Paraíso de otras asociaciones trinitarias mencionadas?</div>
+      <div class="q-answers">
+        <div class="q-answer"><span class="check"></span><span>Es existencial, eterna y perfecta, mientras otras asociaciones se vinculan a niveles experienciales o funcionales.</span></div>
+        <div class="q-answer"><span class="check"></span><span>Pertenece únicamente al nivel finito y evolutivo.</span></div>
+        <div class="q-answer"><span class="check"></span><span>No expresa unidad de Deidad, sino una suma externa de tres seres separados.</span></div>
+      </div>
+      <div class="q-dots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="q-footer">
+        <button class="q-btn">←</button><button class="q-btn">→</button><button class="q-btn primary">Validar y continuar</button>
+      </div>
+    </div>
+    <div class="quiz-card-meta"><h3>A · Compactación conservadora</h3><p>Mantiene la identidad y el contador circular, pero la cabecera y el pie todavía restan bastante espacio a las respuestas.</p></div>
+  </div>
+
+  <div class="quiz-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="phone">
+      <div class="q-top">
+        <div class="q-eyebrow"><span>Cuestionario</span><span class="q-counter">Pregunta 1 de 12</span></div>
+        <div class="q-progress"><i></i></div>
+      </div>
+      <div class="q-question">¿Qué diferencia a la Trinidad del Paraíso de otras asociaciones trinitarias mencionadas?</div>
+      <div class="q-answers">
+        <div class="q-answer"><span class="check"></span><span>Es existencial, eterna y perfecta, mientras otras asociaciones se vinculan a niveles experienciales o funcionales.</span></div>
+        <div class="q-answer"><span class="check"></span><span>Pertenece únicamente al nivel finito y evolutivo.</span></div>
+        <div class="q-answer"><span class="check"></span><span>No expresa unidad de Deidad, sino una suma externa de tres seres separados.</span></div>
+        <div class="q-answer"><span class="check"></span><span>Solo tiene valor como imagen poética sin función cosmológica.</span></div>
+      </div>
+      <div class="q-footer">
+        <button class="q-btn" aria-label="Pregunta anterior">←</button>
+        <button class="q-btn primary">Validar y continuar</button>
+      </div>
+    </div>
+    <div class="quiz-card-meta"><h3>B · Modo enfocado <span class="badge">Recomendada</span></h3><p>Convierte el cuestionario en una mini app: estado arriba, pregunta fija, respuestas con scroll y una única acción principal siempre visible.</p></div>
+  </div>
+
+  <div class="quiz-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="phone one-answer">
+      <div class="q-top">
+        <div class="q-eyebrow"><span>Cuestionario</span><span class="q-counter">Pregunta 1 de 12</span></div>
+        <div class="q-progress"><i></i></div>
+      </div>
+      <div class="q-question">¿Qué diferencia a la Trinidad del Paraíso de otras asociaciones trinitarias mencionadas?</div>
+      <div class="answer-step">Respuesta 1 de 4</div>
+      <div class="q-answers">
+        <div class="q-answer"><span class="check"></span><span>Es existencial, eterna y perfecta, mientras otras asociaciones se vinculan a niveles experienciales o funcionales.</span></div>
+      </div>
+      <div class="q-dots"><i></i><i></i><i></i><i></i></div>
+      <div class="q-footer">
+        <button class="q-btn">← Respuesta</button>
+        <button class="q-btn primary">Siguiente respuesta →</button>
+      </div>
+    </div>
+    <div class="quiz-card-meta"><h3>C · Respuestas por pasos</h3><p>Ofrece el máximo aire y legibilidad, pero multiplica las pulsaciones y hace más difícil comparar opciones de respuesta múltiple.</p></div>
+  </div>
+</div>

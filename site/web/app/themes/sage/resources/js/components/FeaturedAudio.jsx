@@ -7,6 +7,11 @@ import {
   DefaultAudioLayout,
   defaultLayoutIcons,
 } from '@vidstack/react/player/layouts/default';
+import MobileAudioLayout from './MobileAudioLayout.jsx';
+import {
+  AUDIO_DESKTOP_MEDIA_QUERY,
+  resolveFeaturedAudioLayout,
+} from './featuredAudioLayout.js';
 import { fetchMediaMetadata } from '../utils/fetchMediaMetadata.js';
 import { buildChaptersVtt } from '../utils/mediaChapters.js';
 
@@ -38,6 +43,15 @@ const FeaturedAudio = ({
   const [audioSrc, setAudioSrc] = useState(fallbackHlsUrl);
   const [posterUrl, setPosterUrl] = useState(fallbackPosterUrl);
   const [chapterTrackUrl, setChapterTrackUrl] = useState(null);
+  const [audioLayout, setAudioLayout] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) {
+      return 'desktop';
+    }
+
+    return resolveFeaturedAudioLayout(
+      window.matchMedia(AUDIO_DESKTOP_MEDIA_QUERY).matches
+    );
+  });
   const lastSavedTime = useRef(0);
   const saveInterval = 5;
 
@@ -52,6 +66,33 @@ const FeaturedAudio = ({
     setAudioSrc(fallbackHlsUrl);
     setPosterUrl(fallbackPosterUrl);
   }, [fallbackHlsUrl, fallbackPosterUrl]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia(AUDIO_DESKTOP_MEDIA_QUERY);
+    const handleLayoutChange = ({ matches }) => {
+      setAudioLayout(resolveFeaturedAudioLayout(matches));
+    };
+
+    handleLayoutChange(mediaQuery);
+
+    if (typeof mediaQuery.addEventListener === 'function') {
+      mediaQuery.addEventListener('change', handleLayoutChange);
+      return () => {
+        mediaQuery.removeEventListener('change', handleLayoutChange);
+      };
+    }
+
+    if (typeof mediaQuery.addListener === 'function') {
+      mediaQuery.addListener(handleLayoutChange);
+      return () => {
+        mediaQuery.removeListener(handleLayoutChange);
+      };
+    }
+
+    return undefined;
+  }, []);
 
   useEffect(() => {
     if (!audioId || !audioLibraryId) {
@@ -258,7 +299,7 @@ const FeaturedAudio = ({
       : null;
 
   return (
-    <div className="featured-audio-player w-full max-w-3xl rounded-lg bg-morado4/60 p-6 shadow-lg shadow-morado4/40">
+    <div className="featured-audio-player w-full max-w-3xl rounded-lg bg-morado4/60 p-4 shadow-lg shadow-morado4/40 md:p-6">
       {posterUrl ? (
         <div className="mb-4 flex justify-center">
           <img
@@ -285,7 +326,11 @@ const FeaturedAudio = ({
             <Track kind="chapters" src={chapterTrackUrl} label="Subíndice" default />
           ) : null}
         </MediaProvider>
-        <DefaultAudioLayout icons={defaultLayoutIcons} />
+        {audioLayout === 'desktop' ? (
+          <DefaultAudioLayout icons={defaultLayoutIcons} />
+        ) : (
+          <MobileAudioLayout />
+        )}
       </MediaPlayer>
     </div>
   );

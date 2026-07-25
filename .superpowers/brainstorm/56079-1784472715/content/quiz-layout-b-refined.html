@@ -1,0 +1,58 @@
+<style>
+  .refined-wrap { display:grid; grid-template-columns:minmax(280px,320px) minmax(280px,520px); gap:32px; align-items:center; justify-content:center; margin-top:24px; }
+  .refined-phone { height:568px; overflow:hidden; display:flex; flex-direction:column; background:#4d183d; color:#fff; border-radius:14px; box-shadow:0 20px 55px rgba(0,0,0,.24); font-family:system-ui,sans-serif; font-weight:400; }
+  .refined-top { padding:13px 15px 9px; flex:0 0 auto; }
+  .refined-state { display:flex; justify-content:space-between; gap:12px; color:#d9bbd3; font-size:11px; line-height:1.2; text-transform:uppercase; letter-spacing:.12em; font-weight:500; }
+  .refined-count { color:#d4ff84; letter-spacing:0; }
+  .refined-progress { height:4px; margin-top:9px; overflow:hidden; border-radius:99px; background:rgba(255,255,255,.14); }
+  .refined-progress i { display:block; width:8.3%; height:100%; background:#d4ff84; }
+  .refined-question { padding:11px 15px 9px; flex:0 0 auto; font-size:17px; line-height:1.32; font-weight:500; }
+  .refined-answers { min-height:0; padding:4px 15px 12px; display:flex; flex:1 1 auto; flex-direction:column; gap:7px; overflow:auto; }
+  .refined-answer { display:grid; grid-template-columns:19px 1fr; gap:8px; align-items:start; padding:9px 10px; border:1px solid rgba(255,255,255,.18); border-radius:6px; background:rgba(255,255,255,.055); font-size:14px; line-height:1.34; font-weight:400; }
+  .refined-check { width:15px; height:15px; margin-top:2px; border:1px solid #eadce7; border-radius:2px; background:#fff; }
+  .refined-footer { flex:0 0 auto; display:flex; gap:8px; padding:10px 15px; border-top:1px solid rgba(255,255,255,.13); background:#411231; }
+  .refined-button { min-width:44px; min-height:44px; padding:8px 12px; border:1px solid rgba(255,255,255,.3); border-radius:5px; color:#fff; background:transparent; font-size:14px; font-weight:500; }
+  .refined-button.primary { flex:1; border-color:#d4ff84; background:#d4ff84; color:#290511; }
+  .refined-notes h3 { margin-bottom:12px; }
+  .refined-notes ul { margin:0; padding-left:20px; color:var(--text-secondary); }
+  .refined-notes li { margin:9px 0; line-height:1.5; }
+  .weight-sample { margin-top:20px; padding:14px 16px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+  .weight-sample p { margin:4px 0; }
+  @media (max-width:720px) { .refined-wrap { grid-template-columns:minmax(280px,320px); } }
+</style>
+
+<h2>Propuesta B refinada</h2>
+<p class="subtitle">Misma estructura enfocada, sin negritas: peso normal para contenido y medium únicamente para jerarquía y acciones.</p>
+
+<div class="refined-wrap">
+  <div class="refined-phone">
+    <div class="refined-top">
+      <div class="refined-state"><span>Cuestionario</span><span class="refined-count">Pregunta 1 de 12</span></div>
+      <div class="refined-progress"><i></i></div>
+    </div>
+    <div class="refined-question">¿Qué diferencia a la Trinidad del Paraíso de otras asociaciones trinitarias mencionadas?</div>
+    <div class="refined-answers">
+      <div class="refined-answer"><span class="refined-check"></span><span>Es existencial, eterna y perfecta, mientras otras asociaciones se vinculan a niveles experienciales o funcionales.</span></div>
+      <div class="refined-answer"><span class="refined-check"></span><span>Pertenece únicamente al nivel finito y evolutivo.</span></div>
+      <div class="refined-answer"><span class="refined-check"></span><span>No expresa unidad de Deidad, sino una suma externa de tres seres separados.</span></div>
+      <div class="refined-answer"><span class="refined-check"></span><span>Solo tiene valor como imagen poética sin función cosmológica.</span></div>
+    </div>
+    <div class="refined-footer">
+      <button class="refined-button" aria-label="Pregunta anterior">←</button>
+      <button class="refined-button primary">Validar y continuar</button>
+    </div>
+  </div>
+
+  <div class="refined-notes">
+    <h3>Jerarquía tipográfica</h3>
+    <ul>
+      <li><strong style="font-weight:500">Medium (500):</strong> pregunta, estado y botones.</li>
+      <li><span>Normal (400): respuestas.</span></li>
+      <li>No se empleará <strong style="font-weight:500">semibold</strong> ni <strong style="font-weight:500">bold</strong> en el layout móvil.</li>
+    </ul>
+    <div class="weight-sample">
+      <p style="font-weight:500">Pregunta y acciones · 500</p>
+      <p style="font-weight:400">Texto de las respuestas · 400</p>
+    </div>
+  </div>
+</div>

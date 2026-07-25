@@ -89,8 +89,15 @@
         ];
       @endphp
       <section class="bg-morado4/90 not-prose mx-auto my-10 w-full max-w-4xl rounded-sm px-6 py-6 font-sans text-white"
-        id="lesson-quiz" data-quiz-props='@json($quiz_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
-        <header class="mb-4 text-center">
+        id="lesson-quiz" data-quiz-state="questions" data-quiz-last="false"
+        data-quiz-props='@json($quiz_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
+        <header class="quiz-mobile-status" aria-label="Progreso del cuestionario">
+          <span>Cuestionario</span>
+          <span class="quiz-mobile-counter">
+            Pregunta <span data-quiz-counter-current>1</span> de <span data-quiz-counter-total>0</span>
+          </span>
+        </header>
+        <header class="quiz-desktop-header mb-4 text-center">
           <p class="font-display text-morado1 text-sm uppercase tracking-[0.2em]">Cuestionario</p>
           <h2 class="font-display text-2xl font-semibold leading-tight text-white">Refuerza lo aprendido</h2>
           <p class="text-morado1 mt-1 text-base">Responde las preguntas. Puede haber varias opciones
@@ -118,8 +125,8 @@
             <div
               class="quiz-footer grid grid-cols-1 grid-rows-[auto_auto_auto] items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:grid-rows-1">
               <div
-                class="col-start-1 row-start-2 flex items-center gap-2 justify-self-center md:col-start-1 md:row-start-1 md:justify-self-start">
-                <button type="button"
+                class="quiz-navigation col-start-1 row-start-2 flex items-center gap-2 justify-self-center md:col-start-1 md:row-start-1 md:justify-self-start">
+                <button type="button" aria-label="Pregunta anterior"
                   class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
                   ←
                 </button>
@@ -130,10 +137,11 @@
               </div>
               <button type="button"
                 class="quiz-validate-next text-morado5 hover:bg-sol col-start-1 row-start-1 justify-self-center rounded-full bg-green-500 px-4 py-3 text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 md:col-start-2 md:row-start-1">
-                Validar y pasar a la siguiente
+                <span class="quiz-validate-mobile">Validar y continuar</span>
+                <span class="quiz-validate-desktop">Validar y pasar a la siguiente</span>
               </button>
               <div
-                class="col-start-1 row-start-3 flex items-center gap-3 justify-self-center md:col-start-3 md:row-start-1 md:justify-self-end">
+                class="quiz-actions col-start-1 row-start-3 flex items-center gap-3 justify-self-center md:col-start-3 md:row-start-1 md:justify-self-end">
                 <button type="button"
                   class="quiz-submit bg-morado1 text-morado5 hover:bg-morado2 rounded-sm px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-white/40">
                   Finalizar

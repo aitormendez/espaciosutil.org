@@ -4,6 +4,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+import { getQuizNavigationState } from './quizState.js';
+
 const parseQuizProps = (container) => {
   try {
     return JSON.parse(container.dataset.quizProps || '{}');
@@ -259,14 +261,33 @@ const updateProgressBar = (root, currentIndex, totalQuestions) => {
 };
 
 const updateQuizCounter = (root, currentIndex, totalQuestions) => {
-  const currentEl = root.querySelector('[data-quiz-counter-current]');
-  const totalEl = root.querySelector('[data-quiz-counter-total]');
-  if (!currentEl && !totalEl) return;
+  const currentElements = root.querySelectorAll('[data-quiz-counter-current]');
+  const totalElements = root.querySelectorAll('[data-quiz-counter-total]');
+  if (!currentElements.length && !totalElements.length) return;
   const total = Math.max(Number(totalQuestions) || 0, 0);
   const current =
     total > 0 ? Math.min(Math.max(currentIndex + 1, 1), total) : 0;
-  if (currentEl) currentEl.textContent = String(current);
-  if (totalEl) totalEl.textContent = String(total);
+  currentElements.forEach((element) => {
+    element.textContent = String(current);
+  });
+  totalElements.forEach((element) => {
+    element.textContent = String(total);
+  });
+};
+
+const updateQuizNavigation = (root, activeIndex, totalQuestions) => {
+  const navigationState = getQuizNavigationState(
+    activeIndex,
+    totalQuestions
+  );
+  const previousButton = root.querySelector('.quiz-prev');
+
+  root.dataset.quizLast = navigationState.isLast ? 'true' : 'false';
+  if (previousButton) {
+    previousButton.disabled = navigationState.previousDisabled;
+  }
+
+  return navigationState;
 };
 
 const setQuizCounterVisibility = (root, isVisible) => {
@@ -307,6 +328,7 @@ const initLessonQuiz = () => {
   const postId = props.postId;
 
   if (!postId || !Array.isArray(questions) || questions.length === 0) {
+    container.dataset.quizState = 'summary';
     renderEmpty(target, 'No hay cuestionario disponible.');
     return;
   }
@@ -365,15 +387,19 @@ const initLessonQuiz = () => {
           }
           updateProgressBar(container, activeIndex, state.questions.length);
           updateQuizCounter(container, activeIndex, state.questions.length);
+          const navigationState = updateQuizNavigation(
+            container,
+            activeIndex,
+            state.questions.length
+          );
           const currentSlide = state.swiper.slides[activeIndex];
           const selection = state.selections[activeIndex] || [];
           applySelectionsToSlide(currentSlide, selection);
           const validateBtn = container.querySelector('.quiz-validate-next');
           if (validateBtn) {
-            validateBtn.style.display =
-              activeIndex === state.questions.length - 1
-                ? 'none'
-                : 'inline-block';
+            validateBtn.style.display = navigationState.showValidate
+              ? 'inline-block'
+              : 'none';
           }
         },
       },
@@ -381,9 +407,16 @@ const initLessonQuiz = () => {
 
     updateProgressBar(container, 0, state.questions.length);
     updateQuizCounter(container, 0, state.questions.length);
+    const navigationState = updateQuizNavigation(
+      container,
+      0,
+      state.questions.length
+    );
     const validateBtn = container.querySelector('.quiz-validate-next');
-    if (validateBtn && state.questions.length === 1) {
-      validateBtn.style.display = 'none';
+    if (validateBtn) {
+      validateBtn.style.display = navigationState.showValidate
+        ? 'inline-block'
+        : 'none';
     }
   };
 
@@ -423,6 +456,8 @@ const initLessonQuiz = () => {
 
   const goToSummary = (saveStatus) => {
     state.finished = true;
+    container.dataset.quizState = 'summary';
+    container.dataset.quizLast = 'false';
     updateQuizCounter(
       container,
       state.questions.length - 1,
@@ -434,6 +469,8 @@ const initLessonQuiz = () => {
 
   const restart = () => {
     state.finished = false;
+    container.dataset.quizState = 'questions';
+    container.dataset.quizLast = 'false';
     state.selections = {};
     state.answers = [];
     state.saveStatus = null;
