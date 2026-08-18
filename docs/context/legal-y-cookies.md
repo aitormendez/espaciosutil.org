@@ -29,6 +29,9 @@ Configuración asociada:
 - La validación del formulario comprueba captcha y consentimiento.
 - PMPro enlaza a la página publicada de condiciones.
 - El checkout exige una aceptación expresa de inicio inmediato del contenido digital.
+- El checkout CDE muestra además un aviso informativo, sin checkbox comercial, sobre las comunicaciones necesarias del servicio y la sincronización del email/nombre con el proveedor de correo.
+- La oposición a esas comunicaciones de servicio no cancela ni modifica la membresía CDE.
+- La política de privacidad documenta esta finalidad contractual, el proveedor técnico de envío y el derecho de oposición.
 
 ## Banner y panel de cookies
 
@@ -67,3 +70,5 @@ Configuración asociada:
 - `site/web/app/themes/sage/resources/css/components/cookie-consent.css`
 - `site/web/app/themes/sage/resources/css/commons/forms.css`
 - `site/web/app/themes/sage/resources/views/page.blade.php`
+- `site/web/app/mu-plugins/espaciosutil-cde-listmonk-sync.php`
+- `docs/estructura-legal-y-cookies.md`

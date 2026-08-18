@@ -60,6 +60,16 @@ Documento de referencia para la landing de suscripción, la lógica de trial per
   - renovaciones normales: recordatorio a 7 días
   - primer cobro tras trial: recordatorio a 2 días
 
+## Sincronización de miembros CDE con Listmonk
+
+- Mu-plugin: `site/web/app/mu-plugins/espaciosutil-cde-listmonk-sync.php`.
+- Niveles CDE: `11`, `12` y `13`; PMPro devuelve el trial vigente como nivel activo y se aplica la misma regla.
+- El flag `ESPACIOSUTIL_CDE_LISTMONK_SYNC_ENABLED` está apagado por defecto y controla hooks y worker, no los endpoints privados necesarios para preparar el dry-run.
+- `pmpro_after_change_membership_level` y `profile_update` solo encolan una acción local `espaciosutil_cde_listmonk_process_event` en el grupo `espaciosutil_cde_listmonk`.
+- El evento hacia n8n solo incluye `event_id`, `external_subject`, `event_kind`, `occurred_at` y `contract_version`; no incluye email ni nombre.
+- Snapshot, miembros activos y resultado técnico se exponen bajo `/wp-json/espaciosutil/v1/cde-membership/` con un Bearer dedicado diferente del de Atlas.
+- Contrato, variables, despliegue y rollback: `docs/cde-listmonk-wordpress.md`.
+
 ## Preview y pruebas
 
 - Hay una pantalla de preview de emails en desarrollo:
@@ -184,6 +194,7 @@ Notas operativas:
 3. Verificar alta, orden inicial a cero, trial y emails.
 4. Ejecutar `php site/tests/atlas-cde-membership-endpoint.php`.
 5. Verificar `/atlas/` como anonimo, usuario logueado sin membresia y usuario con nivel CDE activo.
+6. Ejecutar `php site/tests/cde-listmonk-sync.php` antes de desplegar la integración CDE–Listmonk.
 
 ## Archivos clave
 
@@ -196,5 +207,8 @@ Notas operativas:
 - `site/web/app/mu-plugins/espaciosutil-atlas-cde-membership.php`
 - `site/web/app/mu-plugins/espaciosutil-pmpro-trials.php`
 - `site/web/app/mu-plugins/espaciosutil-pmpro-email-preview.php`
+- `site/web/app/mu-plugins/espaciosutil-cde-listmonk-sync.php`
+- `site/tests/cde-listmonk-sync.php`
+- `docs/cde-listmonk-wordpress.md`
 - `site/web/app/themes/sage/paid-memberships-pro/email/header.html`
 - `site/web/app/themes/sage/paid-memberships-pro/email/footer.html`

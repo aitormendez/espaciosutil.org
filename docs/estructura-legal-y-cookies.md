@@ -254,6 +254,7 @@ Texto propuesto:
 > - mantener un registro funcional del progreso del alumno y de determinadas interacciones necesarias para la prestación del servicio;
 > - permitir la conexión autorizada de una cuenta de TikTok con `Espacio Sutil Publisher`, mostrar la cuenta conectada, guardar de forma segura los tokens necesarios para mantener la autorización y ejecutar publicaciones asistidas en nombre del usuario cuando este las confirme expresamente;
 > - enviar comunicaciones de servicio relacionadas con la cuenta, los pagos, la membresía o incidencias;
+> - enviar por correo las comunicaciones estrictamente necesarias sobre el Curso de Desarrollo Espiritual —por ejemplo, avisos operativos, cambios relevantes del servicio o información imprescindible para utilizar la membresía—, diferenciadas de cualquier comunicación comercial;
 > - cumplir obligaciones legales, contables, fiscales y de seguridad;
 > - obtener estadísticas de uso y mejorar el sitio, únicamente si has consentido la analítica.
 >
@@ -271,6 +272,7 @@ Texto propuesto:
 > Tus datos podrán comunicarse o ponerse a disposición de proveedores que intervienen en la prestación del servicio, por ejemplo:
 >
 > - proveedores de alojamiento, mantenimiento técnico, correo y seguridad;
+> - el sistema de listas y automatización de correo operado por Libranzai, SL mediante Listmonk y n8n, que trata el nombre y correo de la cuenta únicamente para distribuir comunicaciones necesarias del servicio CDE bajo instrucciones del responsable;
 > - Stripe, como proveedor de pagos y gestión de cobros recurrentes;
 > - proveedores estrictamente necesarios para la entrega técnica de contenidos digitales, como servicios de streaming o CDN;
 > - TikTok y sus servicios para desarrolladores, cuando el usuario utilice `Espacio Sutil Publisher` para autorizar una cuenta o publicar contenido mediante dicha plataforma;
@@ -291,6 +293,8 @@ Texto propuesto:
 > ### 7. Derechos
 >
 > Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad, así como retirar en cualquier momento los consentimientos otorgados, enviando una solicitud a admin@espaciosutil.org e identificándote adecuadamente.
+>
+> Puedes oponerte específicamente a las comunicaciones por email necesarias del servicio CDE mediante el mecanismo de baja incluido en esos mensajes o escribiendo a la misma dirección. Esta oposición se conserva para futuras reactivaciones y no cancela por sí sola tu cuenta, tu suscripción ni el acceso al curso. Las comunicaciones transaccionales imprescindibles para ejecutar pagos, seguridad o cambios solicitados por ti podrán seguir enviándose cuando exista una base jurídica distinta y resulte necesario.
 >
 > Si consideras que tus derechos no han sido atendidos correctamente, puedes presentar una reclamación ante la Agencia Española de Protección de Datos: https://www.aepd.es
 >
