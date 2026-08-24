@@ -23,7 +23,7 @@
     </li>
   </ul>
 
-  @php(dynamic_sidebar('sidebar-footer'))
+  @php dynamic_sidebar('sidebar-footer'); @endphp
 
   <x-navigation-footer name="footer_navigation" />
 

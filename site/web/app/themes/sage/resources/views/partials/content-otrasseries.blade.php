@@ -15,7 +15,7 @@
     </header>
 
     <div class="entry-summary">
-      @php(the_excerpt())
+      @php the_excerpt(); @endphp
     </div>
   </div>
 </li>

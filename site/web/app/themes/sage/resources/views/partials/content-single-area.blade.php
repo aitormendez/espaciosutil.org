@@ -1,11 +1,11 @@
-<article @php(post_class('h-entry'))>
+<article @php post_class('h-entry'); @endphp>
   @include('partials.post-header')
 
   @php $series = get_field('area_series_relacionadas') @endphp
   <div
     class="border-blanco text-blanco bg-morado5/90 max relative flex flex-col flex-wrap justify-center border-t pb-20">
     <div class="contenido prose prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
-      @php(the_content())
+      @php the_content(); @endphp
     </div>
 
     <ul class="series-relacionadas prose prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 md:px-0">
@@ -21,5 +21,5 @@
 
   </div>
 
-  @php(comments_template())
+  @php comments_template(); @endphp
 </article>

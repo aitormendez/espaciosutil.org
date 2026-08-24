@@ -1,4 +1,4 @@
-<article @php(post_class('h-entry'))>
+<article @php post_class('h-entry'); @endphp>
   <header>
     @include('partials.post-header')
 
@@ -7,7 +7,7 @@
 
   <div class="e-content border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-20">
     <div class="contenido prose prose-xl md:prose-2xl mx-auto mt-24 w-full max-w-4xl px-6 !leading-tight md:px-0">
-      @php(the_content())
+      @php the_content(); @endphp
     </div>
   </div>
   <footer>
@@ -18,5 +18,5 @@
     ]) !!}
   </footer>
 
-  @php(comments_template())
+  @php comments_template(); @endphp
 </article>

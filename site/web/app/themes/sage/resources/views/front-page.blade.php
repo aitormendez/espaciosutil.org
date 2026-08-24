@@ -89,7 +89,7 @@
 
   <section class="w-full border-t px-6 py-12 md:px-0">
     <div class="page-content prose prose-xl md:prose-2xl mx-auto max-w-4xl !leading-tight">
-      @php(the_content())</div>
+      @php the_content(); @endphp</div>
   </section>
 
 

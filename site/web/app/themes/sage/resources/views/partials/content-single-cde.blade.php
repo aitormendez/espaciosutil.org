@@ -159,7 +159,7 @@
 
     @include('partials.videos-realacionados-cde')
 
-    @php(comments_template())
+    @php comments_template(); @endphp
   @else
     <div class="prose prose-xl md:prose-2xl mb-8 w-full !p-6 md:px-0">
       <div class="bg-morado3 mx-auto mt-8 max-w-4xl rounded p-4 text-white">

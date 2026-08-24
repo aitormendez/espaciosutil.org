@@ -7,7 +7,7 @@
         <div
             class="posts prose prose-xl md:prose-2xl relative max-w-none !leading-tight">
             @while (have_posts())
-                @php(the_post())
+                @php the_post(); @endphp
                 @includeFirst(['partials.content-' . get_post_type(), 'partials.content'])
             @endwhile
         </div>

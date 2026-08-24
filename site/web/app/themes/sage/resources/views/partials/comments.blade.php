@@ -44,6 +44,6 @@
       </x-alert>
     @endif
 
-    @php(comment_form())
+    @php comment_form(); @endphp
   </div>
 </section>

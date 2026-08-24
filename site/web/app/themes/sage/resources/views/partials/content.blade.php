@@ -1,4 +1,4 @@
-<article @php(post_class('relative px-6 border-b border-gris4'))>
+<article @php post_class('relative px-6 border-b border-gris4'); @endphp>
   <header>
     <h2 class="entry-title mx-auto w-full max-w-4xl">
       <a href="{{ get_permalink() }}">
@@ -8,6 +8,6 @@
   </header>
 
   <div class="entry-summary mx-auto w-full max-w-4xl">
-    @php(the_excerpt())
+    @php the_excerpt(); @endphp
   </div>
 </article>

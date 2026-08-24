@@ -13,7 +13,7 @@
 
         <ul class="series-relacionadas mx-auto mt-24 w-full max-w-4xl px-6 md:px-0">
             @while (have_posts())
-                @php(the_post())
+                @php the_post(); @endphp
                 @includeFirst(['partials.content-' . get_post_type(), 'partials.content'])
             @endwhile
         </ul>

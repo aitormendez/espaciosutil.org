@@ -1,4 +1,4 @@
-<article @php(post_class('h-entry'))>
+<article @php post_class('h-entry'); @endphp>
   <header>
     <h1 class="p-name">
       {!! $title !!}
@@ -8,7 +8,7 @@
   </header>
 
   <div class="e-content">
-    @php(the_content())
+    @php the_content(); @endphp
   </div>
 
   <footer>
@@ -19,5 +19,5 @@
     ]) !!}
   </footer>
 
-  @php(comments_template())
+  @php comments_template(); @endphp
 </article>

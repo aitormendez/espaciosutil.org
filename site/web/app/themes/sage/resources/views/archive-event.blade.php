@@ -9,7 +9,7 @@
         <div class="posts prose relative mt-24">
             <h2 class="">Próximos eventos</h2>
             @while (have_posts())
-                @php(the_post())
+                @php the_post(); @endphp
                 @includeFirst(['partials.content-' . get_post_type(), 'partials.content'])
             @endwhile
         </div>

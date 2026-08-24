@@ -1,6 +1,6 @@
 @php $enlaces = get_field('serie_enlaces') @endphp
 
-<article @php(post_class('h-entry prose  w-full max-w-none'))>
+<article @php post_class('h-entry prose  w-full max-w-none'); @endphp>
   <header class="mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-6 text-center">
     <h1 class="p-name mb-0 pt-24 text-center text-5xl font-thin md:text-7xl">
       {!! $title !!}
@@ -40,7 +40,7 @@
     </div>
 
     <div class="relative mx-auto max-w-4xl px-6 text-3xl">
-      @php(the_content())
+      @php the_content(); @endphp
     </div>
   </div>
 </article>
