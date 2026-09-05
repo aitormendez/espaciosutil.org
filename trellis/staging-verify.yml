@@ -1,0 +1,53 @@
+---
+- name: Determine administrative connection
+  hosts: web:&staging
+  gather_facts: false
+  roles:
+    - connection
+
+- name: Verify dedicated staging services
+  hosts: web:&staging
+  become: true
+  tasks:
+    - name: Refuse any other server
+      assert:
+        that:
+          - inventory_hostname == '138.68.135.185'
+          - ansible_hostname == 'espacio-sutil-staging'
+        quiet: true
+    - name: Check services
+      command: "systemctl is-active {{ item }}"
+      loop: [nginx, php8.4-fpm, mariadb, ferm, fail2ban]
+      changed_when: false
+    - name: Check autostart
+      command: "systemctl is-enabled {{ item }}"
+      loop: [nginx, php8.4-fpm, mariadb, ferm, fail2ban]
+      changed_when: false
+    - name: Check SSH protections
+      shell: "sshd -T | grep -E '^(permitrootlogin|passwordauthentication) '"
+      register: ssh_config
+      changed_when: false
+    - name: Require key authentication and no root login
+      assert:
+        that:
+          - "'permitrootlogin no' in ssh_config.stdout"
+          - "'passwordauthentication no' in ssh_config.stdout"
+        quiet: true
+    - name: Require absent WordPress cron
+      stat:
+        path: /etc/cron.d/wordpress-espaciosutil_org
+      register: wp_cron
+    - name: Check cron absence
+      assert:
+        that: not wp_cron.stat.exists
+        quiet: true
+    - name: Inspect listening sockets
+      command: ss -lntup
+      changed_when: false
+      register: sockets
+    - name: Show listening sockets
+      debug:
+        var: sockets.stdout_lines
+    - name: Validate nginx configuration
+      command: nginx -t
+      changed_when: false
