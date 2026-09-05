@@ -16,3 +16,7 @@ use Roots\WPConfig\Config;
  */
 
 Config::define('DISALLOW_INDEXING', true);
+
+Config::define('WP_ENVIRONMENT_TYPE', 'staging');
+Config::define('DISABLE_WP_CRON', true);
+Config::define('AUTOMATIC_UPDATER_DISABLED', true);

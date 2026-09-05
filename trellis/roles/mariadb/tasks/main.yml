@@ -3,11 +3,13 @@
   ansible.builtin.apt_key:
     url: "https://mariadb.org/mariadb_release_signing_key.asc"
     state: present
+  when: mariadb_use_external_repository | bool
 
 - name: Add MariaDB PPA
   apt_repository:
     repo: "{{ mariadb_ppa }}"
     update_cache: yes
+  when: mariadb_use_external_repository | bool
   register: result
   until: result is success
   retries: 3
@@ -62,7 +64,7 @@
         config_file: ""
         check_implicit_admin: yes
         state: present
-      no_log: false
+      no_log: true
       loop:
         - "{{ inventory_hostname }}"
         - 127.0.0.1

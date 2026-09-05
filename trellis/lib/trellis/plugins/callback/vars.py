@@ -97,7 +97,7 @@ class CallbackModule(CallbackBase):
         if env_group:
             env_group.set_priority(20)
 
-        for host in play.get_variable_manager()._inventory.list_hosts(play.hosts[0]):
+        for host in play.get_variable_manager()._inventory.get_hosts(play.hosts):
             hostvars = play.get_variable_manager().get_vars(play=play, host=host)
             self.raw_vars(play, host, hostvars)
             host.vars['cli_options'] = self.cli_options()

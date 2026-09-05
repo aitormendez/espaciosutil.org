@@ -1,6 +1,6 @@
 from ansible import __version__
 from ansible.errors import AnsibleError
-from distutils.version import LooseVersion
+from packaging.version import Version as LooseVersion
 from operator import eq, ge, gt
 from platform import python_version, python_version_tuple
 

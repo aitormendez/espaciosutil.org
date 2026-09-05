@@ -1,1 +1,19 @@
-mysql_root_password: "{{ vault_mysql_root_password }}" # Define this variable in group_vars/staging/vault.yml
+# Staging dedicado: espacio-sutil-staging (Ubuntu 24.04, 2 GiB).
+mysql_root_password: "{{ vault_mysql_root_password }}"
+mariadb_use_external_repository: false
+matomo_enabled: false
+cron_enabled: false
+sshd_permit_root_login: false
+php_memory_limit: 256M
+php_fpm_pm_max_children: 3
+php_fpm_pm_max_spare_servers: 2
+php_extensions_custom:
+  php8.4-soap: present
+# No instalar credenciales SMTP de producción en el servidor de pruebas.
+mail_smtp_server: 127.0.0.1:1025
+mail_hostname: stage.espaciosutil.org
+mail_admin: staging@invalid.example
+mail_user: ""
+mail_password: ""
+# No heredar claves de integraciones de producción.
+vault_wordpress_env_defaults: {}

@@ -11,5 +11,5 @@ db:
   ssh: "web@134.209.21.17:22"
   path: "/srv/www/espaciosutil.org/current/web/wp"
 "@staging":
-  ssh: "web@167.99.95.143:22"
+  ssh: "web@138.68.135.185:22"
   path: "/srv/www/espaciosutil.org/current/web/wp"
