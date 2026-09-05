@@ -24,7 +24,7 @@
   no_log: true
 
 - name: Activate staging plugins on first installation
-  command: wp plugin activate advanced-custom-fields-pro paid-memberships-pro espacio-sutil-blocks --skip-themes
+  command: wp plugin activate advanced-custom-fields-pro paid-memberships-pro espacio-sutil-blocks html-forms --skip-themes
   args:
     chdir: "{{ deploy_helper.new_release_path }}"
   when: wp_installed.rc == 1

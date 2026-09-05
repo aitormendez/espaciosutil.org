@@ -29,3 +29,5 @@ composer_authentications:
 deploy_finalize_before:
   - "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
   - "{{ playbook_dir }}/deploy-hooks/staging-install.yml"
+# Origen privado del VPS: se actualiza desde un bundle de la rama local.
+project_git_repo: /home/web/staging-source.git

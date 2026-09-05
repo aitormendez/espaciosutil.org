@@ -61,6 +61,8 @@
         password: "{{ mysql_root_password }}"
         plugin: mysql_native_password
         login_unix_socket: "{{ mariadb_login_unix_socket }}"
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
         config_file: ""
         check_implicit_admin: yes
         state: present

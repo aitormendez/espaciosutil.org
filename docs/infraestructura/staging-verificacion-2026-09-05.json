@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-05",
+  "host": "138.68.135.185",
+  "hostname": "espacio-sutil-staging",
+  "domain": "stage.espaciosutil.org",
+  "release": "20260905152352",
+  "web_commit": "a6fc6ea5",
+  "provision": {
+    "ok": 156,
+    "changed": 102,
+    "failed": 0
+  },
+  "deploy": {
+    "ok": 57,
+    "changed": 26,
+    "failed": 0
+  },
+  "service_checks": {
+    "ok": 15,
+    "changed": 0,
+    "failed": 0
+  },
+  "mariadb_repeat": {
+    "ok": 14,
+    "changed": 0,
+    "failed": 0
+  },
+  "http": {
+    "login_https": true,
+    "admin_login": true,
+    "public_page": true,
+    "noindex": true,
+    "test_session_removed": true
+  },
+  "wordpress": {
+    "version": "7.0.3",
+    "users": 1,
+    "checks": {
+      "environment": true,
+      "cron_disabled": true,
+      "indexing_disabled": true,
+      "browser_analytics_disabled": true,
+      "staging_admin": true,
+      "mail_blocked": true,
+      "listmonk_disabled": true,
+      "stripe_http_blocked": true,
+      "mailgun_http_blocked": true,
+      "webhook_http_blocked": true,
+      "no_live_integration_env": true
+    }
+  },
+  "limitations": [
+    "Sin importación de contenidos, alumnos o transacciones",
+    "Sin prueba vertical móvil",
+    "Sin prueba de restauración de backups",
+    "Rama sólo local; publicación pública no autorizada por revisión automática"
+  ]
+}
