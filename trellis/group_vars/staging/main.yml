@@ -25,3 +25,7 @@ composer_authentications:
   - hostname: composer.advancedcustomfields.com
     username: "{{ acf_pro_username }}"
     password: "{{ acf_pro_password }}"
+# Crear WordPress antes de exponer el instalador a través del enlace current.
+deploy_finalize_before:
+  - "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
+  - "{{ playbook_dir }}/deploy-hooks/staging-install.yml"

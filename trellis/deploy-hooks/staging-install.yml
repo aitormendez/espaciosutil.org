@@ -1,0 +1,42 @@
+---
+- name: Require staging for first installation
+  assert:
+    that:
+      - env == 'staging'
+      - inventory_hostname == '138.68.135.185'
+    quiet: true
+
+- name: Install a fresh staging WordPress before publishing the release
+  command:
+    argv:
+      - wp
+      - core
+      - install
+      - --url=https://stage.espaciosutil.org
+      - --title=Espacio Sutil — pruebas
+      - --admin_user=staging-admin
+      - "--admin_password={{ vault_wordpress_sites[site].admin_password }}"
+      - --admin_email=staging@example.invalid
+      - --skip-email
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: wp_installed.rc == 1
+  no_log: true
+
+- name: Activate staging plugins on first installation
+  command: wp plugin activate advanced-custom-fields-pro paid-memberships-pro espacio-sutil-blocks --skip-themes
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: wp_installed.rc == 1
+
+- name: Activate Sage on first installation
+  command: wp theme activate sage
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: wp_installed.rc == 1
+
+- name: Set staging permalink structure on first installation
+  command: wp rewrite structure /%postname%/
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  when: wp_installed.rc == 1
