@@ -30,7 +30,15 @@ if (WP_ENV !== 'staging') {
             verify($result instanceof WP_Error && $result->code === 'staging_outbound_disabled', 'Debe cortar la petición antes del transporte.');
         }
     }
+    putenv('CDE_STAGING_BUNNY_READ=1');
+    $bunny='https://video.bunnycdn.com/library/457097/videos/00000000-0000-0000-0000-000000000001';
+    verify(($filters['pre_http_request'])(false, ['method'=>'GET','redirection'=>0], $bunny) === false, 'Sólo debe permitir la lectura autorizada de Bunny.');
+    foreach ([['method'=>'POST','redirection'=>0],['method'=>'GET','redirection'=>1]] as $args) {
+        verify(($filters['pre_http_request'])(false, $args, $bunny) instanceof WP_Error, 'Debe bloquear escrituras y redirecciones.');
+    }
+    verify(($filters['pre_http_request'])(false, ['method'=>'GET','redirection'=>0], $bunny.'?redirect=1') instanceof WP_Error, 'Debe rechazar consultas fuera de la ruta exacta.');
     verify(($filters['espaciosutil_cde_listmonk_sync_enabled'])(true) === false, 'Debe desactivar la sincronización.');
     verify(($filters['espaciosutil_pmpro_autocomplete_stripe_token_orders'])(true) === false, 'Debe desactivar la consulta automática de pedidos.');
+    verify(($filters['action_scheduler_allow_async_request_runner'])(true) === false, 'Debe impedir la ejecución asíncrona de tareas.');
 }
 echo 'Aislamiento ' . WP_ENV . ": OK\n";

@@ -30,11 +30,13 @@
     "admin_login": true,
     "public_page": true,
     "noindex": true,
-    "test_session_removed": true
+    "test_session_removed": true,
+    "authorized_network_status": 200,
+    "external_network_status": 403
   },
   "wordpress": {
     "version": "7.0.3",
-    "users": 1,
+    "users": 21,
     "checks": {
       "environment": true,
       "cron_disabled": true,
@@ -46,13 +48,39 @@
       "stripe_http_blocked": true,
       "mailgun_http_blocked": true,
       "webhook_http_blocked": true,
-      "no_live_integration_env": true
+      "no_live_integration_env": true,
+      "async_tasks_disabled": true
     }
   },
   "limitations": [
-    "Sin importación de contenidos, alumnos o transacciones",
-    "Sin prueba vertical móvil",
-    "Sin prueba de restauración de backups",
-    "Rama sólo local; publicación pública no autorizada por revisión automática"
-  ]
+    "Autorizacion premium y API movil pendientes",
+    "Reproduccion Bunny pendiente; HTTP saliente bloqueado",
+    "Sin prueba vertical movil",
+    "Sin prueba de restauracion de backups",
+    "Acceso limitado a la IP publica autorizada; actualizar si cambia",
+    "Copia y configuracion posteriores a f8933a7 sin publicar"
+  ],
+  "copy": {
+    "source_host": "134.209.21.17",
+    "original_users": 16,
+    "synthetic_users": 5,
+    "published_lessons": 92,
+    "future_lessons": 1,
+    "published_pages": 77,
+    "attachments": 253,
+    "uploads_source_files": 1391,
+    "uploads_missing": 0,
+    "uploads_changed": 0,
+    "uploads_extra_htaccess": 1,
+    "membership_fixtures_verified": true,
+    "sessions_removed": true,
+    "integration_options_removed": true,
+    "gateway_sandbox": true,
+    "temporary_production_dump_removed": true,
+    "backup_before_sha256": "0ba50354741b1d83ba34d332e10127668dcc7348d832f244b06b3aab054ad5f7"
+  },
+  "live_patch_sha256": {
+    "site/web/app/mu-plugins/espaciosutil-staging-isolation.php": "5180da1d95c2b63732e370677e13fc776a67ac262135fafd2c1efeca70bb8d0f",
+    "site/tests/staging-live.php": "445d62209c33b199538be5423a0a361c3b1c3044caff13de1a895f9e379a6380"
+  }
 }

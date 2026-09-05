@@ -22,6 +22,7 @@ export async function fetchMediaMetadata({ mediaId, libraryId, signal } = {}) {
 
   const response = await fetch(`${BASE_ENDPOINT}?${params.toString()}`, {
     signal,
+    headers: window.wpApiSettings?.nonce ? { 'X-WP-Nonce': window.wpApiSettings.nonce } : {},
   });
 
   if (!response.ok) {

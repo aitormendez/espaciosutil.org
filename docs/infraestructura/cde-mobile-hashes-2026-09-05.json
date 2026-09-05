@@ -1,0 +1,18 @@
+{
+  "release": "20260905152352",
+  "all_match_staging": true,
+  "sha256": {
+    "site/web/app/mu-plugins/espaciosutil-cde-mobile.php": "33f5ea04273747756e6e81aad814b188f2b260a2f9bfd007707e4cb4cd03e5a1",
+    "site/web/app/mu-plugins/espaciosutil-staging-isolation.php": "ff2898f3849aa58544120be2c806c0b0dbd83634ea78f4a573ed764564492e42",
+    "site/web/app/mu-plugins/cde-mobile/access.php": "cbbf2b53356598c861bed60de2ccd56ed896534e9096ff4163649eaca0fab209",
+    "site/web/app/mu-plugins/cde-mobile/progress.php": "5380968ff227a251ebcaa180b5d553df5efdcf7ee3a25a2fdc4acbff81166d0c",
+    "site/web/app/mu-plugins/cde-mobile/storage.php": "4c086b0cb586eb92a7f11d9cf2abca31c6b149e7d727a935c50f8f6e7b22f7de",
+    "site/web/app/mu-plugins/cde-mobile/api.php": "1366f6e4f84e3ec10371db30dabae7e6898006e84d4b921306e950b96a57dee9",
+    "site/web/app/mu-plugins/cde-mobile/media.php": "4e885eec71e4a795710c70bc407a4f73c4c6863a28cfcd07aa8e746fb10001db",
+    "site/web/app/mu-plugins/cde-mobile/contract.json": "0d6949163860dbe4c5294be87823528815ca94ef707e393cf9c4df8b8531588a",
+    "site/web/app/mu-plugins/cde-mobile/legacy.php": "740fa73966315b51f173ebb5532b86952ba25644f047c2f0a94cba42c47ace85",
+    "site/web/app/plugins/espacio-sutil-blocks/includes/api/video-resolutions.php": "79d36f69a8ea6bdd1650da2d36a92f8fc02137fe897920158d7c07dfcf91782a",
+    "site/web/app/plugins/espacio-sutil-blocks/build/video/index.js": "c8f31224ed8d2ccd13f7ea7dfb9c459353d0abb6571179ed53b209eaf695af96",
+    "site/web/app/plugins/espacio-sutil-blocks/build/video/view.js": "ff374cf7f3353db812ac616d573e33c2a767855d092e13ec6a18d24bd6c0596b"
+  }
+}

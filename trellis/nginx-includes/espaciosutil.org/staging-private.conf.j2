@@ -1,0 +1,10 @@
+{% if env == 'staging' %}
+# Staging privado durante la copia y las pruebas con datos reales.
+allow 127.0.0.1;
+allow ::1;
+{% for address in vault_staging_allowed_ips %}
+allow {{ address }};
+{% endfor %}
+deny all;
+if (-f /srv/www/espaciosutil.org/shared/staging-import.lock) { return 503; }
+{% endif %}

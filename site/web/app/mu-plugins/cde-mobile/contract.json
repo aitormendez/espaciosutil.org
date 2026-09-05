@@ -1,0 +1,696 @@
+{
+  "Error": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "code",
+      "message",
+      "request_id",
+      "retryable"
+    ],
+    "properties": {
+      "code": {
+        "type": "string",
+        "minLength": 1
+      },
+      "message": {
+        "type": "string",
+        "minLength": 1
+      },
+      "request_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "retryable": {
+        "type": "boolean"
+      }
+    }
+  },
+  "LoginRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "login",
+      "password",
+      "device_label"
+    ],
+    "properties": {
+      "login": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 254
+      },
+      "password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "writeOnly": true
+      },
+      "device_label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      }
+    }
+  },
+  "RefreshRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "refresh_token"
+    ],
+    "properties": {
+      "refresh_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512,
+        "writeOnly": true
+      }
+    }
+  },
+  "TokenPair": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "token_type",
+      "access_token",
+      "access_expires_at",
+      "refresh_token",
+      "refresh_expires_at"
+    ],
+    "properties": {
+      "token_type": {
+        "type": "string",
+        "enum": [
+          "Bearer"
+        ]
+      },
+      "access_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512
+      },
+      "access_expires_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "refresh_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512
+      },
+      "refresh_expires_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "Access": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "granted",
+      "reason",
+      "checked_at",
+      "expires_at"
+    ],
+    "properties": {
+      "granted": {
+        "type": "boolean"
+      },
+      "reason": {
+        "type": "string",
+        "enum": [
+          "active",
+          "no_membership",
+          "expired",
+          "cancelled"
+        ]
+      },
+      "checked_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "expires_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Me": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "display_name",
+      "access"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "display_name": {
+        "type": "string"
+      },
+      "access": {
+        "$ref": "#/components/schemas/Access"
+      }
+    }
+  },
+  "Node": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "parent_id",
+      "kind",
+      "title",
+      "order",
+      "has_children",
+      "lesson_id",
+      "study_state"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "parent_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "series",
+          "block",
+          "lesson",
+          "container"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "order": {
+        "type": "integer"
+      },
+      "has_children": {
+        "type": "boolean"
+      },
+      "lesson_id": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "study_state": {
+        "type": "string",
+        "enum": [
+          "not_started",
+          "in_progress",
+          "viewed",
+          "unknown"
+        ]
+      }
+    }
+  },
+  "Course": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revision",
+      "nodes",
+      "continue_lesson_id"
+    ],
+    "properties": {
+      "revision": {
+        "type": "string",
+        "minLength": 1
+      },
+      "nodes": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Node"
+        }
+      },
+      "continue_lesson_id": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Completion": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "viewed",
+      "revision",
+      "updated_at"
+    ],
+    "properties": {
+      "viewed": {
+        "type": "boolean"
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "updated_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Lesson": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "node_id",
+      "breadcrumb_node_ids",
+      "content_revision",
+      "completion"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "node_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "breadcrumb_node_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "content_revision": {
+        "type": "string",
+        "minLength": 1
+      },
+      "completion": {
+        "$ref": "#/components/schemas/Completion"
+      }
+    },
+    "description": "Cabecera para la prueba vertical; el esquema completo de introducción, resumen y cuestionario sigue pendiente y no se sustituye por HTML."
+  },
+  "Chapter": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "start_seconds",
+      "end_seconds",
+      "section_id"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "start_seconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "end_seconds": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "section_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Caption": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "language",
+      "label",
+      "url",
+      "format",
+      "is_default"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "language": {
+        "type": "string",
+        "minLength": 2
+      },
+      "label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "format": {
+        "type": "string",
+        "enum": [
+          "webvtt",
+          "hls"
+        ]
+      },
+      "is_default": {
+        "type": "boolean"
+      }
+    }
+  },
+  "Media": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "version",
+      "kind",
+      "duration_seconds",
+      "hls_url",
+      "thumbnail_url",
+      "expires_at",
+      "chapters",
+      "captions",
+      "request_headers"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "video",
+          "audio"
+        ]
+      },
+      "duration_seconds": {
+        "anyOf": [
+          {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "hls_url": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "thumbnail_url": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "expires_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "chapters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Chapter"
+        }
+      },
+      "captions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Caption"
+        }
+      },
+      "request_headers": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Referer": {
+            "type": "string",
+            "const": "https://espaciosutil.org/"
+          }
+        }
+      }
+    }
+  },
+  "MediaCollection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "lesson_id",
+      "items"
+    ],
+    "properties": {
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Media"
+        }
+      }
+    }
+  },
+  "Progress": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "lesson_id",
+      "media_id",
+      "media_version",
+      "position_seconds",
+      "revision",
+      "updated_at"
+    ],
+    "properties": {
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "media_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "media_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "position_seconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "updated_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "ProgressCollection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Progress"
+        }
+      }
+    }
+  },
+  "ProgressWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "expected_revision",
+      "media_id",
+      "media_version",
+      "position_seconds"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "media_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "media_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "position_seconds": {
+        "type": "number",
+        "minimum": 0
+      }
+    }
+  },
+  "ProgressSaved": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "progress"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "progress": {
+        "$ref": "#/components/schemas/Progress"
+      }
+    }
+  },
+  "CompletionWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "expected_revision",
+      "viewed"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "viewed": {
+        "type": "boolean"
+      }
+    }
+  },
+  "CompletionSaved": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "lesson_id",
+      "completion"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "completion": {
+        "$ref": "#/components/schemas/Completion"
+      }
+    }
+  }
+}

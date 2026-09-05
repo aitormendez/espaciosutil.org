@@ -48,12 +48,15 @@ function es_blocks_fetch_media_details($video_id, $library_id)
     $api_endpoint = "https://video.bunnycdn.com/library/{$library_id}/videos/{$video_id}";
 
     $response = wp_remote_get($api_endpoint, [
+        'redirection' => 0,
+        'timeout' => 15,
+        'limit_response_size' => 1048576,
         'headers' => [
             'AccessKey' => $api_key,
         ],
     ]);
 
-    if (is_wp_error($response)) {
+    if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
         return [];
     }
 

@@ -1,0 +1,33 @@
+---
+- name: Connect to staging
+  hosts: web:&staging
+  gather_facts: false
+  roles: [connection]
+- name: Restrict staging web access
+  hosts: web:&staging
+  become: true
+  tasks:
+    - assert:
+        that:
+          - env == 'staging'
+          - inventory_hostname == '138.68.135.185'
+          - vault_staging_allowed_ips | length > 0
+        quiet: true
+    - file:
+        path: /etc/nginx/includes.d/espaciosutil.org
+        state: directory
+        mode: '0755'
+    - template:
+        src: nginx-includes/espaciosutil.org/staging-private.conf.j2
+        dest: /etc/nginx/includes.d/espaciosutil.org/staging-private.conf
+        mode: '0644'
+      no_log: true
+    - lineinfile:
+        path: /etc/nginx/acme-challenge-location.conf
+        insertafter: '^location '
+        line: '  allow all;'
+    - command: nginx -t
+      changed_when: false
+    - service:
+        name: nginx
+        state: reloaded

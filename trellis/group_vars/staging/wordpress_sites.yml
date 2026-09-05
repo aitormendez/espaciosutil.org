@@ -23,3 +23,6 @@ wordpress_sites:
       disable_wp_cron: true
       transactional_email_from: staging@invalid.example
       transactional_email_name: Espacio Sutil
+      bunny_key: "{{ vault_cde_staging_bunny_key | default('') }}"
+      bunny_pull_zone: "{{ vault_cde_staging_bunny_pull_zone | default('') }}"
+      cde_staging_bunny_read: "{{ '1' if vault_cde_staging_bunny_key | default('') else '0' }}"

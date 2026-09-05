@@ -11,11 +11,13 @@ $checks = [
     'staging_admin' => (bool) get_user_by('login', 'staging-admin'),
     'mail_blocked' => wp_mail('fixture@example.invalid', 'Prueba de aislamiento', 'Mensaje sintético') === false,
     'listmonk_disabled' => apply_filters('espaciosutil_cde_listmonk_sync_enabled', true) === false,
+    'async_tasks_disabled' => apply_filters('action_scheduler_allow_async_request_runner', true) === false,
 ];
 foreach (['https://api.stripe.com/v1/charges', 'https://api.eu.mailgun.net/v3/messages', 'https://example.invalid/webhook'] as $index => $url) {
     $result = wp_remote_post($url, ['timeout' => 1, 'body' => ['fixture' => 'synthetic']]);
     $checks['http_blocked_' . $index] = is_wp_error($result) && $result->get_error_code() === 'staging_outbound_disabled';
 }
-$checks['no_live_integration_env'] = ! getenv('BUNNY_KEY') && ! getenv('YOUTUBE_API_KEY') && ! getenv('LISTMONK_API_KEY') && ! getenv('STRIPE_SECRET_KEY');
+$checks['bunny_read_enabled'] = getenv('CDE_STAGING_BUNNY_READ') === '1' && (bool) getenv('BUNNY_KEY');
+$checks['no_payment_or_mail_integration_env'] = ! getenv('YOUTUBE_API_KEY') && ! getenv('LISTMONK_API_KEY') && ! getenv('STRIPE_SECRET_KEY');
 WP_CLI::line(wp_json_encode(['checks' => $checks, 'wordpress' => get_bloginfo('version'), 'users' => count_users()['total_users']], JSON_PRETTY_PRINT));
 if (in_array(false, $checks, true)) { WP_CLI::error('Falló una comprobación de aislamiento.'); }
