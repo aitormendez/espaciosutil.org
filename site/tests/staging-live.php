@@ -7,7 +7,7 @@ $checks = [
     'environment' => WP_ENV === 'staging',
     'cron_disabled' => defined('DISABLE_WP_CRON') && DISABLE_WP_CRON,
     'indexing_disabled' => defined('DISALLOW_INDEXING') && DISALLOW_INDEXING,
-    'browser_analytics_disabled' => function_exists('App\\matomo_tracking_url') && \App\matomo_tracking_url() === '',
+    'browser_analytics_disabled' => function_exists('matomo_tracking_url') && matomo_tracking_url() === '',
     'staging_admin' => (bool) get_user_by('login', 'staging-admin'),
     'mail_blocked' => wp_mail('fixture@example.invalid', 'Prueba de aislamiento', 'Mensaje sintético') === false,
     'listmonk_disabled' => apply_filters('espaciosutil_cde_listmonk_sync_enabled', true) === false,
