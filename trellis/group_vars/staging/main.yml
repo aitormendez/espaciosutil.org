@@ -17,3 +17,11 @@ mail_user: ""
 mail_password: ""
 # No heredar claves de integraciones de producción.
 vault_wordpress_env_defaults: {}
+# Credenciales de descarga del plugin ACF; no son credenciales de alumnos o pagos.
+composer_authentications:
+  - hostname: connect.advancedcustomfields.com
+    username: "{{ acf_pro_username }}"
+    password: "{{ acf_pro_password }}"
+  - hostname: composer.advancedcustomfields.com
+    username: "{{ acf_pro_username }}"
+    password: "{{ acf_pro_password }}"
