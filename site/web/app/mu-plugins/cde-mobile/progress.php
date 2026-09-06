@@ -24,8 +24,26 @@ final class Progress
     }
     public static function read(int $user,int $lesson,array $media): array
     {
-        return ['lesson_id'=>$lesson,'media_id'=>$media['id'],'media_version'=>$media['version'],'position_seconds'=>max(0,(float)self::meta($user,'video_progress_'.$media['id']))]+self::revision($user,'p:'.$media['id']);
+        $canonical=self::meta($user,'cde_lesson_progress_'.$lesson);
+        if (is_array($canonical) && isset($canonical['position_seconds'])) {
+            $position=(float)$canonical['position_seconds'];
+            $revision=self::revision($user,'p:lesson:'.$lesson);
+        } else {
+            // Lectura sin migración: última escritura conocida, nunca máximo de posición.
+            $position=0.0;$revision=['revision'=>0,'updated_at'=>null];$selected=false;
+            foreach (Media::identities($lesson) as $entry) {
+                $legacy=self::revision($user,'p:'.$entry['id']);
+                $revision['revision']=max($revision['revision'],$legacy['revision']);
+                $raw=self::meta($user,'video_progress_'.$entry['id']);
+                if ($raw===null) continue;
+                if (!$selected || strcmp($legacy['updated_at']??'', $revision['updated_at']??'')>0) {
+                    $position=(float)$raw;$revision['updated_at']=$legacy['updated_at'];$selected=true;
+                }
+            }
+        }
+        return ['lesson_id'=>$lesson,'media_id'=>$media['id'],'media_version'=>$media['version'],'position_seconds'=>max(0,$position)]+$revision;
     }
+
     public static function completion(int $user,int $lesson): array
     {
         $ids=array_map('intval',(array)self::meta($user,'cde_completed_lessons'));
@@ -40,7 +58,7 @@ final class Progress
         if ($media && (!is_numeric($body['position_seconds']) || !is_finite((float)$body['position_seconds']) || $body['position_seconds']<0 || ($media['duration_seconds']!==null && $body['position_seconds']>$media['duration_seconds']))) return Access::error('invalid_position',422);
         $lock='cde-mobile-user-'.$user;
         if ((int)$wpdb->get_var($wpdb->prepare('SELECT GET_LOCK(%s,5)',$lock))!==1) return Access::error('storage_busy',503);
-        $resource=$media?'p:'.$media['id']:'c:'.$lesson;$receipts=Schema::table('receipts');$revisions=Schema::table('revisions');
+        $resource=$media?'p:lesson:'.$lesson:'c:'.$lesson;$receipts=Schema::table('receipts');$revisions=Schema::table('revisions');
         ksort($body);$hash=hash('sha256',wp_json_encode([$lesson,$resource,$body]));
         try {
             Schema::query('START TRANSACTION');
@@ -50,7 +68,7 @@ final class Progress
             }
             $current=$media?self::read($user,$lesson,$media):self::completion($user,$lesson);
             if (!$legacy && $body['expected_revision']!==$current['revision']) { Schema::query('ROLLBACK'); return Access::error('revision_conflict',409); }
-            if ($media) self::saveMeta($user,'video_progress_'.$media['id'],(float)$body['position_seconds']);
+            if ($media) self::saveMeta($user,'cde_lesson_progress_'.$lesson,['position_seconds'=>(float)$body['position_seconds']]);
             else {
                 $ids=array_map('intval',(array)self::meta($user,'cde_completed_lessons'));
                 $ids=array_values(array_diff($ids,[$lesson]));if ($body['viewed']) $ids[]=$lesson;
@@ -58,6 +76,13 @@ final class Progress
             }
             $revision=$current['revision']+1;$now=gmdate('c');
             Schema::query($wpdb->prepare("INSERT INTO $revisions (user_id,resource,revision,updated_at) VALUES (%d,%s,%d,%s) ON DUPLICATE KEY UPDATE revision=VALUES(revision),updated_at=VALUES(updated_at)",$user,$resource,$revision,$now));
+            if ($media) {
+                // Proyecciones para lectores web antiguos, atómicas con el dato canónico.
+                foreach (Media::identities($lesson) as $entry) {
+                    self::saveMeta($user,'video_progress_'.$entry['id'],(float)$body['position_seconds']);
+                    Schema::query($wpdb->prepare("INSERT INTO $revisions (user_id,resource,revision,updated_at) VALUES (%d,%s,%d,%s) ON DUPLICATE KEY UPDATE revision=VALUES(revision),updated_at=VALUES(updated_at)",$user,'p:'.$entry['id'],$revision,$now));
+                }
+            }
             $state=$media?self::read($user,$lesson,$media):self::completion($user,$lesson);
             $result=$media?['operation_id'=>$body['operation_id'],'progress'=>$state]:['operation_id'=>$body['operation_id'],'lesson_id'=>$lesson,'completion'=>$state];
             if (!$legacy) {

@@ -2,7 +2,7 @@
 namespace EspacioSutil\Mobile;
 
 // Adaptadores de las escrituras web: el dato y la revisión se confirman en el mismo servicio.
-add_filter('rest_request_before_callbacks',static function($response,$handler,$request){
+add_filter('rest_dispatch_request',static function($response,$request,$route,$handler){
     if($response!==null || $request->get_method()!=='POST')return $response;
     $route=rtrim($request->get_route(),'/');$user=get_current_user_id();
     if(!in_array($route,['/cde/v1/complete','/espacio-sutil/v1/video-progress','/cde/v1/quiz/submit'],true))return $response;
@@ -26,4 +26,15 @@ add_filter('rest_request_before_callbacks',static function($response,$handler,$r
         }
         return Access::error('media_unavailable',404);
     }catch(\Throwable $e){return Access::error('service_unavailable',503);}
-},20,3);
+},20,4);
+
+// Las lecturas web también consultan el punto canónico, incluida la transición histórica.
+add_filter('rest_dispatch_request',static function($response,$request,$route,$handler){
+    if($response!==null || $request->get_method()!=='GET' || rtrim($request->get_route(),'/')!=='/espacio-sutil/v1/video-progress')return $response;
+    $user=get_current_user_id();$id=(string)$request->get_param('video_id');$lesson=Media::lessonFor($id);
+    if(!$lesson)return $response;
+    $permission=Access::lesson($lesson,$user);if($permission!==true)return $permission;
+    if(!Schema::ready())return Access::error('storage_unavailable',503);
+    foreach(Media::identities($lesson) as $media)if($media['id']===$id)return new \WP_REST_Response(['progress'=>Progress::read($user,$lesson,$media)['position_seconds']]);
+    return Access::error('media_unavailable',404);
+},20,4);

@@ -1,0 +1,22 @@
+{
+    "passed": true,
+    "checks": {
+        "legacy_latest_time_not_largest_position": true,
+        "get_does_not_migrate": true,
+        "web_get_uses_shared_legacy_selection": true,
+        "video_write": true,
+        "audio_reads_video_position_revision": true,
+        "idempotent_receipt": true,
+        "uuid_reuse_rejected": true,
+        "stale_other_media_conflicts": true,
+        "audio_backward_shared": true,
+        "legacy_meta_projected_atomically": true,
+        "out_of_range_does_not_write": true,
+        "changed_media_rejected": true,
+        "web_audio_write_updates_video": true,
+        "never_marks_viewed": true,
+        "anonymous_cannot_write": true,
+        "receipt_revalidates_access": true
+    },
+    "count": 16
+}
