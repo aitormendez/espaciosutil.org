@@ -13,6 +13,22 @@ final class Media
         }
         return $items;
     }
+    /** Invalida la verificación si cambia cualquiera de los medios o capítulos. */
+    public static function audioChapterFingerprint(int $lesson): string
+    {
+        $source=[];
+        foreach (['video','audio'] as $kind) {
+            $source[]=(string)get_post_meta($lesson,'featured_'.$kind.'_id',true);
+            $source[]=(string)get_post_meta($lesson,'featured_'.$kind.'_library_id',true)?:'457097';
+        }
+        $source[]=function_exists('get_field')?(array)get_field('lesson_subindex_items',$lesson):[];
+        return hash('sha256',wp_json_encode($source));
+    }
+    public static function audioChaptersVerified(int $lesson): bool
+    {
+        $verified=(string)get_post_meta($lesson,'_cde_mobile_audio_chapters_verified',true);
+        return $verified!=='' && hash_equals(self::audioChapterFingerprint($lesson),$verified);
+    }
     public static function entries(int $lesson): array
     {
         $items=[];
@@ -23,8 +39,8 @@ final class Media
             $details=self::details($id,$library);
             if (is_wp_error($details)) throw new \RuntimeException('Medio temporalmente no disponible.');
             $chapters=[];
-            // La edición de audio no tiene todavía un mapa temporal propio verificado.
-            if ($kind==='video' && function_exists('get_field')) foreach ((array)get_field('lesson_subindex_items',$lesson) as $i=>$row) {
+            // Sólo reutilizar el subíndice tras verificar el par y su mapa temporal.
+            if (($kind==='video' || self::audioChaptersVerified($lesson)) && function_exists('get_field')) foreach ((array)get_field('lesson_subindex_items',$lesson) as $i=>$row) {
                 $time=(string)($row['timecode']??'');
                 if (!preg_match('/^(?:\d{1,2}:)?[0-5]?\d:[0-5]\d$/',$time)) continue;
                 $seconds=0;foreach(explode(':',$time) as $part)$seconds=$seconds*60+(int)$part;
