@@ -7,6 +7,7 @@ final class API
     {
         foreach ([
             ['/auth/login','POST','login','LoginRequest'],['/auth/refresh','POST','refresh','RefreshRequest'],['/auth/logout','POST','logout','RefreshRequest'],
+            ['/lessons/(?P<lessonId>\d+)/study','GET','study',null],['/lessons/(?P<lessonId>\d+)/quiz','GET','quiz',null],['/lessons/(?P<lessonId>\d+)/quiz/attempt','PUT','quizWrite','QuizWrite'],
             ['/me','GET','me',null],['/course','GET','course',null],['/lessons/(?P<lessonId>\d+)','GET','lesson',null],
             ['/lessons/(?P<lessonId>\d+)/media','GET','media',null],['/progress','GET','progress',null],
             ['/progress/(?P<lessonId>\d+)','PUT','saveProgress','ProgressWrite'],['/lessons/(?P<lessonId>\d+)/completion','PUT','saveCompletion','CompletionWrite'],
@@ -45,6 +46,7 @@ final class API
             $lesson=absint($r->get_param('lessonId'));
             if ($lesson && ($permission=Access::lesson($lesson,$user))!==true) return self::response($permission);
             return self::response(match($action) {
+                'study'=>Study::read($lesson), 'quiz'=>Quiz::read($user,$lesson), 'quizWrite'=>Quiz::write($user,$lesson,$body),
                 'course'=>self::course($user), 'lesson'=>self::lesson($user,$lesson),
                 'media'=>['lesson_id'=>$lesson,'items'=>Media::entries($lesson)],
                 'progress'=>self::progress($user),
