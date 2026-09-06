@@ -66,6 +66,46 @@ final class API
         if ($row && $row->enddate!=='0000-00-00 00:00:00') $expires=gmdate('c',strtotime($row->enddate.' UTC'));
         return ['id'=>$user,'display_name'=>get_userdata($user)->display_name,'access'=>['granted'=>$granted,'reason'=>$reason,'checked_at'=>gmdate('c'),'expires_at'=>$expires]];
     }
+    /** Deriva actividad sin escribir ni consultar Bunny; sólo lecciones autorizadas. */
+    private static function activity(int $user,array $lessons): array
+    {
+        global $wpdb;
+        $keys=['cde_completed_lessons'];$resources=[];$streams=[];
+        foreach($lessons as $id) {
+            foreach(['cde_lesson_progress_','cde_quiz_attempt_','cde_quiz_result_'] as $prefix)$keys[]=$prefix.$id;
+            $resources['p:lesson:'.$id]=$id;$resources['q:'.$id]=$id;
+            foreach(Media::identities($id) as $media) {
+                $keys[]='video_progress_'.$media['id'];
+                $resources['p:'.$media['id']]=$id;$streams[$id][]=$media['id'];
+            }
+        }
+        $keys=array_values(array_unique($keys));$placeholders=implode(',',array_fill(0,count($keys),'%s'));
+        $rows=$wpdb->get_results($wpdb->prepare("SELECT meta_key,meta_value FROM {$wpdb->usermeta} WHERE user_id=%d AND meta_key IN ($placeholders) ORDER BY umeta_id",$user,...$keys),ARRAY_A);
+        if($wpdb->last_error)throw new \RuntimeException('Actividad no disponible.');
+        $meta=[];foreach($rows as $row)if(!array_key_exists($row['meta_key'],$meta))$meta[$row['meta_key']]=maybe_unserialize($row['meta_value']);
+        $completed=array_map('intval',(array)($meta['cde_completed_lessons']??[]));$started=[];$recent=[];
+        $table=Schema::table('revisions');
+        $rows=$wpdb->get_results($wpdb->prepare("SELECT resource,revision,updated_at FROM $table WHERE user_id=%d",$user),ARRAY_A);
+        if($wpdb->last_error)throw new \RuntimeException('Actividad no disponible.');
+        foreach($rows as $row) {
+            $id=$resources[$row['resource']]??null;
+            if(!$id || (int)$row['revision']<=0)continue;
+            $started[$id]=true;
+            // No hay fechas inventadas para las claves históricas sin revisión.
+            $time=strtotime($row['updated_at']);
+            if($time!==false)$recent[$id]=max($recent[$id]??PHP_INT_MIN,$time);
+        }
+        $states=[];
+        foreach($lessons as $id) {
+            $active=isset($started[$id]) || (float)($meta['cde_lesson_progress_'.$id]['position_seconds']??0)>0
+                || !empty($meta['cde_quiz_attempt_'.$id]) || !empty($meta['cde_quiz_result_'.$id]);
+            foreach($streams[$id]??[] as $stream)if((float)($meta['video_progress_'.$stream]??0)>0)$active=true;
+            $states[$id]=in_array($id,$completed,true)?'viewed':($active?'in_progress':'not_started');
+        }
+        $continue=null;$latest=PHP_INT_MIN;
+        foreach($recent as $id=>$time)if($time>$latest || ($time===$latest && ($continue===null || $id<$continue))){$continue=$id;$latest=$time;}
+        return ['states'=>$states,'continue'=>$continue];
+    }
     public static function course(int $user): array
     {
         $posts=get_posts(['post_type'=>'cde','post_status'=>'publish','posts_per_page'=>-1,'orderby'=>['menu_order'=>'ASC','ID'=>'ASC'],'suppress_filters'=>false]);
@@ -75,6 +115,7 @@ final class API
         foreach($posts as $post)$map[$post->ID]=$post;
         foreach($terms as $term)$termMap[$term->term_id]=$term;
         foreach($posts as $post)if(Access::lesson($post->ID,$user)===true){$allowed[$post->ID]=true;foreach(get_post_ancestors($post) as $p)if(isset($map[$p]))$allowed[$p]??=false;}
+        $activity=self::activity($user,array_keys(array_filter($allowed)));
         foreach($terms as $term)$nodes['term:'.$term->term_id]=['id'=>'term:'.$term->term_id,'parent_id'=>$term->parent?'term:'.$term->parent:null,'kind'=>$term->parent?'block':'series','title'=>$term->name,'order'=>(int)($term->term_order??$term->term_id),'has_children'=>false,'lesson_id'=>null,'study_state'=>'unknown'];
         foreach($allowed as $id=>$open) {
             $post=$map[$id];$parent=null;
@@ -83,17 +124,14 @@ final class API
                 $assigned=wp_get_post_terms($id,'serie_cde');
                 if(!is_wp_error($assigned)&&$assigned){usort($assigned,fn($a,$b)=>count(get_ancestors($b->term_id,'serie_cde'))<=>count(get_ancestors($a->term_id,'serie_cde'))?:$a->term_id<=>$b->term_id);$parent='term:'.$assigned[0]->term_id;}
             }
-            $viewed=$open?Progress::completion($user,$id)['viewed']:false;
-            $nodes['lesson:'.$id]=['id'=>'lesson:'.$id,'parent_id'=>$parent,'kind'=>$open?'lesson':'container','title'=>wp_strip_all_tags(get_the_title($id)),'order'=>(int)$post->menu_order,'has_children'=>false,'lesson_id'=>$open?$id:null,'study_state'=>$open?($viewed?'viewed':'not_started'):'unknown'];
+            $nodes['lesson:'.$id]=['id'=>'lesson:'.$id,'parent_id'=>$parent,'kind'=>$open?'lesson':'container','title'=>wp_strip_all_tags(get_the_title($id)),'order'=>(int)$post->menu_order,'has_children'=>false,'lesson_id'=>$open?$id:null,'study_state'=>$open?$activity['states'][$id]:'unknown'];
         }
         // Eliminar términos vacíos y marcar hijos después de construir el árbol autorizado.
         do {$changed=false;$parents=array_column($nodes,'parent_id');foreach($nodes as $id=>$node)if(str_starts_with($id,'term:')&&!in_array($id,$parents,true)){unset($nodes[$id]);$changed=true;}}while($changed);
         foreach($nodes as $node)if($node['parent_id']&&isset($nodes[$node['parent_id']]))$nodes[$node['parent_id']]['has_children']=true;
         $items=array_values($nodes);usort($items,fn($a,$b)=>$a['order']<=>$b['order']?:strcmp($a['id'],$b['id']));
-        $continue=null;global $wpdb;$rev=Schema::table('revisions');
-        $recent=$wpdb->get_col($wpdb->prepare("SELECT resource FROM $rev WHERE user_id=%d AND resource LIKE 'p:%%' ORDER BY updated_at DESC LIMIT 20",$user));
-        foreach($recent as $r){$candidate=Media::lessonFor(substr($r,2));if($candidate&&($allowed[$candidate]??false)){$continue=$candidate;break;}}
-        return ['revision'=>hash('sha256',wp_json_encode($items)),'nodes'=>$items,'continue_lesson_id'=>$continue];
+        $continue=$activity['continue'];
+        return ['revision'=>hash('sha256',wp_json_encode([$items,$continue])),'nodes'=>$items,'continue_lesson_id'=>$continue];
     }
     private static function lesson(int $user,int $id): array
     {
