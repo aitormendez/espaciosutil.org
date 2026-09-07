@@ -752,5 +752,212 @@
       "selected"
     ],
     "additionalProperties": false
+  },
+  "ProfileWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expected_revision",
+      "display_name",
+      "first_name",
+      "last_name"
+    ],
+    "properties": {
+      "expected_revision": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "display_name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "first_name": {
+        "type": "string",
+        "maxLength": 120
+      },
+      "last_name": {
+        "type": "string",
+        "maxLength": 120
+      }
+    }
+  },
+  "AvatarWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expected_revision",
+      "image_base64"
+    ],
+    "properties": {
+      "expected_revision": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "image_base64": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 2800000
+      }
+    }
+  },
+  "EmailStart": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "email",
+      "current_password"
+    ],
+    "properties": {
+      "email": {
+        "type": "string",
+        "format": "email",
+        "maxLength": 254
+      },
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      }
+    }
+  },
+  "EmailConfirm": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "code"
+    ],
+    "properties": {
+      "code": {
+        "type": "string",
+        "pattern": "^[0-9]{6}$",
+        "writeOnly": true
+      }
+    }
+  },
+  "PasswordWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "current_password",
+      "new_password"
+    ],
+    "properties": {
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      },
+      "new_password": {
+        "type": "string",
+        "minLength": 12,
+        "maxLength": 128,
+        "writeOnly": true
+      }
+    }
+  },
+  "SupportWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "subject",
+      "message",
+      "privacy_consent"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "subject": {
+        "type": "string",
+        "enum": [
+          "Acceso al curso",
+          "Uso de la app",
+          "Otro"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 5000
+      },
+      "privacy_consent": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      }
+    }
+  },
+  "GuestSupportWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "subject",
+      "message",
+      "privacy_consent",
+      "name",
+      "email",
+      "challenge_token",
+      "answer",
+      "website"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "subject": {
+        "type": "string",
+        "enum": [
+          "Acceso al curso",
+          "Uso de la app",
+          "Otro"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 5000
+      },
+      "privacy_consent": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "maxLength": 254
+      },
+      "challenge_token": {
+        "type": "string",
+        "maxLength": 800,
+        "minLength": 1
+      },
+      "answer": {
+        "type": "string",
+        "pattern": "^[0-9]{1,2}$"
+      },
+      "website": {
+        "type": "string",
+        "enum": [
+          ""
+        ]
+      }
+    }
   }
 }

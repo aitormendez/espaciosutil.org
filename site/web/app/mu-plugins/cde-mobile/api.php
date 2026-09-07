@@ -6,6 +6,11 @@ final class API
     public static function register(): void
     {
         foreach ([
+            ['/support/challenge','GET','supportChallenge',null],['/support','POST','supportPublic','GuestSupportWrite'],['/privacy','GET','publicPrivacy',null],
+            ['/account/profile','GET','accountProfile',null],['/account/profile','PUT','accountProfileWrite','ProfileWrite'],
+            ['/account/avatar','PUT','accountAvatar','AvatarWrite'],['/account/email','POST','accountEmail','EmailStart'],
+            ['/account/email/confirm','POST','accountEmailConfirm','EmailConfirm'],['/account/password','POST','accountPassword','PasswordWrite'],
+            ['/account/privacy','GET','accountPrivacy',null],['/account/support','POST','accountSupport','SupportWrite'],
             ['/auth/login','POST','login','LoginRequest'],['/auth/refresh','POST','refresh','RefreshRequest'],['/auth/logout','POST','logout','RefreshRequest'],
             ['/lessons/(?P<lessonId>\d+)/study','GET','study',null],['/lessons/(?P<lessonId>\d+)/quiz','GET','quiz',null],['/lessons/(?P<lessonId>\d+)/quiz/attempt','PUT','quizWrite','QuizWrite'],
             ['/me','GET','me',null],['/course','GET','course',null],['/lessons/(?P<lessonId>\d+)','GET','lesson',null],
@@ -36,12 +41,21 @@ final class API
                 $valid=rest_validate_value_from_schema($body,$schemas[$schema],'body');
                 if (is_wp_error($valid)) return self::response(Access::error('invalid_request',422));
             }
+            if ($action==='supportChallenge')return self::response(Account::supportChallenge());
+            if ($action==='supportPublic')return self::response(Account::publicSupport($body));
+            if ($action==='publicPrivacy')return self::response(Account::privacy());
             if ($action==='login') return self::response(Sessions::login($body));
             if ($action==='refresh' || $action==='logout') return self::response(Sessions::refresh($body['refresh_token'],$action==='logout'));
             $header=$r->get_header('authorization');
             if (!preg_match('/^Bearer ([A-Za-z0-9_-]{43})$/D',$header,$m)) return self::response(Access::error('session_required',401));
             $user=Sessions::user($m[1]);if (is_wp_error($user)) return self::response($user);
             if ($action==='me') return self::response(self::me($user));
+            if (str_starts_with($action,'account')) return self::response(match($action) {
+                'accountProfile'=>Account::profile($user), 'accountProfileWrite'=>Account::updateProfile($user,$body),
+                'accountAvatar'=>Account::avatar($user,$body), 'accountEmail'=>Account::startEmail($user,$body),
+                'accountEmailConfirm'=>Account::confirmEmail($user,$body), 'accountPassword'=>Account::passwordChange($user,$body),
+                'accountPrivacy'=>Account::privacy(), 'accountSupport'=>Account::support($user,$body),
+            });
             if (($permission=Access::member($user))!==true)return self::response($permission);
             $lesson=absint($r->get_param('lessonId'));
             if ($lesson && ($permission=Access::lesson($lesson,$user))!==true) return self::response($permission);
