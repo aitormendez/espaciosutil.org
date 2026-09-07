@@ -20,6 +20,7 @@ add_filter('pre_http_request', static function ($pre, $args, $url) {
         && preg_match('~^https://video\.bunnycdn\.com/library/457097/videos/[a-f0-9-]{36}$~iD', $url)) {
         return $pre;
     }
+    if (class_exists('EspacioSutil\\Mobile\\StripeMembership') && \EspacioSutil\Mobile\StripeMembership::allowsTestRequest($args, $url)) return $pre;
     return new WP_Error('staging_outbound_disabled', 'Las conexiones salientes están desactivadas en staging.');
 }, PHP_INT_MAX, 3);
 add_filter('espaciosutil_cde_listmonk_sync_enabled', '__return_false', PHP_INT_MAX);

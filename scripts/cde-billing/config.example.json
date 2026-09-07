@@ -1,0 +1,28 @@
+{
+  "apple": {
+    "enabled": false,
+    "environment": "sandbox",
+    "bundle_id": "org.espaciosutil.cde.staging",
+    "app_apple_id": null,
+    "subscription_group_id": "",
+    "issuer_id": "",
+    "key_id": "",
+    "private_key_file": "",
+    "root_certificates": [],
+    "products": {}
+  },
+  "google": {
+    "enabled": false,
+    "environment": "sandbox",
+    "package_id": "org.espaciosutil.cde.staging",
+    "service_account_file": "",
+    "notification_audience": "",
+    "notification_service_account": "",
+    "products": {}
+  },
+  "stripe": {
+    "enabled": false,
+    "environment": "sandbox",
+    "secret_key_file": ""
+  }
+}

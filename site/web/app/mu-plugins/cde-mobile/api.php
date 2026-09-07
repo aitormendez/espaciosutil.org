@@ -6,6 +6,11 @@ final class API
     public static function register(): void
     {
         foreach ([
+            ['/membership','GET','membership',null],['/membership/intent','POST','membershipIntent','MembershipIntent'],
+            ['/membership/purchase','POST','membershipPurchase','MembershipPurchase'],['/membership/manage','POST','membershipManage','MembershipManage'],
+            ['/membership/notifications/apple','POST','appleNotification','AppleNotification'],['/membership/notifications/google','POST','googleNotification','GoogleNotification'],
+            ['/auth/register','POST','register','RegistrationStart'],['/auth/register/confirm','POST','registerConfirm','RegistrationConfirm'],
+            ['/account/delete','POST','accountDelete','AccountDelete'],
             ['/support/challenge','GET','supportChallenge',null],['/support','POST','supportPublic','GuestSupportWrite'],['/privacy','GET','publicPrivacy',null],
             ['/account/profile','GET','accountProfile',null],['/account/profile','PUT','accountProfileWrite','ProfileWrite'],
             ['/account/avatar','PUT','accountAvatar','AvatarWrite'],['/account/email','POST','accountEmail','EmailStart'],
@@ -41,6 +46,9 @@ final class API
                 $valid=rest_validate_value_from_schema($body,$schemas[$schema],'body');
                 if (is_wp_error($valid)) return self::response(Access::error('invalid_request',422));
             }
+            if ($action==='register')return self::response(Registration::start($body));
+            if ($action==='registerConfirm')return self::response(Registration::confirm($body));
+            if ($action==='appleNotification'||$action==='googleNotification')return self::response(Membership::notification($action==='appleNotification'?'apple':'google',$body,$r->get_header('authorization')));
             if ($action==='supportChallenge')return self::response(Account::supportChallenge());
             if ($action==='supportPublic')return self::response(Account::publicSupport($body));
             if ($action==='publicPrivacy')return self::response(Account::privacy());
@@ -49,9 +57,13 @@ final class API
             $header=$r->get_header('authorization');
             if (!preg_match('/^Bearer ([A-Za-z0-9_-]{43})$/D',$header,$m)) return self::response(Access::error('session_required',401));
             $user=Sessions::user($m[1]);if (is_wp_error($user)) return self::response($user);
+            if(str_starts_with($action,'membership'))return self::response(match($action){
+                'membership'=>Membership::read($user),'membershipIntent'=>Membership::intent($user,$body),
+                'membershipPurchase'=>Membership::purchase($user,$body),'membershipManage'=>StripeMembership::manage($user,$body),
+            });
             if ($action==='me') return self::response(self::me($user));
             if (str_starts_with($action,'account')) return self::response(match($action) {
-                'accountProfile'=>Account::profile($user), 'accountProfileWrite'=>Account::updateProfile($user,$body),
+                'accountDelete'=>Registration::delete($user,$body), 'accountProfile'=>Account::profile($user), 'accountProfileWrite'=>Account::updateProfile($user,$body),
                 'accountAvatar'=>Account::avatar($user,$body), 'accountEmail'=>Account::startEmail($user,$body),
                 'accountEmailConfirm'=>Account::confirmEmail($user,$body), 'accountPassword'=>Account::passwordChange($user,$body),
                 'accountPrivacy'=>Account::privacy(), 'accountSupport'=>Account::support($user,$body),
@@ -78,6 +90,7 @@ final class API
         $row=$wpdb->get_row($wpdb->prepare("SELECT status,enddate FROM $t WHERE user_id=%d AND membership_id IN (11,12,13) ORDER BY (status='active') DESC,id DESC LIMIT 1",$user));
         if ($row && !$granted) $reason=match($row->status){'expired'=>'expired','cancelled','admin_cancelled','inactive'=>'cancelled',default=>'no_membership'};
         if ($row && $row->enddate!=='0000-00-00 00:00:00') $expires=gmdate('c',strtotime($row->enddate.' UTC'));
+        foreach(Membership::rows($user) as $native)if(Membership::grants($native,time())&&!($row&&$row->status==='active'&&$row->enddate==='0000-00-00 00:00:00'))$expires=gmdate('c',max((int)$native['expires_at'],$expires?strtotime($expires):0));
         return ['id'=>$user,'display_name'=>get_userdata($user)->display_name,'access'=>['granted'=>$granted,'reason'=>$reason,'checked_at'=>gmdate('c'),'expires_at'=>$expires]];
     }
     /** Deriva actividad sin escribir ni consultar Bunny; sólo lecciones autorizadas. */
