@@ -154,7 +154,7 @@
         <p class="text-gris2 font-light">
           Misma membresía, distinto ritmo de cobro.
           @if ($monthly_trial_label !== '')
-            El plan mensual incluye {{ strtolower($monthly_trial_label) }}.
+            Empieza con 7 días gratis en cualquier plan.
           @endif
         </p>
       </div>
