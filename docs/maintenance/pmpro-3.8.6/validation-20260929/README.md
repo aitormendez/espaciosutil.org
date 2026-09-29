@@ -31,7 +31,9 @@ Limitaciones: por la ACL, los eventos se entregaron al handler mediante túnel; 
 
 ## Producción
 
-Preparación a las 10:22 UTC: respaldo consistente privado `/home/web/pmpro-20260929/before.sql`, SHA256 `6de80bc3bdf6cc4410903731e032f3cf0b0e856a019ac09cd878cb1cad74467a`. Restauración aislada correcta de 68 tablas: 67 checksums idénticos; `wp_options` había cambiado con el sitio en servicio. La copia temporal se eliminó. Se tomará un respaldo final bajo mantenimiento antes de migrar. Release preparado pero todavía inactivo; versión activa en este punto: 3.6.5.
+La actualización de PMPro 3.6.5 a 3.8.6 se completó después de aprobar la validación funcional de staging. WordPress permanece en 7.0.3. Se comprobaron la restauración del respaldo final, la migración, la conservación de los datos de membresía y la configuración de pagos, y el funcionamiento posterior de las páginas de acceso y contratación.
+
+Las pruebas de cobro, rechazo y cancelación se realizaron en Stripe sandbox. No se efectuaron cargos reales ni modificaciones de suscripciones de clientes. Los registros operativos y las evidencias detalladas de producción se conservan de forma privada, fuera de este repositorio público.
 
 Reversión: conservar release anterior y respaldo final. Tras migrar, revertir solo código no basta. Detener escrituras/runners, preservar cualquier pedido nuevo y reconciliarlo antes de restaurar BD y release juntos.
 
