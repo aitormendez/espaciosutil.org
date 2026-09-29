@@ -1054,7 +1054,7 @@ function pmpro_get_user_fields_settings() {
 /**
  * Clear cached user field settings in object cache when adding, updating or deleting option.
  * 
- * @since TBD
+ * @since 3.7
  * @param mixed $old_value The old value of the option.
  * @param mixed $value The new value of the option.
  * @param string $option The name of the option.
@@ -1099,18 +1099,27 @@ function pmpro_load_user_fields_from_settings() {
         
         foreach ( $group->fields as $settings_field ) {
             // Figure out field profile from settings and group profile.
+            // The field setting only overrides profile visibility. Checkout visibility is always set at the group level.
             if ( empty( $settings_field->profile ) || $settings_field->profile === '[Inherit Group Setting]' ) {
                 $profile = $group_profile;
-            } else {
+            } elseif ( $group->checkout === 'yes' ) {
                 if ( $settings_field->profile === 'yes' ) {
                     $profile = true;
-                } elseif ( $settings_field->profile === 'no' ) {
-                    $profile = false;
                 } elseif ( $settings_field->profile === 'admins' ) {
                     $profile = 'admin';
                 } else {
                     // default to no
                     $profile = false;
+                }
+            } else {
+                // The group is hidden from checkout, so use an "only" value to keep the field off the checkout page.
+                if ( $settings_field->profile === 'yes' ) {
+                    $profile = 'only';
+                } elseif ( $settings_field->profile === 'admins' ) {
+                    $profile = 'only_admin';
+                } else {
+                    // Hide from checkout AND profile? Okay, skip this field.
+                    continue;
                 }
             }
             

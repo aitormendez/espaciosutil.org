@@ -66,7 +66,7 @@ jQuery( document ).ready( function( $ ) {
 	}
 	$( '.pmpro_form' ).submit( function( event ) {
 		// If the gateway field is present and not set to stripe, return.
-		if ( $( 'input[name="gateway"]' ).length > 0 && $( 'input[name="gateway"]:checked' ).val() !== 'stripe' ) {
+		if ( $(this).find('input[name="gateway"]').length > 0 && $(this).find('input[name="gateway"]:checked').val() !== 'stripe' ) {
 			return;
 		}
 
@@ -77,13 +77,13 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// If there is no "pmpro_level" input (or "level" input for legacy page templates), then this is not a checkout form. Return.
-		if ( $( 'input[name="pmpro_level"]' ).length === 0 && $( 'input[name="level"]' ).length === 0 ) {
+		if ( $(this).find('input[name="pmpro_level"]').length === 0 && $(this).find('input[name="level"]').length === 0 ) {
 			return;
 		}
 
 		// If there is a payment method ID already, then this is a form submission after card authentication.
 		// This may be the case when the payment request button is used, for example.
-		if ( $( 'input[name="payment_method_id"]' ).length > 0 ) {
+		if ( $(this).find('input[name="payment_method_id"]').length > 0 ) {
 			return;
 		}
 
@@ -184,7 +184,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 		});
 		// Hide payment request button on form submit to prevent double charges.
-		jQuery('form').submit(function(){
+		jQuery('#pmpro_form').submit(function(){
 			jQuery('#payment-request-button').hide();
 		});	
 		// Update price shown in payment request button if price changes.
@@ -217,11 +217,22 @@ jQuery( document ).ready( function( $ ) {
 	 */
 	function pmpro_stripeResponseHandler( response ) {
 
-		var form, data, card, paymentMethodId;
+		var form, data, card, paymentMethodId, errorMessage, publishableKeyError;
 
 		form = $('#pmpro_form, .pmpro_form');
 
 		if (response.error) {
+			errorMessage = response.error.message;
+			publishableKeyError = $.inArray( response.error.code, [ 'api_key_expired', 'platform_api_key_expired', 'invalid_api_key' ] ) !== -1 ||
+				( response.error.type === 'invalid_request_error' && typeof errorMessage === 'string' && ( errorMessage.indexOf( 'Invalid API Key provided' ) === 0 || errorMessage.indexOf( 'Expired API Key provided' ) === 0 ) );
+			if ( publishableKeyError && pmproStripe.publishableKeyRefreshNonce ) {
+				$.post( pmproStripe.ajaxUrl, {
+					action: 'pmpro_stripe_refresh_publishable_key',
+					nonce: pmproStripe.publishableKeyRefreshNonce
+				} );
+				errorMessage = pmproStripe.msgPublishableKeyRefreshed;
+			}
+
 			// There was an issue with the payment method supplied or card authentication failed.
 			// Re-enable the submit button.
 			$('.pmpro_btn-submit-checkout,.pmpro_btn-submit').removeAttr('disabled');
@@ -230,8 +241,8 @@ jQuery( document ).ready( function( $ ) {
 			$('#pmpro_processing_message').css('visibility', 'hidden');
 
 			// error message
-			$( '#pmpro_message' ).text( response.error.message ).addClass( 'pmpro_error' ).removeClass( 'pmpro_alert' ).removeClass( 'pmpro_success' ).attr('role', 'alert').show();
-			$( '#pmpro_message_bottom' ).text( response.error.message ).addClass( 'pmpro_error' ).removeClass( 'pmpro_alert' ).removeClass( 'pmpro_success' ).attr('role', 'alert').show();
+			$( '#pmpro_message' ).text( errorMessage ).addClass( 'pmpro_error' ).removeClass( 'pmpro_alert' ).removeClass( 'pmpro_success' ).attr('role', 'alert').show();
+			$( '#pmpro_message_bottom' ).text( errorMessage ).addClass( 'pmpro_error' ).removeClass( 'pmpro_alert' ).removeClass( 'pmpro_success' ).attr('role', 'alert').show();
 			
 		} else if ( response.paymentMethod ) {			
 			// A payment method was created successfully. Submit the checkout form and finish the checkout in PHP.

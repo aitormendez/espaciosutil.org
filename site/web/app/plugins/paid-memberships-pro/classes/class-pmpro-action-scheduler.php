@@ -298,6 +298,8 @@ class PMPro_Action_Scheduler {
 	/**
 	 * Maybe add a recurring task (if not exists)
 	 *
+	 * Also cancels duplicate pending actions for the hook, keeping the earliest scheduled one.
+	 *
 	 * @access public
 	 * @since 3.5
 	 * @param string   $hook The hook for the task.
@@ -307,6 +309,31 @@ class PMPro_Action_Scheduler {
 	 * @return void
 	 */
 	public function maybe_add_recurring_task( $hook, $interval_in_seconds = null, $first_run_datetime = null, $group = 'pmpro_recurring_tasks' ) {
+		// Cancel duplicate pending actions for this hook, keeping the earliest scheduled one.
+		// The $unique flag below only guards new scheduling. Duplicate chains that already
+		// exist (e.g. inherited from a cloned or migrated database) self-perpetuate because
+		// Action Scheduler reschedules each chain's next occurrence without a uniqueness check.
+		$pending_action_ids = (array) as_get_scheduled_actions(
+			array(
+				'hook'     => $hook,
+				'args'     => array(),
+				'group'    => $group,
+				'status'   => ActionScheduler_Store::STATUS_PENDING,
+				'claimed'  => false,
+				'per_page' => 20,
+				'orderby'  => 'date',
+				'order'    => 'ASC',
+			),
+			'ids'
+		);
+		foreach ( array_slice( $pending_action_ids, 1 ) as $duplicate_action_id ) {
+			try {
+				ActionScheduler::store()->cancel_action( $duplicate_action_id );
+			} catch ( Exception $e ) {
+				// The action may have been deleted or claimed by another process.
+			}
+		}
+
 		if ( ! as_next_scheduled_action( $hook, array(), $group ) ) {
 			// Make sure first run datetime has been set.
 			$first_run_datetime = $first_run_datetime ?: self::as_strtotime( 'now +5 minutes' );
@@ -754,6 +781,34 @@ class PMPro_Action_Scheduler {
 	 */
 	public static function resume() {
 		update_option( 'pmpro_as_halted', false );
+	}
+
+	/**
+	 * Dispatch an async request to process the Action Scheduler queue.
+	 *
+	 * This triggers a non-blocking background HTTP request to process
+	 * pending tasks, without running them in the current PHP process.
+	 * Use this instead of do_action('action_scheduler_run_queue') which
+	 * runs synchronously and can exhaust memory.
+	 *
+	 * @since 3.7
+	 * @return void
+	 */
+	public static function dispatch_queue() {
+		// Don't dispatch if PMPro is paused or halted.
+		if ( pmpro_is_paused() || get_option( 'pmpro_as_halted', false ) ) {
+			return;
+		}
+
+		$runner = ActionScheduler_QueueRunner::instance();
+
+		// Clear the lock so we can dispatch immediately
+		// (A.S. has a 60-second heartbeat between dispatches).
+		delete_option( 'action_scheduler_lock_async-request-runner' );
+
+		// Fire a non-blocking wp_remote_post() to process the queue
+		// in a separate PHP process.
+		$runner->maybe_dispatch_async_request();
 	}
 
 	/**
