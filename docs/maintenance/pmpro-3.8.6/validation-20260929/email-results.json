@@ -1,0 +1,138 @@
+[
+    {
+        "template": "checkout_paid",
+        "source": "theme",
+        "subject": "Tu confirmación de membresía para Espacio Sutil — staging",
+        "body_bytes": 5825,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "checkout_paid_admin",
+        "source": "theme",
+        "subject": "Pago de miembro para Mensual en Espacio Sutil — staging",
+        "body_bytes": 5801,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "checkout_free",
+        "source": "database",
+        "subject": "Tu confirmación de membresía para Espacio Sutil",
+        "body_bytes": 4770,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "checkout_free_admin",
+        "source": "database",
+        "subject": "Pago de miembro para Mensual en Espacio Sutil — staging",
+        "body_bytes": 4737,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "invoice",
+        "source": "theme",
+        "subject": "Recibo de pago periódico para la membresía de Espacio Sutil — staging",
+        "body_bytes": 5942,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "membership_recurring",
+        "source": "database",
+        "subject": "Tu membresía de Espacio Sutil — staging se va a renovar pronto",
+        "body_bytes": 4694,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "billing",
+        "source": "database",
+        "subject": "Tu información de facturación se ha actualizado en Espacio Sutil — staging",
+        "body_bytes": 4862,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "billing_admin",
+        "source": "database",
+        "subject": "La información de facturación se ha actualizado para pmpro-qa-20260929-11 en Espacio Sutil — staging",
+        "body_bytes": 4761,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "billing_failure",
+        "source": "database",
+        "subject": "El pago de la membresía ha fallado en Espacio Sutil — staging",
+        "body_bytes": 4723,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "billing_failure_admin",
+        "source": "database",
+        "subject": "El pago de la membresía ha fallado para Prueba PMPro en Espacio Sutil — staging",
+        "body_bytes": 4667,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "cancel",
+        "source": "database",
+        "subject": "Tu membresía en Espacio Sutil — staging se ha CANCELADO",
+        "body_bytes": 4635,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "cancel_admin",
+        "source": "database",
+        "subject": "La membresía para pmpro-qa-20260929-11 en Espacio Sutil — staging se ha CANCELADO",
+        "body_bytes": 4728,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "cancel_on_next_payment_date",
+        "source": "database",
+        "subject": "Tu suscripción de pago en Espacio Sutil — staging ha sido CANCELADA",
+        "body_bytes": 4569,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "cancel_on_next_payment_date_admin",
+        "source": "database",
+        "subject": "La suscripción de pago para pmpro-qa-20260929-11 en Espacio Sutil — staging ha sido CANCELADA",
+        "body_bytes": 4734,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "payment_action",
+        "source": "database",
+        "subject": "Acción de pago necesaria para tu membresía en Espacio Sutil — staging",
+        "body_bytes": 4596,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "payment_action_admin",
+        "source": "database",
+        "subject": "Acción de pago necesaria: membresía de pmpro-qa-20260929-11 en Espacio Sutil — staging",
+        "body_bytes": 4884,
+        "unresolved": 0,
+        "sent": false
+    },
+    {
+        "template": "membership_recurring_trial",
+        "source": "theme",
+        "subject": "Tu periodo de prueba en Espacio Sutil — staging termina pronto",
+        "body_bytes": 6174,
+        "unresolved": 0,
+        "sent": false
+    }
+]

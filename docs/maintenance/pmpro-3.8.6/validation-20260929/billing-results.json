@@ -1,0 +1,62 @@
+[
+  {
+    "level": 11,
+    "livemode": false,
+    "status": "trialing",
+    "amount": 500,
+    "interval": {
+      "aggregate_usage": null,
+      "interval": "month",
+      "interval_count": 1,
+      "meter": null,
+      "trial_period_days": null,
+      "usage_type": "licensed"
+    },
+    "trial_days": 7.0,
+    "test_payment": {
+      "status": "paid",
+      "paid": 500,
+      "currency": "eur"
+    }
+  },
+  {
+    "level": 12,
+    "livemode": false,
+    "status": "trialing",
+    "amount": 2500,
+    "interval": {
+      "aggregate_usage": null,
+      "interval": "month",
+      "interval_count": 6,
+      "meter": null,
+      "trial_period_days": null,
+      "usage_type": "licensed"
+    },
+    "trial_days": 7.0,
+    "test_payment": {
+      "status": "paid",
+      "paid": 2500,
+      "currency": "eur"
+    }
+  },
+  {
+    "level": 13,
+    "livemode": false,
+    "status": "trialing",
+    "amount": 4500,
+    "interval": {
+      "aggregate_usage": null,
+      "interval": "year",
+      "interval_count": 1,
+      "meter": null,
+      "trial_period_days": null,
+      "usage_type": "licensed"
+    },
+    "trial_days": 7.0,
+    "test_payment": {
+      "status": "paid",
+      "paid": 4500,
+      "currency": "eur"
+    }
+  }
+]
