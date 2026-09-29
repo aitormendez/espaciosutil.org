@@ -33,7 +33,7 @@
 }
 
 #lesson-quiz .quiz-progress-bar.question {
-  background: var(--quiz-question-color, #d4ff84);
+  background: var(--quiz-question-color, var(--color-sol));
 }
 
 #lesson-quiz .quiz-progress-bar.score {
@@ -107,7 +107,7 @@
 }
 
 #lesson-quiz .quiz-pagination .swiper-pagination-bullet-active {
-  background: #d4ff84;
+  background: var(--color-sol);
 }
 
 #lesson-quiz .quiz-summary {

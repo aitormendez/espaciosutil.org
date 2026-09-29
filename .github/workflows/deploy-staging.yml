@@ -18,16 +18,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.TRELLIS_DEPLOY_SSH_PRIVATE_KEY }}
 
-      - name: 🧹 Remove old SSH host key
-        run: ssh-keygen -R 167.99.95.143 || true
-
-      - name: 🔐 Add updated host key
+      - name: Verify staging SSH host identity
+        env:
+          TRELLIS_DEPLOY_SSH_KNOWN_HOSTS: ${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}
         run: |
+          test -n "$TRELLIS_DEPLOY_SSH_KNOWN_HOSTS"
           mkdir -p ~/.ssh
-          ssh-keyscan -H 167.99.95.143 >> ~/.ssh/known_hosts
-
-      - name: 🕵️ Debug known_hosts
-        run: cat ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          printf '%s\n' "$TRELLIS_DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -F 138.68.135.185 -f ~/.ssh/known_hosts >/dev/null
 
       - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1

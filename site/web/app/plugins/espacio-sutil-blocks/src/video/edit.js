@@ -1,3 +1,4 @@
+import apiFetch from '@wordpress/api-fetch';
 import { useEffect } from "react";
 import { __ } from "@wordpress/i18n";
 import { InspectorControls, useBlockProps } from "@wordpress/block-editor";
@@ -32,11 +33,9 @@ export default function Edit({ attributes, setAttributes }) {
 
 		async function fetchVideoData() {
 			try {
-				const response = await fetch(
-					`/wp-json/espacio-sutil/v1/video-resolutions?library_id=${libraryId}&video_id=${videoId}`,
-					{ signal: controller.signal },
-				);
-				const data = await response.json();
+				const data = await apiFetch({ path:
+					`/espacio-sutil/v1/video-resolutions?library_id=${libraryId}&video_id=${videoId}`,
+					signal: controller.signal });
 
 				if (data?.hlsUrl) {
 					setAttributes({

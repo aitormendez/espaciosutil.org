@@ -1,0 +1,3 @@
+#!/bin/sh
+# Ejecuta el entorno Python privado de CDE sin ampliar open_basedir de PHP.
+exec /srv/www/espaciosutil.org/shared/cde-billing/venv/bin/python "$@"

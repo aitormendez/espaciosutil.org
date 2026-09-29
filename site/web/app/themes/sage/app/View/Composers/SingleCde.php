@@ -86,6 +86,7 @@ class SingleCde extends Composer
      */
     protected function buildLessonQuiz(): array
     {
+        if (class_exists(\EspacioSutil\Mobile\Quiz::class)) return \EspacioSutil\Mobile\Quiz::webDefinition((int) get_the_ID());
         if (!function_exists('get_field')) {
             return [
                 'enabled' => false,

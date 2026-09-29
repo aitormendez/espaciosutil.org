@@ -1,7 +1,7 @@
 .featured-audio-mobile-layout {
   --media-brand: var(--color-sol);
   --media-controls-color: var(--color-blanco);
-  --media-focus-ring: 0 0 0 3px rgb(212 255 132 / 45%);
+  --media-focus-ring: 0 0 0 3px color-mix(in srgb, var(--color-sol) 45%, transparent);
   --media-font-family: var(--font-sans);
   --media-menu-bg: var(--color-gris5);
   --media-menu-max-height: min(60vh, 20rem);

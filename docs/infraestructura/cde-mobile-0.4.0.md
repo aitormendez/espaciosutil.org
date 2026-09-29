@@ -1,0 +1,11 @@
+# Estados del curso y continuidad 0.4
+
+Staging, 2026-09-06. El índice móvil distinguía sólo Vista y no iniciada, aunque el contrato admitía En curso. La continuidad consultaba únicamente veinte revisiones por medio y no reconocía directamente el progreso canónico por lección ni los cuestionarios.
+
+`API::activity` deriva el estado de metadatos y revisiones existentes, acotados al usuario y las lecciones autorizadas. Vista manual tiene prioridad. Sin ella, una escritura confirmada de reproducción (también a cero), posición histórica positiva o intento/resultado guardado de cuestionario significa En curso. El resto de lecciones son no iniciadas; los contenedores no abribles usan unknown. No hay migraciones, escrituras en GET ni consultas a Bunny para construir el índice.
+
+Continuar reconoce recursos p:lesson, p:stream y q:lesson, descarta recursos ajenos al árbol autorizado y selecciona la fecha más reciente; desempata por ID de lección ascendente. No inventa fechas para datos históricos. La revisión opaca del curso incorpora también el ID elegido. Los campos y operaciones del contrato HTTP no cambian, conservando clientes anteriores.
+
+Validación: 16 aserciones de `site/tests/cde-course-live.php` y 42 de la regresión HTTPS del proyecto móvil. La prueba de curso cubre cero, progreso histórico de audio, cuestionario sin medios, precedencia y desmarcado manual, recursos recientes ajenos, ausencia de escrituras en GET y exclusión de lecciones no autorizadas. La fixture usa contenido temporal y cuentas sintéticas, con limpieza en finally. El primer recibo omitía el contador por el ámbito de variables de wp eval-file; se corrigió el registro y se repitió la prueba completa con las 16 aserciones registradas.
+
+Se despliega únicamente api.php en el host de staging espacio-sutil-staging (138.68.135.185), con copia privada previa en `/srv/www/espaciosutil.org/shared/backups/mobile-0.4.0/api.before.php`. Para revertir, restaurar ese archivo; no se requiere restaurar la base de datos porque el cambio sólo deriva lecturas. Producción, credenciales, correo, red y diseño no se modifican. La app 0.4 añade representación, refresco y recuperación sin red; las comprobaciones físicas no se presentan como realizadas.

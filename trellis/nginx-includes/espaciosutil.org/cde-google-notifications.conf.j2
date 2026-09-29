@@ -1,0 +1,18 @@
+{% if env == 'staging' and staging_cde_google_notifications | default(false) %}
+# Excepción exclusiva para RTDN de Google; WordPress valida firma, emisor y audiencia.
+location = /wp-json/cde-mobile/v1/membership/notifications/google {
+  if ($https != on) { return 404; }
+  if ($request_method != POST) { return 405; }
+  allow all;
+  client_max_body_size 32k;
+  # No permitir que parámetros externos seleccionen otra ruta REST o página.
+  set $args "rest_route=/cde-mobile/v1/membership/notifications/google";
+  include fastcgi_params;
+  fastcgi_param SERVER_NAME $host;
+  fastcgi_param SCRIPT_FILENAME $realpath_root/index.php;
+  fastcgi_param SCRIPT_NAME /index.php;
+  fastcgi_param DOCUMENT_ROOT $realpath_root;
+  fastcgi_read_timeout 35s;
+  fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
+}
+{% endif %}
