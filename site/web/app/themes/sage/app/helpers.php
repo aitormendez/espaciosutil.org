@@ -69,6 +69,10 @@ function cde_free_lesson_url(): string
  */
 function matomo_tracking_url(): string
 {
+    if (defined('WP_ENV') && WP_ENV === 'staging') {
+        return '';
+    }
+
     $configuredUrl = env('MATOMO_URL');
 
     if (is_string($configuredUrl) && $configuredUrl !== '') {

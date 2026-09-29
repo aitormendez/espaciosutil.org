@@ -1,0 +1,1182 @@
+{
+  "Error": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "code",
+      "message",
+      "request_id",
+      "retryable"
+    ],
+    "properties": {
+      "code": {
+        "type": "string",
+        "minLength": 1
+      },
+      "message": {
+        "type": "string",
+        "minLength": 1
+      },
+      "request_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "retryable": {
+        "type": "boolean"
+      }
+    }
+  },
+  "LoginRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "login",
+      "password",
+      "device_label"
+    ],
+    "properties": {
+      "login": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 254
+      },
+      "password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1024,
+        "writeOnly": true
+      },
+      "device_label": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      }
+    }
+  },
+  "RefreshRequest": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "refresh_token"
+    ],
+    "properties": {
+      "refresh_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512,
+        "writeOnly": true
+      }
+    }
+  },
+  "TokenPair": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "token_type",
+      "access_token",
+      "access_expires_at",
+      "refresh_token",
+      "refresh_expires_at"
+    ],
+    "properties": {
+      "token_type": {
+        "type": "string",
+        "enum": [
+          "Bearer"
+        ]
+      },
+      "access_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512
+      },
+      "access_expires_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "refresh_token": {
+        "type": "string",
+        "minLength": 32,
+        "maxLength": 512
+      },
+      "refresh_expires_at": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "Access": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "granted",
+      "reason",
+      "checked_at",
+      "expires_at"
+    ],
+    "properties": {
+      "granted": {
+        "type": "boolean"
+      },
+      "reason": {
+        "type": "string",
+        "enum": [
+          "active",
+          "no_membership",
+          "expired",
+          "cancelled"
+        ]
+      },
+      "checked_at": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "expires_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Me": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "display_name",
+      "access"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "display_name": {
+        "type": "string"
+      },
+      "access": {
+        "$ref": "#/components/schemas/Access"
+      }
+    }
+  },
+  "Node": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "parent_id",
+      "kind",
+      "title",
+      "order",
+      "has_children",
+      "lesson_id",
+      "study_state"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "parent_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "series",
+          "block",
+          "lesson",
+          "container"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "order": {
+        "type": "integer"
+      },
+      "has_children": {
+        "type": "boolean"
+      },
+      "lesson_id": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "study_state": {
+        "type": "string",
+        "enum": [
+          "not_started",
+          "in_progress",
+          "viewed",
+          "unknown"
+        ]
+      }
+    }
+  },
+  "Course": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revision",
+      "nodes",
+      "continue_lesson_id"
+    ],
+    "properties": {
+      "revision": {
+        "type": "string",
+        "minLength": 1
+      },
+      "nodes": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Node"
+        }
+      },
+      "continue_lesson_id": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Completion": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "viewed",
+      "revision",
+      "updated_at"
+    ],
+    "properties": {
+      "viewed": {
+        "type": "boolean"
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "updated_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Lesson": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "node_id",
+      "breadcrumb_node_ids",
+      "content_revision",
+      "completion"
+    ],
+    "properties": {
+      "id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "node_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "breadcrumb_node_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "content_revision": {
+        "type": "string",
+        "minLength": 1
+      },
+      "completion": {
+        "$ref": "#/components/schemas/Completion"
+      }
+    },
+    "description": "Cabecera para la prueba vertical; el esquema completo de introducción, resumen y cuestionario sigue pendiente y no se sustituye por HTML."
+  },
+  "Chapter": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "title",
+      "start_seconds",
+      "end_seconds",
+      "section_id"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "start_seconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "end_seconds": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "section_id": {
+        "anyOf": [
+          {
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "Caption": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "language",
+      "label",
+      "url",
+      "format",
+      "is_default"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "language": {
+        "type": "string",
+        "minLength": 2
+      },
+      "label": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "format": {
+        "type": "string",
+        "enum": [
+          "webvtt",
+          "hls"
+        ]
+      },
+      "is_default": {
+        "type": "boolean"
+      }
+    }
+  },
+  "Media": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "version",
+      "kind",
+      "duration_seconds",
+      "hls_url",
+      "thumbnail_url",
+      "expires_at",
+      "chapters",
+      "captions",
+      "request_headers"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "kind": {
+        "type": "string",
+        "enum": [
+          "video",
+          "audio"
+        ]
+      },
+      "duration_seconds": {
+        "anyOf": [
+          {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "hls_url": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://"
+      },
+      "thumbnail_url": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "expires_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "chapters": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Chapter"
+        }
+      },
+      "captions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Caption"
+        }
+      },
+      "request_headers": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "Referer": {
+            "type": "string",
+            "const": "https://espaciosutil.org/"
+          }
+        }
+      }
+    }
+  },
+  "MediaCollection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "lesson_id",
+      "items"
+    ],
+    "properties": {
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Media"
+        }
+      }
+    }
+  },
+  "Progress": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "lesson_id",
+      "media_id",
+      "media_version",
+      "position_seconds",
+      "revision",
+      "updated_at"
+    ],
+    "properties": {
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "media_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "media_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "position_seconds": {
+        "type": "number",
+        "minimum": 0
+      },
+      "revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "updated_at": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "ProgressCollection": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Progress"
+        }
+      }
+    }
+  },
+  "ProgressWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "expected_revision",
+      "media_id",
+      "media_version",
+      "position_seconds"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "media_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "media_version": {
+        "type": "string",
+        "minLength": 1
+      },
+      "position_seconds": {
+        "type": "number",
+        "minimum": 0
+      }
+    }
+  },
+  "ProgressSaved": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "progress"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "progress": {
+        "$ref": "#/components/schemas/Progress"
+      }
+    }
+  },
+  "CompletionWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "expected_revision",
+      "viewed"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "viewed": {
+        "type": "boolean"
+      }
+    }
+  },
+  "CompletionSaved": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "lesson_id",
+      "completion"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "lesson_id": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "completion": {
+        "$ref": "#/components/schemas/Completion"
+      }
+    }
+  },
+  "QuizWrite": {
+    "type": "object",
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "expected_revision": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "quiz_version": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "attempt_id": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 36
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "start",
+          "save",
+          "validate",
+          "finish",
+          "restart"
+        ]
+      },
+      "question_id": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 80
+      },
+      "selected": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "maxItems": 100,
+        "uniqueItems": true
+      }
+    },
+    "required": [
+      "operation_id",
+      "expected_revision",
+      "quiz_version",
+      "attempt_id",
+      "action",
+      "question_id",
+      "selected"
+    ],
+    "additionalProperties": false
+  },
+  "ProfileWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expected_revision",
+      "display_name",
+      "first_name",
+      "last_name"
+    ],
+    "properties": {
+      "expected_revision": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "display_name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "first_name": {
+        "type": "string",
+        "maxLength": 120
+      },
+      "last_name": {
+        "type": "string",
+        "maxLength": 120
+      }
+    }
+  },
+  "AvatarWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expected_revision",
+      "image_base64"
+    ],
+    "properties": {
+      "expected_revision": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "image_base64": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "maxLength": 2800000
+      }
+    }
+  },
+  "EmailStart": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "email",
+      "current_password"
+    ],
+    "properties": {
+      "email": {
+        "type": "string",
+        "format": "email",
+        "maxLength": 254
+      },
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      }
+    }
+  },
+  "EmailConfirm": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "code"
+    ],
+    "properties": {
+      "code": {
+        "type": "string",
+        "pattern": "^[0-9]{6}$",
+        "writeOnly": true
+      }
+    }
+  },
+  "PasswordWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "current_password",
+      "new_password"
+    ],
+    "properties": {
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      },
+      "new_password": {
+        "type": "string",
+        "minLength": 12,
+        "maxLength": 128,
+        "writeOnly": true
+      }
+    }
+  },
+  "SupportWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "subject",
+      "message",
+      "privacy_consent"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "subject": {
+        "type": "string",
+        "enum": [
+          "Acceso al curso",
+          "Uso de la app",
+          "Otro"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 5000
+      },
+      "privacy_consent": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      }
+    }
+  },
+  "GuestSupportWrite": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "operation_id",
+      "subject",
+      "message",
+      "privacy_consent",
+      "name",
+      "email",
+      "challenge_token",
+      "answer",
+      "website"
+    ],
+    "properties": {
+      "operation_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "subject": {
+        "type": "string",
+        "enum": [
+          "Acceso al curso",
+          "Uso de la app",
+          "Otro"
+        ]
+      },
+      "message": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 5000
+      },
+      "privacy_consent": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      },
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "maxLength": 254
+      },
+      "challenge_token": {
+        "type": "string",
+        "maxLength": 800,
+        "minLength": 1
+      },
+      "answer": {
+        "type": "string",
+        "pattern": "^[0-9]{1,2}$"
+      },
+      "website": {
+        "type": "string",
+        "enum": [
+          ""
+        ]
+      }
+    }
+  },
+  "MembershipIntent": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "provider",
+      "product_id"
+    ],
+    "properties": {
+      "provider": {
+        "type": "string",
+        "enum": [
+          "apple",
+          "google"
+        ]
+      },
+      "product_id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "base_plan_id": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 200
+      },
+      "subscription_id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "offer_id": {
+        "type": "string",
+        "minLength": 0,
+        "maxLength": 63
+      }
+    }
+  },
+  "MembershipPurchase": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "provider",
+      "reference"
+    ],
+    "properties": {
+      "provider": {
+        "type": "string",
+        "enum": [
+          "apple",
+          "google"
+        ]
+      },
+      "reference": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096,
+        "writeOnly": true
+      }
+    }
+  },
+  "MembershipManage": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "action",
+      "current_password"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "cancel_renewal",
+          "resume_renewal"
+        ]
+      },
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      }
+    }
+  },
+  "RegistrationStart": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "name",
+      "email",
+      "consent"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 120
+      },
+      "email": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 254,
+        "format": "email"
+      },
+      "consent": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      }
+    }
+  },
+  "RegistrationConfirm": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "registration_token",
+      "code",
+      "password"
+    ],
+    "properties": {
+      "registration_token": {
+        "type": "string",
+        "minLength": 43,
+        "maxLength": 43,
+        "pattern": "^[A-Za-z0-9_-]{43}$",
+        "writeOnly": true
+      },
+      "code": {
+        "type": "string",
+        "minLength": 6,
+        "maxLength": 6,
+        "pattern": "^[0-9]{6}$",
+        "writeOnly": true
+      },
+      "password": {
+        "type": "string",
+        "minLength": 12,
+        "maxLength": 128,
+        "writeOnly": true
+      }
+    }
+  },
+  "AccountDelete": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "current_password",
+      "confirm",
+      "understands_subscriptions"
+    ],
+    "properties": {
+      "current_password": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256,
+        "writeOnly": true
+      },
+      "confirm": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      },
+      "understands_subscriptions": {
+        "type": "boolean",
+        "enum": [
+          true
+        ]
+      }
+    }
+  },
+  "AppleNotification": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "signedPayload"
+    ],
+    "properties": {
+      "signedPayload": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 30000,
+        "writeOnly": true
+      }
+    }
+  },
+  "GoogleNotification": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "message"
+    ],
+    "properties": {
+      "message": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 16000,
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "subscription": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "apple": {
+    "enabled": false,
+    "environment": "sandbox",
+    "bundle_id": "org.espaciosutil.cde.staging",
+    "app_apple_id": null,
+    "subscription_group_id": "",
+    "issuer_id": "",
+    "key_id": "",
+    "private_key_file": "",
+    "root_certificates": [],
+    "products": {}
+  },
+  "google": {
+    "enabled": false,
+    "environment": "sandbox",
+    "package_id": "org.espaciosutil.cde",
+    "service_account_file": "",
+    "notification_audience": "",
+    "notification_service_account": "",
+    "products": {
+      "cde_mensual": {
+        "level_id": 11,
+        "base_plan_id": "mensual",
+        "billing_period": "P1M",
+        "trial_offer_id": "prueba-7-dias"
+      },
+      "cde_semestral": {
+        "level_id": 12,
+        "base_plan_id": "semestral",
+        "billing_period": "P6M",
+        "trial_offer_id": "prueba-7-dias"
+      },
+      "cde_anual": {
+        "level_id": 13,
+        "base_plan_id": "anual",
+        "billing_period": "P1Y",
+        "trial_offer_id": "prueba-7-dias"
+      }
+    }
+  },
+  "stripe": {
+    "enabled": false,
+    "environment": "sandbox",
+    "secret_key_file": ""
+  }
+}

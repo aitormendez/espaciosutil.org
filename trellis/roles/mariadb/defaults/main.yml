@@ -1,3 +1,4 @@
+mariadb_use_external_repository: true
 mariadb_version: 10.11
 mariadb_ppa: "deb https://mirror.rackspace.com/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main"
 
