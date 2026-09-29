@@ -324,6 +324,9 @@ class PMPro_Wisdom_Integration {
 		$stats['plugin_options_fields']['pmpro_license_key']  = get_option( 'pmpro_license_key', 'No Value' );
 		$stats['plugin_options_fields']['pmpro_license_plan'] = $license_plan;
 
+		// Hosting info.
+		$stats['plugin_options_fields']['pmpro_hosting'] = defined( 'PMPRO_HOSTING_IS_MU_PLUGIN' ) && PMPRO_HOSTING_IS_MU_PLUGIN ? 'yes' : 'no';
+
 		// Gateway info.
 		$stats['plugin_options_fields'] = array_merge( $stats['plugin_options_fields'], $this->get_gateway_info() );
 
@@ -420,7 +423,7 @@ class PMPro_Wisdom_Integration {
 			'braintree'      => get_option( 'pmpro_braintree_merchantid' ),
 			'cybersource'    => get_option( 'pmpro_cybersource_merchantid' ),
 			'payflowpro'     => get_option( 'pmpro_payflow_user' ),
-			'paypal'         => get_option( 'pmpro_apiusername' ),
+			'paypalwpp'      => get_option( 'pmpro_apiusername' ),
 			'paypalexpress'  => get_option( 'paypalexpress_skip_confirmation' ),
 			'paypalstandard' => get_option( 'gateway_email' ),
 			'stripe'         => $stripe_using_legacy_keys || $stripe_using_api_keys || $stripe_has_connect_credentials,

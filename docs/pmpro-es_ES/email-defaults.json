@@ -1,0 +1,66 @@
+{
+    "checkout-paid": {
+        "subject": "Confirmación de tu membresía en {{ sitename }}",
+        "body": "<p>Gracias por suscribirte a {{ sitename }}. Tu membresía ya está activa.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Estos son los datos de tu membresía y el recibo de tu pedido inicial.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Cuota de membresía: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+    },
+    "checkout-paid-admin": {
+        "subject": "Alta de membresía {{ membership_level_name }} en {{ sitename }}",
+        "body": "<p>Se ha registrado una nueva alta de membresía en {{ sitename }}.</p>\n\n<p>Estos son los datos de la nueva membresía y el recibo del pedido inicial.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Cuota de membresía: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "checkout-free": {
+        "subject": "Confirmación de tu membresía en {{ sitename }}",
+        "body": "<p>Gracias por suscribirte a {{ sitename }}. Tu membresía ya está activa.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Estos son los datos de tu membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+    },
+    "checkout-free-admin": {
+        "subject": "Alta de membresía {{ membership_level_name }} en {{ sitename }}",
+        "body": "<p>Se ha registrado una nueva alta de membresía en {{ sitename }}.</p>\n\n<p>Estos son los datos de la nueva membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "invoice": {
+        "subject": "Recibo del pago recurrente de tu membresía en {{ sitename }}",
+        "body": "<p>Gracias por suscribirte a {{ sitename }}. A continuación encontrarás el recibo de tu último pedido de membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if cardtype %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>\n\n<p>Consulta este pedido en línea aquí: {{ order_url }}</p>"
+    },
+    "membership-recurring": {
+        "subject": "Tu membresía en {{ sitename }} se renovará pronto",
+        "body": "<p>Gracias por suscribirte a {{ sitename }}.</p>\n\n<p>Te recordamos que tu membresía {{ membership_level_name }} se renovará automáticamente el {{ renewaldate }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Si no deseas renovar tu membresía, puedes cancelarla aquí: {{ cancel_url }}</p>"
+    },
+    "billing": {
+        "subject": "Tus datos de facturación en {{ sitename }} se han actualizado",
+        "body": "<p>Tus datos de facturación en {{ sitename }} se han actualizado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Si no has solicitado este cambio en tus datos de facturación, contacta con nosotros en {{ siteemail }}</p>\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+    },
+    "billing-admin": {
+        "subject": "Se han actualizado los datos de facturación de {{ user_login }} en {{ sitename }}",
+        "body": "<p>Los datos de facturación de {{ display_name }} en {{ sitename }} se han actualizado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "billing-failure": {
+        "subject": "No se ha podido cobrar tu membresía en {{ sitename }}",
+        "body": "<p>No se ha podido cobrar el pago de tu suscripción al nivel {{ membership_level_name }} en {{ sitename }}.</p>\n\n<p>\n\t<strong>Accede al siguiente enlace y actualiza tus datos de facturación para evitar la suspensión de tu cuenta.</strong><br />\n\t{{ login_url }}\n</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>"
+    },
+    "billing-failure-admin": {
+        "subject": "No se ha podido cobrar la membresía de {{ display_name }} en {{ sitename }}",
+        "body": "<p>No se ha podido cobrar el pago de la suscripción de {{ user_login }} al nivel {{ membership_level_name }} en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "cancel": {
+        "subject": "Tu membresía en {{ sitename }} se ha CANCELADO",
+        "body": "<p>Tu membresía en {{ sitename }} se ha cancelado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Si no has solicitado esta cancelación y deseas más información, contacta con nosotros en {{ siteemail }}</p>"
+    },
+    "cancel-admin": {
+        "subject": "La membresía de {{ user_login }} en {{ sitename }} se ha CANCELADO",
+        "body": "<p>La membresía de {{ user_login }} en {{ sitename }} se ha cancelado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if startdate %}<p>Fecha de inicio: {{ startdate }}</p>{% endif %}\n\n{% if enddate %}<p>Fecha de fin: {{ enddate }}</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "cancel-on-next-payment-date": {
+        "subject": "Los pagos recurrentes de tu suscripción en {{ sitename }} se han CANCELADO",
+        "body": "<p>Se han cancelado los pagos recurrentes de tu suscripción en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Tu acceso finalizará el {{ enddate }}.</p>"
+    },
+    "cancel-on-next-payment-date-admin": {
+        "subject": "Los pagos recurrentes de la suscripción de {{ user_login }} en {{ sitename }} se han CANCELADO",
+        "body": "<p>Se han cancelado los pagos recurrentes de la suscripción de {{ user_login }} en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Fecha de inicio: {{ startdate }}</p>\n\n<p>Fecha de caducidad: {{ enddate }}</p>\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+    },
+    "payment-action": {
+        "subject": "Se requiere una acción para pagar tu membresía en {{ sitename }}",
+        "body": "<p>Es necesario que te autentiques para completar tu suscripción en {{ sitename }}.</p>\n\n<p>Completa los pasos de verificación de tu proveedor de pago en el siguiente enlace:</p>\n\n<p>{{ order_url }}</p>"
+    },
+    "payment-action-admin": {
+        "subject": "Se requiere una acción para el pago: membresía de {{ user_login }} en {{ sitename }}",
+        "body": "<p>Un pago de {{ user_login }} en {{ sitename }} requiere autenticación adicional para completarse.</p>\n\n<p>Esta es una copia del correo enviado a {{ user_email }} para comunicarle que debe completar el pago:</p>\n\n<p>Es necesario que te autentiques para completar tu suscripción en {{ sitename }}.</p>\n\n<p>Completa los pasos de verificación de tu proveedor de pago en el siguiente enlace:</p>\n\n<p>{{ order_url }}</p>"
+    }
+}

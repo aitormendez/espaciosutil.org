@@ -1,0 +1,97 @@
+{
+  "captured_at": "2026-09-29T10:31:52.194205+00:00",
+  "mode": "read-only after replay and Stripe cleanup",
+  "subscriptions": [
+    {
+      "level": "11",
+      "status": "canceled",
+      "livemode": false
+    },
+    {
+      "level": "12",
+      "status": "canceled",
+      "livemode": false
+    },
+    {
+      "level": "13",
+      "status": "canceled",
+      "livemode": false
+    }
+  ],
+  "paid_events": [
+    {
+      "id": "evt_1UKxzWGf9zxloXyFJerY1xiZ",
+      "created": 1790676630,
+      "type": "invoice.payment_succeeded",
+      "livemode": false,
+      "amount_paid": 4500,
+      "currency": "eur"
+    },
+    {
+      "id": "evt_1UKxzTGf9zxloXyFBEkaxBoO",
+      "created": 1790676626,
+      "type": "invoice.payment_succeeded",
+      "livemode": false,
+      "amount_paid": 2500,
+      "currency": "eur"
+    },
+    {
+      "id": "evt_1UKxzPGf9zxloXyF3cVVRjXE",
+      "created": 1790676622,
+      "type": "invoice.payment_succeeded",
+      "livemode": false,
+      "amount_paid": 500,
+      "currency": "eur"
+    }
+  ],
+  "ledger_after_replay": [
+    {
+      "id": "49",
+      "level": "11",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "0"
+    },
+    {
+      "id": "50",
+      "level": "12",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "0"
+    },
+    {
+      "id": "51",
+      "level": "13",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "0"
+    },
+    {
+      "id": "52",
+      "level": "13",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "45"
+    },
+    {
+      "id": "53",
+      "level": "12",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "25"
+    },
+    {
+      "id": "54",
+      "level": "11",
+      "status": "success",
+      "environment": "sandbox",
+      "total": "5"
+    }
+  ],
+  "backend": {
+    "declined_has_membership": false,
+    "annual_enddate": "2027-09-29T10:10:28+00:00",
+    "trial_used": "1",
+    "trial_eligible_again": false
+  }
+}

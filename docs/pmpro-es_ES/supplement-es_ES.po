@@ -1,0 +1,236 @@
+# Suplemento de Espacio Sutil para PMPro 3.8.6. GPL-2.0-only.
+msgid ""
+msgstr ""
+"Project-Id-Version: Espacio Sutil PMPro 3.8.6\n"
+"PO-Revision-Date: 2026-09-29 00:00+0000\n"
+"Last-Translator: Espacio Sutil\n"
+"Language-Team: Espacio Sutil\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: classes/class-pmpro-field.php:1768
+msgid "No file uploaded."
+msgstr "No se ha subido ningún archivo."
+
+#: classes/class-pmpro-field.php:1770
+msgid "Invalid file data."
+msgstr "Los datos del archivo no son válidos."
+
+#: classes/email-templates/class-pmpro-email-template-billing-admin.php:73
+msgid "Billing information has been updated for {{ user_login }} at {{ sitename }}"
+msgstr "Se han actualizado los datos de facturación de {{ user_login }} en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-billing-admin.php:77
+msgid "<p>The billing information for {{ display_name }} at {{ sitename }} has been changed.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tBilling Information:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tExpires: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>Los datos de facturación de {{ display_name }} en {{ sitename }} se han actualizado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-billing-failure-admin.php:73
+msgid "Membership payment failed for {{ display_name }} at {{ sitename }}"
+msgstr "No se ha podido cobrar la membresía de {{ display_name }} en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-billing-failure-admin.php:84
+msgid "<p>The subscription payment for {{ user_login }} for level {{ membership_level_name }} at {{ sitename }} has failed.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>No se ha podido cobrar el pago de la suscripción de {{ user_login }} al nivel {{ membership_level_name }} en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-billing-failure.php:73
+msgid "Membership payment failed at {{ sitename }}"
+msgstr "No se ha podido cobrar tu membresía en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-billing-failure.php:84
+msgid "<p>The current subscription payment for level {{ membership_level_name }} at {{ sitename }} has failed.</p>\n\n<p>\n\t<strong>Please click the following link to log in and update your billing information to avoid account suspension.</strong><br />\n\t{{ login_url }}\n</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>"
+msgstr "<p>No se ha podido cobrar el pago de tu suscripción al nivel {{ membership_level_name }} en {{ sitename }}.</p>\n\n<p>\n\t<strong>Accede al siguiente enlace y actualiza tus datos de facturación para evitar la suspensión de tu cuenta.</strong><br />\n\t{{ login_url }}\n</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>"
+
+#: classes/email-templates/class-pmpro-email-template-billing.php:73
+msgid "Your billing information has been updated at {{ sitename }}"
+msgstr "Tus datos de facturación en {{ sitename }} se han actualizado"
+
+#: classes/email-templates/class-pmpro-email-template-billing.php:84
+msgid "<p>Your billing information at {{ sitename }} has been changed.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tBilling Information:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tExpires: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>If you did not request a billing information change please contact us at {{ siteemail }}</p>\n\n<p>Log in to your membership account here: {{ login_url }}</p>"
+msgstr "<p>Tus datos de facturación en {{ sitename }} se han actualizado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Si no has solicitado este cambio en tus datos de facturación, contacta con nosotros en {{ siteemail }}</p>\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-admin.php:76
+msgid "Membership for {{ user_login }} at {{ sitename }} has been CANCELLED"
+msgstr "La membresía de {{ user_login }} en {{ sitename }} se ha CANCELADO"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-admin.php:87
+msgid "<p>The membership for {{ user_login }} at {{ sitename }} has been cancelled.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n{% if startdate %}<p>Start Date: {{ startdate }}</p>{% endif %}\n\n{% if enddate %}<p>End Date: {{ enddate }}</p>{% endif %}\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>La membresía de {{ user_login }} en {{ sitename }} se ha cancelado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if startdate %}<p>Fecha de inicio: {{ startdate }}</p>{% endif %}\n\n{% if enddate %}<p>Fecha de fin: {{ enddate }}</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-on-next-payment-date-admin.php:72
+msgid "Payment subscription for {{ user_login }} at {{ sitename }} has been CANCELLED"
+msgstr "Los pagos recurrentes de la suscripción de {{ user_login }} en {{ sitename }} se han CANCELADO"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-on-next-payment-date-admin.php:83
+msgid "<p>The payment subscription for {{ user_login }} at {{ sitename }} has been cancelled.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>Start Date: {{ startdate }}</p>\n\n<p>Expiration Date: {{ enddate }}</p>\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>Se han cancelado los pagos recurrentes de la suscripción de {{ user_login }} en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Fecha de inicio: {{ startdate }}</p>\n\n<p>Fecha de caducidad: {{ enddate }}</p>\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-on-next-payment-date.php:73
+msgid "Your payment subscription at {{ sitename }} has been CANCELLED"
+msgstr "Los pagos recurrentes de tu suscripción en {{ sitename }} se han CANCELADO"
+
+#: classes/email-templates/class-pmpro-email-template-cancel-on-next-payment-date.php:84
+msgid "<p>Your payment subscription at {{ sitename }} has been cancelled.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>Your access will expire on {{ enddate }}.</p>"
+msgstr "<p>Se han cancelado los pagos recurrentes de tu suscripción en {{ sitename }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Tu acceso finalizará el {{ enddate }}.</p>"
+
+#: classes/email-templates/class-pmpro-email-template-cancel.php:75
+msgid "Your membership at {{ sitename }} has been CANCELLED"
+msgstr "Tu membresía en {{ sitename }} se ha CANCELADO"
+
+#: classes/email-templates/class-pmpro-email-template-cancel.php:86
+msgid "<p>Your membership at {{ sitename }} has been cancelled.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>If you did not request this cancellation and would like more information please contact us at {{ siteemail }}</p>"
+msgstr "<p>Tu membresía en {{ sitename }} se ha cancelado.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Si no has solicitado esta cancelación y deseas más información, contacta con nosotros en {{ siteemail }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-check-admin.php:73 classes/email-templates/class-pmpro-email-template-checkout-free-admin.php:74 classes/email-templates/class-pmpro-email-template-checkout-paid-admin.php:72
+msgid "Member checkout for {{ membership_level_name }} at {{ sitename }}"
+msgstr "Alta de membresía {{ membership_level_name }} en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-check.php:73 classes/email-templates/class-pmpro-email-template-checkout-free.php:73 classes/email-templates/class-pmpro-email-template-checkout-paid.php:77
+msgid "Your membership confirmation for {{ sitename }}"
+msgstr "Confirmación de tu membresía en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-free-admin.php:85
+msgid "<p>There was a new member checkout at {{ sitename }}.</p>\n\n<p>Below are details about the new membership account.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Discount Code: {{ discount_code_name }}</p>{% endif %}\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>Se ha registrado una nueva alta de membresía en {{ sitename }}.</p>\n\n<p>Estos son los datos de la nueva membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-free.php:84
+msgid "<p>Thank you for your membership to {{ sitename }}. Your membership account is now active.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Below are details about your membership account.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Discount Code: {{ discount_code_name }}</p>{% endif %}\n\n<p>Log in to your membership account here: {{ login_url }}</p>"
+msgstr "<p>Gracias por suscribirte a {{ sitename }}. Tu membresía ya está activa.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Estos son los datos de tu membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-paid-admin.php:83
+msgid "<p>There was a new member checkout at {{ sitename }}.</p>\n\n<p>Below are details about the new membership account and a receipt for the initial membership order.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>Membership Fee: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Discount Code: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tOrder #{{ order_id }} on {{ order_date }}<br />\n\tTotal Billed: {{ order_total }}\n</p>\n\n<p>\n\tBilling Information:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tExpires: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Log in to your WordPress admin here: {{ login_url }}</p>"
+msgstr "<p>Se ha registrado una nueva alta de membresía en {{ sitename }}.</p>\n\n<p>Estos son los datos de la nueva membresía y el recibo del pedido inicial.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Cuota de membresía: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a la administración de WordPress aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-checkout-paid.php:88
+msgid "<p>Thank you for your membership to {{ sitename }}. Your membership account is now active.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Below are details about your membership account and a receipt for your initial membership order.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>Membership Level: {{ membership_level_name }}</p>\n\n<p>Membership Fee: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Discount Code: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tOrder #{{ order_id }} on {{ order_date }}<br />\n\tTotal Billed: {{ order_total }}\n</p>\n\n<p>\n\tBilling Information:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tExpires: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Log in to your membership account here: {{ login_url }}</p>"
+msgstr "<p>Gracias por suscribirte a {{ sitename }}. Tu membresía ya está activa.</p>\n\n{% if membership_level_confirmation_message %}{{ membership_level_confirmation_message }}{% endif %}\n\n<p>Estos son los datos de tu membresía y el recibo de tu pedido inicial.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Nivel de membresía: {{ membership_level_name }}</p>\n\n<p>Cuota de membresía: {{ membership_cost }}</p>\n\n{% if membership_expiration %}{{ membership_expiration }}{% endif %}\n\n{% if discount_code_name %}<p>Código de descuento: {{ discount_code_name }}</p>{% endif %}\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if accountnumber %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-invoice.php:72
+msgid "Recurring payment receipt for {{ sitename }} membership"
+msgstr "Recibo del pago recurrente de tu membresía en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-invoice.php:83
+msgid "<p>Thank you for your membership to {{ sitename }}. Below is a receipt for your most recent membership order.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tOrder #{{ order_id }} on {{ order_date }}<br />\n\tTotal Billed: {{ order_total }}\n</p>\n\n<p>\n\tBilling Information:<br />\n\t{{ billing_address }}\n</p>\n\n{% if cardtype %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tExpires: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Log in to your membership account here: {{ login_url }}</p>\n\n<p>View an online version of this order here: {{ order_url }}</p>"
+msgstr "<p>Gracias por suscribirte a {{ sitename }}. A continuación encontrarás el recibo de tu último pedido de membresía.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>\n\tPedido n.º {{ order_id }} del {{ order_date }}<br />\n\tTotal facturado: {{ order_total }}\n</p>\n\n<p>\n\tDatos de facturación:<br />\n\t{{ billing_address }}\n</p>\n\n{% if cardtype %}<p>\n\t{{ cardtype }}: {{ accountnumber }}<br />\n\tCaduca: {{ expirationmonth }}/{{ expirationyear }}\n</p>{% endif %}\n\n<p>Accede a tu cuenta aquí: {{ login_url }}</p>\n\n<p>Consulta este pedido en línea aquí: {{ order_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-membership-recurring.php:67
+msgid "Your membership at {{ sitename }} will renew soon"
+msgstr "Tu membresía en {{ sitename }} se renovará pronto"
+
+#: classes/email-templates/class-pmpro-email-template-membership-recurring.php:78
+msgid "<p>Thank you for your membership to {{ sitename }}.</p>\n\n<p>This is just a reminder that your {{ membership_level_name }} membership will automatically renew on {{ renewaldate }}.</p>\n\n<p>Account: {{ display_name }} ({{ user_email }})</p>\n\n<p>If for some reason you do not want to renew your membership you can cancel here: {{ cancel_url }}</p>"
+msgstr "<p>Gracias por suscribirte a {{ sitename }}.</p>\n\n<p>Te recordamos que tu membresía {{ membership_level_name }} se renovará automáticamente el {{ renewaldate }}.</p>\n\n<p>Cuenta: {{ display_name }} ({{ user_email }})</p>\n\n<p>Si no deseas renovar tu membresía, puedes cancelarla aquí: {{ cancel_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-payment-action-admin.php:72
+msgid "Payment action required: membership for {{ user_login }} at {{ sitename }}"
+msgstr "Se requiere una acción para el pago: membresía de {{ user_login }} en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-payment-action-admin.php:83
+msgid "<p>A payment at {{ sitename }} for {{ user_login }} requires additional customer authentication to complete.</p>\n\n<p>Below is a copy of the email we sent to {{ user_email }} to notify them that they need to complete their payment:</p>\n\n<p>Customer authentication is required to finish setting up your subscription at {{ sitename }}.</p>\n\n<p>Please complete the verification steps issued by your payment provider at the following link:</p>\n\n<p>{{ order_url }}</p>"
+msgstr "<p>Un pago de {{ user_login }} en {{ sitename }} requiere autenticación adicional para completarse.</p>\n\n<p>Esta es una copia del correo enviado a {{ user_email }} para comunicarle que debe completar el pago:</p>\n\n<p>Es necesario que te autentiques para completar tu suscripción en {{ sitename }}.</p>\n\n<p>Completa los pasos de verificación de tu proveedor de pago en el siguiente enlace:</p>\n\n<p>{{ order_url }}</p>"
+
+#: classes/email-templates/class-pmpro-email-template-payment-action.php:72
+msgid "Payment action required for your {{ sitename }} membership"
+msgstr "Se requiere una acción para pagar tu membresía en {{ sitename }}"
+
+#: classes/email-templates/class-pmpro-email-template-payment-action.php:83
+msgid "<p>Customer authentication is required to finish setting up your subscription at {{ sitename }}.</p>\n\n<p>Please complete the verification steps issued by your payment provider at the following link:</p>\n\n<p>{{ order_url }}</p>"
+msgstr "<p>Es necesario que te autentiques para completar tu suscripción en {{ sitename }}.</p>\n\n<p>Completa los pasos de verificación de tu proveedor de pago en el siguiente enlace:</p>\n\n<p>{{ order_url }}</p>"
+
+#: classes/gateways/class.pmprogateway_stripe.php:1243
+msgid "There was a problem connecting to the payment gateway. Please reload this page and try again."
+msgstr "No se ha podido conectar con la pasarela de pago. Recarga esta página e inténtalo de nuevo."
+
+#: classes/gateways/class.pmprogateway_stripe.php:2810
+msgid "Manage billing"
+msgstr "Gestionar facturación"
+
+#: classes/gateways/class.pmprogateway_stripe.php:3796
+msgid "This payment does not match the amount due for this checkout."
+msgstr "Este pago no coincide con el importe correspondiente a esta compra."
+
+#: includes/functions.php:1834
+msgid "Pagination"
+msgstr "Paginación"
+
+#: includes/functions.php:1850
+msgid "Go to the previous page"
+msgstr "Ir a la página anterior"
+
+#: includes/functions.php:1850 includes/functions.php:1852
+msgid "Previous"
+msgstr "Anterior"
+
+#: includes/functions.php:1863 includes/functions.php:1875 includes/functions.php:1881 includes/functions.php:1884 includes/functions.php:1898 includes/functions.php:1904 includes/functions.php:1907 includes/functions.php:1921
+#, php-format
+msgid "Page %s"
+msgstr "Página %s"
+
+#: includes/functions.php:1888 includes/functions.php:1911
+msgid "Page 1"
+msgstr "Página 1"
+
+#: includes/functions.php:1890 includes/functions.php:1913
+msgid "Page 2"
+msgstr "Página 2"
+
+#: includes/functions.php:1930
+msgid "Go to the next page"
+msgstr "Ir a la página siguiente"
+
+#: includes/functions.php:1930 includes/functions.php:1932
+msgid "Next"
+msgstr "Siguiente"
+
+#: includes/functions.php:2184
+msgid "You have already used the discount code provided."
+msgstr "Ya has utilizado el código de descuento indicado."
+
+#: pages/billing.php:160
+#, php-format
+msgid "To change your billing information, log in to your payment gateway dashboard or complete checkout again for your current membership level: %s."
+msgstr "Para cambiar tus datos de facturación, accede al panel de tu pasarela de pago o vuelve a completar la compra de tu nivel de membresía actual: %s."
+
+#: pages/billing.php:453
+msgid "Update Billing Information"
+msgstr "Actualizar datos de facturación"
+
+#: pages/billing.php:529
+msgid "Previous Memberships"
+msgstr "Membresías anteriores"
+
+#: pages/cancel.php:56
+msgid "Yes, cancel this membership"
+msgid_plural "Yes, cancel these memberships"
+msgstr[0] "Sí, cancelar esta membresía"
+msgstr[1] "Sí, cancelar estas membresías"
+
+#: pages/cancel.php:57
+msgid "No, keep this membership"
+msgid_plural "No, keep these memberships"
+msgstr[0] "No, mantener esta membresía"
+msgstr[1] "No, mantener estas membresías"
+
+#: pages/cancel.php:63
+msgid "Are you sure you want to cancel your membership?"
+msgid_plural "Are you sure you want to cancel all of your memberships?"
+msgstr[0] "¿Seguro que quieres cancelar tu membresía?"
+msgstr[1] "¿Seguro que quieres cancelar todas tus membresías?"
+
+#: pages/checkout.php:339
+msgid "Do not fill this field out. Leave this blank."
+msgstr "No rellenes este campo. Déjalo en blanco."
+
+#: shortcodes/pmpro_account.php:161
+msgid "You do not have an active membership."
+msgstr "No tienes ninguna membresía activa."
+
+#: shortcodes/pmpro_account.php:166
+msgid "Choose a membership level."
+msgstr "Elige un nivel de membresía."
+
+#: shortcodes/pmpro_account.php:426
+msgid "Please contact the site administrator for full order history."
+msgstr "Contacta con la administración del sitio para consultar el historial completo de pedidos."

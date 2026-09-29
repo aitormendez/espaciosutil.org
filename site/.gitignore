@@ -35,3 +35,9 @@ auth.json
 
 # WP-CLI
 wp-cli.local.yml
+
+# Versioned PMPro locale package, outside automatic translation updates.
+!web/app/mu-plugins/espaciosutil-pmpro-l10n/
+
+# Email artwork is a runtime dependency of the Sage Vite manifest.
+!web/app/themes/sage/resources/images/email/*.png

@@ -1,0 +1,49 @@
+{
+  "php": "8.5.1",
+  "lint_files": 1011,
+  "lint_errors": [
+    {
+      "file": "site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php",
+      "output": "\nFatal error: Declaration of CyberSourceSoapClient::__doRequest($request, $location, $action, $version, $one_way = 0) must be compatible with SoapClient::__doRequest(string $request, string $location, string $action, int $version, bool $oneWay = false, ?string $uriParserClass = null): ?string in site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php on line 66\nStack trace:\n#0 {main}\nErrors parsing site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php\nPHP Fatal error:  Declaration of CyberSourceSoapClient::__doRequest($request, $location, $action, $version, $one_way = 0) must be compatible with SoapClient::__doRequest(string $request, string $location, string $action, int $version, bool $oneWay = false, ?string $uriParserClass = null): ?string in site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php on line 66\nStack trace:\n#0 {main}\n"
+    }
+  ],
+  "tests": {
+    "pmpro-upgrade-trials": {
+      "exit_code": 0,
+      "output": "PASS: 16 trial cases using PMPro MemberOrder, reminders and email registration; no external effects\n"
+    },
+    "pmpro-upgrade-recovery": {
+      "exit_code": 0,
+      "output": "PASS: recovery scheduling, five outcomes and repeat exclusion; mocked Stripe only, zero events\n"
+    },
+    "atlas-cde-membership-endpoint": {
+      "exit_code": 0,
+      "output": ""
+    },
+    "cde-listmonk-sync": {
+      "exit_code": 0,
+      "output": ""
+    }
+  },
+  "lint_mode": "host extensions enabled",
+  "runtime_note": "Homebrew php@8.4 and php@8.3 are aliases to php 8.5.1, not installed target runtimes.",
+  "parser_without_extensions": {
+    "command": "php -n -l",
+    "files": 1011,
+    "errors": [
+      {
+        "file": "site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php",
+        "output": "\nFatal error: Declaration of CyberSourceSoapClient::__doRequest($request, $location, $action, $version, $one_way = 0) must be compatible with SoapClient::__doRequest(string $request, string $location, string $action, int $version, bool $oneWay = false, ?string $uriParserClass = null): ?string in site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php on line 66\nStack trace:\n#0 {main}\nErrors parsing site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php\n"
+      }
+    ]
+  },
+  "targeted_php84_lint": {
+    "php": "8.4.18",
+    "file": "site/web/app/plugins/paid-memberships-pro/includes/lib/CyberSource/cyber_source_soap_client.php",
+    "sha256": "91aa69f7dfa4abcbc53c0ebcc791a1de6a2874fea4544b88631852bd0e6cfa33",
+    "command": "ssh [trusted production alias] php -l < file",
+    "exit_code": 0,
+    "output": "No syntax errors detected in Standard input code",
+    "execution": "syntax only on stdin; no bootstrap, file write or DB access"
+  }
+}

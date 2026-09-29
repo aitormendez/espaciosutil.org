@@ -1,0 +1,4 @@
+# Preserve the exact upstream snapshot bytes and hashes across checkouts.
+upstream/* -text
+# The vendor license notice includes CRLF, trailing spaces and blank lines.
+upstream/LICENSE-PMPro.txt -whitespace

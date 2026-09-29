@@ -1,0 +1,9 @@
+PASS: 365 claves críticas; tokens, printf, HTML, plurales, contexto, hashes.
+PASS: WP 7.1.2 hooks/l10n + init real PMPro 3.8.6; MO global/local/PHP y recarga; aislamiento de dominio/locale.
+PASS: 16 asuntos/cuerpos por métodos upstream. Sin BD, bootstrap WP, render Liquid completo, FPM, envío ni transacción.
+Página 2
+Ya has utilizado el código de descuento indicado.
+msgfmt --check --statistics: 54 translated messages, sin errores.
+php -l: cargador, constructor de catálogo y prueba sin errores de sintaxis.
+Snapshot upstream: hashes de sus ocho archivos verificados antes de construir.
+Git conserva los bytes CRLF/espacios del aviso de licencia del proveedor mediante atributo específico.

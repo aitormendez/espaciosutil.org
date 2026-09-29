@@ -1,0 +1,42 @@
+{
+    "pot_entries": 2997,
+    "translated_exact": 2343,
+    "groups": {
+        "flujo_comun": {
+            "total": 155,
+            "translated": 134
+        },
+        "stripe": {
+            "total": 160,
+            "translated": 145
+        },
+        "campos": {
+            "total": 21,
+            "translated": 12
+        },
+        "paginas": {
+            "total": 122,
+            "translated": 114
+        },
+        "emails": {
+            "total": 168,
+            "translated": 59
+        },
+        "preheaders": {
+            "total": 30,
+            "translated": 30
+        }
+    },
+    "mo_examples": {
+        "Membership Account": "Cuenta de membresía",
+        "Membership Level": "Nivel de membresía",
+        "Account Information": "Información de la cuenta",
+        "Username": "Nombre de usuario",
+        "Password": "Contraseña",
+        "Email Address": "Dirección de correo electrónico",
+        "Submit and Check Out": "Enviar y pagar",
+        "You have already used the discount code provided.": "You have already used the discount code provided.",
+        "This payment does not match the amount due for this checkout.": "This payment does not match the amount due for this checkout.",
+        "Your membership confirmation for {{ sitename }}": "Your membership confirmation for {{ sitename }}"
+    }
+}

@@ -207,6 +207,12 @@ if ( ! empty( $temp_id ) ) {
 	<h1 class="wp-heading-inline"><?php esc_html_e('Add New Membership Level', 'paid-memberships-pro'); ?></h1>
 <?php } ?>
 
+<p><?php
+	$edit_level_link = '<a title="' . esc_attr__( 'Paid Memberships Pro - Membership Level Setup Documentation', 'paid-memberships-pro' ) . '" target="_blank" rel="nofollow noopener" href="https://www.paidmembershipspro.com/documentation/membership-levels/initial-membership-level-setup/?utm_source=plugin&utm_medium=pmpro-membershiplevels&utm_campaign=documentation&utm_content=&utm_term=">' . esc_html__( 'Membership Level Setup', 'paid-memberships-pro' ) . '</a>';
+	// translators: %s: Link to Membership Level Setup doc.
+	printf( esc_html__('Learn more about %s.', 'paid-memberships-pro' ), $edit_level_link ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+?></p>
+
 <?php
 // Show the settings page message.
 if (!empty($page_msg)) { ?>
@@ -277,7 +283,7 @@ if (!empty($page_msg)) { ?>
 									),
 									'code' => array(),
 								);
-								echo sprintf(wp_kses(__('Use the placeholder variable <code>%1$s</code> in your checkout <a href="%2$s" title="Edit Membership Email Templates">email templates</a> to include this information.', 'paid-memberships-pro'), $allowed_confirmation_in_email_html), '!!membership_level_confirmation_message!!', esc_url(add_query_arg('page', 'pmpro-emailtemplates', admin_url('admin.php'))));
+								echo sprintf(wp_kses(__('Use the placeholder variable <code>%1$s</code> in your checkout <a href="%2$s" title="Edit Membership Email Templates">email templates</a> to include this information.', 'paid-memberships-pro'), $allowed_confirmation_in_email_html), '{{ membership_level_confirmation_message }}', esc_url(add_query_arg('page', 'pmpro-emailtemplates', admin_url('admin.php'))));
 								?>
 							</p>
 						</td>
@@ -442,16 +448,22 @@ if (!empty($page_msg)) { ?>
 			 */
 			do_action('pmpro_membership_level_after_billing_details_settings', $level);
 			?>
+			<?php
+			// Only show trial settings if the active gateway supports recurring trials or if the level already has a trial set.
+			$gateway_class = 'PMProGateway_' . $gateway;
+			$gateway_supports_recurring_trials = method_exists( $gateway_class, 'supports' ) && $gateway_class::supports( 'recurring_trials' );
+			if ( $gateway_supports_recurring_trials || pmpro_isLevelTrial( $level ) ) {
+			?>
 			<table class="form-table">
+				<tbody>
 				<tr class="recurring_info" <?php if (!pmpro_isLevelRecurring($level)) echo "style='display:none;'"; ?>>
 					<th scope="row" valign="top"><label><?php esc_html_e('Custom Trial', 'paid-memberships-pro'); ?></label></th>
 					<td>
 						<input id="custom_trial" name="custom_trial" type="checkbox" value="yes" <?php if (pmpro_isLevelTrial($level)) {
 																										echo "checked='checked'";
 																									} ?> onclick="jQuery('.trial_info').toggle();" /> <label for="custom_trial"><?php esc_html_e('Check to add a custom trial period.', 'paid-memberships-pro'); ?></label>
-
-						<?php if ($gateway == "twocheckout") { ?>
-							<p class="description"><strong <?php if (!empty($pmpro_twocheckout_error)) { ?>class="pmpro_red" <?php } ?>><?php esc_html_e('2Checkout integration does not support custom trials. You can do one period trials by setting an initial payment different from the billing amount.', 'paid-memberships-pro'); ?></strong></p>
+						<?php if ( ! $gateway_supports_recurring_trials ) { ?>
+							<p class="description"><strong class="pmpro_red"><?php esc_html_e( 'The current payment gateway does not support recurring trials.', 'paid-memberships-pro' ); ?></strong></p>
 						<?php } ?>
 					</td>
 				</tr>
@@ -470,17 +482,11 @@ if (!empty($page_msg)) { ?>
 						<?php esc_html_e('for the first', 'paid-memberships-pro'); ?>
 						<input name="trial_limit" type="text" value="<?php echo esc_attr($level->trial_limit); ?>" class="small-text" />
 						<?php esc_html_e('subscription payments', 'paid-memberships-pro'); ?>.
-						<?php if ($gateway == "stripe") { ?>
-							<p class="description"><strong <?php if (!empty($pmpro_stripe_error)) { ?>class="pmpro_red" <?php } ?>><?php esc_html_e('Stripe integration currently does not support trial amounts greater than $0.', 'paid-memberships-pro'); ?></strong></p>
-						<?php } elseif ($gateway == "braintree") { ?>
-							<p class="description"><strong <?php if (!empty($pmpro_braintree_error)) { ?>class="pmpro_red" <?php } ?>><?php esc_html_e('Braintree integration currently does not support trial amounts greater than $0.', 'paid-memberships-pro'); ?></strong></p>
-						<?php } elseif ($gateway == "payflowpro") { ?>
-							<p class="description"><strong <?php if (!empty($pmpro_payflow_error)) { ?>class="pmpro_red" <?php } ?>><?php esc_html_e('Payflow integration currently does not support trial amounts greater than $0.', 'paid-memberships-pro'); ?></strong></p>
-						<?php } ?>
 					</td>
 				</tr>
 				</tbody>
 			</table>
+			<?php } ?>
 			<?php
 			/**
 			 * Allow adding form fields after the Trial Settings section.
@@ -511,6 +517,7 @@ if (!empty($page_msg)) { ?>
 			</button>
 		</div>
 		<div class="pmpro_section_inside" <?php echo $section_visibility === 'hidden' ? 'style="display: none"' : ''; ?>>
+			<p><?php esc_html_e('Control when membership access ends for this level. If left unchecked, membership access will not expire. For recurring memberships, leave expiration unchecked to continue charging members according to your billing settings.', 'paid-memberships-pro'); ?></p>
 			<div id="pmpro_expiration_warning" style="display: none;" class="notice notice-alt notice-error inline">
 				<p><?php
 					$allowed_html = array(
@@ -629,7 +636,23 @@ if (!empty($page_msg)) { ?>
 				),
 			);
 			?>
-			<p><?php echo wp_kses( sprintf( __('Protect access to posts, pages, and content sections with built-in PMPro features. If you want to protect more content types, <a href="%s" rel="nofollow noopener" target="_blank">read our documentation on restricting content</a>.', 'paid-memberships-pro'), 'https://www.paidmembershipspro.com/documentation/content-controls/?utm_source=plugin&utm_medium=pmpro-membershiplevels&utm_campaign=documentation&utm_content=pmpro-content-settings'), $allowed_html ); ?></p>
+			<p>
+				<?php echo wp_kses( sprintf( __('Protect access to posts, pages, and content sections with built-in PMPro features. If you want to protect more content types, <a href="%s" rel="nofollow noopener" target="_blank">read our documentation on restricting content</a>.', 'paid-memberships-pro'), 'https://www.paidmembershipspro.com/documentation/content-controls/?utm_source=plugin&utm_medium=pmpro-membershiplevels&utm_campaign=documentation&utm_content=pmpro-content-settings'), $allowed_html ); ?>
+				<?php
+					// Show a single message about how protected content displays to non-members, based on the Advanced Settings.
+					$filterqueries = get_option( 'pmpro_filterqueries' );
+					$showexcerpts = get_option( 'pmpro_showexcerpts' );
+					if ( $filterqueries == 1 ) {
+						esc_html_e( 'Based on your advanced settings, protected content is hidden from non-members in searches and archives.', 'paid-memberships-pro' );
+					} elseif ( $showexcerpts == 1 ) {
+						esc_html_e( 'Based on your advanced settings, non-members will see the title and excerpt of protected content.', 'paid-memberships-pro' );
+					} else {
+						esc_html_e( 'Based on your advanced settings, non-members will see the title only for protected content.', 'paid-memberships-pro' );
+					}
+					echo ' ';
+					echo sprintf( wp_kses( __( 'Display can vary by content type and theme. You can <a href="%s" title="Advanced Settings" target="_blank">update this setting here</a>.', 'paid-memberships-pro' ), $allowed_html ), esc_url( admin_url( 'admin.php?page=pmpro-advancedsettings' ) ) );
+				?>
+			</p>
 			<table class="form-table">
 				<tbody>
 					<tr class="membership_categories">
@@ -663,23 +686,6 @@ if (!empty($page_msg)) { ?>
 							</div>
 							<p class="description">
 								<?php esc_html_e('Select categories to bulk protect posts.', 'paid-memberships-pro'); ?>
-								<?php
-								// Get the Advanced Settings for filtering queries and showing excerpts.
-								$filterqueries = get_option('pmpro_filterqueries');
-								$showexcerpts = get_option("pmpro_showexcerpts");
-								if ($filterqueries == 1) {
-									// Show a message that posts in these categories are hidden.
-									echo sprintf(wp_kses(__('Non-members will not see posts in these categories. You can <a href="%s" title="Advanced Settings" target="_blank">update this setting here</a>.', 'paid-memberships-pro'), $allowed_html), esc_url( admin_url('admin.php?page=pmpro-advancedsettings')));
-								} else {
-									if ($showexcerpts == 1) {
-										// Show a message that posts in these categories will show title and excerpt.
-										echo sprintf(wp_kses(__('Non-members will see the title and excerpt for posts in these categories. You can <a href="%s" title="Advanced Settings" target="_blank">update this setting here</a>.', 'paid-memberships-pro'), $allowed_html), esc_url( admin_url('admin.php?page=pmpro-advancedsettings')));
-									} else {
-										// Show a message that posts in these categories will show only the title.
-										echo sprintf(wp_kses(__('Non-members will see the title only for posts in these categories. You can <a href="%s" title="Advanced Settings" target="_blank">update this setting here</a>.', 'paid-memberships-pro'), $allowed_html), esc_url( admin_url('admin.php?page=pmpro-advancedsettings')));
-									}
-								}
-								?>
 							</p>
 						</td>
 					</tr>
