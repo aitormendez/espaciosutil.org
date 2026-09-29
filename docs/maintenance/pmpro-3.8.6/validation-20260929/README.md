@@ -34,3 +34,11 @@ Limitaciones: por la ACL, los eventos se entregaron al handler mediante túnel; 
 Preparación a las 10:22 UTC: respaldo consistente privado `/home/web/pmpro-20260929/before.sql`, SHA256 `6de80bc3bdf6cc4410903731e032f3cf0b0e856a019ac09cd878cb1cad74467a`. Restauración aislada correcta de 68 tablas: 67 checksums idénticos; `wp_options` había cambiado con el sitio en servicio. La copia temporal se eliminó. Se tomará un respaldo final bajo mantenimiento antes de migrar. Release preparado pero todavía inactivo; versión activa en este punto: 3.6.5.
 
 Reversión: conservar release anterior y respaldo final. Tras migrar, revertir solo código no basta. Detener escrituras/runners, preservar cualquier pedido nuevo y reconciliarlo antes de restaurar BD y release juntos.
+
+## Evidencia adicional y limpieza de staging
+
+La cuenta mensual creada por checkout accede a la lección publicada 2875: navegador 19814 caracteres de contenido/cuestionario; anónimo 1053 y aviso de restricción. Trial consumido y no elegible de nuevo. FPM 8.4.25, cero errores PHP/FastCGI posteriores a 10:05 UTC. El correo de bienvenida real, generado desde el pedido inicial sin completar tokens, contiene 7 días, primer cobro de 5 EUR el 6 de octubre y acceso a cuenta; se conserva su texto. Los 17 renders generales usan fixtures enriquecidos y no acreditan por sí solos los datos de todos los eventos reales.
+
+La transcripción del replay explicita su origen y límites: el script solo exigía HTTP200, la revisión humana de la salida comprobó «already processed». No hay archivo autónomo del ledger anterior; backend-evidence.json conserva la lectura posterior y los tres eventos Stripe originales.
+
+Limpieza: tres suscripciones sandbox canceladas, cuatro clientes Stripe sintéticos eliminados y sesión pendiente expirada. Cuatro usuarios y siete pedidos de prueba retirados de staging; quedan sus 23 usuarios originales. Helper y archivo de claves eliminados, ambas claves Stripe ausentes, sandbox, correo/cron/runner bloqueados. Se fija EUR para corregir el default previo USD. El harness de aislamiento global no pasa por la clave Bunny de solo lectura preexistente; todos sus checks críticos pasan. No se modifica esa integración ni la ACL.

@@ -1,0 +1,20 @@
+Transcripción de la salida de tools.write_stdin sesión19077 (29/09/2026), conservada después de su ejecución; no es una segunda ejecución del relay.
+
+matching_paid_invoice_events 3
+Logged On: 09/29/2026 10:16:21
+We have already processed this payment. ( Order ID #52)
+-------------
+
+HTTP:200
+Logged On: 09/29/2026 10:16:22
+We have already processed this payment. ( Order ID #53)
+-------------
+
+HTTP:200
+Logged On: 09/29/2026 10:16:24
+We have already processed this payment. ( Order ID #54)
+-------------
+
+HTTP:200
+
+El script por sí solo solo exige HTTP200. La comprobación semántica «already processed» y el SELECT posterior de seis pedidos se comprobaron en la salida de herramientas del chat. No se conserva un archivo autónomo del ledger anterior al replay; no se presenta esta transcripción como tal. El backend-evidence.json se obtiene después mediante lecturas independientes de Stripe y SQL; mantiene exactamente tres pedidos iniciales y tres facturas, IDs49–54.

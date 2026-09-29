@@ -1,0 +1,1 @@
+{"version":"3.8.6","schema":"3.84","environment":"staging","gateway_environment":"sandbox","currency":"EUR","stripe_test_key_absent":true,"stripe_live_key_absent":true,"mail_blocked":true,"cron_disabled":true,"helper_absent":true}
