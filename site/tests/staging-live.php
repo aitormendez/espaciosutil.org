@@ -1,4 +1,5 @@
 <?php
+
 // Ejecutar mediante wp eval-file; las aserciones fallan antes de probar transportes si el entorno no es staging.
 if (! defined('WP_ENV') || WP_ENV !== 'staging' || home_url() !== 'https://stage.espaciosutil.org') {
     WP_CLI::error('Entorno inesperado: no se ejecutaron pruebas.');
@@ -20,4 +21,6 @@ foreach (['https://api.stripe.com/v1/charges', 'https://api.eu.mailgun.net/v3/me
 $checks['bunny_read_enabled'] = getenv('CDE_STAGING_BUNNY_READ') === '1' && (bool) getenv('BUNNY_KEY');
 $checks['no_payment_or_mail_integration_env'] = ! getenv('YOUTUBE_API_KEY') && ! getenv('LISTMONK_API_KEY') && ! getenv('STRIPE_SECRET_KEY');
 WP_CLI::line(wp_json_encode(['checks' => $checks, 'wordpress' => get_bloginfo('version'), 'users' => count_users()['total_users']], JSON_PRETTY_PRINT));
-if (in_array(false, $checks, true)) { WP_CLI::error('Falló una comprobación de aislamiento.'); }
+if (in_array(false, $checks, true)) {
+    WP_CLI::error('Falló una comprobación de aislamiento.');
+}

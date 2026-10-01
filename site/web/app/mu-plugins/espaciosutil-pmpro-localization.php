@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: Espacio Sutil — PMPro es_ES
  * Description: Catálogo reproducible y acotado a Paid Memberships Pro 3.8.6.
