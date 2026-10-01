@@ -1,1 +1,11 @@
 mysql_root_password: "{{ vault_mysql_root_password }}" # Define this variable in group_vars/production/vault.yml
+
+# Descarga de ACF Pro mediante credenciales del vault compartido.
+# El hook de Composer crea auth.json temporalmente y lo elimina al finalizar.
+composer_authentications:
+  - hostname: connect.advancedcustomfields.com
+    username: "{{ acf_pro_username }}"
+    password: "{{ acf_pro_password }}"
+  - hostname: composer.advancedcustomfields.com
+    username: "{{ acf_pro_username }}"
+    password: "{{ acf_pro_password }}"
