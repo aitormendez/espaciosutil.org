@@ -2,7 +2,7 @@
 
 Fecha de inicio: 2026-09-30. Última actualización: 2026-10-01.
 
-Estado: definición funcional y del modelo de contenido. Este documento registra las decisiones de la conversación; no implica que la funcionalidad esté implementada. La estructura definitiva de la ficha está pendiente de acordar.
+Estado: decisiones de diseño e inventario. La primera versión de texto está implementada en ramas aisladas, sin instalación ni integración operativa. Consultar [alcance implementado, pruebas y pendientes](practicas-cde-implementacion.md); las propuestas de inventario remoto de este documento siguen pendientes de integración con NocoDB.
 
 ## Objetivo
 

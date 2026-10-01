@@ -157,6 +157,8 @@
       </section>
     @endif
 
+    @include('partials.lesson-practicas')
+
     @include('partials.videos-realacionados-cde')
 
     @php comments_template(); @endphp
