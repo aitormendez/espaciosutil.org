@@ -1,3 +1,4 @@
+import initPresentations from './lessons/presentation.js';
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones, destruirConstelaciones } from './constelaciones.js';
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let navMode = null;
   let destroyNavigation = () => {};
 
+  initPresentations();
   initCookieConsent();
   syncActiveMenuState();
 

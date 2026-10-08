@@ -26,6 +26,7 @@ wordpress_sites:
       bunny_key: "{{ vault_cde_staging_bunny_key | default('') }}"
       bunny_pull_zone: "{{ vault_cde_staging_bunny_pull_zone | default('') }}"
       cde_staging_bunny_read: "{{ '1' if vault_cde_staging_bunny_key | default('') else '0' }}"
+      cde_presentations_dir: /srv/www/espaciosutil.org/shared/cde-presentations
       cde_billing_config_file: /srv/www/espaciosutil.org/shared/cde-billing/config.json
       cde_billing_python: /srv/www/espaciosutil.org/shared/cde-billing/python-runner
       cde_billing_verifier: /srv/www/espaciosutil.org/shared/cde-billing/store_verify.py

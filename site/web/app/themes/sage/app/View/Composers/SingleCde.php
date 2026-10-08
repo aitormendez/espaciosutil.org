@@ -71,6 +71,7 @@ class SingleCde extends Composer
         return [
             'is_completed' => in_array(get_the_ID(), $completed_lessons, true),
             'has_access' => $has_access,
+            'lesson_presentation' => $has_access && class_exists(\EspacioSutil\Presentations\Service::class) ? \EspacioSutil\Presentations\Service::view((int) get_the_ID()) : null,
             'related_lessons' => $related_lessons,
             'lesson_subindex' => $lesson_subindex,
             'lesson_subindex_root_title' => get_the_title(),

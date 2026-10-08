@@ -3,6 +3,7 @@ web/app/plugins/*
 !web/app/plugins/.gitkeep
 web/app/mu-plugins/*/
 !web/app/mu-plugins/cde-mobile/
+!web/app/mu-plugins/cde-presentations/
 !web/app/plugins/espacio-sutil-blocks
 !web/app/plugins/paid-memberships-pro
 !web/app/plugins/pmpro-update-manager
@@ -42,3 +43,6 @@ wp-cli.local.yml
 
 # Email artwork is a runtime dependency of the Sage Vite manifest.
 !web/app/themes/sage/resources/images/email/*.png
+
+# Derivados privados de presentaciones locales.
+/storage/cde-presentations/

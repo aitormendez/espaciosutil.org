@@ -1,3 +1,4 @@
+import { destroyPresentations } from './lessons/presentation.js';
 import barba from '@barba/core';
 import {gsap} from 'gsap';
 import {transitionScriptsAfter, transitionScriptsEnter} from './transitionScripts.js';
@@ -98,6 +99,8 @@ export function barbaInit() {
       },
     ],
   });
+
+  barba.hooks.beforeLeave((data) => destroyPresentations(data.current.container));
 
   barba.hooks.afterLeave(() => {
     gsap.to(window, {duration: 0.5, scrollTo: 0});

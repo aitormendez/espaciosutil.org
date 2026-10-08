@@ -75,6 +75,8 @@
       </div>
     @endif
 
+    @include('partials.lesson-presentation')
+
     <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-4 md:p-6 md:px-0">
       <div class="prose md:prose-2xl mx-auto w-full max-w-4xl md:px-0">
         @php the_content() @endphp

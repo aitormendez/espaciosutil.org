@@ -1,0 +1,27 @@
+.lesson-presentation { max-width: 60rem; margin: 2.5rem auto; padding: 0 1rem; color: #faf5ff; font-family: var(--font-sans); }
+.lesson-presentation-heading h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 .35rem; }
+.lesson-presentation-heading p { opacity: .8; font-size: .95rem; margin-bottom: 1.25rem; }
+.lesson-presentation-shell { background: #171321; border: 1px solid #ffffff30; border-radius: .3rem; overflow: hidden; }
+.lesson-presentation .swiper { width: 100%; aspect-ratio: 16 / 9; background: #0c0911; }
+.lesson-presentation .swiper-slide { display: flex; align-items: center; justify-content: center; }
+.lesson-presentation .swiper-slide img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
+.lesson-presentation-toolbar { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .75rem; }
+.lesson-presentation-navigation, .lesson-presentation-actions { display: flex; align-items: center; gap: .4rem; }
+.lesson-presentation button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; background: transparent; min-width: 44px; min-height: 44px; border: 1px solid #ffffff45; border-radius: .25rem; padding: .4rem .7rem; font-size: .875rem; color: inherit; cursor: pointer; }
+.lesson-presentation button:hover:not(:disabled) { background: #ffffff18; }
+.lesson-presentation button:disabled { opacity: .4; cursor: default; }
+.lesson-presentation button:focus-visible, .lesson-presentation .swiper:focus-visible { outline: 2px solid #f8d785; outline-offset: -3px; }
+.lesson-presentation [data-presentation-counter] { min-width: 4rem; text-align: center; font-variant-numeric: tabular-nums; font-size: .9rem; }
+.lesson-presentation [data-presentation-status]:not(:empty) { padding: .5rem 1rem; }
+.lesson-presentation [data-presentation-retry] { margin: .5rem 1rem 1rem; }
+.lesson-presentation [hidden] { display: none !important; }
+.lesson-presentation dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: #0c0911; color: #faf5ff; }
+.lesson-presentation dialog::backdrop { background: #0c0911ee; }
+.lesson-presentation dialog .lesson-presentation-shell { height: 100dvh; border: 0; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); }
+.lesson-presentation dialog .swiper { flex: 1; min-height: 0; aspect-ratio: auto; }
+.lesson-presentation dialog [data-presentation-dialog-content] { height: 100%; }
+@media (max-width: 420px) { .lesson-presentation-toolbar { padding: .5rem; flex-wrap: wrap; } .lesson-presentation-actions { margin-left: auto; } .lesson-presentation [data-presentation-zoom]:disabled { display: none; } }
+
+.lesson-presentation [data-presentation-status]:empty { display: none; }
+
+.lesson-presentation button svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
