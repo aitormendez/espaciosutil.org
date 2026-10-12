@@ -1,6 +1,6 @@
 # Prácticas CDE: implementación candidata e integración diferida
 
-Fecha: 2026-10-01. Estado: primera versión de texto implementada y probada en worktrees independientes; instalación y conexión a servicios pendientes de coordinación.
+Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-12. Estado: primera versión de texto implementada y probada en worktrees independientes; instalación y conexión a servicios pendientes de coordinación.
 
 ## Alcance implementado
 
@@ -49,7 +49,7 @@ Coordinar la integración cuando exista aislamiento por versión o una ventana c
 1. Revisar el esquema vivo de NocoDB y aprobar su migración/mapeo; preparar el adaptador remoto sobre los campos reales.
 2. Validar en staging con la versión exacta de WordPress y MySQL, ACF y PMPro del destino, incluyendo cachés externas.
 3. Instalar ambos conjuntos de cambios de forma coordinada; regenerar reglas de enlaces permanentes una vez y añadir «Prácticas» al menú CDE desde WordPress. No ejecutar flush de reglas en cada petición.
-4. Confirmar las lecciones de la práctica real de Iván, importar un borrador y revisar su contenido antes de publicarlo.
+4. Resolver en NocoDB la identidad técnica de la pieza `0.4.3.2 — La canalización como permiso y el ejercicio de sentir`, confirmada por Iván como origen de EP-0.1 y verificada en el inventario del 2026-10-08. Consultar la nueva ubicación y su huella en [las decisiones de inventario](practicas-cde.md). Después de la instalación autorizada, importar un borrador y revisarlo antes de publicarlo.
 5. Incorporar posteriormente prácticas a la app Android/iOS y evaluar audio o guías por pasos según cada texto.
 
 Evidencia y límites de las pruebas web: [validación de prácticas](qa/practicas/README.md). La regresión de Contenidos se ejecutó en modo candidato, sin emitir certificado: 1.546 pruebas y 5 auxiliares. La skill pasó validación estructural y una comprobación independiente con 17 casos CLI; los dos defectos encontrados quedaron corregidos con regresiones.

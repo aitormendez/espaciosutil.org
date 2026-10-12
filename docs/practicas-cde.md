@@ -1,6 +1,6 @@
 # Prácticas del CDE: objetivo y decisiones de diseño
 
-Fecha de inicio: 2026-09-30. Última actualización: 2026-10-01.
+Fecha de inicio: 2026-09-30. Última actualización: 2026-10-12.
 
 Estado: decisiones de diseño e inventario. La primera versión de texto está implementada en ramas aisladas, sin instalación ni integración operativa. Consultar [alcance implementado, pruebas y pendientes](practicas-cde-implementacion.md); las propuestas de inventario remoto de este documento siguen pendientes de integración con NocoDB.
 
@@ -111,11 +111,21 @@ La comunicación de Iván del 2026-09-30 enumera un ejercicio depositado: `EP-0.
 
 El TXT del ejercicio se ha leído. Contiene seis apartados: procedencia, objetivo, utilidad en el camino del alumno, instrucciones paso a paso, ritmo y progresión, y avisos de la fuente. Es un texto editorial preparado para el curso, con explicaciones y citas; no debe etiquetarse automáticamente todo su contenido como transcripción literal de la fuente revelada.
 
-Ni el comunicado ni el TXT identifican las claves exactas de las lecciones relacionadas. El código `EP-0.1` no demuestra que corresponda a una lección `0.1`. La pertenencia a una serie tampoco demuestra una asociación con todas sus lecciones.
+En la revisión inicial, ni el comunicado del 2026-09-30 ni el TXT identificaban las claves exactas de las lecciones relacionadas. Esa falta de procedencia editorial queda resuelta por la entrega del 2026-10-08 descrita a continuación; la correspondencia técnica en NocoDB sigue pendiente. El código `EP-0.1` no demuestra que corresponda a una lección `0.1`.
 
 El comunicado inventaría ejercicios depositados; no prueba que sean todas las prácticas mencionadas hasta ahora en el curso. La revisión de cobertura debe contemplar también prácticas detectadas en lecciones para las que todavía no se haya entregado una ficha.
 
 La documentación local de `cde_lecciones` establece `clave_leccion` como identidad canónica y separa los campos editoriales de los hechos técnicos verificados. El reconciliador existente tiene una lista explícita de campos permitidos y no crea filas automáticamente. No debe suponerse que ese proceso gestione ya las futuras prácticas.
+
+### Procedencia confirmada y organización de entregas — 2026-10-12
+
+La comunicación de Iván aportada en este hilo establece que cada ejercicio se conserva una sola vez en la carpeta de la pieza de procedencia directa, sea un tema ordinario, una profundización o una reprofundización. Cada proyecto mantiene en su raíz un TXT con su inventario y ubicaciones. Las carpetas generales «Ejercicios prácticos» y el listado conjunto de la raíz AITOR CDE dejan de ser las ubicaciones de referencia. No mover ni duplicar las fuentes al inventariarlas.
+
+El inventario de El Círculo Carmesí del 2026-10-08 confirma expresamente que `EP-0.1 — Sentir el suelo: una capa de energía cada vez` procede de `0.4.3.2 — La canalización como permiso y el ejercicio de sentir`. Su nueva ubicación se ha comprobado el 2026-10-12. La huella SHA-256 del TXT coincide con la declarada en ese inventario: `ccf46e9ab58a816b5673bc0edfbc19e8fa6ae66b872b7d654ab9c6764cb053d8`. Esto verifica identidad de bytes con la entrega descrita, no una nueva aprobación editorial.
+
+Ruta del TXT relativa a AITOR CDE: `08 - El Círculo Carmesí/00 - Presentación/0.4. - Geoffrey Hoppe y la naturaleza de la canalizacion/0.4.3.2/EP-0.1. - Sentir el suelo una capa de energia cada vez.txt`.
+
+La procedencia editorial ya está confirmada; queda localizar y verificar la fila y la `clave_leccion` exactas en NocoDB antes de generar la asociación técnica. No deducir esa clave del código EP ni de la numeración de la carpeta. La pieza de origen no impide que otras lecciones también mencionen la misma práctica: esas apariciones se registrarán por separado en la relación muchos a muchos, sin copiar el TXT.
 
 ### Responsabilidades propuestas
 
@@ -156,7 +166,7 @@ Una búsqueda de texto o un análisis asistido podrá sugerir correspondencias, 
 
 ### Flujo propuesto
 
-1. Detectar una entrega nueva o una práctica mencionada en una lección; comprobar si ya existe en el inventario antes de darla de alta.
+1. Consultar el inventario TXT de la raíz de cada proyecto y localizar cada entrega en la carpeta de su pieza de procedencia; también detectar prácticas mencionadas en lecciones todavía sin ficha. Comprobar si ya existe en el inventario antes de darla de alta.
 2. Registrar su identidad y, cuando exista, localizar y comprobar el TXT entregado, manteniendo separado el estado editorial de los hechos técnicos.
 3. Confirmar con Iván o con pasajes concretos qué filas de `cde_lecciones` deben asociarse. Conservar como pendientes las correspondencias no resueltas.
 4. Preparar la ficha de WordPress y trasladar las asociaciones confirmadas al campo `Relationship`, resolviendo ambas entidades por sus claves estables.
@@ -171,8 +181,8 @@ Antes de implementar se verificará el esquema vivo de NocoDB y se preparará el
 
 ### Fuentes consultadas
 
-- Comunicación de Iván: `/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/Comunicación a Aitor - Ejercicios prácticos depositados - 20260930.txt`.
-- Ejercicio leído: `08 - El Círculo Carmesí/Ejercicios prácticos/EP-0.1. - Sentir el suelo una capa de energia cada vez/EP-0.1. - Sentir el suelo una capa de energia cada vez.txt`, dentro de la misma raíz Dropbox.
+- Comunicación vigente de Iván: `/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/08 - El Círculo Carmesí/Comunicación a Aitor - Ejercicios prácticos depositados - 20261008.txt`. El comunicado general del 2026-09-30 fue consultado inicialmente y ya no está en su ubicación anterior.
+- Ejercicio comprobado el 2026-10-12: `08 - El Círculo Carmesí/00 - Presentación/0.4. - Geoffrey Hoppe y la naturaleza de la canalizacion/0.4.3.2/EP-0.1. - Sentir el suelo una capa de energia cada vez.txt`, relativo a la raíz Dropbox AITOR CDE. Sustituye a la antigua ubicación en «Ejercicios prácticos».
 - Entrada de infraestructura: `/Volumes/E/Infraestructura VPS/AGENTS.md` y `docs/nocodb.md` de ese repositorio.
 - Contrato local del inventario: `/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/docs/cde-lecciones-inventario-nocodb.md`.
 - Documentación oficial de [relaciones de NocoDB](https://nocodb.com/docs/product/tables/fields/field-types/links-based/links). La disponibilidad y configuración en la instancia instalada están pendientes de verificación.
