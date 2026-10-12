@@ -56,9 +56,9 @@ La práctica se plantea como culminación del aprendizaje: el contexto prepara a
 
 El orden de lectura acordado para EP-0.1 es: procedencia, objetivo, utilidad, ritmo y progresión, avisos de la fuente y, por último, ejecución paso a paso. La renumeración de la adaptación es `1 → 1`, `2 → 2`, `3 → 3`, `5 → 4`, `6 → 5` y `4 → 6`; se aplica también a los subapartados. No se modifica la numeración ni el orden del TXT fuente.
 
-La presentación interactiva tendrá una pantalla por titular y una por párrafo, con avance manual mediante «Siguiente». La narración de voz sintética es una posibilidad por evaluar, no un requisito cerrado. El criterio de pantallas está acordado; su diseño, implementación y adaptación a web y posteriormente Android/iOS siguen pendientes. La navegación manual permite permanecer en cada paso el tiempo necesario.
+La presentación interactiva tendrá una pantalla de cabecera al inicio de cada bloque de párrafos, con toda la ruta de epígrafes: padre, hijo y los niveles adicionales que existan. Un padre que solo agrupa hijos no genera una pantalla independiente. Después, cada párrafo ocupa su propia pantalla, con avance manual mediante «Siguiente». La narración de voz sintética es una posibilidad por evaluar, no un requisito cerrado. El criterio de pantallas está acordado; su diseño, implementación y adaptación a web y posteriormente Android/iOS siguen pendientes. La navegación manual permite permanecer en cada paso el tiempo necesario.
 
-La versión de lectura contiene 6 encabezados de apartado, 15 de subapartado y 28 párrafos de contenido: 49 bloques de contenido para esa segmentación, más el título general si se presenta como portada. La etiqueta de bloque «00. Presentación» es contexto del documento, no una instrucción de práctica.
+La versión de lectura contiene 6 encabezados de apartado, 15 de subapartado y 28 párrafos de contenido. Con el criterio de ruta completa aclarado por Aitor, se generan 15 cabeceras y 28 pantallas de párrafo: 43 pantallas de contenido, más una portada opcional. Los 6 padres se repiten en las cabeceras de sus hijos; no producen otras 6 pantallas. Este recuento sustituye la estimación anterior de 49. La etiqueta de bloque «00. Presentación» es contexto del documento, no una instrucción de práctica.
 
 ### Web primero; aplicaciones después
 

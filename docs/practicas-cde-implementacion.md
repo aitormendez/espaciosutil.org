@@ -13,7 +13,9 @@ Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-12. Est
 
 ## Acuerdo editorial posterior: pantallas y orden de EP-0.1
 
-El 2026-10-12 Aitor aportó el acuerdo de Iván para una pantalla por titular y por párrafo, avance manual y ejecución al final tras recibir el contexto. El Markdown de lectura en el worktree de Contenidos se ha reordenado y renumerado, conservando íntegra la prosa. Consultar [las decisiones de diseño](practicas-cde.md). La voz sintética sigue como posibilidad por evaluar. El MVP de esta rama continúa mostrando texto: no incorpora todavía pantallas ni narración, y el importador/preparador no consume esa adaptación Markdown.
+El 2026-10-12 Aitor aportó el acuerdo de Iván para una presentación por pantallas, avance manual y ejecución al final tras recibir el contexto. Aitor precisó después que cada cabecera reúne toda la ruta de epígrafes al inicio de un bloque; no hay pantallas independientes para los padres que solo agrupan hijos. El Markdown de lectura en el worktree de Contenidos se ha reordenado y renumerado, conservando íntegra la prosa. Consultar [las decisiones de diseño](practicas-cde.md). La voz sintética sigue como posibilidad por evaluar. El MVP de esta rama continúa mostrando texto: no incorpora todavía pantallas ni narración, y el importador/preparador no consume esa adaptación Markdown.
+
+La propuesta de layouts y arquitectura reutilizable está en [wireframes de prácticas](diseno/practicas/README.md). Los diseños están guardados en Penpot y exportados localmente; no se han incorporado al código del MVP.
 
 ## Preparación en Contenidos
 
