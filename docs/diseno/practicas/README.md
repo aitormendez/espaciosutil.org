@@ -2,6 +2,10 @@
 
 Fecha: 2026-10-12. Estado: propuesta de diseño realizada en Penpot; pendiente de revisión e implementación. Archivo: Espacio-Sutil-CDE. Página: Práctica - wireframe. La documentación canónica se mantiene aquí y los SVG se conservan en `wireframes/`. No se ha modificado código operativo ni se ha instalado nada en Paperclip.
 
+## Orden de revisión acordado
+
+Por indicación de Aitor, revisar y aprobar primero los layouts de escritorio. No adaptar ni actualizar los layouts móviles hasta que el desktop esté aprobado. Los bocetos móviles ya creados se conservan como exploración previa, sin aprobación y fuera de la revisión actual. Esta regla se aplica tanto al catálogo como a la ficha y al incrustado.
+
 ## Criterio de pantallas
 
 Cada bloque de párrafos empieza con una única pantalla que muestra su ruta completa de encabezados. Por ejemplo, `1. De dónde viene esta práctica` junto con `1.1. En este corpus, canalizar es permitir que la energía pase`. Al llegar al siguiente bloque se repite el padre y aparece `1.2. Una práctica que Tobías propuso a los asistentes`. Para tres o más niveles, se muestran todos, con el último más destacado. No añadir una pantalla previa solo para un padre sin prosa propia.
