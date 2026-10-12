@@ -48,6 +48,18 @@ La primera versión tratará las prácticas como instrucciones de texto. El mode
 
 Se analizará cada práctica para determinar si admite una guía narrada con voz sintética, una presentación por pasos con un botón «Siguiente paso», ambos formatos o únicamente texto. La conversión depende de su estructura y no se presupone que todas las prácticas puedan adaptarse de la misma manera.
 
+### Presentación interactiva: acuerdo del 2026-10-12
+
+En la conversación aportada por Aitor, Iván respondió «Vale a todo» a la propuesta de presentación por pantallas y a colocar la ejecución al final, después del contexto. Es un acuerdo editorial sobre esta adaptación; no implica que la interfaz interactiva o la narración estén implementadas.
+
+La práctica se plantea como culminación del aprendizaje: el contexto prepara al alumno para realizarla. En la versión Markdown de EP-0.1, cada idea sin numerar y sus explicaciones subordinadas forman un párrafo, con punto y seguido; las ideas hermanas permanecen en párrafos separados. Los niveles numerados se representan mediante encabezados.
+
+El orden de lectura acordado para EP-0.1 es: procedencia, objetivo, utilidad, ritmo y progresión, avisos de la fuente y, por último, ejecución paso a paso. La renumeración de la adaptación es `1 → 1`, `2 → 2`, `3 → 3`, `5 → 4`, `6 → 5` y `4 → 6`; se aplica también a los subapartados. No se modifica la numeración ni el orden del TXT fuente.
+
+La presentación interactiva tendrá una pantalla por titular y una por párrafo, con avance manual mediante «Siguiente». La narración de voz sintética es una posibilidad por evaluar, no un requisito cerrado. El criterio de pantallas está acordado; su diseño, implementación y adaptación a web y posteriormente Android/iOS siguen pendientes. La navegación manual permite permanecer en cada paso el tiempo necesario.
+
+La versión de lectura contiene 6 encabezados de apartado, 15 de subapartado y 28 párrafos de contenido: 49 bloques de contenido para esa segmentación, más el título general si se presenta como portada. La etiqueta de bloque «00. Presentación» es contexto del documento, no una instrucción de práctica.
+
 ### Web primero; aplicaciones después
 
 La funcionalidad se implementará primero en la web del CDE. Después se incorporará a las aplicaciones nativas Android e iOS.
@@ -98,7 +110,7 @@ El diseño del catálogo y el modo exacto de mostrar la práctica dentro de la l
 5. Concretar la presentación del catálogo, la ficha y el bloque de prácticas en las lecciones para la primera versión web.
 6. Tras validar la versión web, definir la incorporación del contenido y las relaciones a la API y a las aplicaciones Android e iOS.
 
-El análisis de audio y navegación por pasos se realizará por práctica. Su calendario respecto a la integración móvil sigue abierto.
+La segmentación por titulares y párrafos está acordada para EP-0.1; debe evaluarse su encaje en las demás prácticas. La narración y el calendario de implementación respecto a la integración móvil siguen abiertos.
 
 
 ## Inventario editorial: propuesta del 2026-10-01

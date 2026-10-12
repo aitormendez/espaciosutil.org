@@ -11,6 +11,10 @@ Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-12. Est
 - Acceso protegido en vistas y REST, exclusión del buscador general y sitemap, oEmbed deshabilitado y respuestas privadas sin caché. Durante la integración, excluir `/practicas/` y sus rutas REST de cualquier caché externa que pueda servir HTML antes de ejecutar WordPress.
 - Importador WP-CLI: plan de solo lectura seguido de apply explícito. Resuelve identidades exactas, detecta duplicados y cambios posteriores al plan. Crea borradores y añade asociaciones confirmadas, sin publicar, retirar asociaciones ni sobrescribir textos existentes distintos. Conserva campos de lecciones ajenos al Relationship y no escribe en NocoDB.
 
+## Acuerdo editorial posterior: pantallas y orden de EP-0.1
+
+El 2026-10-12 Aitor aportó el acuerdo de Iván para una pantalla por titular y por párrafo, avance manual y ejecución al final tras recibir el contexto. El Markdown de lectura en el worktree de Contenidos se ha reordenado y renumerado, conservando íntegra la prosa. Consultar [las decisiones de diseño](practicas-cde.md). La voz sintética sigue como posibilidad por evaluar. El MVP de esta rama continúa mostrando texto: no incorpora todavía pantallas ni narración, y el importador/preparador no consume esa adaptación Markdown.
+
 ## Preparación en Contenidos
 
 El worktree hermano añade `scripts/cde_practicas.py`, su JSON Schema, pruebas y la skill local `cde-practicas`. Recibe un export normalizado de prácticas y lecciones, comprueba fuentes y revisiones y emite un informe de pendientes y un paquete de WordPress. El TXT se convierte preservando viñetas y escapando HTML; no se generan instrucciones nuevas.
