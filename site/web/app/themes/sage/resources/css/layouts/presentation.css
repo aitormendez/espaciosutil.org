@@ -1,4 +1,4 @@
-.lesson-presentation { max-width: 60rem; margin: 2.5rem auto; padding: 0 1rem; color: #faf5ff; font-family: var(--font-sans); }
+.lesson-presentation { width: calc(100% - 2rem); max-width: var(--container-4xl, 56rem); margin: 2.5rem auto; color: #faf5ff; font-family: var(--font-sans); }
 .lesson-presentation-heading h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 .35rem; }
 .lesson-presentation-heading p { opacity: .8; font-size: .95rem; margin-bottom: 1.25rem; }
 .lesson-presentation-shell { background: #171321; border: 1px solid #ffffff30; border-radius: .3rem; overflow: hidden; }
@@ -25,3 +25,5 @@
 .lesson-presentation [data-presentation-status]:empty { display: none; }
 
 .lesson-presentation button svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
+
+@media (min-width: 48rem) { .lesson-presentation { width: calc(100% - 3rem); } }
