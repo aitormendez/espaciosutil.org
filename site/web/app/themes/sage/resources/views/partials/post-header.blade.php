@@ -35,13 +35,15 @@
     <h1 class="px-4 text-center text-3xl font-thin md:mb-9 md:mt-24 md:text-6xl">{!! $title !!}</h1>
 
     @if (is_singular('cde') && is_user_logged_in())
-      <button
+      <button type="button"
         class="{{ $is_completed ? 'completed text-sol' : 'text-gris2' }} mt-6 cursor-pointer px-4 py-2 font-sans text-base transition-colors"
-        id="mark-complete" data-post-id="{{ get_the_ID() }}">
+        id="mark-complete" data-lesson-completion data-post-id="{{ get_the_ID() }}"
+        data-completed="{{ $is_completed ? 'true' : 'false' }}" aria-pressed="{{ $is_completed ? 'true' : 'false' }}"
+        aria-label="{{ $is_completed ? 'Marcar como no vista' : 'Marcar como vista' }}">
         <div class="flex flex-col items-center">
           <div class="btn-text">{{ $is_completed ? 'Vista' : 'Marcar como vista' }}</div>
-          <x-coolicon-show class="icon-show {{ $is_completed ? '' : 'hidden' }} block h-8 w-8" />
-          <x-coolicon-hide class="icon-hide {{ $is_completed ? 'hidden' : '' }} block h-8 w-8" />
+          <x-coolicon-show aria-hidden="true" class="icon-show {{ $is_completed ? '' : 'hidden' }} block h-8 w-8" />
+          <x-coolicon-hide aria-hidden="true" class="icon-hide {{ $is_completed ? 'hidden' : '' }} block h-8 w-8" />
         </div>
       </button>
     @endif

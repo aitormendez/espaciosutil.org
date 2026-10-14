@@ -1,3 +1,4 @@
+import useLessonCompletion from '../lessons/useLessonCompletion.js';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { MediaPlayer, MediaProvider, Track } from '@vidstack/react';
 import '@vidstack/react/player/styles/base.css';
@@ -23,11 +24,14 @@ const FeaturedAudio = ({
   pullZone,
   audioName,
   lessonTitle,
+  lessonId,
+  isCompleted,
   chapters = [],
   defaultHlsUrl,
   defaultPosterUrl,
 }) => {
   const playerRef = useRef(null);
+  useLessonCompletion(playerRef, lessonId, isCompleted);
   const fallbackHlsUrl =
     typeof defaultHlsUrl === 'string' && defaultHlsUrl.trim()
       ? defaultHlsUrl.trim()

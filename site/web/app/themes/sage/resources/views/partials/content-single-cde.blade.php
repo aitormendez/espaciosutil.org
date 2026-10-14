@@ -66,6 +66,8 @@
           'audio' => $featured_media['audio'] ?? null,
           'pullZone' => $featured_media['pull_zone'] ?? null,
           'lessonTitle' => get_the_title(),
+          'lessonId' => is_user_logged_in() ? get_the_ID() : null,
+          'isCompleted' => (bool) ($is_completed ?? false),
       ];
     @endphp
 

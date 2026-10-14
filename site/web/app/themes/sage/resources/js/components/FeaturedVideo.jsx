@@ -1,3 +1,4 @@
+import useLessonCompletion from '../lessons/useLessonCompletion.js';
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import {
   MediaPlayer,
@@ -88,11 +89,14 @@ const FeaturedVideo = ({
   pullZone,
   videoName,
   lessonTitle,
+  lessonId,
+  isCompleted,
   chapters = [],
   defaultHlsUrl,
   defaultPosterUrl,
 }) => {
   const playerRef = useRef(null);
+  useLessonCompletion(playerRef, lessonId, isCompleted);
   const fallbackHlsUrl =
     typeof defaultHlsUrl === 'string' && defaultHlsUrl.trim()
       ? defaultHlsUrl.trim()

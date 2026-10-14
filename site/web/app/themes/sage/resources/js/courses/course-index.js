@@ -1,3 +1,4 @@
+import initMarkComplete, { syncCompletionButtons } from './mark-complete.js';
 import { gsap } from 'gsap';
 import {
   MOBILE_COURSE_INDEX_QUERY,
@@ -5,6 +6,7 @@ import {
 } from './courseIndexScroll.js';
 
 export default function initCourseIndex() {
+  initMarkComplete();
   const container = document.getElementById('indice-ajax-container');
   const topicsHeading = document.getElementById('course-topics-heading');
   const seriesToggles = document.querySelectorAll('.serie-accordion-toggle');
@@ -258,6 +260,7 @@ export default function initCourseIndex() {
         }
         const data = await response.json();
         container.innerHTML = data.html;
+        syncCompletionButtons(container);
         initializeCourseIndexChildren(container);
         scrollToTopicsOnMobile();
       } catch (error) {

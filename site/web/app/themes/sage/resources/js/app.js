@@ -1,3 +1,4 @@
+import initMarkComplete from './courses/mark-complete.js';
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones, destruirConstelaciones } from './constelaciones.js';
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let destroyNavigation = () => {};
 
   initCookieConsent();
+  initMarkComplete();
   syncActiveMenuState();
 
   if (!document.getElementById('wpadminbar')) {
@@ -99,9 +101,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (document.body.classList.contains('single-cde')) {
-    const markCompleteModule = await import('./courses/mark-complete.js');
-    markCompleteModule.default();
-
     const lessonSubindexModule = await import('./lessons/subindex.js');
     lessonSubindexModule.default();
 

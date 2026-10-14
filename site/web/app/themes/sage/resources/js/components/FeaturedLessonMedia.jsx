@@ -45,7 +45,7 @@ const normalizeMediaEntry = (entry) => {
   };
 };
 
-const FeaturedLessonMedia = ({ video, audio, pullZone, lessonTitle }) => {
+const FeaturedLessonMedia = ({ video, audio, pullZone, lessonTitle, lessonId, isCompleted }) => {
   const normalizedVideo = useMemo(() => normalizeMediaEntry(video), [video]);
   const normalizedAudio = useMemo(() => normalizeMediaEntry(audio), [audio]);
 
@@ -111,6 +111,8 @@ const FeaturedLessonMedia = ({ video, audio, pullZone, lessonTitle }) => {
             pullZone={pullZone}
             videoName={normalizedVideo.name}
             lessonTitle={lessonTitle}
+            lessonId={lessonId}
+            isCompleted={isCompleted}
             chapters={normalizedVideo.chapters}
             defaultHlsUrl={normalizedVideo.defaultHlsUrl}
             defaultPosterUrl={normalizedVideo.defaultPosterUrl}
@@ -125,6 +127,8 @@ const FeaturedLessonMedia = ({ video, audio, pullZone, lessonTitle }) => {
             pullZone={pullZone}
             audioName={normalizedAudio.name}
             lessonTitle={lessonTitle}
+            lessonId={lessonId}
+            isCompleted={isCompleted}
             chapters={normalizedAudio.chapters}
             defaultHlsUrl={normalizedAudio.defaultHlsUrl}
             defaultPosterUrl={normalizedAudio.defaultPosterUrl}

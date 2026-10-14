@@ -22,11 +22,15 @@
           </a>
 
           @if ($showCompletionIcon)
-            @if ($isCompleted)
-              <x-coolicon-show class="icon-show text-sol h-6 w-6" />
-            @else
-              <x-coolicon-hide class="icon-hide text-morado1 h-6 w-6" />
-            @endif
+            <button type="button" data-lesson-completion data-post-id="{{ $item->id }}"
+              data-lesson-title="{{ $item->title }}" data-completed="{{ $isCompleted ? 'true' : 'false' }}"
+              aria-pressed="{{ $isCompleted ? 'true' : 'false' }}"
+              aria-label="{{ $isCompleted ? 'Marcar como no vista' : 'Marcar como vista' }}: {{ $item->title }}"
+              title="{{ $isCompleted ? 'Marcar como no vista' : 'Marcar como vista' }}"
+              class="course-index-completion {{ $isCompleted ? 'completed text-sol' : 'text-morado1' }} inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-blanco/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sol disabled:cursor-wait disabled:opacity-50">
+              <x-coolicon-show aria-hidden="true" class="icon-show {{ $isCompleted ? '' : 'hidden' }} h-6 w-6" />
+              <x-coolicon-hide aria-hidden="true" class="icon-hide {{ $isCompleted ? 'hidden' : '' }} h-6 w-6" />
+            </button>
           @else
             <span class="course-index-placeholder-icon block h-6 w-6"></span>
           @endif
