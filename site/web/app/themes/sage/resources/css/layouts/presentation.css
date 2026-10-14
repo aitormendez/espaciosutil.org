@@ -1,8 +1,8 @@
-.lesson-presentation { width: calc(100% - 2rem); max-width: var(--container-4xl, 56rem); margin: 2.5rem auto; color: #faf5ff; font-family: var(--font-sans); }
+.lesson-presentation { --presentation-background: #171321; width: calc(100% - 2rem); max-width: var(--container-4xl, 56rem); margin: 2.5rem auto; color: #faf5ff; font-family: var(--font-sans); }
 .lesson-presentation-heading h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 .35rem; }
 .lesson-presentation-heading p { opacity: .8; font-size: .95rem; margin-bottom: 1.25rem; }
-.lesson-presentation-shell { background: #171321; border: 1px solid #ffffff30; border-radius: .3rem; overflow: hidden; }
-.lesson-presentation .swiper { width: 100%; aspect-ratio: 16 / 9; background: #0c0911; }
+.lesson-presentation-shell { background: var(--presentation-background); border: 1px solid #ffffff30; border-radius: .3rem; overflow: hidden; }
+.lesson-presentation .swiper { width: 100%; aspect-ratio: 16 / 9; background: var(--presentation-background); }
 .lesson-presentation .swiper-slide { display: flex; align-items: center; justify-content: center; }
 .lesson-presentation .swiper-slide img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
 .lesson-presentation-toolbar { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .75rem; }
@@ -15,7 +15,7 @@
 .lesson-presentation [data-presentation-status]:not(:empty) { padding: .5rem 1rem; }
 .lesson-presentation [data-presentation-retry] { margin: .5rem 1rem 1rem; }
 .lesson-presentation [hidden] { display: none !important; }
-.lesson-presentation dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: #0c0911; color: #faf5ff; }
+.lesson-presentation dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: var(--presentation-background); color: #faf5ff; }
 .lesson-presentation dialog::backdrop { background: #0c0911ee; }
 .lesson-presentation dialog .lesson-presentation-shell { height: 100dvh; border: 0; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); }
 .lesson-presentation dialog .swiper { flex: 1; min-height: 0; aspect-ratio: auto; }
@@ -28,7 +28,7 @@
 
 @media (min-width: 48rem) { .lesson-presentation { width: calc(100% - 3rem); } }
 
-.lesson-presentation-loading { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; }
+.lesson-presentation-loading { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; background: var(--presentation-background); pointer-events: none; }
 .lesson-presentation-loading-label { display: inline-flex; align-items: center; gap: .65rem; padding: .7rem 1rem; border: 1px solid #ffffff20; border-radius: .35rem; background: #171321ed; color: #faf5ff; font-size: .875rem; }
 .lesson-presentation-loading svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; animation: presentation-loading-spin 1.2s linear infinite; }
 @keyframes presentation-loading-spin { to { transform: rotate(360deg); } }
