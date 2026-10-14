@@ -119,7 +119,8 @@ export default function initPresentations(scope = document) {
           img.width = slide.sources[0].width; img.height = slide.sources[0].height;
           img.addEventListener('load', () => imageReady(img), options);
           img.addEventListener('error', () => {
-            if (!img.isConnected || !img.hasAttribute('src') || abort.signal.aborted) return;
+            // Una renovación en curso sustituirá estas imágenes; sus errores ya no son actuales.
+            if (loading || !img.isConnected || !img.hasAttribute('src') || abort.signal.aborted) return;
             if (!reloaded) { reloaded = true; load(swiper?.activeIndex || 0); }
             else showError('No se ha podido cargar una diapositiva. Comprueba tu sesión y vuelve a intentarlo.');
           }, options);
