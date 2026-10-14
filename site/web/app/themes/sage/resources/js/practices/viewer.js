@@ -50,8 +50,8 @@ export function initPracticeViewers(scope = document) {
       }
     };
     const syncIndex = () => {
-      index.hidden = mode !== 'guide' || (fullscreen ? !indexOpen : root.classList.contains('practice-viewer--embedded'));
-      root.classList.toggle('practice-index-open', fullscreen && indexOpen && mode === 'guide');
+      index.hidden = fullscreen ? !indexOpen : (mode === 'guide' && root.classList.contains('practice-viewer--embedded'));
+      root.classList.toggle('practice-index-open', fullscreen && indexOpen);
       const toggle = q('[data-action="index"]');
       toggle.setAttribute('aria-expanded', String(!index.hidden));
       toggle.querySelector('span').textContent = index.hidden ? 'Mostrar índice' : 'Ocultar índice';
@@ -92,12 +92,27 @@ export function initPracticeViewers(scope = document) {
       q('[data-practice-controls]').hidden = mode !== 'guide';
       audioButton.hidden = mode !== 'guide';
       for (const name of ['guide', 'reading']) q(`[data-action="${name}"]`).setAttribute('aria-pressed', String(mode === name));
+      if (mode === 'guide') render();
+      else root.querySelectorAll('[data-practice-jump]').forEach((item) => item.removeAttribute('aria-current'));
       syncIndex(); narrate();
     };
     root.addEventListener('click', async (event) => {
       const button = event.target.closest('button');
       if (!button || !root.contains(button)) return;
-      if (button.hasAttribute('data-practice-jump')) { setMode('guide'); go(Number(button.dataset.practiceJump)); return; }
+      if (button.hasAttribute('data-practice-jump')) {
+        if (mode === 'reading') {
+          const target = reading.querySelector(`[data-practice-heading="${button.dataset.practiceSection}"]`);
+          if (target) {
+            target.scrollIntoView({ block: 'start', behavior: 'instant' });
+            target.focus({ preventScroll: true });
+            root.querySelectorAll('[data-practice-jump]').forEach((item) => {
+              if (item === button) item.setAttribute('aria-current', 'location');
+              else item.removeAttribute('aria-current');
+            });
+          }
+        } else { go(Number(button.dataset.practiceJump)); }
+        return;
+      }
       switch (button.dataset.action) {
         case 'next': go(position + 1); break;
         case 'previous': go(position - 1); break;
@@ -138,7 +153,7 @@ export function initPracticeViewers(scope = document) {
       q('[data-fullscreen-exit]').hidden = !fullscreen;
       q('[data-fullscreen-label]').textContent = fullscreen ? 'Salir de pantalla completa' : 'Pantalla completa';
       syncIndex();
-      (fullscreen ? screen : fullButton).focus({ preventScroll: true });
+      (fullscreen ? (mode === 'guide' ? screen : reading) : fullButton).focus({ preventScroll: true });
     }, options);
     // Leaving the page or starting another lesson medium must not leave an invisible narration playing.
     window.addEventListener('pagehide', disable, options);
@@ -150,6 +165,7 @@ export function initPracticeViewers(scope = document) {
     if (audioButton.disabled) audioButton.title = 'La narración de esta práctica está pendiente de preparación.';
     fullButton.hidden = !document.fullscreenEnabled || typeof root.requestFullscreen !== 'function';
     root.dataset.mode = 'guide';
+    root.dataset.practiceReady = 'true';
     q('[data-practice-toolbar]').hidden = false;
     q('[data-practice-controls]').hidden = false;
     screen.hidden = false; reading.hidden = true;

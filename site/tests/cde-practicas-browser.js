@@ -28,12 +28,12 @@ async (page) => {
   await button('Desactivar audio').click();check((await state()).audio[0].paused,'desactivar detiene audio');
   await button('6. Cómo se hace, paso a paso').click();
   while (await button('Siguiente').isEnabled()) await button('Siguiente').click();
-  check((await state()).counter.startsWith('43 '),'43 pantallas y límite final');
-  await button('Anterior').click();check((await state()).counter.startsWith('42 '),'retroceso funciona');
+  check((await state()).counter.startsWith('49 '),'49 pantallas y límite final');
+  await button('Anterior').click();check((await state()).counter.startsWith('48 '),'retroceso funciona');
   await button('Activar audio').click();
   await page.waitForFunction(()=>window.__practiceAudio[0].currentTime>.3);
   await page.waitForFunction(()=>window.__practiceAudio[0].ended,{},{timeout:30000});
-  check((await state()).counter.startsWith('42 '),'fin del audio no avanza pantalla');
+  check((await state()).counter.startsWith('48 '),'fin del audio no avanza pantalla');
   await button('Desactivar audio').click();
   const url = await page.evaluate(()=>JSON.parse(document.querySelector('[data-practice-viewer]').dataset.guide).screens[0].audio);
   const access = await page.evaluate(async url=>{

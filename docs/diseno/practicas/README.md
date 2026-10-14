@@ -14,9 +14,9 @@ Por indicación de Aitor, revisar y aprobar primero los layouts de escritorio. N
 
 ## Criterio de pantallas
 
-Cada bloque de párrafos empieza con una única pantalla que muestra su ruta completa de encabezados. Por ejemplo, `1. De dónde viene esta práctica` junto con `1.1. En este corpus, canalizar es permitir que la energía pase`. Al llegar al siguiente bloque se repite el padre y aparece `1.2. Una práctica que Tobías propuso a los asistentes`. Para tres o más niveles, se muestran todos, con el último más destacado. No añadir una pantalla previa solo para un padre sin prosa propia.
+Cada bloque de párrafos empieza con una única pantalla que muestra su ruta completa de encabezados. Por ejemplo, `1. De dónde viene esta práctica` junto con `1.1. En este corpus, canalizar es permitir que la energía pase`. Al llegar al siguiente bloque se repite el padre y aparece `1.2. Una práctica que Tobías propuso a los asistentes`. Para tres o más niveles, se muestran todos, con el último más destacado. El ajuste confirmado el 2026-10-14 añade una portada por padre; el hijo conserva la ruta visual pero narra sólo su propio título, con punto final para TTS.
 
-Después de la cabecera, cada párrafo ocupa una pantalla. No separar las explicaciones subordinadas que ya se integraron con punto y seguido. Mantener el orden editorial aprobado: contexto, ritmo, avisos y ejecución al final. En EP-0.1 hay 15 cabeceras y 28 párrafos: 43 pantallas de contenido, sin contar una eventual portada. Si otra práctica tiene prosa directamente bajo un padre, ese bloque sí necesita su cabecera con la ruta disponible; no limitar el algoritmo a hojas ni a dos niveles.
+Después de la cabecera, cada párrafo ocupa una pantalla. No separar las explicaciones subordinadas que ya se integraron con punto y seguido. Mantener el orden editorial aprobado: contexto, ritmo, avisos y ejecución al final. En EP-0.1 hay 6 portadas de bloque, 15 cabeceras de subapartado y 28 párrafos: 49 pantallas. Si otra práctica tiene prosa directamente bajo un padre, ese bloque sí necesita su cabecera con la ruta disponible; no limitar el algoritmo a hojas ni a dos niveles.
 
 ## Tres vistas, un visor compartido
 

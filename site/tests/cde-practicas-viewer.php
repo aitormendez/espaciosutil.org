@@ -15,12 +15,17 @@ $check = static function ($condition, $message) use (&$checks) {
     $checks++;
 };
 $g = Guide::fromHtml('<h2>1. Padre</h2><h3>1.1. Hijo</h3><h4>1.1.1. Nieto</h4><p>Una idea. Su desarrollo.</p><h3>1.2. Otro hijo</h3><p>Otra idea.</p>');
-$check(count($g['screens']) === 4, 'No crear pantallas de padres que sólo agrupan hijos.');
-$check($g['screens'][0]['path'] === ['1. Padre', '1.1. Hijo', '1.1.1. Nieto'], 'Ruta de tres niveles.');
-$check($g['screens'][2]['path'] === ['1. Padre', '1.2. Otro hijo'], 'Eliminar descendientes al cambiar de epígrafe.');
+$check(count($g['screens']) === 6, 'Cada encabezado tiene pantalla, incluidos los padres.');
+$check($g['screens'][2]['path'] === ['1. Padre', '1.1. Hijo', '1.1.1. Nieto'], 'Ruta de tres niveles.');
+$check($g['screens'][4]['path'] === ['1. Padre', '1.2. Otro hijo'], 'Eliminar descendientes al cambiar de epígrafe.');
 $check(count($g['sections']) === 1 && $g['sections'][0]['screen'] === 0, 'Índice apunta al inicio del bloque.');
-$check($g['screens'][1]['speech'] === 'Una idea. Su desarrollo.', 'No dividir párrafos en frases.');
-$check($g['screens'][0]['speech'] === '1. Padre. 1.1. Hijo. 1.1.1. Nieto', 'Narración de la ruta sin portadas independientes.');
+$check($g['screens'][3]['speech'] === 'Una idea. Su desarrollo.', 'No dividir párrafos en frases.');
+$check($g['screens'][2]['speech'] === '1.1.1. Nieto.', 'Narrar sólo el epígrafe nuevo con punto final.');
+$check($g['screens'][0]['path'] === ['1. Padre'] && $g['screens'][0]['speech'] === '1. Padre.', 'Portada de bloque sin punto visual y con punto hablado.');
+$reading = Guide::readingHtml('<h2>1. Padre</h2><p>Contexto.</p><h3>1.1. Hijo</h3>', 'instance-a', $g['sections']);
+$check(str_contains($reading, 'id="instance-a-section-0"') && str_contains($reading, 'data-practice-heading="0"'), 'Índice de lectura apunta a encabezados reales de la instancia.');
+$other = Guide::readingHtml('<h2>1. Padre</h2>', 'instance-b', $g['sections']);
+$check(!str_contains($other, 'instance-a') && str_contains($other, 'instance-b-section-0'), 'Dos visores no comparten IDs.');
 $standalone = Guide::fromHtml('<h2>Padre</h2><p>Contexto propio.</p><h3>Hijo</h3><p>Desarrollo.</p><h2>Final</h2>');
 $check(count($standalone['screens']) === 5 && count($standalone['sections']) === 2, 'Conservar padres con texto propio y cabecera final.');
 foreach (['<ul><li>Paso</li></ul>', '<table><tr><td>Dato</td></tr></table>', '<p>Antes</p><img src="x">', 'Texto sin párrafo', '<h1>Título no adaptado</h1>', '<p>Instrucción con <img src="x"> imagen.</p>', '<p><audio src="x"></audio></p>'] as $html) {
@@ -39,8 +44,8 @@ $check(Catalog::forLesson($lessonId) === [] && Catalog::lessonsFor($practiceId) 
 wp_set_current_user($memberId);
 $check(Catalog::allowed(), 'Cualquier membresía activa da acceso.');
 $actual = Guide::forPost($practice);
-$check(count($actual['screens']) === 43 && count($actual['sections']) === 6, 'EP-0.1: 43 pantallas y seis bloques.');
-$check(count(array_filter(array_column($actual['screens'], 'audio'))) === 43, 'Audio preparado para las 43 pantallas.');
+$check(count($actual['screens']) === 49 && count($actual['sections']) === 6, 'EP-0.1: 49 pantallas y seis bloques.');
+$check(count(array_filter(array_column($actual['screens'], 'audio'))) === 49, 'Audio preparado para las 49 pantallas.');
 $check(in_array($practiceId, array_column(Catalog::forLesson($lessonId), 'ID'), true), 'Relación desde lección.');
 $check(in_array($lessonId, array_column(Catalog::lessonsFor($practiceId), 'ID'), true), 'Consulta inversa de contexto.');
 $check(!str_contains(Audio::directory(), '/web/'), 'Audios fuera del directorio público.');

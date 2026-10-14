@@ -1,14 +1,14 @@
 @php
   $guide = \EspacioSutil\Practicas\Guide::forPost($practice);
   $viewerId = wp_unique_id('practice-');
-  $reading = wpautop(wp_kses_post($practice->post_content));
+  $reading = \EspacioSutil\Practicas\Guide::readingHtml(wpautop(wp_kses_post($practice->post_content)), $viewerId, $guide['sections']);
 @endphp
 <section class="practice-viewer {{ !empty($embedded) ? 'practice-viewer--embedded' : '' }}" data-practice-viewer data-mode="reading" aria-label="{{ get_the_title($practice) }}" data-guide='@json($guide, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
   <header class="practice-fullscreen-title"><span>{{ get_the_title($practice) }}</span></header>
   <nav class="practice-index" id="{{ $viewerId }}-index" aria-label="Índice de la práctica" hidden>
     <p class="practice-eyebrow">En esta práctica</p>
     @foreach ($guide['sections'] as $section)
-      <button type="button" data-practice-jump="{{ $section['screen'] }}">{{ $section['title'] }}</button>
+      <button type="button" data-practice-jump="{{ $section['screen'] }}" data-practice-section="{{ $loop->index }}">{{ $section['title'] }}</button>
     @endforeach
   </nav>
   <div class="practice-viewer-main">
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="practice-screen" data-practice-screen tabindex="-1" hidden></div>
-    <div class="practice-reading" data-practice-reading>{!! $reading !!}</div>
+    <div class="practice-reading" data-practice-reading tabindex="-1">{!! $reading !!}</div>
     <footer class="practice-controls" hidden data-practice-controls>
       <progress data-practice-progress max="{{ max(1, count($guide['screens'])) }}" value="1" aria-label="Progreso de la práctica"></progress>
       <button type="button" class="practice-button" data-action="previous" disabled>@include('partials.practice-icon', ['icon'=>'left']) Anterior</button>

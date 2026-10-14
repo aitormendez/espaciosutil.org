@@ -42,3 +42,17 @@ Este hook vive sólo en el navegador de QA y no forma parte del producto. El scr
 - [Pantalla completa](practicas-fullscreen.png).
 
 Móvil, Safari/iOS/Android, cachés de staging/producción, almacenamiento remoto y la escucha editorial quedan pendientes de sus fases correspondientes. Esta prueba no integra las ramas ni instala skills.
+
+## Segunda iteración: portadas, voz e índice en lectura
+
+La versión vigente incorpora 49 pantallas y sustituye el recorrido de 43 de la primera prueba. Las regresiones actuales están en `site/tests/cde-practicas-viewer.php`, `site/tests/cde-practicas-adjustments-browser.js` y `scripts/test_generate_practice_audio.py`. Se comprueban portadas, ruta visual, voz sólo del último epígrafe con punto final, anclas de lectura por instancia y límite de audio por frames exactos.
+
+La prueba del índice llevó el foco al encabezado 6 sin abandonar la pestaña de lectura; en pantalla completa el scroll interno llegó a 3.138 px, con el encabezado a 209,94 px por debajo de la barra que termina a 178 px, sin desbordamiento del visor. Volver a la guía conservó la pantalla 2.
+
+- [Portada del bloque](practicas-portada-v2.png).
+- [Índice en lectura completa](practicas-lectura-indice-v2.png).
+- [Lectura e índice en pantalla completa](practicas-texto-completo-fullscreen-v2.png).
+
+El diagnóstico y tratamiento de la referencia acústica se documentan en [visor y voz](../../../practicas-cde-visor-y-voz.md). La validación automática no sustituye la escucha humana del inicio de los fragmentos.
+
+La regresión funcional final del visor pasó sus 17 aserciones con los 49 audios preparados; [resultado HTTP y funcional](ajustes-v2-resultados.json). También se comprobó el índice de lectura en la práctica incrustada: visible, destino correcto al encabezado 6 y sin desbordamiento horizontal. Compilación estándar Vite correcta.

@@ -13,6 +13,29 @@ final class Guide
         return Audio::attach($post->ID, self::fromHtml(wpautop($post->post_content)));
     }
 
+    public static function readingHtml(string $html, string $prefix, array $sections): string
+    {
+        if (!$sections) { return $html; }
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+        $doc->loadHTML('<?xml encoding="UTF-8"><body>'.$html.'</body>', LIBXML_NONET);
+        libxml_clear_errors();
+        libxml_use_internal_errors($previous);
+        $next = 0;
+        foreach ((new \DOMXPath($doc))->query('//h2|//h3|//h4|//h5|//h6') as $heading) {
+            $title = trim(preg_replace('/\s+/u', ' ', $heading->textContent));
+            if (isset($sections[$next]) && $sections[$next]['title'] === $title) {
+                $heading->setAttribute('id', $prefix.'-section-'.$next);
+                $heading->setAttribute('data-practice-heading', (string) $next);
+                $heading->setAttribute('tabindex', '-1');
+                $next++;
+            }
+        }
+        $result = '';
+        foreach ($doc->getElementsByTagName('body')->item(0)->childNodes as $node) { $result .= $doc->saveHTML($node); }
+        return $result;
+    }
+
     public static function fromHtml(string $html): array
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
@@ -31,7 +54,7 @@ final class Guide
             if (!isset($sections[$section])) {
                 $sections[$section] = ['title' => $section, 'screen' => count($screens)];
             }
-            $screens[] = ['type' => 'heading', 'path' => $route, 'html' => '', 'speech' => implode('. ', $route), 'section' => $section];
+            $screens[] = ['type' => 'heading', 'path' => $route, 'html' => '', 'speech' => rtrim(end($route), '. ').'.', 'section' => $section];
             $pending = false;
         };
         $visit = static function ($node) use (&$visit, &$path, &$pending, &$unsupported, &$screens, $flush, $doc) {
@@ -45,7 +68,7 @@ final class Guide
             $text = trim(preg_replace('/\s+/u', ' ', $node->textContent));
             if (preg_match('/^h([2-6])$/', $tag, $match)) {
                 $level = (int) $match[1];
-                if ($pending && $path && $level <= max(array_keys($path))) { $flush(); }
+                if ($pending) { $flush(); }
                 foreach (array_keys($path) as $key) { if ($key >= $level) { unset($path[$key]); } }
                 if ($text !== '') { $path[$level] = $text; $pending = true; }
             } elseif ($tag === 'p') {

@@ -6,11 +6,11 @@ Fecha: 2026-10-14. Rama: `codex/cde-practicas`. Worktree web en aitorFS: `/Users
 
 Catálogo oscuro con búsqueda, filtro por serie de las lecciones y un enlace por lección, usando únicamente su título. Una práctica puede aparecer en varias series a través de sus relaciones. No hay clasificación propia ni referencia al texto fuente en la ficha. El catálogo, la ficha individual y el incrustado se apoyan en el mismo CPT y Relationship.
 
-`partials/practice-viewer.blade.php` es el visor compartido y `resources/js/practices/viewer.js` controla cada instancia. Cada ruta de encabezados inicia su bloque; cada párrafo es una pantalla. EP-0.1 tiene 43 pantallas, 6 bloques y ejecución al final. No se han añadido portadas de padres ni progreso persistente. Un texto con listas, tablas o medios sin adaptar conserva la lectura completa, sin omitir instrucciones para forzar la conversión.
+`partials/practice-viewer.blade.php` es el visor compartido y `resources/js/practices/viewer.js` controla cada instancia. Cada ruta de encabezados inicia su bloque; cada párrafo es una pantalla. EP-0.1 tiene 49 pantallas: 6 portadas de bloque, 15 subepígrafes y 28 párrafos, con ejecución al final. Cada padre tiene su portada; la pantalla del hijo mantiene toda la ruta visual, pero narra sólo el título nuevo. Todos los títulos llegan al motor de voz con punto final, sin añadirlo a la presentación visual. No hay progreso persistente. Un texto con listas, tablas o medios sin adaptar conserva la lectura completa, sin omitir instrucciones para forzar la conversión.
 
 La guía se calcula en el servidor desde el HTML editorial mediante `Guide`; el navegador no divide el DOM ni inventa resúmenes. La prosa inline se sanea antes de insertarla. El formato actual permite probar la web; la API de pantallas y los IDs estables para la app aún deben diseñarse. La lectura completa funciona sin JavaScript.
 
-«Activar audio» reproduce la pantalla actual y cada nueva pantalla hasta desactivarlo. Cambiar de pantalla corta el fragmento previo; terminar un audio no avanza. Activar otra práctica o un medio de la lección detiene la narración anterior. «Texto completo» la pausa y regresar a la guía mantiene la pantalla. No se usan las voces del navegador.
+«Activar audio» reproduce la pantalla actual y cada nueva pantalla hasta desactivarlo. Cambiar de pantalla corta el fragmento previo; terminar un audio no avanza. Activar otra práctica o un medio de la lección detiene la narración anterior. «Texto completo» la pausa y regresar a la guía mantiene la pantalla. El índice sigue visible en lectura y sus botones enfocan y desplazan a los encabezados reales del texto; en pantalla completa se puede mostrar u ocultar y el texto tiene scroll interno. No se usan las voces del navegador.
 
 Pantalla completa oculta el índice inicialmente y permite mostrarlo u ocultarlo sin reiniciar audio ni posición. Escape y el botón de salida restauran el contexto. Los botones usan los iconos Tabler acordados. El diseño y la validación se limitan al escritorio.
 
@@ -93,3 +93,17 @@ El motor, sus contratos/certificados y las skills de Paperclip no cambian. La in
 - `site/web/app/themes/sage/resources/views/partials/lesson-practicas.blade.php`.
 - `site/web/app/themes/sage/resources/views/partials/practice-icon.blade.php`.
 - `site/web/app/themes/sage/resources/views/partials/practice-viewer.blade.php`.
+
+## Ajustes posteriores del 2026-10-14
+
+La primera prueba con 43 pantallas se sustituye por una versión con 49, conforme a la indicación de Aitor de incluir las portadas de bloque. El texto enviado a TTS se separa del título visual: sólo se narra el último epígrafe de la ruta, terminado en punto. Esto invalida correctamente los audios anteriores mediante una nueva huella; se conservan los archivos anteriores en privado como evidencia, pero el visor sirve la nueva versión.
+
+Cada pantalla ya se sintetizaba de forma independiente; no se segmentaba una grabación larga. Se inspeccionó la decodificación de MLX: antepone los códigos de la referencia F063 y elimina su tramo al final. En tres muestras, el recorte proporcional difería del límite exacto en cero o una muestra (0,042 ms), de modo que no se atribuye el problema de décimas de segundo a un simple redondeo. El inicio audible es compatible con arrastre del contexto acústico de esa referencia.
+
+La corrección prepara una copia de F063 con 480 ms de silencio final (seis frames del códec), sin alterar sus muestras originales. Durante la síntesis se captura la decodificación completa y se retira la referencia por el número exacto de frames de 1.920 muestras, validando dimensiones y rechazando recortes aproximados. No se elimina un intervalo fijo del comienzo de la voz generada ni se recortan fonemas por un umbral de volumen. El modelo y la biblioteca operativos permanecen intactos; este tratamiento reside en el generador del worktree.
+
+Las primeras tres muestras nuevas empiezan con RMS cero en los primeros 30 ms; dos muestras anteriores tenían RMS 0,016179 y 0,001922. La transcripción local con Whisper conserva el texto de los dos títulos y el párrafo de prueba; representa la numeración de manera desigual, por lo que no se declara coincidencia literal total ni aprobación perceptiva. Las muestras nuevas deben escucharse para confirmar subjetivamente la desaparición de los sonidos señalados. La transcripción usa dependencias temporales en `/tmp/cde-practicas-asr-deps`, sin modificar el entorno de entrenamiento.
+
+Pruebas adicionales: cuatro regresiones Python del límite exacto y de conservación de F063; 35 comprobaciones PHP, incluyendo portadas, puntuación y anclas únicas por visor; comprobación en Chrome del índice en ambas pestañas y en pantalla completa. Las capturas nuevas se conservan en `docs/qa/practicas/desktop-20261014/`. La evidencia de 43 pantallas del apartado previo corresponde a la primera iteración y se mantiene como historial.
+
+Resultado de la regeneración: 49 fragmentos y 437,6 segundos de audio en 225,89 segundos de inferencia; cero muestras saturadas. Todos los límites de referencia fueron exactamente 270.720 muestras (141 frames). El RMS máximo de los primeros 30 ms fue 0,0000261, aproximadamente −91,7 dBFS. Esto acredita el arranque casi silencioso, sin sustituir una revisión auditiva completa. Las 35 comprobaciones PHP y las cuatro pruebas Python pasaron.
