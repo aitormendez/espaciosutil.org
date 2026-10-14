@@ -36,6 +36,35 @@ final class Guide
         return $result;
     }
 
+    /** Spell editorial numbering only; visual titles and paragraph speech stay intact. */
+    private static function headingSpeech(string $heading): string
+    {
+        if (preg_match('/^(\d+(?:\.\d+)*)(\.?)\s+(.+)$/u', $heading, $parts)
+            && ($parts[2] === '.' || str_contains($parts[1], '.'))) {
+            $numbers = array_map(static fn ($part) => self::numberSpeech($part), explode('.', $parts[1]));
+            $heading = ucfirst(implode(' punto ', $numbers)).'. '.$parts[3];
+        }
+        return rtrim($heading, '. ').'.';
+    }
+
+    private static function numberSpeech(string $digits): string
+    {
+        $small = ['cero', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve', 'veinte', 'veintiuno', 'veintidós', 'veintitrés', 'veinticuatro', 'veinticinco', 'veintiséis', 'veintisiete', 'veintiocho', 'veintinueve'];
+        // Preserve leading zeroes and unusually long identifiers without integer overflow.
+        if (strlen($digits) > 3 || (strlen($digits) > 1 && $digits[0] === '0')) {
+            return implode(' ', array_map(static fn ($digit) => $small[(int) $digit], str_split($digits)));
+        }
+        $number = (int) $digits;
+        if ($number < 30) { return $small[$number]; }
+        if ($number < 100) {
+            $tens = [3 => 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+            return $tens[intdiv($number, 10)].($number % 10 ? ' y '.$small[$number % 10] : '');
+        }
+        if ($number === 100) { return 'cien'; }
+        $hundreds = [1 => 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+        return $hundreds[intdiv($number, 100)].($number % 100 ? ' '.self::numberSpeech((string) ($number % 100)) : '');
+    }
+
     public static function fromHtml(string $html): array
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
@@ -54,7 +83,7 @@ final class Guide
             if (!isset($sections[$section])) {
                 $sections[$section] = ['title' => $section, 'screen' => count($screens)];
             }
-            $screens[] = ['type' => 'heading', 'path' => $route, 'html' => '', 'speech' => rtrim(end($route), '. ').'.', 'section' => $section];
+            $screens[] = ['type' => 'heading', 'path' => $route, 'html' => '', 'speech' => self::headingSpeech(end($route)), 'section' => $section];
             $pending = false;
         };
         $visit = static function ($node) use (&$visit, &$path, &$pending, &$unsupported, &$screens, $flush, $doc) {

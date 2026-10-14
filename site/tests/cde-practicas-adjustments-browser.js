@@ -6,8 +6,8 @@ async (page) => {
   await button('1. De dónde viene esta práctica').click();
   let data=await page.evaluate(()=>JSON.parse(document.querySelector('[data-practice-viewer]').dataset.guide));
   check(data.screens.length===49,'49 pantallas');
-  check(data.screens[0].path.length===1 && data.screens[0].speech==='1. De dónde viene esta práctica.','portada y punto hablado');
-  check(data.screens[1].path.length===2 && data.screens[1].speech==='1.1. En este corpus, canalizar es permitir que la energía pase.','hijo conserva ruta sin narrar padre');
+  check(data.screens[0].path.length===1 && data.screens[0].speech==='Uno. De dónde viene esta práctica.','portada y punto hablado');
+  check(data.screens[1].path.length===2 && data.screens[1].speech==='Uno punto uno. En este corpus, canalizar es permitir que la energía pase.','hijo conserva ruta sin narrar padre');
   check(data.screens.filter(s=>s.type==='heading').every(s=>s.speech.endsWith('.')),'todos los encabezados tienen punto hablado');
   await button('Siguiente').click();
   check(await page.getByRole('heading',{name:'1.1. En este corpus, canalizar es permitir que la energía pase',exact:true}).count()===1,'encabezado visual sin punto final');

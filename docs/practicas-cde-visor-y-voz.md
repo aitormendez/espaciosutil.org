@@ -107,3 +107,13 @@ Las primeras tres muestras nuevas empiezan con RMS cero en los primeros 30 ms; d
 Pruebas adicionales: cuatro regresiones Python del límite exacto y de conservación de F063; 35 comprobaciones PHP, incluyendo portadas, puntuación y anclas únicas por visor; comprobación en Chrome del índice en ambas pestañas y en pantalla completa. Las capturas nuevas se conservan en `docs/qa/practicas/desktop-20261014/`. La evidencia de 43 pantallas del apartado previo corresponde a la primera iteración y se mantiene como historial.
 
 Resultado de la regeneración: 49 fragmentos y 437,6 segundos de audio en 225,89 segundos de inferencia; cero muestras saturadas. Todos los límites de referencia fueron exactamente 270.720 muestras (141 frames). El RMS máximo de los primeros 30 ms fue 0,0000261, aproximadamente −91,7 dBFS. Esto acredita el arranque casi silencioso, sin sustituir una revisión auditiva completa. Las 35 comprobaciones PHP y las cuatro pruebas Python pasaron.
+
+## Numeración explícita para la voz
+
+Los encabezados se envían al motor con su numeración escrita en palabras: «1.1. En este corpus, canalizar es permitir que la energía pase» se narra a partir de «Uno punto uno. En este corpus, canalizar es permitir que la energía pase.». Cada componente se separa con «punto» y la numeración termina con una pausa de frase. Se conserva el punto final del epígrafe y sólo se narra el último título de la ruta, sin repetir los padres. La portada «1. …» recibe «Uno. …».
+
+La transformación reside en `Guide`, antes de calcular la huella y exportar el plan de audio; por tanto, el nuevo texto invalida correctamente la versión de voz anterior. Los títulos visibles, el índice y la lectura completa mantienen cifras. Los párrafos no se transforman. Se admiten componentes de hasta tres cifras como cardinales; los ceros iniciales y componentes más largos se verbalizan dígito a dígito, evitando perder información o desbordar enteros. No hay dependencia nueva de extensiones PHP ni cambios en el motor Qwen3, su checkpoint o las skills.
+
+La previsualización local usa una revisión nueva. Se regeneran los 21 encabezados y se reutilizan los 28 fragmentos de párrafo, comprobando igualdad del contenido, metadatos de síntesis y SHA-256. Las versiones anteriores permanecen en almacenamiento privado. No se realizan integración en `Contenidos`, recertificación ni instalación en Paperclip.
+
+Validación: 47 comprobaciones PHP, recorrido del visor en Chrome y reconocimiento correcto de la numeración en los 21 encabezados por Whisper local. Las diferencias de puntuación y la normalización «consciencia/conciencia» no se consideran una comprobación de fidelidad textual literal. [Resultados de numeración](qa/practicas/desktop-20261014/numeracion-v3-resultados.json).

@@ -20,8 +20,25 @@ $check($g['screens'][2]['path'] === ['1. Padre', '1.1. Hijo', '1.1.1. Nieto'], '
 $check($g['screens'][4]['path'] === ['1. Padre', '1.2. Otro hijo'], 'Eliminar descendientes al cambiar de epígrafe.');
 $check(count($g['sections']) === 1 && $g['sections'][0]['screen'] === 0, 'Índice apunta al inicio del bloque.');
 $check($g['screens'][3]['speech'] === 'Una idea. Su desarrollo.', 'No dividir párrafos en frases.');
-$check($g['screens'][2]['speech'] === '1.1.1. Nieto.', 'Narrar sólo el epígrafe nuevo con punto final.');
-$check($g['screens'][0]['path'] === ['1. Padre'] && $g['screens'][0]['speech'] === '1. Padre.', 'Portada de bloque sin punto visual y con punto hablado.');
+$check($g['screens'][2]['speech'] === 'Uno punto uno punto uno. Nieto.', 'Narrar sólo el epígrafe nuevo con punto final.');
+$check($g['screens'][0]['path'] === ['1. Padre'] && $g['screens'][0]['speech'] === 'Uno. Padre.', 'Portada de bloque sin punto visual y con punto hablado.');
+foreach ([
+    '1.1. Hijo' => 'Uno punto uno. Hijo.',
+    '1.2. Hijo' => 'Uno punto dos. Hijo.',
+    '2.2. Hijo' => 'Dos punto dos. Hijo.',
+    '2.2 Hijo' => 'Dos punto dos. Hijo.',
+    '12.21.32. Hijo.' => 'Doce punto veintiuno punto treinta y dos. Hijo.',
+    '100.101.999. Hijo' => 'Cien punto ciento uno punto novecientos noventa y nueve. Hijo.',
+    '01.2. Hijo' => 'Cero uno punto dos. Hijo.',
+    '1000. Hijo' => 'Uno cero cero cero. Hijo.',
+    'Sin numeración' => 'Sin numeración.',
+    'En el punto 2.2' => 'En el punto 2.2.',
+    '2026 enseñanzas' => '2026 enseñanzas.',
+] as $title => $speech) {
+    $heading = Guide::fromHtml('<h2>'.$title.'</h2>')['screens'][0];
+    $check($heading['speech'] === $speech && $heading['path'] === [$title], 'Numeración hablada sin alterar el título: '.$title);
+}
+$check(Guide::fromHtml('<p>1.2. Un párrafo.</p>')['screens'][0]['speech'] === '1.2. Un párrafo.', 'No reinterpretar numeración en párrafos.');
 $reading = Guide::readingHtml('<h2>1. Padre</h2><p>Contexto.</p><h3>1.1. Hijo</h3>', 'instance-a', $g['sections']);
 $check(str_contains($reading, 'id="instance-a-section-0"') && str_contains($reading, 'data-practice-heading="0"'), 'Índice de lectura apunta a encabezados reales de la instancia.');
 $other = Guide::readingHtml('<h2>1. Padre</h2>', 'instance-b', $g['sections']);

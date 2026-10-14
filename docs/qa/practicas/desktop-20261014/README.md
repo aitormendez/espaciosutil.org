@@ -56,3 +56,11 @@ La prueba del índice llevó el foco al encabezado 6 sin abandonar la pestaña d
 El diagnóstico y tratamiento de la referencia acústica se documentan en [visor y voz](../../../practicas-cde-visor-y-voz.md). La validación automática no sustituye la escucha humana del inicio de los fragmentos.
 
 La regresión funcional final del visor pasó sus 17 aserciones con los 49 audios preparados; [resultado HTTP y funcional](ajustes-v2-resultados.json). También se comprobó el índice de lectura en la práctica incrustada: visible, destino correcto al encabezado 6 y sin desbordamiento horizontal. Compilación estándar Vite correcta.
+
+## Tercera iteración: numeración verbal explícita
+
+Los 21 encabezados se sintetizaron con numeración en palabras y los 28 párrafos se conservaron mediante comparación del plan, metadatos y huellas. La transcripción local independiente recuperó la numeración correcta en los 21 casos, incluidos 1.1, 1.2 y 2.2. Whisper convierte los números pronunciados a cifras y normaliza signos de puntuación; esta prueba no declara igualdad literal del texto ni sustituye una aprobación auditiva. [Evidencia por encabezado](numeracion-v3-resultados.json).
+
+Pasaron 47 comprobaciones PHP sin escrituras en la base de datos, sintaxis PHP y el recorrido de Chrome de portadas, ruta visual sin punto final, voz del último epígrafe, índice en ambas pestañas y pantalla completa. El navegador recibe el texto «Uno punto uno. En este corpus, canalizar es permitir que la energía pase.» y conserva «1.1» en el título visual.
+
+La reproducción real de 1.1 en Chrome alcanzó 0,206 s sobre un archivo de 6,4 s servido por el endpoint privado con la nueva revisión `302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448`. Se dejó el audio desactivado después de la prueba.
