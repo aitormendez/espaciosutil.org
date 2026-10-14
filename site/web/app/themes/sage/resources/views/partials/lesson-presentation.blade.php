@@ -7,8 +7,14 @@
     </header>
     <div data-presentation-home>
       <div data-presentation-shell class="lesson-presentation-shell">
-        <div class="swiper" tabindex="0" aria-label="Diapositivas">
+        <div class="swiper" tabindex="0" aria-label="Diapositivas" aria-busy="true">
           <div class="swiper-wrapper"></div>
+          <div class="lesson-presentation-loading" data-presentation-loading role="status" aria-live="polite">
+            <span class="lesson-presentation-loading-label">
+              <x-dynamic-component component="tabler-loader-2" aria-hidden="true" />
+              <span>Cargando diapositiva…</span>
+            </span>
+          </div>
         </div>
         <div class="lesson-presentation-toolbar">
           <div class="lesson-presentation-navigation">
@@ -33,7 +39,7 @@
             </button>
           </div>
         </div>
-        <p data-presentation-status role="status">Cargando presentación…</p>
+        <p data-presentation-status role="status"></p>
         <button type="button" data-presentation-retry hidden>
           <x-dynamic-component component="tabler-refresh" aria-hidden="true" />
           <span>Volver a intentar</span>

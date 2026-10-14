@@ -23,6 +23,10 @@ export default function initPresentations(scope = document) {
     const target = root.querySelector('.swiper');
     const wrapper = root.querySelector('.swiper-wrapper');
     const status = root.querySelector('[data-presentation-status]');
+    const indicator = root.querySelector('[data-presentation-loading]');
+    const imageVersions = new WeakMap();
+    const readyImages = new WeakSet();
+    let failed = false;
     const counter = root.querySelector('[data-presentation-counter]');
     const previous = root.querySelector('[data-presentation-prev]');
     const next = root.querySelector('[data-presentation-next]');
@@ -32,6 +36,21 @@ export default function initPresentations(scope = document) {
     const zoom = root.querySelector('[data-presentation-zoom]');
     let swiper, slides = [], reloaded = false, lastFocus, loading = false, zoomFactor = 1;
 
+    function updateLoading() {
+      if (abort.signal.aborted) return;
+      const img = wrapper.querySelectorAll('img')[swiper?.activeIndex ?? 0];
+      const pending = !failed && (loading || !img || !readyImages.has(img));
+      indicator.hidden = !pending;
+      target.setAttribute('aria-busy', String(pending));
+    }
+    async function imageReady(img) {
+      const version = imageVersions.get(img);
+      const source = img.currentSrc;
+      try { await img.decode(); } catch { return; }
+      if (abort.signal.aborted || !img.isConnected || !img.hasAttribute('src') || imageVersions.get(img) !== version || (source && source !== img.currentSrc)) return;
+      readyImages.add(img);
+      updateLoading();
+    }
     function updateZoomControl(scale) {
       const enlarged = scale > 1;
       const label = enlarged ? 'Restablecer zoom' : 'Acercar';
@@ -53,21 +72,27 @@ export default function initPresentations(scope = document) {
     function loadNeighbours() {
       wrapper.querySelectorAll('img').forEach((img, i) => {
         if (Math.abs(i - swiper.activeIndex) > 1) {
+          readyImages.delete(img); imageVersions.set(img, (imageVersions.get(img) || 0) + 1);
           img.removeAttribute('srcset'); img.removeAttribute('src'); delete img.dataset.mode;
           return;
         }
         const factor = dialog.open && i === swiper.activeIndex ? zoomFactor : 1;
         const mode = dialog.open ? `expanded-${factor}` : 'inline';
         if (img.dataset.mode === mode) return;
+        readyImages.delete(img); imageVersions.set(img, (imageVersions.get(img) || 0) + 1);
         img.dataset.mode = mode;
         const variants = slides[i].sources.filter((v) => v.width <= (dialog.open ? 3840 : 2560));
         const available = variants.length ? variants : [slides[i].sources[0]];
         img.sizes = dialog.open ? `${Math.ceil(innerWidth * factor)}px` : '(min-width: 1024px) 896px, calc(100vw - 32px)';
         img.srcset = available.map((v) => `${v.url} ${v.width}w`).join(', ');
         img.src = available[0].url;
+        imageReady(img);
       });
+      updateLoading();
     }
     function showError(message) {
+      failed = true;
+      updateLoading();
       status.textContent = message;
       retry.hidden = false;
     }
@@ -75,7 +100,9 @@ export default function initPresentations(scope = document) {
       if (loading || abort.signal.aborted) return;
       loading = true;
       retry.hidden = true;
-      status.textContent = 'Cargando presentación…';
+      failed = false;
+      status.textContent = '';
+      updateLoading();
       try {
         const response = await fetch(config.manifestUrl, { credentials: 'same-origin', cache: 'no-store', signal: abort.signal });
         if (!response.ok) throw new Error([401, 403].includes(response.status) ? 'Tu sesión no permite acceder. Inicia sesión y vuelve a intentarlo.' : 'No se ha podido cargar la presentación.');
@@ -90,8 +117,9 @@ export default function initPresentations(scope = document) {
           const img = document.createElement('img');
           img.alt = slide.alt; img.decoding = 'async';
           img.width = slide.sources[0].width; img.height = slide.sources[0].height;
+          img.addEventListener('load', () => imageReady(img), options);
           img.addEventListener('error', () => {
-            if (!img.hasAttribute('src')) return;
+            if (!img.isConnected || !img.hasAttribute('src') || abort.signal.aborted) return;
             if (!reloaded) { reloaded = true; load(swiper?.activeIndex || 0); }
             else showError('No se ha podido cargar una diapositiva. Comprueba tu sesión y vuelve a intentarlo.');
           }, options);
@@ -107,7 +135,7 @@ export default function initPresentations(scope = document) {
         status.textContent = ''; expand.disabled = false; controls();
       } catch (error) {
         if (error.name !== 'AbortError') showError(error.message);
-      } finally { loading = false; }
+      } finally { loading = false; updateLoading(); }
     }
     previous.addEventListener('click', () => swiper?.slidePrev(), options);
     next.addEventListener('click', () => swiper?.slideNext(), options);

@@ -27,3 +27,9 @@
 .lesson-presentation button svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
 
 @media (min-width: 48rem) { .lesson-presentation { width: calc(100% - 3rem); } }
+
+.lesson-presentation-loading { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; }
+.lesson-presentation-loading-label { display: inline-flex; align-items: center; gap: .65rem; padding: .7rem 1rem; border: 1px solid #ffffff20; border-radius: .35rem; background: #171321ed; color: #faf5ff; font-size: .875rem; }
+.lesson-presentation-loading svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; animation: presentation-loading-spin 1.2s linear infinite; }
+@keyframes presentation-loading-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .lesson-presentation-loading svg { animation: none; } }
