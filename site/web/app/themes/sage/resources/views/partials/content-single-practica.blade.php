@@ -1,30 +1,24 @@
-<article class="bg-morado5/90 text-blanco px-4 py-12 md:px-8">
-  <div class="mx-auto max-w-4xl">
-    <a class="underline" href="{{ get_post_type_archive_link('practica') }}">Todas las prácticas</a>
+<article class="practice-page">
+  <div class="practice-container">
+    <a class="practice-back" href="{{ get_post_type_archive_link('practica') }}">@include('partials.practice-icon', ['icon'=>'left']) Todas las prácticas</a>
     @if (\EspacioSutil\Practicas\Catalog::allowed() || \EspacioSutil\Practicas\Catalog::editor())
-      <h1 class="font-display mt-6 text-4xl">{{ get_the_title() }}</h1>
-      <div class="prose prose-xl md:prose-2xl mt-8">@php the_content(); @endphp</div>
-      @if (!post_password_required())
-      @php
-        $source = get_post_meta(get_the_ID(), 'referencia_fuente', true);
-        $lessons = \EspacioSutil\Practicas\Catalog::lessonsFor(get_the_ID());
-      @endphp
-      @if ($source)
-        <aside class="mt-8 border-t border-white/20 pt-6"><h2 class="font-display text-2xl">Texto de origen</h2><p class="mt-3 whitespace-pre-line">{{ $source }}</p></aside>
-      @endif
-      <section class="mt-8 border-t border-white/20 pt-6" aria-labelledby="practice-lessons-title">
-        <h2 id="practice-lessons-title" class="font-display text-2xl">Lecciones donde aparece esta práctica</h2>
-        <ul class="mt-4 space-y-3">
-          @forelse ($lessons as $lesson)
-            <li><a class="underline" href="{{ get_permalink($lesson) }}">{{ get_the_title($lesson) }}</a></li>
-          @empty
-            <li>Todavía no hay lecciones disponibles asociadas a esta práctica.</li>
-          @endforelse
-        </ul>
-      </section>
+      <h1>{{ get_the_title() }}</h1>
+      @if (post_password_required())
+        {!! get_the_password_form() !!}
+      @else
+        <p class="practice-description">{{ get_the_excerpt() }}</p>
+        @include('partials.practice-viewer', ['practice'=>get_post(), 'embedded'=>false])
+        @php $lessons = \EspacioSutil\Practicas\Catalog::lessonsFor(get_the_ID()); @endphp
+        @if ($lessons)
+          <aside class="practice-context"><h2>Esta práctica aparece en</h2><div class="practice-lesson-links">
+            @foreach ($lessons as $lesson)
+              <a class="practice-lesson-link" href="{{ get_permalink($lesson) }}">{{ get_the_title($lesson) }}</a>
+            @endforeach
+          </div></aside>
+        @endif
       @endif
     @else
-      <h1 class="font-display mt-6 text-4xl">Prácticas</h1>
+      <h1>Prácticas</h1>
       @include('partials.practicas-access')
     @endif
   </div>

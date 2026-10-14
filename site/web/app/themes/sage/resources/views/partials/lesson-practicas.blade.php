@@ -1,15 +1,11 @@
-@php
-  $practices = \EspacioSutil\Practicas\Catalog::forLesson((int) get_the_ID());
-@endphp
+@php $practices = \EspacioSutil\Practicas\Catalog::forLesson((int) get_the_ID()); @endphp
 @if ($practices)
-  <section class="bg-morado4/90 mx-auto my-10 w-full max-w-4xl rounded px-6 py-6 text-white" aria-labelledby="lesson-practices-title">
-    <h2 id="lesson-practices-title" class="font-display text-2xl">Prácticas de esta lección</h2>
+  <section class="practice-lesson-section practice-container" aria-label="Prácticas de esta lección">
     @foreach ($practices as $practice)
-      <details class="mt-5 border-t border-white/20 pt-4">
-        <summary class="cursor-pointer text-xl">{{ get_the_title($practice) }}</summary>
-        <div class="prose mt-4">{!! wpautop(wp_kses_post($practice->post_content)) !!}</div>
-        <a class="mt-4 inline-block underline" href="{{ get_permalink($practice) }}">Ver ficha y lecciones relacionadas</a>
-      </details>
+      <header class="practice-embedded-header"><p class="practice-eyebrow">Práctica</p><a href="{{ get_permalink($practice) }}">Abrir práctica por separado @include('partials.practice-icon', ['icon'=>'right'])</a></header>
+      <h2>{{ get_the_title($practice) }}</h2>
+      @include('partials.practice-viewer', ['practice'=>$practice, 'embedded'=>true])
     @endforeach
+    <a class="practice-back" href="{{ get_post_type_archive_link('practica') }}">Ver todas las prácticas @include('partials.practice-icon', ['icon'=>'right'])</a>
   </section>
 @endif

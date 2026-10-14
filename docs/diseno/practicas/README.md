@@ -2,6 +2,12 @@
 
 Fecha: 2026-10-12. Estado: propuesta de diseño realizada en Penpot; pendiente de revisión e implementación. Archivo: Espacio-Sutil-CDE. Página: Práctica - wireframe. La documentación canónica se mantiene aquí y los SVG se conservan en `wireframes/`. No se ha modificado código operativo ni se ha instalado nada en Paperclip.
 
+## Implementación de escritorio del 2026-10-14
+
+La propuesta de este documento y sus SVG corresponden a una iteración anterior. Tras los ajustes en Figma y el regreso a Penpot, el escritorio aprobado usa modo oscuro y controles de audio y pantalla completa. La implementación real utiliza un parcial Blade compartido y un controlador JavaScript pequeño, sin añadir React al visor. El HTML editorial adaptado es la única fuente; el servidor lo convierte de forma determinista en pantallas y calcula una huella que vincula cada audio a su texto. No hay progreso persistente ni contrato de pantallas para la app todavía. Esta decisión sustituye para el MVP la propuesta inferior de un documento independiente con IDs estables; dicho contrato deberá concretarse antes de incorporar progreso persistente o la app. Los textos con bloques no adaptados conservan la lectura completa sin generar una guía incompleta.
+
+Consultar [alcance, voz y validación local](../../practicas-cde-visor-y-voz.md). Los bocetos móviles históricos no están aprobados ni se han actualizado en esta implementación.
+
 ## Orden de revisión acordado
 
 Por indicación de Aitor, revisar y aprobar primero los layouts de escritorio. No adaptar ni actualizar los layouts móviles hasta que el desktop esté aprobado. Los bocetos móviles ya creados se conservan como exploración previa, sin aprobación y fuera de la revisión actual. Esta regla se aplica tanto al catálogo como a la ficha y al incrustado.

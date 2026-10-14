@@ -1,5 +1,7 @@
 # Validación de prácticas — 2026-10-01
 
+La validación posterior del visor de escritorio con voz de Iván está en [QA del 2026-10-14](desktop-20261014/README.md). Este documento conserva la prueba histórica del MVP de texto.
+
 Implementación candidata en el worktree de la web, rama `codex/cde-practicas`, basada en `325fb19c3b60bd0ddf171566dd56dbd677aa03d8`. No desplegada ni conectada a NocoDB. Los datos de las capturas son ficticios.
 
 ## Resultados

@@ -1,3 +1,4 @@
+import { initPracticeViewers } from './practices/viewer.js';
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones, destruirConstelaciones } from './constelaciones.js';
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let destroyNavigation = () => {};
 
   initCookieConsent();
+  initPracticeViewers();
   syncActiveMenuState();
 
   if (!document.getElementById('wpadminbar')) {

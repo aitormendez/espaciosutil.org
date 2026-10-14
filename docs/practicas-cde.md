@@ -1,8 +1,8 @@
 # Prácticas del CDE: objetivo y decisiones de diseño
 
-Fecha de inicio: 2026-09-30. Última actualización: 2026-10-12.
+Fecha de inicio: 2026-09-30. Última actualización: 2026-10-14.
 
-Estado: decisiones de diseño e inventario. La primera versión de texto está implementada en ramas aisladas, sin instalación ni integración operativa. Consultar [alcance implementado, pruebas y pendientes](practicas-cde-implementacion.md); las propuestas de inventario remoto de este documento siguen pendientes de integración con NocoDB.
+Estado: decisiones de diseño e inventario. El catálogo y el visor de escritorio con narración están implementados en la rama aislada y se prueban mediante una copia local en la VM. La integración operativa sigue pendiente. Consultar [alcance implementado, pruebas y pendientes](practicas-cde-implementacion.md); las propuestas de inventario remoto de este documento siguen pendientes de integración con NocoDB.
 
 ## Objetivo
 
@@ -56,7 +56,7 @@ La práctica se plantea como culminación del aprendizaje: el contexto prepara a
 
 El orden de lectura acordado para EP-0.1 es: procedencia, objetivo, utilidad, ritmo y progresión, avisos de la fuente y, por último, ejecución paso a paso. La renumeración de la adaptación es `1 → 1`, `2 → 2`, `3 → 3`, `5 → 4`, `6 → 5` y `4 → 6`; se aplica también a los subapartados. No se modifica la numeración ni el orden del TXT fuente.
 
-La presentación interactiva tendrá una pantalla de cabecera al inicio de cada bloque de párrafos, con toda la ruta de epígrafes: padre, hijo y los niveles adicionales que existan. Un padre que solo agrupa hijos no genera una pantalla independiente. Después, cada párrafo ocupa su propia pantalla, con avance manual mediante «Siguiente». La narración de voz sintética es una posibilidad por evaluar, no un requisito cerrado. El criterio de pantallas está acordado; su diseño, implementación y adaptación a web y posteriormente Android/iOS siguen pendientes. La navegación manual permite permanecer en cada paso el tiempo necesario.
+La presentación interactiva tendrá una pantalla de cabecera al inicio de cada bloque de párrafos, con toda la ruta de epígrafes: padre, hijo y los niveles adicionales que existan. Un padre que solo agrupa hijos no genera una pantalla independiente. Después, cada párrafo ocupa su propia pantalla, con avance manual mediante «Siguiente». La narración acordada se activa mediante «Activar audio» y reproduce la pantalla actual y las siguientes mientras siga activa; no avanza automáticamente. Se reutiliza la voz local entrenada de Iván. La implementación de escritorio está descrita en el informe enlazado; móvil y Android/iOS siguen pendientes. La navegación manual permite permanecer en cada paso el tiempo necesario.
 
 La versión de lectura contiene 6 encabezados de apartado, 15 de subapartado y 28 párrafos de contenido. Con el criterio de ruta completa aclarado por Aitor, se generan 15 cabeceras y 28 pantallas de párrafo: 43 pantallas de contenido, más una portada opcional. Los 6 padres se repiten en las cabeceras de sus hijos; no producen otras 6 pantallas. Este recuento sustituye la estimación anterior de 49. La etiqueta de bloque «00. Presentación» es contexto del documento, no una instrucción de práctica.
 
@@ -75,15 +75,15 @@ La siguiente tabla es una base para discutir los datos de la ficha, no un esquem
 | Título | Identificar la práctica en el catálogo, la ficha y las lecciones. | Propuesto; concretar criterio de denominación. |
 | Descripción breve | Explicar de forma concisa en qué consiste. | Propuesto; decidir si es necesaria. |
 | Instrucciones de texto | Presentar el contenido inicial de la práctica. | Formato inicial acordado; estructura editorial pendiente. |
-| Referencia al texto de origen | Localizar la obra, capítulo o pasaje del que procede. | Propuesto; acordar estructura y si admite varias referencias. |
+| Referencia al texto de origen | No disponible. | Descartada en esta fase; el contexto visible son las lecciones relacionadas. |
 | Contexto o notas editoriales | Aclarar información necesaria para comprender las instrucciones. | Propuesto; decidir si requiere un campo separado. |
 | Lecciones relacionadas | Recuperar el contexto donde se enseña la práctica. | Acordado; dato derivado por consulta inversa, no campo manual. |
-| Clasificación | Facilitar la exploración del catálogo si el volumen y la variedad lo justifican. | Pendiente; no hay taxonomías acordadas. |
-| Adaptaciones por pasos o audio | Ofrecer modos guiados cuando la estructura de la práctica lo permita. | Posibilidad futura acordada; modelo y flujo de revisión pendientes. |
+| Clasificación | Posible exploración futura. | Aplazada expresamente; no se implementa ahora. |
+| Adaptaciones por pasos o audio | Ofrecer modos guiados cuando la estructura de la práctica lo permita. | Visor web y audio preparado implementados; revisión editorial y auditiva por práctica. |
 
 Se propone distinguir el texto original, las explicaciones editoriales y las adaptaciones guiadas para conservar la procedencia de las instrucciones. Esta separación y su traducción a campos concretos deben acordarse al analizar ejemplos reales.
 
-La lista de lecciones obtenida por consulta inversa aporta contexto docente. Una referencia bibliográfica al texto de origen, si se incorpora, cumple una función diferente y no se sustituye por esa lista.
+Las lecciones relacionadas son el contexto disponible para el alumno. No se añade ni muestra una referencia al texto de origen. El código editorial se conserva como dato interno, sin atribuir una única serie a la práctica.
 
 ## Datos de la relación: decisión pendiente
 
@@ -99,7 +99,7 @@ No se ha acordado incluir esa información adicional. Se conserva la decisión d
 - Al cambiar las asignaciones de una lección, la consulta inversa refleja el cambio sin editar manualmente la ficha de la práctica.
 - Una membresía activa permite acceder a las lecciones y a las prácticas, sin distinciones por nivel de membresía.
 
-El diseño del catálogo y el modo exacto de mostrar la práctica dentro de la lección están pendientes. No se ha decidido si se desplegará el texto completo, un bloque expandible u otra presentación.
+El catálogo muestra un único enlace con el título de cada lección relacionada y un acceso al visor individual. La ficha y el incrustado usan el mismo visor. El filtro por serie consulta las series de las lecciones asociadas; no clasifica la práctica.
 
 ## Próximas decisiones
 
@@ -110,7 +110,7 @@ El diseño del catálogo y el modo exacto de mostrar la práctica dentro de la l
 5. Concretar la presentación del catálogo, la ficha y el bloque de prácticas en las lecciones para la primera versión web.
 6. Tras validar la versión web, definir la incorporación del contenido y las relaciones a la API y a las aplicaciones Android e iOS.
 
-La segmentación por titulares y párrafos está acordada para EP-0.1; debe evaluarse su encaje en las demás prácticas. La narración y el calendario de implementación respecto a la integración móvil siguen abiertos.
+La segmentación por titulares y párrafos está acordada para EP-0.1; debe evaluarse su encaje en las demás prácticas. La narración se prueba en escritorio; la incorporación móvil sigue pendiente.
 
 
 ## Inventario editorial: propuesta del 2026-10-01
@@ -198,3 +198,9 @@ Antes de implementar se verificará el esquema vivo de NocoDB y se preparará el
 - Entrada de infraestructura: `/Volumes/E/Infraestructura VPS/AGENTS.md` y `docs/nocodb.md` de ese repositorio.
 - Contrato local del inventario: `/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/docs/cde-lecciones-inventario-nocodb.md`.
 - Documentación oficial de [relaciones de NocoDB](https://nocodb.com/docs/product/tables/fields/field-types/links-based/links). La disponibilidad y configuración en la instancia instalada están pendientes de verificación.
+
+## Controles de escritorio acordados
+
+El visor usa modo oscuro, «Activar audio» con iconos Tabler `volume`/`volume-off`, navegación `arrow-badge-left`/`arrow-badge-right` filled y pantalla completa. Al entrar en pantalla completa se oculta el índice; «Mostrar índice»/«Ocultar índice» permite recuperarlo. El cambio de tamaño conserva pantalla y reproducción. La propuesta de una portada independiente para cada padre queda pendiente de decisión; esta implementación conserva las 43 pantallas acordadas y narra la ruta completa de cada cabecera.
+
+Implementación, instalación de voz y prueba local: [visor de escritorio y narración](practicas-cde-visor-y-voz.md). No se ha adaptado móvil en esta fase.

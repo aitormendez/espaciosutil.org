@@ -54,6 +54,20 @@ final class Catalog
                 $query->set('has_password', false);
                 $query->set('orderby', 'title');
                 $query->set('order', 'ASC');
+                $query->set('posts_per_page', 12);
+                $query->set('s', self::search());
+                $series = self::selectedSeries();
+                if ($series) {
+                    $lessons = get_posts(['post_type'=>'cde', 'post_status'=>'publish', 'posts_per_page'=>-1,
+                        'has_password'=>false, 'meta_key'=>'active_lesson', 'meta_value'=>'1',
+                        'tax_query'=>[['taxonomy'=>'serie_cde', 'field'=>'term_id', 'terms'=>$series, 'include_children'=>true]]]);
+                    $ids = [];
+                    foreach ($lessons as $lesson) {
+                        $related = get_post_meta($lesson->ID, self::RELATION, true);
+                        if (is_array($related)) { $ids = array_merge($ids, array_map('intval', $related)); }
+                    }
+                    $query->set('post__in', array_values(array_unique($ids)) ?: [0]);
+                }
             }
             if ($query->is_feed()) {
                 $types = $query->get('post_type');
@@ -62,6 +76,22 @@ final class Catalog
                 }
             }
         });
+    }
+
+    public static function search(): string
+    {
+        return isset($_GET['practice_search']) && is_string($_GET['practice_search']) ? sanitize_text_field(wp_unslash($_GET['practice_search'])) : '';
+    }
+
+    public static function selectedSeries(): int
+    {
+        return isset($_GET['practice_series']) && is_scalar($_GET['practice_series']) ? absint($_GET['practice_series']) : 0;
+    }
+
+    public static function series(): array
+    {
+        $terms = get_terms(['taxonomy'=>'serie_cde', 'parent'=>0, 'hide_empty'=>true]);
+        return is_wp_error($terms) ? [] : $terms;
     }
 
     public static function register(): void
@@ -86,7 +116,6 @@ final class Catalog
             'fields' => [
                 ['key' => 'field_cde_clave_practica', 'name' => self::KEY, 'label' => 'Clave de la práctica', 'type' => 'text', 'required' => 1],
                 ['key' => 'field_cde_codigo_practica', 'name' => 'codigo_practica', 'label' => 'Código editorial', 'type' => 'text'],
-                ['key' => 'field_cde_fuente_practica', 'name' => 'referencia_fuente', 'label' => 'Referencia al texto de origen', 'type' => 'textarea', 'instructions' => 'Obra o pasaje de origen. No introducir rutas internas ni credenciales.'],
             ],
             'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'practica']]],
         ]);

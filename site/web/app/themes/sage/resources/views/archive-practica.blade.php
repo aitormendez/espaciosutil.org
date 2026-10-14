@@ -1,25 +1,38 @@
 @extends('layouts.app')
-
 @section('content')
-  <section class="bg-morado5/90 text-blanco px-4 py-12 md:px-8">
-    <div class="mx-auto max-w-4xl">
-      <h1 class="font-display text-4xl">Prácticas</h1>
+  <section class="practice-page">
+    <div class="practice-container">
+      <p class="practice-eyebrow">Curso de Desarrollo Espiritual</p>
+      <h1>Prácticas</h1>
       @if (\EspacioSutil\Practicas\Catalog::allowed() || \EspacioSutil\Practicas\Catalog::editor())
-        <p class="mt-4">Consulta las prácticas del curso y las lecciones donde se enseñan.</p>
-        <div class="mt-8 grid gap-6 md:grid-cols-2">
-          @while(have_posts()) @php the_post(); @endphp
-            @if (get_post()->post_password === '')
-              <article class="rounded border border-white/20 p-6">
-                <h2 class="font-display text-2xl"><a class="underline" href="{{ get_permalink() }}">{{ get_the_title() }}</a></h2>
-                <div class="mt-3">{!! get_the_excerpt() !!}</div>
-              </article>
-            @endif
+        <form method="get" action="{{ get_post_type_archive_link('practica') }}" class="practice-search" role="search" aria-label="Buscar prácticas">
+          <label>Buscar prácticas<input name="practice_search" type="search" value="{{ \EspacioSutil\Practicas\Catalog::search() }}" placeholder="Buscar por título o palabra clave"></label>
+          <label>Serie de las lecciones<select name="practice_series"><option value="0">Todas las series</option>
+            @foreach (\EspacioSutil\Practicas\Catalog::series() as $series)
+              <option value="{{ $series->term_id }}" @selected(\EspacioSutil\Practicas\Catalog::selectedSeries() === $series->term_id)>{{ $series->name }}</option>
+            @endforeach
+          </select></label>
+          <button class="practice-button" type="submit">Buscar</button>
+        </form>
+        <p class="practice-count">{{ $GLOBALS['wp_query']->found_posts }} {{ $GLOBALS['wp_query']->found_posts === 1 ? 'práctica' : 'prácticas' }}</p>
+        <div class="practice-list">
+          @while(have_posts()) @php the_post(); $lessons = \EspacioSutil\Practicas\Catalog::lessonsFor(get_the_ID()); @endphp
+            <article class="practice-card">
+              <div><h2><a href="{{ get_permalink() }}">{{ get_the_title() }}</a></h2><p>{{ get_the_excerpt() }}</p>
+                <div class="practice-lesson-links">
+                  @foreach ($lessons as $lesson)
+                    <a class="practice-lesson-link" href="{{ get_permalink($lesson) }}">{{ get_the_title($lesson) }}</a>
+                  @endforeach
+                </div>
+              </div>
+              <a class="practice-button practice-button--primary" href="{{ get_permalink() }}">Abrir práctica @include('partials.practice-icon', ['icon'=>'right'])</a>
+            </article>
           @endwhile
         </div>
-        @if (empty($GLOBALS['wp_query']->posts))
-          <p class="mt-8">Todavía no hay prácticas publicadas.</p>
+        @if (!have_posts() && !$GLOBALS['wp_query']->found_posts)
+          <p>No hay prácticas que coincidan con esta búsqueda.</p>
         @endif
-        <nav class="mt-8" aria-label="Páginas de prácticas">{!! get_the_posts_pagination() !!}</nav>
+        <nav class="practice-pagination" aria-label="Páginas de prácticas">{!! get_the_posts_pagination() !!}</nav>
       @else
         @include('partials.practicas-access')
       @endif

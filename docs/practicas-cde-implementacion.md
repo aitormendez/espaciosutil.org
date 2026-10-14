@@ -1,21 +1,21 @@
 # Prácticas CDE: implementación candidata e integración diferida
 
-Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-12. Estado: primera versión de texto implementada y probada en worktrees independientes; instalación y conexión a servicios pendientes de coordinación.
+Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-14. Estado: catálogo y visor de escritorio implementados en worktree independiente, con voz de Iván y prueba local optativa en la VM. Integración y conexión al inventario remoto pendientes de coordinación.
 
 ## Alcance implementado
 
 - Mu-plugin `espaciosutil-cde-practicas.php` y módulos `cde-practicas/catalog.php` e `import.php`: CPT `practica`, rutas `/practicas/` y `/practicas/<slug>/`, campos ACF y acceso por cualquier membresía PMPro activa. Los editores pueden previsualizar contenido.
-- Ficha: título y cuerpo del editor de WordPress, extracto para el catálogo, `clave_practica`, `codigo_practica` y `referencia_fuente`. Las lecciones relacionadas se calculan por consulta inversa; no hay lista manual duplicada. Se ordenan por orden de lección y título; el catálogo por título.
-- Campo ACF `cde_practicas`, tipo Relationship, en las lecciones. El bloque «Prácticas de esta lección» muestra instrucciones desplegables y enlaza a la ficha. Excluye prácticas no publicadas o con contraseña. La consulta inversa excluye lecciones no publicadas, inactivas o con contraseña.
+- Ficha: título y cuerpo del editor de WordPress, extracto para el catálogo, `clave_practica`, `codigo_practica`. Las lecciones relacionadas se calculan por consulta inversa; no hay lista manual duplicada. Se ordenan por orden de lección y título; el catálogo por título.
+- Campo ACF `cde_practicas`, tipo Relationship, en las lecciones. El bloque «Prácticas de esta lección» reutiliza el visor de la ficha y enlaza a ella. Excluye prácticas no publicadas o con contraseña. La consulta inversa excluye lecciones no publicadas, inactivas o con contraseña.
 - Contexto CDE y navegación completa en `/practicas/`; se evita la transición Barba en estas rutas. No se modifican los menús de la base de datos.
 - Acceso protegido en vistas y REST, exclusión del buscador general y sitemap, oEmbed deshabilitado y respuestas privadas sin caché. Durante la integración, excluir `/practicas/` y sus rutas REST de cualquier caché externa que pueda servir HTML antes de ejecutar WordPress.
 - Importador WP-CLI: plan de solo lectura seguido de apply explícito. Resuelve identidades exactas, detecta duplicados y cambios posteriores al plan. Crea borradores y añade asociaciones confirmadas, sin publicar, retirar asociaciones ni sobrescribir textos existentes distintos. Conserva campos de lecciones ajenos al Relationship y no escribe en NocoDB.
 
 ## Acuerdo editorial posterior: pantallas y orden de EP-0.1
 
-El 2026-10-12 Aitor aportó el acuerdo de Iván para una presentación por pantallas, avance manual y ejecución al final tras recibir el contexto. Aitor precisó después que cada cabecera reúne toda la ruta de epígrafes al inicio de un bloque; no hay pantallas independientes para los padres que solo agrupan hijos. El Markdown de lectura en el worktree de Contenidos se ha reordenado y renumerado, conservando íntegra la prosa. Consultar [las decisiones de diseño](practicas-cde.md). La voz sintética sigue como posibilidad por evaluar. El MVP de esta rama continúa mostrando texto: no incorpora todavía pantallas ni narración, y el importador/preparador no consume esa adaptación Markdown.
+El 2026-10-12 Aitor aportó el acuerdo de Iván para una presentación por pantallas, avance manual y ejecución al final tras recibir el contexto. Aitor precisó después que cada cabecera reúne toda la ruta de epígrafes al inicio de un bloque; no hay pantallas independientes para los padres que solo agrupan hijos. El Markdown de lectura en el worktree de Contenidos se ha reordenado y renumerado, conservando íntegra la prosa. Consultar [las decisiones de diseño](practicas-cde.md). El visor ya incluye las 43 pantallas y narración preparada con la voz local de Iván. El importador/preparador de inventario aún no consume directamente esa adaptación Markdown: para la prueba se ha cargado el HTML de la adaptación en una ficha exclusivamente local.
 
-La propuesta de layouts y arquitectura reutilizable está en [wireframes de prácticas](diseno/practicas/README.md). Los diseños están guardados en Penpot y exportados localmente; no se han incorporado al código del MVP.
+La propuesta de layouts y arquitectura reutilizable está en [wireframes de prácticas](diseno/practicas/README.md). La implementación de escritorio vigente y sus diferencias respecto a la propuesta inicial se documentan en [visor y voz](practicas-cde-visor-y-voz.md). Los SVG históricos no sustituyen el diseño posterior aprobado en Penpot.
 
 ## Preparación en Contenidos
 
@@ -56,6 +56,6 @@ Coordinar la integración cuando exista aislamiento por versión o una ventana c
 2. Validar en staging con la versión exacta de WordPress y MySQL, ACF y PMPro del destino, incluyendo cachés externas.
 3. Instalar ambos conjuntos de cambios de forma coordinada; regenerar reglas de enlaces permanentes una vez y añadir «Prácticas» al menú CDE desde WordPress. No ejecutar flush de reglas en cada petición.
 4. Resolver en NocoDB la identidad técnica de la pieza `0.4.3.2 — La canalización como permiso y el ejercicio de sentir`, confirmada por Iván como origen de EP-0.1 y verificada en el inventario del 2026-10-08. Consultar la nueva ubicación y su huella en [las decisiones de inventario](practicas-cde.md). Después de la instalación autorizada, importar un borrador y revisarlo antes de publicarlo.
-5. Incorporar posteriormente prácticas a la app Android/iOS y evaluar audio o guías por pasos según cada texto.
+5. Incorporar posteriormente prácticas a la app Android/iOS y revisar la adaptación de cada texto.
 
 Evidencia y límites de las pruebas web: [validación de prácticas](qa/practicas/README.md). La regresión de Contenidos se ejecutó en modo candidato, sin emitir certificado: 1.546 pruebas y 5 auxiliares. La skill pasó validación estructural y una comprobación independiente con 17 casos CLI; los dos defectos encontrados quedaron corregidos con regresiones.
