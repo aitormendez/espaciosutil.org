@@ -64,3 +64,7 @@ Los 21 encabezados se sintetizaron con numeración en palabras y los 28 párrafo
 Pasaron 47 comprobaciones PHP sin escrituras en la base de datos, sintaxis PHP y el recorrido de Chrome de portadas, ruta visual sin punto final, voz del último epígrafe, índice en ambas pestañas y pantalla completa. El navegador recibe el texto «Uno punto uno. En este corpus, canalizar es permitir que la energía pase.» y conserva «1.1» en el título visual.
 
 La reproducción real de 1.1 en Chrome alcanzó 0,206 s sobre un archivo de 6,4 s servido por el endpoint privado con la nueva revisión `302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448`. Se dejó el audio desactivado después de la prueba.
+
+## Lección original y ventana redimensionable
+
+La revisión actual usa la lección local 3000 (`cde:08:00:0.4.3.2`) incorporada desde su TXT original, en lugar de la lección ficticia 2999. La relación de prueba anterior se retiró con recibo local. Repetir PHP con argumentos `2998 3000 29`. El recorrido `site/tests/cde-practicas-lesson-browser.js` requiere `viewport: null` y cambia las dimensiones reales de Chrome; verifica tres anchuras de escritorio y restaura la ventana al terminar. [Resultados](leccion-original-resultados.json), [captura del incrustado](practicas-leccion-original.png) y [alcance/reversión](../../../practicas-cde-visor-y-voz.md#práctica-en-su-lección-original-y-ventana-libre).

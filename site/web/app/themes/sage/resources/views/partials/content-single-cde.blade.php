@@ -1,9 +1,22 @@
-<article @php post_class('h-entry') @endphp>
+@php
+  $lessonPractices = $has_access ? \EspacioSutil\Practicas\Catalog::forLesson((int) get_the_ID()) : [];
+@endphp
+<article @php post_class($lessonPractices ? 'h-entry lesson-with-practices' : 'h-entry') @endphp>
   <header>
     @include('partials.post-header')
   </header>
 
-  <div class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-4">
+  @if ($lessonPractices)
+    <div class="lesson-practice-layout practice-container">
+      <nav class="lesson-practice-nav" aria-label="En esta lección">
+        <p class="practice-eyebrow">En esta lección</p>
+        <a href="#lesson-content-{{ get_the_ID() }}" data-barba-prevent>Contenido de la lección</a>
+        <a href="#lesson-practices-{{ get_the_ID() }}" data-barba-prevent>Práctica{{ count($lessonPractices) > 1 ? 's' : '' }}</a>
+      </nav>
+      <div class="lesson-practice-content">
+  @endif
+
+  <div id="lesson-content-{{ get_the_ID() }}" class="border-blanco text-blanco bg-morado5/90 relative flex flex-wrap justify-center border-t pb-4">
     <div class="contenido prose md:prose-2xl md:mt-18 mx-auto mt-6 w-full max-w-4xl px-4 !leading-tight md:px-0">
       {{-- Parte 1: Extracto (visible para todos) --}}
       <div>
@@ -157,7 +170,7 @@
       </section>
     @endif
 
-    @include('partials.lesson-practicas')
+    @include('partials.lesson-practicas', ['practices' => $lessonPractices])
 
     @include('partials.videos-realacionados-cde')
 
@@ -172,5 +185,9 @@
       </div>
     </div>
 
+  @endif
+  @if ($lessonPractices)
+      </div>
+    </div>
   @endif
 </article>

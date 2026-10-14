@@ -1,6 +1,6 @@
-@php $practices = \EspacioSutil\Practicas\Catalog::forLesson((int) get_the_ID()); @endphp
+@php $practices = $practices ?? \EspacioSutil\Practicas\Catalog::forLesson((int) get_the_ID()); @endphp
 @if ($practices)
-  <section class="practice-lesson-section practice-container" aria-label="Prácticas de esta lección">
+  <section id="lesson-practices-{{ get_the_ID() }}" class="practice-lesson-section practice-container" aria-label="Prácticas de esta lección">
     @foreach ($practices as $practice)
       <header class="practice-embedded-header"><p class="practice-eyebrow">Práctica</p><a href="{{ get_permalink($practice) }}">Abrir práctica por separado @include('partials.practice-icon', ['icon'=>'right'])</a></header>
       <h2>{{ get_the_title($practice) }}</h2>

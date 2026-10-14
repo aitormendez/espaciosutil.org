@@ -1,0 +1,38 @@
+{
+  "lesson_id": 3000,
+  "practice_id": 2998,
+  "key": "cde:08:00:0.4.3.2",
+  "source_sha256": "b1c5fe8b127901bfd0da361ed236a12161139397ca2ef16a8c2a60fa0d8b8be3",
+  "source_body_lines": 60,
+  "headings": 14,
+  "paragraphs": 17,
+  "php_checks": 47,
+  "native_viewport": true,
+  "desktop_widths": [
+    {
+      "window": 1440,
+      "viewer": 992
+    },
+    {
+      "window": 1280,
+      "viewer": 913
+    },
+    {
+      "window": 1024,
+      "viewer": 657
+    }
+  ],
+  "horizontal_overflow": false,
+  "reading_index": true,
+  "fullscreen_index": true,
+  "scope": "Sólo WordPress local; texto fuente original, sin medios de lección procesados ni publicación remota.",
+  "anonymous": {
+    "lesson_body_visible": false,
+    "practice_viewer_visible": false,
+    "login_prompt": true,
+    "public_seo_description": "Extracto automático del sitio; no se modifica la política SEO en esta tarea."
+  },
+  "inverse_lessons": [
+    3000
+  ]
+}
