@@ -21,7 +21,11 @@ final class Catalog
     public static function boot(): void
     {
         add_action('init', [self::class, 'register']);
-        add_action('acf/init', [self::class, 'fields']);
+        // ACF Composer registers Lección CDE at priority 100; append our tab afterwards.
+        add_action('acf/init', [self::class, 'fields'], 110);
+        // Lección CDE is REST-enabled; preserve the relationship's previous exclusion.
+        add_filter('acf/rest/get_fields', static fn ($fields) => array_filter($fields,
+            static fn ($field) => $field['key'] !== 'field_cde_practicas'));
         add_action('template_redirect', [self::class, 'protectPage'], 0);
         add_filter('rest_request_before_callbacks', [self::class, 'protectRest'], PHP_INT_MAX, 3);
         add_filter('rest_post_dispatch', static function ($response, $server, $request) {
@@ -119,15 +123,17 @@ final class Catalog
             ],
             'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'practica']]],
         ]);
-        acf_add_local_field_group([
-            'key' => 'group_cde_practicas_leccion', 'title' => 'Prácticas de esta lección', 'show_in_rest' => false,
-            'fields' => [[
-                'key' => 'field_cde_practicas', 'name' => self::RELATION, 'label' => 'Prácticas',
-                'type' => 'relationship', 'post_type' => ['practica'], 'filters' => ['search'],
-                'return_format' => 'id',
-                'instructions' => 'Asociaciones del inventario NocoDB. Los cambios manuales deben reconciliarse antes de otra importación.',
-            ]],
-            'location' => [[['param' => 'post_type', 'operator' => '==', 'value' => 'cde']]],
+        // Keep the relationship key stable for existing values and the inventory importer.
+        acf_add_local_field([
+            'key' => 'field_cde_practicas_tab', 'name' => '', 'label' => 'Prácticas',
+            'type' => 'tab', 'placement' => 'top', 'parent' => 'group_cde_fields',
+        ]);
+        acf_add_local_field([
+            'key' => 'field_cde_practicas', 'name' => self::RELATION, 'label' => 'Prácticas',
+            'parent' => 'group_cde_fields',
+            'type' => 'relationship', 'post_type' => ['practica'], 'filters' => ['search'],
+            'return_format' => 'id',
+            'instructions' => 'Asociaciones del inventario NocoDB. Los cambios manuales deben reconciliarse antes de otra importación.',
         ]);
     }
 
