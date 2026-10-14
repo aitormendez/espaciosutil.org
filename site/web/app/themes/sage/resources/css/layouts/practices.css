@@ -89,25 +89,9 @@
 
 .practice-viewer:fullscreen .practice-viewer-main, .practice-viewer:fullscreen .practice-reading { min-height: 0; }
 
-/* The lesson wireframe shares one fluid content column with the embedded viewer. */
-.lesson-with-practices { background: #101010; padding-bottom: 1px; }
-.lesson-practice-layout { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 32px; margin-block: 48px; }
-.lesson-practice-nav { flex: 0 0 256px; max-width: 256px; position: sticky; top: 32px; font-family: 'Rubik', sans-serif; color: #aaa; }
-.lesson-practice-nav a { display: block; padding: 12px 16px; border-radius: 6px; color: inherit; font-size: 15px; }
-.lesson-practice-nav a:hover, .lesson-practice-nav a:focus-visible { background: #1c1c1c; color: #e6e6e6; }
-.lesson-practice-content { flex: 999 1 640px; min-width: 0; }
-.lesson-practice-content > [id], .practice-lesson-section { scroll-margin-top: 32px; }
-.lesson-practice-content .practice-lesson-section { width: 100%; max-width: none; padding: 0; background: transparent; border-radius: 0; }
-.lesson-practice-content .practice-toolbar { flex-wrap: wrap; gap: 20px; }
-.lesson-practice-content .practice-tools { flex-wrap: wrap; }
-.lesson-practice-content .practice-screen { padding-inline: clamp(24px, 4.45vw, 64px); }
-.lesson-practice-content .practice-embedded-header { flex-wrap: wrap; }
-.lesson-practice-content .practice-viewer--embedded[data-mode='reading'] { grid-template-columns: minmax(160px, 25%) minmax(0, 1fr); }
-.lesson-practice-content .practice-reading { padding-inline: clamp(24px, 3.34vw, 48px); }
-
-.lesson-practice-nav a:focus-visible { outline: 2px solid #e6e6e6; outline-offset: 2px; }
-.lesson-practice-layout:has(.practice-lesson-section:target) .lesson-practice-nav a:last-child { background: #1c1c1c; color: #e6e6e6; font-weight: 500; }
-@media (max-width: 991px) {
-  .lesson-practice-nav { position: static; flex-basis: 100%; max-width: none; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-  .lesson-practice-nav .practice-eyebrow { width: 100%; margin-bottom: 0; }
-}
+/* Keep the existing lesson layout; only the embedded practice reflows. */
+.practice-lesson-section { scroll-margin-top: 32px; }
+.practice-lesson-section .practice-tools, .practice-embedded-header { flex-wrap: wrap; }
+.practice-lesson-section .practice-screen { padding-inline: clamp(24px, 4.45vw, 64px); }
+.practice-lesson-section .practice-viewer--embedded[data-mode='reading'] { grid-template-columns: minmax(160px, 25%) minmax(0, 1fr); }
+.practice-lesson-section .practice-reading { padding-inline: clamp(24px, 3.34vw, 48px); }

@@ -65,6 +65,14 @@ Pasaron 47 comprobaciones PHP sin escrituras en la base de datos, sintaxis PHP y
 
 La reproducción real de 1.1 en Chrome alcanzó 0,206 s sobre un archivo de 6,4 s servido por el endpoint privado con la nueva revisión `302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448`. Se dejó el audio desactivado después de la prueba.
 
-## Lección original y ventana redimensionable
+## Lección original y ventana redimensionable (prueba retirada)
 
-La revisión actual usa la lección local 3000 (`cde:08:00:0.4.3.2`) incorporada desde su TXT original, en lugar de la lección ficticia 2999. La relación de prueba anterior se retiró con recibo local. Repetir PHP con argumentos `2998 3000 29`. El recorrido `site/tests/cde-practicas-lesson-browser.js` requiere `viewport: null` y cambia las dimensiones reales de Chrome; verifica tres anchuras de escritorio y restaura la ventana al terminar. [Resultados](leccion-original-resultados.json), [captura del incrustado](practicas-leccion-original.png) y [alcance/reversión](../../../practicas-cde-visor-y-voz.md#práctica-en-su-lección-original-y-ventana-libre).
+La revisión anterior usaba la lección local 3000 (`cde:08:00:0.4.3.2`) incorporada desde su TXT original, en lugar de la lección ficticia 2999. La relación de prueba anterior se retiró con recibo local. Repetir PHP con argumentos `2998 3000 29`. El recorrido `site/tests/cde-practicas-lesson-browser.js` requiere `viewport: null` y cambia las dimensiones reales de Chrome; verifica tres anchuras de escritorio y restaura la ventana al terminar. [Resultados](leccion-original-resultados.json), [captura del incrustado](practicas-leccion-original.png) y [alcance/reversión](../../../practicas-cde-visor-y-voz.md#práctica-en-su-lección-original-y-ventana-libre).
+
+## Ubicación vigente: lección completa 2967
+
+La práctica 2998 está asociada temporalmente a «Qué es el Círculo Carmesí» (2967), conservando la presentación habitual de la lección. La entrada creada desde el TXT (3000) se ha enviado a la papelera y ya no tiene la relación. La consulta inversa devuelve sólo 2967. El post anfitrión y sus metadatos originales se verificaron sin cambios, salvo la incorporación de la relación ACF. Los niveles de acceso 11–13 se conservan y se añade el nivel local de QA 14; el acceso anónimo sigue denegado.
+
+La compilación de la previsualización pasó. El recorrido actualizado `site/tests/cde-practicas-lesson-browser.js` comprueba los datos de vídeo y audio, el subíndice, el cuestionario, la ausencia del layout lateral añadido, el avance de la guía, el índice de lectura y la adaptación de la anchura. Chrome midió 1216, 1137 y 881 px de visor para ventanas de 1440, 1280 y 1024 px, sin desbordamiento. Se restaura el tamaño de ventana al terminar. Estas comprobaciones no equivalen a una reproducción completa de los medios de la lección.
+
+También se verificó la pantalla completa y su índice. [Resultados](leccion-completa-resultados.json), [captura vigente](practicas-leccion-completa.png) y [alcance y reversión local](../../../practicas-cde-visor-y-voz.md#revisión-temporal-en-una-lección-completa). La asociación no representa el origen editorial definitivo. No se ha integrado ni desplegado esta rama.

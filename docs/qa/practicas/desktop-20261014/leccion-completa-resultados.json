@@ -1,0 +1,41 @@
+{
+  "lesson": 2967,
+  "practice": 2998,
+  "temporary_association": true,
+  "previous_lesson": {
+    "id": 3000,
+    "status": "trash"
+  },
+  "preserved_original_post": true,
+  "preserved_original_metadata_except_relationship": true,
+  "inverse_lessons": [
+    2967
+  ],
+  "anonymous_access": false,
+  "browser": {
+    "native_viewport": true,
+    "video_and_audio_data": true,
+    "quiz": true,
+    "subindex": true,
+    "guide": true,
+    "reading_index": true,
+    "fullscreen": true,
+    "widths": [
+      {
+        "window": 1440,
+        "viewer": 1216,
+        "overflow": false
+      },
+      {
+        "window": 1280,
+        "viewer": 1137,
+        "overflow": false
+      },
+      {
+        "window": 1024,
+        "viewer": 881,
+        "overflow": false
+      }
+    ]
+  }
+}

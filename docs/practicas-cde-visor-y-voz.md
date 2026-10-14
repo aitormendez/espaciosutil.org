@@ -118,7 +118,9 @@ La previsualización local usa una revisión nueva. Se regeneran los 21 encabeza
 
 Validación: 47 comprobaciones PHP, recorrido del visor en Chrome y reconocimiento correcto de la numeración en los 21 encabezados por Whisper local. Las diferencias de puntuación y la normalización «consciencia/conciencia» no se consideran una comprobación de fidelidad textual literal. [Resultados de numeración](qa/practicas/desktop-20261014/numeracion-v3-resultados.json).
 
-## Práctica en su lección original y ventana libre
+## Práctica en su lección original y ventana libre (iteración retirada)
+
+Este apartado conserva el historial de una prueba retirada por petición de Aitor. La entrada 3000 está en la papelera y el diseño lateral se ha eliminado. La ubicación vigente se describe en el siguiente apartado.
 
 El 2026-10-14 se incorporó a la base local la lección `cde:08:00:0.4.3.2`, «La canalización como permiso y el ejercicio de sentir» (post 3000), desde el TXT original `08 - El Círculo Carmesí/00 - Presentación/0.4. - Geoffrey Hoppe y la naturaleza de la canalizacion/0.4.3.2/0.4.3.2. - La canalizacion como permiso y el ejercicio de sentir.txt`, relativo a AITOR CDE. No existía una entrada correspondiente en la copia local. Esta incorporación proporciona el texto real para revisar el diseño; no equivale a una publicación editorial procesada. No se inventan medios ni se altera el TXT. La huella de fuente es `b1c5fe8b127901bfd0da361ed236a12161139397ca2ef16a8c2a60fa0d8b8be3`. Las 60 líneas del cuerpo se conservan literalmente y en orden en 14 encabezados y 17 párrafos; la jerarquía previa al título y el índice duplicado se representan mediante el contexto y el subíndice.
 
@@ -135,3 +137,15 @@ Trazabilidad y reversión local: `site/tmp/cde-practicas-preview/real-lesson-pla
 Validación: 47 comprobaciones PHP sobre la práctica 2998, la lección 3000 y el miembro de QA 29; compilación Vite; navegación de escritorio en Chrome con dimensiones nativas, anclas al texto y práctica, ruta 1/1.1, índice del texto completo y pantalla completa. [Resultados](qa/practicas/desktop-20261014/leccion-original-resultados.json) y [captura](qa/practicas/desktop-20261014/practicas-leccion-original.png).
 
 La respuesta anónima oculta el cuerpo docente y el visor y muestra el acceso a sesión. El SEO Framework conserva su descripción pública automática, como en el resto del sitio; no se declara ausencia de todo extracto en los metadatos. La consulta inversa de EP-0.1 devuelve únicamente 3000. Los scripts de preparación y aplicación se conservan junto al plan en el directorio local ignorado para auditoría.
+
+## Revisión temporal en una lección completa
+
+Por indicación de Aitor, EP-0.1 (2998) se asocia temporalmente a «Qué es el Círculo Carmesí» (2967, clave `cde:08:00:0.1`), que ya contiene texto, vídeo, audio, subíndice y cuestionario. Esta asociación permite revisar el diseño y no constituye una atribución editorial de la práctica a esa lección. Se retira la relación de 3000 y se envía esa entrada a la papelera, tras verificar su marca local y que su contenido coincide con el recibo de creación. La consulta inversa devuelve ahora únicamente 2967.
+
+Se restaura la plantilla habitual de la lección, eliminando la envoltura, la navegación lateral y el fondo global añadidos en la iteración anterior. El visor conserva su panel oscuro y los parciales compartidos. Sólo sus controles y rellenos se adaptan al ancho disponible; el texto, los medios, el subíndice y el cuestionario de la lección anfitriona se mantienen.
+
+[Abrir la lección completa con la práctica](http://espaciosutil.test/lecciones-del-cde/el-circulo-carmesi-introduccion/que-es-el-circulo-carmesi/?cde_practicas_preview=1#lesson-practices-2967). La sesión de Chrome usa una ventana nativa redimensionable. La previsualización sigue siendo optativa, local y protegida por membresía. Se conserva la protección de los niveles 11–13 y se añade el nivel local de QA 14 a esta lección para permitir la revisión con el miembro de pruebas existente; no se altera ninguna suscripción.
+
+La aplicación local conserva copia previa completa de ambos posts, sus metadatos y las restricciones de acceso en `site/tmp/cde-practicas-preview/transfer-to-complete-lesson.json`; el script se conserva junto a ella como `transfer-to-complete-lesson.php`. Para revertir la preparación, restaurar los campos de relación y niveles desde ese recibo, comprobando antes que no hayan cambiado por otra tarea. La entrada 3000 permanece recuperable en la papelera; no restaurarla automáticamente. El post 2967 y todos sus metadatos previos, salvo los dos campos de la nueva relación ACF, se comprobaron sin modificaciones.
+
+Validación: compilación Vite de la previsualización; Chrome con vídeo y audio configurados, subíndice, cuestionario, guía, índice de lectura y tres anchuras de ventana (1440, 1280 y 1024 px) sin desbordamiento. La respuesta anónima sigue sin permiso ni visor. [Captura actual](qa/practicas/desktop-20261014/practicas-leccion-completa.png). La prueba PHP histórica de 47 aserciones se ejecutó sobre la fixture anterior y no se presenta como nueva validación de 2967. No cambia el motor de guía, el audio, las skills, Paperclip ni los certificados; todo el código permanece en el worktree y su rama, sin integración ni despliegue.
