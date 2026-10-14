@@ -178,6 +178,24 @@ class Cde extends Field
                 ],
             ])
 
+            ->addTab('lesson_presentation', [
+                'label' => 'Presentación',
+                'placement' => 'top',
+            ])
+            ->addTrueFalse('lesson_presentation_enabled', [
+                'label' => 'Mostrar presentación',
+                'ui' => 1,
+                'default_value' => 0,
+            ])
+            // Conservar las claves originales mantiene las referencias ACF existentes.
+            ->setCustomKey('field_cde_presentation_lesson_presentation_enabled')
+            ->addField('presentation_help', 'message', [
+                'label' => 'Diapositivas importadas',
+                'message' => 'La presentación se prepara desde el PDF y se importa con la herramienta del curso. Activar esta opción requiere un paquete importado.',
+            ])
+
+            ->setCustomKey('field_cde_presentation_presentation_help')
+
             ->addTab('quiz', [
                 'label' => 'Cuestionario',
                 'placement' => 'top',

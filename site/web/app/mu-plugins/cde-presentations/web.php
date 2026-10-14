@@ -93,6 +93,14 @@ add_action('template_redirect', static function () {
     }
 });
 
+// Mantener los campos de presentación fuera de REST al integrarlos en Lección CDE.
+add_filter('acf/rest/get_fields', static function (array $fields): array {
+    return array_filter($fields, static fn (array $field): bool => ! in_array($field['key'], [
+        'field_cde_presentation_lesson_presentation_enabled',
+        'field_cde_presentation_presentation_help',
+    ], true));
+});
+
 add_filter('acf/prepare_field/name=presentation_help', static function ($field) {
     $id = (int) get_the_ID();
     if (! $id || ! current_user_can('edit_post', $id)) {
