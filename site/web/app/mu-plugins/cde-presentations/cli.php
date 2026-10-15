@@ -8,7 +8,7 @@ namespace EspacioSutil\Presentations;
     $lock = null;
     try {
         if (empty($args[0]) || empty($options['lesson-key']) || ! array_key_exists('expected-revision', $options)) {
-            throw new \RuntimeException('Uso: wp cde presentation import PAQUETE --lesson-key=CLAVE --expected-revision=none|SHA [--apply] [--activate]');
+            throw new \RuntimeException('Uso: wp cde presentation import PAQUETE --lesson-key=CLAVE --expected-revision=none|SHA [--apply] [--activate] [--replace-editor-slides]');
         }
         $source = rtrim($args[0], '/');
         $package = Package::read($source, true);
@@ -25,8 +25,11 @@ namespace EspacioSutil\Presentations;
         if (is_link($parent)) {
             throw new \RuntimeException('Almacén inválido');
         }
+        if (Service::isEdited($id) && isset($options['activate']) && ! isset($options['replace-editor-slides'])) {
+            throw new \RuntimeException('La presentación tiene una edición manual. Usa --replace-editor-slides para sustituirla expresamente.');
+        }
         if (! isset($options['apply'])) {
-            if ((string) get_post_meta($id, Service::META, true) !== $expected) {
+            if (Service::revision($id) !== $expected) {
                 throw new \RuntimeException('Revisión esperada diferente');
             }
             \WP_CLI::success('Dry-run: paquete válido; lección '.$id.'; revisión '.$package['revision']);
@@ -41,9 +44,13 @@ namespace EspacioSutil\Presentations;
             throw new \RuntimeException('Importación concurrente');
         }
         wp_cache_delete($id, 'post_meta');
-        $before = (string) get_post_meta($id, Service::META, true);
+        $before = Service::revision($id);
         if ($before !== $expected) {
             throw new \RuntimeException('Revisión esperada diferente');
+        }
+        $edited = metadata_exists('post', $id, 'lesson_presentation_slides');
+        if ($edited && Service::isEdited($id) && isset($options['activate']) && ! isset($options['replace-editor-slides'])) {
+            throw new \RuntimeException('La presentación tiene una edición manual. Usa --replace-editor-slides para sustituirla expresamente.');
         }
         $destination = Service::directory($id, $package['revision']);
         if (! is_dir($destination)) {
@@ -68,6 +75,9 @@ namespace EspacioSutil\Presentations;
         }
         Package::read($destination, true);
         if (isset($options['activate'])) {
+            if ($edited) {
+                delete_field('field_cde_presentation_slides', $id);
+            }
             update_post_meta($id, Service::META, $package['revision']);
             update_post_meta($id, 'lesson_presentation_enabled', '1');
             if (Service::active($id) !== $package['revision']) {

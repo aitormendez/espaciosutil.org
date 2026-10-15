@@ -13,6 +13,7 @@ if (! defined('WP_ENV') || ! in_array(WP_ENV, ['staging', 'development'], true))
 require_once __DIR__.'/cde-presentations/package.php';
 require_once __DIR__.'/cde-presentations/service.php';
 require_once __DIR__.'/cde-presentations/web.php';
+require_once __DIR__.'/cde-presentations/editor.php';
 if (defined('WP_CLI') && WP_CLI) {
     require_once __DIR__.'/cde-presentations/cli.php';
 }

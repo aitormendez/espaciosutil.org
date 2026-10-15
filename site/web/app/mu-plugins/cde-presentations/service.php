@@ -56,8 +56,84 @@ final class Service
 
     public static function active(int $id): string
     {
-        return get_post_meta($id, 'lesson_presentation_enabled', true) === '1'
-            ? (string) get_post_meta($id, self::META, true) : '';
+        try {
+            return get_post_meta($id, 'lesson_presentation_enabled', true) === '1'
+                ? self::revision($id) : '';
+        } catch (\Throwable $error) {
+            error_log('CDE presentation unavailable for lesson '.$id.': '.$error->getMessage());
+
+            return '';
+        }
+    }
+
+    public static function references(int $id): array
+    {
+        if (metadata_exists('post', $id, 'lesson_presentation_slides')) {
+            $count = (int) get_post_meta($id, 'lesson_presentation_slides', true);
+            if ($count < 0 || $count > 100) {
+                throw new \RuntimeException('Número de diapositivas inválido');
+            }
+            $refs = [];
+            for ($i = 0; $i < $count; $i++) {
+                $refs[] = (string) get_post_meta($id, "lesson_presentation_slides_{$i}_image", true);
+            }
+
+            return $refs;
+        }
+
+        return self::importedReferences($id);
+    }
+
+    public static function importedReferences(int $id): array
+    {
+        $revision = (string) get_post_meta($id, self::META, true);
+        if (! $revision) {
+            return [];
+        }
+        $data = self::load($id, $revision);
+
+        return array_map(static fn ($slide) => $revision.':'.$slide['page'], $data['slides']);
+    }
+
+    public static function isEdited(int $id): bool
+    {
+        return metadata_exists('post', $id, 'lesson_presentation_slides') && self::references($id) !== self::importedReferences($id);
+    }
+
+    public static function revision(int $id): string
+    {
+        if (! self::isEdited($id)) {
+            return (string) get_post_meta($id, self::META, true);
+        }
+        $refs = self::references($id);
+
+        return $refs ? hash('sha256', Package::canonical($refs)) : '';
+    }
+
+    public static function resolve(int $id, string $reference): array
+    {
+        if (! preg_match('/^([a-f0-9]{64}):([1-9][0-9]{0,2})$/D', $reference, $match)) {
+            throw new \RuntimeException('Imagen no válida');
+        }
+        $data = self::load($id, $match[1]);
+        $slide = $data['slides'][(int) $match[2] - 1] ?? null;
+        if (! $slide) {
+            throw new \RuntimeException('Diapositiva ausente');
+        }
+
+        return $slide + ['source_revision' => $match[1]];
+    }
+
+    public static function presentation(int $id): array
+    {
+        $slides = [];
+        foreach (self::references($id) as $ref) {
+            $slide = self::resolve($id, $ref);
+            $slide['page'] = count($slides) + 1;
+            $slides[] = $slide;
+        }
+
+        return ['revision' => self::revision($id), 'page_count' => count($slides), 'slides' => $slides];
     }
 
     public static function load(int $id, string $revision): array

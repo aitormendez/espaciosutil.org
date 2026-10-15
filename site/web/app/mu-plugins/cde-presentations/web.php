@@ -34,6 +34,12 @@ function deliver(): void
         $kind = is_string($_GET['kind'] ?? null) ? $_GET['kind'] : '';
         $requested = is_string($_GET['revision'] ?? null) ? $_GET['revision'] : '';
         $revision = $preview && $requested ? $requested : $active;
+        if ($kind === 'source-image' && $preview) {
+            $data = Service::load($id, $requested);
+            $kind = 'image';
+        } else {
+            $data = null;
+        }
         if (! $revision) {
             if ($kind === 'manifest') {
                 header('Content-Type: application/json; charset=UTF-8');
@@ -47,7 +53,7 @@ function deliver(): void
         if ($kind === 'image' && $requested !== $revision) {
             $fail('presentation_revision_changed', 409);
         }
-        $data = Service::load($id, $revision);
+        $data ??= Service::presentation($id);
         if ($kind === 'manifest') {
             header('Content-Type: application/json; charset=UTF-8');
             if ($_SERVER['REQUEST_METHOD'] !== 'HEAD') {
@@ -62,7 +68,7 @@ function deliver(): void
         $width = absint($_GET['width'] ?? 0);
         foreach ($data['slides'][$page - 1]['variants'] ?? [] as $variant) {
             if ($variant['width'] === $width) {
-                $file = Package::verifyImage(Service::directory($id, $revision), $variant);
+                $file = Package::verifyImage(Service::directory($id, $data['slides'][$page - 1]['source_revision'] ?? $revision), $variant);
                 header('Content-Type: image/webp');
                 header('Content-Length: '.$variant['bytes']);
                 // El piloto transmite un archivo acotado después de autorizar cada petición.
@@ -98,31 +104,6 @@ add_filter('acf/rest/get_fields', static function (array $fields): array {
     return array_filter($fields, static fn (array $field): bool => ! in_array($field['key'], [
         'field_cde_presentation_lesson_presentation_enabled',
         'field_cde_presentation_presentation_help',
+        'field_cde_presentation_slides',
     ], true));
-});
-
-add_filter('acf/prepare_field/name=presentation_help', static function ($field) {
-    $id = (int) get_the_ID();
-    if (! $id || ! current_user_can('edit_post', $id)) {
-        return $field;
-    }
-    $revision = (string) get_post_meta($id, Service::META, true);
-    if (! $revision) {
-        $field['message'] = 'Sin presentación importada.';
-
-        return $field;
-    }
-    try {
-        $data = Service::load($id, $revision);
-        $html = '<p>'.esc_html($data['page_count'].' diapositivas · Revisión '.substr($revision, 0, 12)).'</p><div style="display:flex;gap:8px;flex-wrap:wrap">';
-        foreach ($data['slides'] as $slide) {
-            $url = Service::url($id, 'image', ['revision' => $revision, 'page' => $slide['page'], 'width' => $slide['variants'][0]['width'], 'preview' => 1]);
-            $html .= '<a target="_blank" rel="noopener" href="'.esc_url($url).'"><img loading="lazy" style="width:160px;height:auto" src="'.esc_url($url).'" alt="Diapositiva '.(int) $slide['page'].'"></a>';
-        }
-        $field['message'] = $html.'</div>';
-    } catch (\Throwable $error) {
-        $field['message'] = 'El paquete no está disponible. Revisa la importación.';
-    }
-
-    return $field;
 });
