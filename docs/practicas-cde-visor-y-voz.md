@@ -157,3 +157,11 @@ El selector Relationship se incorpora como pestaña «Prácticas» del grupo exi
 Aunque el grupo anfitrión permite REST, el campo de relación conserva su exclusión previa mediante `acf/rest/get_fields`; los demás campos no cambian. Validación: sintaxis PHP, inspección de grupos y campos efectivos en WordPress local, correspondencia entre lectura ACF y metadato guardado, y revisión visual del editor autenticado con la pestaña y el selector cargados. No se ha guardado la lección ni modificado su selección durante esta corrección. En esta revisión, el valor guardado de 2967 ya aparece vacío, por lo que la asociación temporal descrita en el apartado anterior no representa su estado actual.
 
 Aplicado únicamente al worktree y a la copia local optativa de previsualización. No afecta al motor, la voz, las skills ni los certificados.
+
+## Sección a ancho completo con columna centrada e índice exterior
+
+El 2026-10-15 se adapta el incrustado al criterio de Aitor: fondo de sección a ancho completo, título y visor en una columna centrada del mismo ancho máximo que el contenido de lección, e índice pegado al borde izquierdo. Se elimina la división en columnas de «Texto completo»; guía y lectura comparten un único índice exterior. En guía selecciona pantallas y en lectura lleva el foco al encabezado correspondiente.
+
+La visibilidad automática se calcula a partir del espacio real a la izquierda de la columna, con `ResizeObserver`: si caben el índice y su separación, se muestra; si no, se oculta. El botón está disponible en ambos modos. La elección manual dura hasta cruzar el límite de espacio disponible, y cambiar de pestaña no la reinicia. La apertura manual sin espacio suficiente usa un panel superpuesto, con cierre propio y Escape; seleccionar un destino lo cierra para dejar el contenido visible. El observador se desconecta al desmontar el visor.
+
+La validación se realiza sobre «Qué es El libro de Urantia» (2389), asociación que ya existía al iniciar esta revisión. No se alteran relaciones editoriales ni permisos. [Evidencia y alcance de las pruebas](qa/practicas/desktop-20261015/README.md). Cambios limitados a Blade, CSS, controles del visor y su recorrido de prueba; motor de contenido, narración, skills y certificados sin modificaciones. Se conserva el desarrollo en el worktree y la previsualización local, sin integración ni despliegue.

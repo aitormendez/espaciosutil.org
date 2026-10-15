@@ -56,15 +56,13 @@
 .practice-reading h2 { font-size: 28px; margin: 32px 0 16px; }
 .practice-reading h3 { font-size: 24px; margin: 24px 0 16px; }
 .practice-reading p { margin-bottom: 20px; }
-.practice-viewer--embedded[data-mode='reading'] { grid-template-columns: 256px minmax(0, 1fr); }
-.practice-viewer--embedded[data-mode='reading'] .practice-viewer-main { grid-column: 2; }
 .practice-reading [data-practice-heading] { scroll-margin-top: 32px; }
 .practice-viewer:not([data-guide]) .practice-viewer-main { grid-column: 1 / -1; }
 .practice-fullscreen-title, .practice-index-toggle { display: none; }
 .practice-context { margin: 32px 0 0 288px; }
 .practice-context h2 { font: 500 14px/1.4 'Rubik', sans-serif; color: var(--practice-muted); margin-bottom: 16px; }
-.practice-lesson-section { margin-block: 48px; padding: 32px; background: var(--practice-bg); border-radius: 8px; }
-.practice-lesson-section > h2 { font: 500 28px/1.4 'Rubik', sans-serif; margin: 20px 0 28px; }
+.practice-lesson-section { margin-block: 48px; padding-block: 40px; width: 100%; background: var(--practice-bg); }
+.practice-lesson-column > h2 { font: 500 28px/1.4 'Rubik', sans-serif; margin: 20px 0 28px; }
 .practice-embedded-header { display: flex; justify-content: space-between; gap: 20px; }
 .practice-embedded-header .practice-eyebrow { margin: 0; }
 .practice-viewer--embedded { grid-template-columns: 1fr; margin-bottom: 28px; }
@@ -89,9 +87,16 @@
 
 .practice-viewer:fullscreen .practice-viewer-main, .practice-viewer:fullscreen .practice-reading { min-height: 0; }
 
-/* Keep the existing lesson layout; only the embedded practice reflows. */
-.practice-lesson-section { scroll-margin-top: 32px; }
+/* Match the lesson's max-w-4xl column while the section spans its full width. */
+.practice-lesson-section { --practice-column-width: var(--container-4xl, 56rem); scroll-margin-top: 32px; }
+.practice-lesson-column, .practice-viewer--embedded:not(:fullscreen) .practice-viewer-main { width: calc(100% - 32px); max-width: var(--practice-column-width); margin-inline: auto; }
 .practice-lesson-section .practice-tools, .practice-embedded-header { flex-wrap: wrap; }
 .practice-lesson-section .practice-screen { padding-inline: clamp(24px, 4.45vw, 64px); }
-.practice-lesson-section .practice-viewer--embedded[data-mode='reading'] { grid-template-columns: minmax(160px, 25%) minmax(0, 1fr); }
 .practice-lesson-section .practice-reading { padding-inline: clamp(24px, 3.34vw, 48px); }
+.practice-viewer--embedded:not(:fullscreen) { --practice-index-width: 256px; --practice-index-gap: 24px; position: relative; display: block; }
+.practice-viewer--embedded .practice-index-toggle { display: inline-flex; }
+.practice-index-close { display: none !important; }
+.practice-viewer--embedded:not(:fullscreen) .practice-index { position: absolute; inset: 0 auto 0 0; width: var(--practice-index-width); padding: 0; z-index: 2; }
+.practice-viewer--embedded:not(:fullscreen) .practice-index-content { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; padding: 16px; background: var(--practice-bg); }
+.practice-viewer--embedded:not(:fullscreen)[data-index-fits='false'] .practice-index-content { border: 1px solid var(--practice-border); border-left: 0; border-radius: 0 8px 8px 0; box-shadow: 8px 8px 24px #0008; }
+.practice-viewer--embedded:not(:fullscreen)[data-index-fits='false'] .practice-index-close { display: block !important; color: var(--practice-text); text-decoration: underline; }

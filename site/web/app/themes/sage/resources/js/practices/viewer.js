@@ -26,6 +26,10 @@ export function initPracticeViewers(scope = document) {
     let enabled = false;
     let fullscreen = false;
     let indexOpen = false;
+    const embedded = root.classList.contains('practice-viewer--embedded');
+    let indexFits = null;
+    let embeddedIndexOpen = null;
+    const indexToggle = q('.practice-index-toggle');
     let revision = 0;
     const stop = () => { revision++; audio.pause(); audio.removeAttribute('src'); audio.load(); };
     const syncAudio = () => {
@@ -50,11 +54,21 @@ export function initPracticeViewers(scope = document) {
       }
     };
     const syncIndex = () => {
-      index.hidden = fullscreen ? !indexOpen : (mode === 'guide' && root.classList.contains('practice-viewer--embedded'));
+      if (embedded && !fullscreen) {
+        const style = getComputedStyle(root);
+        const needed = parseFloat(style.getPropertyValue('--practice-index-width')) + parseFloat(style.getPropertyValue('--practice-index-gap'));
+        const available = q('.practice-viewer-main').getBoundingClientRect().left - root.getBoundingClientRect().left;
+        const fits = available >= needed;
+        // Resizing across the fit boundary restores the automatic state; changing mode does not.
+        if (fits !== indexFits) { indexFits = fits; embeddedIndexOpen = null; }
+        root.dataset.indexFits = String(fits);
+        index.hidden = !(embeddedIndexOpen ?? fits);
+      } else { index.hidden = fullscreen ? !indexOpen : false; }
       root.classList.toggle('practice-index-open', fullscreen && indexOpen);
-      const toggle = q('[data-action="index"]');
+      const toggle = indexToggle;
       toggle.setAttribute('aria-expanded', String(!index.hidden));
       toggle.querySelector('span').textContent = index.hidden ? 'Mostrar índice' : 'Ocultar índice';
+      if (index.hidden && index.contains(document.activeElement)) toggle.focus({ preventScroll: true });
     };
     const render = () => {
       const current = guide.screens[position];
@@ -100,6 +114,7 @@ export function initPracticeViewers(scope = document) {
       const button = event.target.closest('button');
       if (!button || !root.contains(button)) return;
       if (button.hasAttribute('data-practice-jump')) {
+        if (embedded && !fullscreen && !indexFits) { embeddedIndexOpen = false; syncIndex(); }
         if (mode === 'reading') {
           const target = reading.querySelector(`[data-practice-heading="${button.dataset.practiceSection}"]`);
           if (target) {
@@ -125,7 +140,12 @@ export function initPracticeViewers(scope = document) {
             enabled = true; syncAudio(); narrate();
           }
           break;
-        case 'index': indexOpen = !indexOpen; syncIndex(); break;
+        case 'index':
+          if (embedded && !fullscreen) embeddedIndexOpen = index.hidden;
+          else indexOpen = !indexOpen;
+          syncIndex();
+          if (index.hidden) indexToggle.focus({ preventScroll: true });
+          break;
         case 'fullscreen':
           try {
             if (document.fullscreenElement === root) await document.exitFullscreen();
@@ -137,6 +157,10 @@ export function initPracticeViewers(scope = document) {
     root.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && document.fullscreenElement === root) {
         document.exitFullscreen().catch(() => {});
+        return;
+      }
+      if (event.key === 'Escape' && embedded && !fullscreen && !index.hidden) {
+        embeddedIndexOpen = false; syncIndex(); indexToggle.focus({ preventScroll: true });
         return;
       }
       if (mode !== 'guide' || event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
@@ -170,6 +194,9 @@ export function initPracticeViewers(scope = document) {
     q('[data-practice-controls]').hidden = false;
     screen.hidden = false; reading.hidden = true;
     render(); syncIndex();
-    mounted.set(root, () => { disable(); controller.abort(); });
+    const resizeObserver = embedded ? new ResizeObserver(syncIndex) : null;
+    resizeObserver?.observe(root);
+    resizeObserver?.observe(q('.practice-viewer-main'));
+    mounted.set(root, () => { disable(); controller.abort(); resizeObserver?.disconnect(); });
   });
 }

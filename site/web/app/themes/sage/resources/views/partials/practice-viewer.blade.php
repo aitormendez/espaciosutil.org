@@ -6,10 +6,15 @@
 <section class="practice-viewer {{ !empty($embedded) ? 'practice-viewer--embedded' : '' }}" data-practice-viewer data-mode="reading" aria-label="{{ get_the_title($practice) }}" data-guide='@json($guide, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
   <header class="practice-fullscreen-title"><span>{{ get_the_title($practice) }}</span></header>
   <nav class="practice-index" id="{{ $viewerId }}-index" aria-label="Índice de la práctica" hidden>
+    <div class="practice-index-content">
+    @if (!empty($embedded))
+      <button type="button" class="practice-index-close" data-action="index">Cerrar índice</button>
+    @endif
     <p class="practice-eyebrow">En esta práctica</p>
     @foreach ($guide['sections'] as $section)
       <button type="button" data-practice-jump="{{ $section['screen'] }}" data-practice-section="{{ $loop->index }}">{{ $section['title'] }}</button>
     @endforeach
+    </div>
   </nav>
   <div class="practice-viewer-main">
     <div class="practice-toolbar" hidden data-practice-toolbar>
