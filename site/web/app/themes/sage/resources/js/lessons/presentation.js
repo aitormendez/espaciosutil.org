@@ -112,9 +112,10 @@ export default function initPresentations(scope = document) {
         swiper?.destroy(true, true);
         wrapper.replaceChildren();
         slides.forEach((slide) => {
-          const el = document.createElement('div'); el.className = 'swiper-slide';
+          const el = document.createElement('div'); el.className = 'swiper-slide flex! items-center justify-center';
           const box = document.createElement('div'); box.className = 'swiper-zoom-container';
           const img = document.createElement('img');
+          img.className = 'block h-full w-full max-h-full max-w-full object-contain';
           img.alt = slide.alt; img.decoding = 'async';
           img.width = slide.sources[0].width; img.height = slide.sources[0].height;
           img.addEventListener('load', () => imageReady(img), options);

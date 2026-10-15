@@ -1,15 +1,5 @@
-/* Una sola superficie evita acumular opacidad entre los contenidos de la lección. */
-.lesson-study-content {
-  display: flow-root;
-}
-
 .lesson-study-content .practice-lesson-section,
 .lesson-study-content .practice-viewer--embedded:not(:fullscreen),
 .lesson-study-content .practice-viewer--embedded:not(:fullscreen) .practice-viewer-main {
   background: transparent;
-}
-
-/* El diálogo ampliado conserva su fondo propio; el visor integrado deja ver la superficie común. */
-.lesson-study-content .lesson-presentation > [data-presentation-home] {
-  --presentation-background: transparent;
 }

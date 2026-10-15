@@ -43,3 +43,9 @@ CDE_PRACTICAS_PREVIEW=1 wp eval-file tests/cde-presentation-fields-live.php
 ```
 
 La aplicación local conserva los archivos anteriores en `site/tmp/presentation-editor-before-20261015/`. Se sustituyeron los módulos propios de presentaciones y solo el bloque de su pestaña en ambos temas, manteniendo los cambios ajenos. Las dependencias existentes emiten avisos de deprecación PDO bajo PHP 8.5; las comprobaciones terminan correctamente.
+
+## Assets de la vista previa local
+
+El 2026-10-15 se encontró que `site/tmp/cde-practicas-preview/theme/public/build` no contenía el visor de presentaciones, aunque los imports sí estaban en sus fuentes. Esto dejaba el HTML sin estilos y detenido en «Cargando diapositiva…». Se reconstruyó directamente desde ese tema con `npm run build -- --base=/app/themes/sage-practicas-preview/public/build/`, conservando sus fuentes combinadas. Copiar un build generado desde otra rama que carezca de presentaciones vuelve a introducir el problema; los assets deben corresponder al conjunto de fuentes servido.
+
+El visor usa utilidades Tailwind en Blade y en los nodos que crea JavaScript. `app.css` declara explícitamente el archivo de JavaScript como fuente de clases para que también se incluya al compilar la carpeta temporal ignorada por Git. Se retiró `layouts/presentation.css`; `layouts/lesson.css` solo conserva las reglas de integración del fondo de Prácticas. Comprobados ambos temas locales, las 15 diapositivas, navegación, apertura/cierre ampliado y ancho móvil de 390 píxeles sin desbordamiento.

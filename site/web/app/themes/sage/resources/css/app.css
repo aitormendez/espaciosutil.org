@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @source "../views/";
+@source "../js/lessons/presentation.js";
 @source "../../app/";
 @source "../safelist.txt";
 @import 'hamburgers/dist/hamburgers.css';
@@ -26,7 +27,6 @@
 @import './pmp.css';
 @import './layouts/niveles-membresia.css';
 @import './layouts/quiz.css';
-@import './layouts/presentation.css';
 @import './layouts/lesson.css';
 
 .toc {
