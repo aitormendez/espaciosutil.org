@@ -61,7 +61,7 @@
 .practice-fullscreen-title, .practice-index-toggle { display: none; }
 .practice-context { margin: 32px 0 0 288px; }
 .practice-context h2 { font: 500 14px/1.4 'Rubik', sans-serif; color: var(--practice-muted); margin-bottom: 16px; }
-.practice-lesson-section { margin-block: 48px; padding-block: 40px; width: 100%; background: color-mix(in oklab, var(--color-morado5) 90%, transparent); }
+.practice-lesson-section { margin-block: 48px; padding-block: 40px; border-block: 1px solid var(--practice-border); width: 100%; background: color-mix(in oklab, var(--color-morado5) 90%, transparent); }
 .practice-lesson-column > h2 { font: 500 28px/1.4 'Rubik', sans-serif; margin: 20px 0 28px; }
 .practice-embedded-header { display: flex; justify-content: space-between; gap: 20px; }
 .practice-embedded-header .practice-eyebrow { margin: 0; }
