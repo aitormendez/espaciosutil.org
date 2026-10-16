@@ -1,0 +1,1096 @@
+{
+  "url": "https://stage.espaciosutil.org/lecciones-del-cde/urantia/que-es-el-libro-de-urantia/",
+  "measurements": [
+    {
+      "width": 320,
+      "height": 568,
+      "inline": {
+        "viewport": 320,
+        "main": {
+          "x": 16,
+          "y": 271.875,
+          "right": 304,
+          "bottom": 754.875,
+          "width": 288,
+          "height": 483,
+          "scroll": 286,
+          "client": 286
+        },
+        "screen": {
+          "x": 17,
+          "y": 397.875,
+          "right": 303,
+          "bottom": 677.875,
+          "width": 286,
+          "height": 280,
+          "scroll": 286,
+          "client": 286
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 272.875,
+          "right": 303,
+          "bottom": 397.875,
+          "width": 286,
+          "height": 125,
+          "scroll": 286,
+          "client": 286
+        },
+        "footer": {
+          "x": 17,
+          "y": 677.875,
+          "right": 303,
+          "bottom": 753.875,
+          "width": 286,
+          "height": 76,
+          "scroll": 286,
+          "client": 286
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 158,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 291,
+            "left": 162
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 237,
+            "left": 147.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 291,
+            "left": 245
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 291,
+            "left": 189.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 320,
+        "main": {
+          "x": 12,
+          "y": 67.59375,
+          "right": 308,
+          "bottom": 560,
+          "width": 296,
+          "height": 492.40625,
+          "scroll": 296,
+          "client": 296
+        },
+        "screen": {
+          "x": 12,
+          "y": 180.59375,
+          "right": 308,
+          "bottom": 500,
+          "width": 296,
+          "height": 319.40625,
+          "scroll": 296,
+          "client": 296
+        },
+        "toolbar": {
+          "x": 12,
+          "y": 67.59375,
+          "right": 308,
+          "bottom": 180.59375,
+          "width": 296,
+          "height": 113,
+          "scroll": 296,
+          "client": 296
+        },
+        "footer": {
+          "x": 12,
+          "y": 500,
+          "right": 308,
+          "bottom": 560,
+          "width": 296,
+          "height": 60,
+          "scroll": 296,
+          "client": 296
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 103.59375,
+            "left": 12
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 158,
+            "left": 12
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 308,
+            "left": 162
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 254,
+            "left": 164.53125
+          },
+          {
+            "name": "Salir de pantalla completa",
+            "height": 44,
+            "right": 308,
+            "left": 262
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 105.359375,
+            "left": 12
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 308,
+            "left": 206.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 568
+      }
+    },
+    {
+      "width": 360,
+      "height": 640,
+      "inline": {
+        "viewport": 360,
+        "main": {
+          "x": 16,
+          "y": 271.015625,
+          "right": 344,
+          "bottom": 754.015625,
+          "width": 328,
+          "height": 483,
+          "scroll": 326,
+          "client": 326
+        },
+        "screen": {
+          "x": 17,
+          "y": 397.015625,
+          "right": 343,
+          "bottom": 677.015625,
+          "width": 326,
+          "height": 280,
+          "scroll": 326,
+          "client": 326
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 272.015625,
+          "right": 343,
+          "bottom": 397.015625,
+          "width": 326,
+          "height": 125,
+          "scroll": 326,
+          "client": 326
+        },
+        "footer": {
+          "x": 17,
+          "y": 677.015625,
+          "right": 343,
+          "bottom": 753.015625,
+          "width": 326,
+          "height": 76,
+          "scroll": 326,
+          "client": 326
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 178,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 331,
+            "left": 182
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 277,
+            "left": 187.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 331,
+            "left": 285
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 331,
+            "left": 229.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 360,
+        "main": {
+          "x": 12,
+          "y": 67.59375,
+          "right": 348,
+          "bottom": 632,
+          "width": 336,
+          "height": 564.40625,
+          "scroll": 336,
+          "client": 336
+        },
+        "screen": {
+          "x": 12,
+          "y": 180.59375,
+          "right": 348,
+          "bottom": 572,
+          "width": 336,
+          "height": 391.40625,
+          "scroll": 336,
+          "client": 336
+        },
+        "toolbar": {
+          "x": 12,
+          "y": 67.59375,
+          "right": 348,
+          "bottom": 180.59375,
+          "width": 336,
+          "height": 113,
+          "scroll": 336,
+          "client": 336
+        },
+        "footer": {
+          "x": 12,
+          "y": 572,
+          "right": 348,
+          "bottom": 632,
+          "width": 336,
+          "height": 60,
+          "scroll": 336,
+          "client": 336
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 103.59375,
+            "left": 12
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 178,
+            "left": 12
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 348,
+            "left": 182
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 294,
+            "left": 204.53125
+          },
+          {
+            "name": "Salir de pantalla completa",
+            "height": 44,
+            "right": 348,
+            "left": 302
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 105.359375,
+            "left": 12
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 348,
+            "left": 246.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 640
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "inline": {
+        "viewport": 390,
+        "main": {
+          "x": 16,
+          "y": 270.203125,
+          "right": 374,
+          "bottom": 753.203125,
+          "width": 358,
+          "height": 483,
+          "scroll": 356,
+          "client": 356
+        },
+        "screen": {
+          "x": 17,
+          "y": 396.203125,
+          "right": 373,
+          "bottom": 676.203125,
+          "width": 356,
+          "height": 280,
+          "scroll": 356,
+          "client": 356
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 271.203125,
+          "right": 373,
+          "bottom": 396.203125,
+          "width": 356,
+          "height": 125,
+          "scroll": 356,
+          "client": 356
+        },
+        "footer": {
+          "x": 17,
+          "y": 676.203125,
+          "right": 373,
+          "bottom": 752.203125,
+          "width": 356,
+          "height": 76,
+          "scroll": 356,
+          "client": 356
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 193,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 361,
+            "left": 197
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 307,
+            "left": 217.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 361,
+            "left": 315
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 361,
+            "left": 259.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 390,
+        "main": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 378,
+          "bottom": 836,
+          "width": 366,
+          "height": 792.203125,
+          "scroll": 366,
+          "client": 366
+        },
+        "screen": {
+          "x": 12,
+          "y": 156.796875,
+          "right": 378,
+          "bottom": 776,
+          "width": 366,
+          "height": 619.203125,
+          "scroll": 366,
+          "client": 366
+        },
+        "toolbar": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 378,
+          "bottom": 156.796875,
+          "width": 366,
+          "height": 113,
+          "scroll": 366,
+          "client": 366
+        },
+        "footer": {
+          "x": 12,
+          "y": 776,
+          "right": 378,
+          "bottom": 836,
+          "width": 366,
+          "height": 60,
+          "scroll": 366,
+          "client": 366
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 103.59375,
+            "left": 12
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 193,
+            "left": 12
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 378,
+            "left": 197
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 324,
+            "left": 234.53125
+          },
+          {
+            "name": "Salir de pantalla completa",
+            "height": 44,
+            "right": 378,
+            "left": 332
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 105.359375,
+            "left": 12
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 378,
+            "left": 276.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 844
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "inline": {
+        "viewport": 430,
+        "main": {
+          "x": 16,
+          "y": 268.796875,
+          "right": 414,
+          "bottom": 751.796875,
+          "width": 398,
+          "height": 483,
+          "scroll": 396,
+          "client": 396
+        },
+        "screen": {
+          "x": 17,
+          "y": 394.796875,
+          "right": 413,
+          "bottom": 674.796875,
+          "width": 396,
+          "height": 280,
+          "scroll": 396,
+          "client": 396
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 269.796875,
+          "right": 413,
+          "bottom": 394.796875,
+          "width": 396,
+          "height": 125,
+          "scroll": 396,
+          "client": 396
+        },
+        "footer": {
+          "x": 17,
+          "y": 674.796875,
+          "right": 413,
+          "bottom": 750.796875,
+          "width": 396,
+          "height": 76,
+          "scroll": 396,
+          "client": 396
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 213,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 401,
+            "left": 217
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 347,
+            "left": 257.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 401,
+            "left": 355
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 401,
+            "left": 299.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 430,
+        "main": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 418,
+          "bottom": 924,
+          "width": 406,
+          "height": 880.203125,
+          "scroll": 406,
+          "client": 406
+        },
+        "screen": {
+          "x": 12,
+          "y": 156.796875,
+          "right": 418,
+          "bottom": 864,
+          "width": 406,
+          "height": 707.203125,
+          "scroll": 406,
+          "client": 406
+        },
+        "toolbar": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 418,
+          "bottom": 156.796875,
+          "width": 406,
+          "height": 113,
+          "scroll": 406,
+          "client": 406
+        },
+        "footer": {
+          "x": 12,
+          "y": 864,
+          "right": 418,
+          "bottom": 924,
+          "width": 406,
+          "height": 60,
+          "scroll": 406,
+          "client": 406
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 103.59375,
+            "left": 12
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 213,
+            "left": 12
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 418,
+            "left": 217
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 364,
+            "left": 274.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 418,
+            "left": 372
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 105.359375,
+            "left": 12
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 418,
+            "left": 316.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 932
+      }
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "inline": {
+        "viewport": 768,
+        "main": {
+          "x": 16,
+          "y": 33.015625,
+          "right": 752,
+          "bottom": 516.015625,
+          "width": 736,
+          "height": 483,
+          "scroll": 734,
+          "client": 734
+        },
+        "screen": {
+          "x": 17,
+          "y": 159.015625,
+          "right": 751,
+          "bottom": 439.015625,
+          "width": 734,
+          "height": 280,
+          "scroll": 734,
+          "client": 734
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 34.015625,
+          "right": 751,
+          "bottom": 159.015625,
+          "width": 734,
+          "height": 125,
+          "scroll": 734,
+          "client": 734
+        },
+        "footer": {
+          "x": 17,
+          "y": 439.015625,
+          "right": 751,
+          "bottom": 515.015625,
+          "width": 734,
+          "height": 76,
+          "scroll": 734,
+          "client": 734
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 382,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 739,
+            "left": 386
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 685,
+            "left": 595.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 739,
+            "left": 693
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 739,
+            "left": 637.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 768,
+        "main": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 756,
+          "bottom": 1016,
+          "width": 744,
+          "height": 972.203125,
+          "scroll": 744,
+          "client": 744
+        },
+        "screen": {
+          "x": 12,
+          "y": 156.796875,
+          "right": 756,
+          "bottom": 956,
+          "width": 744,
+          "height": 799.203125,
+          "scroll": 744,
+          "client": 744
+        },
+        "toolbar": {
+          "x": 12,
+          "y": 43.796875,
+          "right": 756,
+          "bottom": 156.796875,
+          "width": 744,
+          "height": 113,
+          "scroll": 744,
+          "client": 744
+        },
+        "footer": {
+          "x": 12,
+          "y": 956,
+          "right": 756,
+          "bottom": 1016,
+          "width": 744,
+          "height": 60,
+          "scroll": 744,
+          "client": 744
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 103.59375,
+            "left": 12
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 382,
+            "left": 12
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 756,
+            "left": 386
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 702,
+            "left": 612.53125
+          },
+          {
+            "name": "Salir de pantalla completa",
+            "height": 44,
+            "right": 756,
+            "left": 710
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 105.359375,
+            "left": 12
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 756,
+            "left": 654.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 1024
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "inline": {
+        "viewport": 844,
+        "main": {
+          "x": 16,
+          "y": 241.640625,
+          "right": 828,
+          "bottom": 724.640625,
+          "width": 812,
+          "height": 483,
+          "scroll": 810,
+          "client": 810
+        },
+        "screen": {
+          "x": 17,
+          "y": 367.640625,
+          "right": 827,
+          "bottom": 647.640625,
+          "width": 810,
+          "height": 280,
+          "scroll": 810,
+          "client": 810
+        },
+        "toolbar": {
+          "x": 17,
+          "y": 242.640625,
+          "right": 827,
+          "bottom": 367.640625,
+          "width": 810,
+          "height": 125,
+          "scroll": 810,
+          "client": 810
+        },
+        "footer": {
+          "x": 17,
+          "y": 647.640625,
+          "right": 827,
+          "bottom": 723.640625,
+          "width": 810,
+          "height": 76,
+          "scroll": 810,
+          "client": 810
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 120.59375,
+            "left": 29
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 420,
+            "left": 29
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 815,
+            "left": 424
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 761,
+            "left": 671.53125
+          },
+          {
+            "name": "Pantalla completa",
+            "height": 44,
+            "right": 815,
+            "left": 769
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 122.359375,
+            "left": 29
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 815,
+            "left": 713.59375
+          }
+        ],
+        "headingSize": "27px"
+      },
+      "full": {
+        "viewport": 844,
+        "main": {
+          "x": 20,
+          "y": 42.390625,
+          "right": 824,
+          "bottom": 378,
+          "width": 804,
+          "height": 335.609375,
+          "scroll": 804,
+          "client": 804
+        },
+        "screen": {
+          "x": 20,
+          "y": 95.390625,
+          "right": 824,
+          "bottom": 322,
+          "width": 804,
+          "height": 226.609375,
+          "scroll": 804,
+          "client": 804
+        },
+        "toolbar": {
+          "x": 20,
+          "y": 42.390625,
+          "right": 824,
+          "bottom": 95.390625,
+          "width": 804,
+          "height": 53,
+          "scroll": 804,
+          "client": 804
+        },
+        "footer": {
+          "x": 20,
+          "y": 322,
+          "right": 824,
+          "bottom": 378,
+          "width": 804,
+          "height": 56,
+          "scroll": 804,
+          "client": 804
+        },
+        "controls": [
+          {
+            "name": "Mostrar índiceÍndice",
+            "height": 44,
+            "right": 100.765625,
+            "left": 20
+          },
+          {
+            "name": "Guía paso a paso",
+            "height": 44,
+            "right": 230.359375,
+            "left": 112.765625
+          },
+          {
+            "name": "Texto completo",
+            "height": 44,
+            "right": 363.953125,
+            "left": 246.359375
+          },
+          {
+            "name": "Activar audioAudio",
+            "height": 44,
+            "right": 772,
+            "left": 693.203125
+          },
+          {
+            "name": "Salir de pantalla completa",
+            "height": 44,
+            "right": 824,
+            "left": 780
+          },
+          {
+            "name": "Anterior",
+            "height": 44,
+            "right": 113.359375,
+            "left": 20
+          },
+          {
+            "name": "Siguiente",
+            "height": 44,
+            "right": 824,
+            "left": 722.59375
+          }
+        ],
+        "headingSize": "28px",
+        "height": 390
+      }
+    }
+  ],
+  "screensChecked": 98,
+  "audio": true,
+  "indexGuideAndReading": true,
+  "touchEmulation": true,
+  "pageErrors": []
+}

@@ -1,0 +1,25 @@
+{
+    "env": "staging",
+    "release": "\/srv\/www\/espaciosutil.org\/releases\/20261016083020",
+    "practice": 2998,
+    "lesson": 2389,
+    "screens": 49,
+    "audio_revision": "302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448",
+    "audio_files": 49,
+    "audio_directory": "\/srv\/www\/espaciosutil.org\/shared\/cde-practicas-audio",
+    "slides": 15,
+    "presentation_revision": "d831299f008ae8d911eceec756eb8399c570f6b878e52d1efa887712f70159f3",
+    "tabs": [
+        "General",
+        "Subíndice",
+        "Medios (Video\/Audio)",
+        "Presentación",
+        "Cuestionario",
+        "Lecciones relacionadas",
+        "Prácticas"
+    ],
+    "isolation": "passed",
+    "rest_private": "passed",
+    "inherited_series_filter": "passed",
+    "progress_schema": "ready"
+}

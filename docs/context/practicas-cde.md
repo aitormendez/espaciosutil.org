@@ -1,6 +1,6 @@
 # Prácticas CDE: referencia de implementación
 
-Actualizado: 2026-10-16. Estado: implementación web de escritorio validada en local y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main y producción siguen pendientes de integración; la adaptación web móvil se desarrolla por autorización del usuario el 2026-10-16 y queda pendiente de su revisión visual. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
+Actualizado: 2026-10-16. Estado: implementación web de escritorio y móvil validada y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main y producción siguen pendientes de integración; la adaptación web móvil se ha desplegado por autorización del usuario el 2026-10-16 y queda pendiente de su revisión visual. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
 
 ## Alcance y decisiones
 
@@ -115,6 +115,7 @@ Los resultados corresponden a las ejecuciones documentadas, no a una nueva ejecu
 - [QA general](../qa/practicas/README.md): importación, acceso y límites de los entornos de prueba.
 - [QA del 14 de octubre](../qa/practicas/desktop-20261014/README.md): guía, voz y numeración; 47 comprobaciones PHP sobre la fixture de aquel momento y cuatro pruebas Python de referencia/audio. Las pruebas sobre la lección 3000 son históricas, pues esa entrada se retiró.
 - [QA del 15 de octubre](../qa/practicas/desktop-20261015/README.md): columna de 896 px, anchuras útiles aproximadas de 1761/1405/1121 px, índice adaptable, lectura, foco y ausencia de desbordamiento. Pantalla completa comprobada de forma independiente en la ficha individual con Playwright.
+- [QA móvil del 16 de octubre](../qa/practicas/mobile-20261016/README.md): seis tamaños, recorrido completo de 49 pantallas en vertical y horizontal, audio, índice, lectura, ficha, catálogo y regresión de escritorio; release `20261016083020`.
 - Separadores: build Vite, compilación y sintaxis Blade, inspección de la lección 2389 y ejecución de `lesson-separators-browser.js` con las cuatro combinaciones de práctica/presentación y un caso de elementos vacíos/ocultos. La prueba construye fixtures sólo en el navegador, sin escribir en WordPress.
 
 Al modificar el visor, repetir el recorrido afectado con una cuenta que tenga acceso a la lección y ventana redimensionable: guía/lectura, índice con y sin margen, cierre y foco, pantalla completa, narración y coexistencia con medios. Al modificar la composición, ejecutar las combinaciones de secciones. No presentar el recorrido reutilizable de lección como ejecutado sobre un post al que la cuenta de QA no tiene acceso ni restaurar relaciones antiguas para hacerlo pasar.

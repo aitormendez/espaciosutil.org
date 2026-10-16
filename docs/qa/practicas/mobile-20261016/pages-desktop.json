@@ -1,0 +1,37 @@
+{
+  "desktop": [
+    {
+      "width": 1920,
+      "main": 896,
+      "column": 896,
+      "left": 504.5,
+      "columnLeft": 504.5,
+      "index": true,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "main": 896,
+      "column": 896,
+      "left": 264.5,
+      "columnLeft": 264.5,
+      "index": false,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "main": 896,
+      "column": 896,
+      "left": 56.5,
+      "columnLeft": 56.5,
+      "index": false,
+      "overflow": false
+    }
+  ],
+  "individual": true,
+  "catalogue": [
+    320,
+    390,
+    768
+  ]
+}

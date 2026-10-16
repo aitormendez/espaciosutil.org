@@ -67,3 +67,10 @@ Si hay que revertir código, usar el release anterior de staging y verificar el 
 Se mantiene el acceso público de demostración de staging con los permisos de contenido de WordPress; no se ha cambiado Nginx ni ampliado exposición. En este Mac, la conexión SSH usa un transporte temporal por la interfaz física porque la ruta de Tailscale no respondía; no se modificaron rutas ni cortafuegos.
 
 El despliegue web no integra el inventario NocoDB, el motor de Contenidos o sus skills. La promoción a producción y la coordinación con esos sistemas siguen pendientes de autorización y planificación separadas. La documentación de este informe puede quedar en un commit posterior al código desplegado, porque `docs/` no forma parte del subtree web de la release.
+
+
+## Continuación: adaptación móvil
+
+Tras la autorización del diseño móvil, se desplegó `7668a0250f6f122b44615756a86603ff9b302db2` desde la misma rama. Release activa comprobada: `/srv/www/espaciosutil.org/releases/20261016083020`; anterior para reversión de esta adaptación: `20261016080930`. No se cambiaron contenidos, relaciones, archivos de audio, imágenes ni configuración operativa. Trellis finalizó sin errores.
+
+La validación publicada incluye seis tamaños con emulación móvil, 98 pantallas recorridas, índice/lectura/audio, ficha y catálogo, más regresión de escritorio. El runtime conserva 49 pantallas/audios y 15 diapositivas. Véanse [resultados y capturas móviles](../qa/practicas/mobile-20261016/README.md). Pendientes la revisión visual del usuario y dispositivos físicos; las comprobaciones anteriores de esta página siguen siendo evidencia de la entrega inicial.
