@@ -1,5 +1,7 @@
 # Prácticas del CDE: objetivo y decisiones de diseño
 
+> Referencia vigente (2026-10-16): [Prácticas CDE: implementación, edición, visor, voz y operación local](context/practicas-cde.md). Este documento conserva decisiones, propuestas y evidencias fechadas; las ubicaciones de prueba y estados de iteraciones anteriores no deben interpretarse como el estado actual.
+
 Fecha de inicio: 2026-09-30. Última actualización: 2026-10-14.
 
 Estado: decisiones de diseño e inventario. El catálogo y el visor de escritorio con narración están implementados en la rama aislada y se prueban mediante una copia local en la VM. La integración operativa sigue pendiente. Consultar [alcance implementado, pruebas y pendientes](practicas-cde-implementacion.md); las propuestas de inventario remoto de este documento siguen pendientes de integración con NocoDB.

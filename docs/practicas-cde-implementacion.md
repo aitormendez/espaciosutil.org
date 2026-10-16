@@ -1,5 +1,7 @@
 # Prácticas CDE: implementación candidata e integración diferida
 
+> Referencia vigente (2026-10-16): [Prácticas CDE: implementación, edición, visor, voz y operación local](context/practicas-cde.md). Este documento conserva decisiones, propuestas y evidencias fechadas; las ubicaciones de prueba y estados de iteraciones anteriores no deben interpretarse como el estado actual.
+
 Fecha de implementación: 2026-10-01. Actualización documental: 2026-10-14. Estado: catálogo y visor de escritorio implementados en worktree independiente, con voz de Iván y prueba local optativa en la VM. Integración y conexión al inventario remoto pendientes de coordinación.
 
 ## Alcance implementado

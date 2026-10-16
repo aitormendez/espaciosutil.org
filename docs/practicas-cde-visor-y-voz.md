@@ -1,5 +1,7 @@
 # Prácticas: visor de escritorio y voz de Iván
 
+> Referencia vigente (2026-10-16): [Prácticas CDE: implementación, edición, visor, voz y operación local](context/practicas-cde.md). Este documento conserva decisiones, propuestas y evidencias fechadas; las ubicaciones de prueba y estados de iteraciones anteriores no deben interpretarse como el estado actual.
+
 Fecha: 2026-10-14. Rama: `codex/cde-practicas`. Worktree web en aitorFS: `/Users/aitor/.codex/worktrees/cde-practicas/espaciosutil.org`. Implementación candidata, sin merge, push, despliegue, instalación de skills ni recertificación del motor.
 
 ## Comportamiento implementado
@@ -138,7 +140,9 @@ Validación: 47 comprobaciones PHP sobre la práctica 2998, la lección 3000 y e
 
 La respuesta anónima oculta el cuerpo docente y el visor y muestra el acceso a sesión. El SEO Framework conserva su descripción pública automática, como en el resto del sitio; no se declara ausencia de todo extracto en los metadatos. La consulta inversa de EP-0.1 devuelve únicamente 3000. Los scripts de preparación y aplicación se conservan junto al plan en el directorio local ignorado para auditoría.
 
-## Revisión temporal en una lección completa
+## Revisión temporal en una lección completa (historial)
+
+La relación con 2967 descrita aquí se retiró posteriormente. La revisión más reciente se realizó en 2389; consultar la referencia vigente antes de abrir una ubicación de prueba o modificar relaciones.
 
 Por indicación de Aitor, EP-0.1 (2998) se asocia temporalmente a «Qué es el Círculo Carmesí» (2967, clave `cde:08:00:0.1`), que ya contiene texto, vídeo, audio, subíndice y cuestionario. Esta asociación permite revisar el diseño y no constituye una atribución editorial de la práctica a esa lección. Se retira la relación de 3000 y se envía esa entrada a la papelera, tras verificar su marca local y que su contenido coincide con el recibo de creación. La consulta inversa devuelve ahora únicamente 2967.
 
