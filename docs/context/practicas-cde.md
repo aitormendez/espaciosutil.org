@@ -2,6 +2,8 @@
 
 Actualizado: 2026-10-16. Estado: implementación web de escritorio y móvil validada y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main y producción siguen pendientes de integración; la adaptación web móvil se ha desplegado por autorización del usuario el 2026-10-16 y queda pendiente de su revisión visual. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
 
+Para integrar las prácticas en el flujo versionado de lecciones, leer el [traspaso de automatización](../relevo/practicas-automatizacion-lecciones.md): fuentes, conversión de outline, contrato de pantallas, TTS de Iván, recorte exacto, límites del importador y trabajo pendiente. Ese documento no activa la integración.
+
 ## Alcance y decisiones
 
 Una práctica es un contenido reutilizable del curso: instrucciones, meditaciones u otros procedimientos que el alumno puede consultar desde el catálogo, desde su ficha individual o dentro de las lecciones relacionadas. El nombre público y técnico acordado es «Práctica» / `practica`, aunque una fuente conserve «Ejercicio práctico» y su código editorial.
