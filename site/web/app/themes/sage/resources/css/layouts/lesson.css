@@ -1,0 +1,5 @@
+.lesson-study-content .practice-lesson-section,
+.lesson-study-content .practice-viewer--embedded:not(:fullscreen),
+.lesson-study-content .practice-viewer--embedded:not(:fullscreen) .practice-viewer-main {
+  background: transparent;
+}

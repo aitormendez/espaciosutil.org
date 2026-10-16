@@ -77,87 +77,93 @@
       </div>
     @endif
 
-    <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-4 md:p-6 md:px-0">
-      <div class="prose md:prose-2xl mx-auto w-full max-w-4xl md:px-0">
-        @php the_content() @endphp
+    <div class="lesson-study-content flow-root bg-morado5/90">
+      <div class="lesson-summary prose prose-xl md:prose-2xl w-full p-4 md:p-6 md:px-0">
+        <div class="prose md:prose-2xl mx-auto w-full max-w-4xl md:px-0">
+          @php the_content() @endphp
+        </div>
       </div>
-    </div>
 
-    @if ($lesson_quiz['enabled'] ?? false)
-      @php
-        $quiz_props = [
-            'postId' => $lesson_quiz['post_id'] ?? null,
-            'questions' => $lesson_quiz['questions'] ?? [],
-        ];
-      @endphp
-      <section class="bg-morado4/90 not-prose mx-auto my-10 w-full max-w-4xl rounded-sm px-6 py-6 font-sans text-white"
-        id="lesson-quiz" data-quiz-state="questions" data-quiz-last="false"
-        data-quiz-props='@json($quiz_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
-        <header class="quiz-mobile-status" aria-label="Progreso del cuestionario">
-          <span>Cuestionario</span>
-          <span class="quiz-mobile-counter">
-            Pregunta <span data-quiz-counter-current>1</span> de <span data-quiz-counter-total>0</span>
-          </span>
-        </header>
-        <header class="quiz-desktop-header mb-4 text-center">
-          <p class="font-display text-morado1 text-sm uppercase tracking-[0.2em]">Cuestionario</p>
-          <h2 class="font-display text-2xl font-semibold leading-tight text-white">Refuerza lo aprendido</h2>
-          <p class="text-morado1 mt-1 text-base">Responde las preguntas. Puede haber varias opciones
-            correctas.</p>
-          <div
-            class="bg-sol text-cde mt-6 inline-flex h-[80px] w-[80px] items-center justify-center rounded-full p-4 text-2xl font-bold leading-none"
-            data-quiz-counter>
-            <span data-quiz-counter-current>1</span><span class="text-cde/50">/</span><span class="text-cde/50"
-              data-quiz-counter-total>0</span>
-          </div>
-        </header>
-        <div data-quiz-target class="text-morado1">
-          <div class="quiz-shell">
-            <div class="quiz-progress" aria-hidden="true">
-              <div class="quiz-progress-bar question" style="--percent: 0%"></div>
+      @includeIf('partials.lesson-practicas')
+
+      @include('partials.lesson-presentation')
+
+      @if ($lesson_quiz['enabled'] ?? false)
+        @php
+          $quiz_props = [
+              'postId' => $lesson_quiz['post_id'] ?? null,
+              'questions' => $lesson_quiz['questions'] ?? [],
+          ];
+        @endphp
+        <section class="not-prose mx-auto my-10 w-full max-w-4xl rounded-sm px-6 py-6 font-sans text-white"
+          id="lesson-quiz" data-quiz-state="questions" data-quiz-last="false"
+          data-quiz-props='@json($quiz_props, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
+          <header class="quiz-mobile-status" aria-label="Progreso del cuestionario">
+            <span>Cuestionario</span>
+            <span class="quiz-mobile-counter">
+              Pregunta <span data-quiz-counter-current>1</span> de <span data-quiz-counter-total>0</span>
+            </span>
+          </header>
+          <header class="quiz-desktop-header mb-4 text-center">
+            <p class="font-display text-morado1 text-sm uppercase tracking-[0.2em]">Cuestionario</p>
+            <h2 class="font-display text-2xl font-semibold leading-tight text-white">Refuerza lo aprendido</h2>
+            <p class="text-morado1 mt-1 text-base">Responde las preguntas. Puede haber varias opciones
+              correctas.</p>
+            <div
+              class="bg-sol text-cde mt-6 inline-flex h-[80px] w-[80px] items-center justify-center rounded-full p-4 text-2xl font-bold leading-none"
+              data-quiz-counter>
+              <span data-quiz-counter-current>1</span><span class="text-cde/50">/</span><span class="text-cde/50"
+                data-quiz-counter-total>0</span>
             </div>
-            <div class="quiz-swiper swiper" role="region" aria-label="Cuestionario">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide quiz-slide">
-                  <p class="text-sm">Cargando cuestionario…</p>
+          </header>
+          <div data-quiz-target class="text-morado1">
+            <div class="quiz-shell">
+              <div class="quiz-progress" aria-hidden="true">
+                <div class="quiz-progress-bar question" style="--percent: 0%"></div>
+              </div>
+              <div class="quiz-swiper swiper" role="region" aria-label="Cuestionario">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide quiz-slide">
+                    <p class="text-sm">Cargando cuestionario…</p>
+                  </div>
+                </div>
+                <div class="quiz-pagination swiper-pagination"></div>
+              </div>
+              <div
+                class="quiz-footer grid grid-cols-1 grid-rows-[auto_auto_auto] items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:grid-rows-1">
+                <div
+                  class="quiz-navigation col-start-1 row-start-2 flex items-center gap-2 justify-self-center md:col-start-1 md:row-start-1 md:justify-self-start">
+                  <button type="button" aria-label="Pregunta anterior"
+                    class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+                    ←
+                  </button>
+                  <button type="button"
+                    class="quiz-next rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+                    →
+                  </button>
+                </div>
+                <button type="button"
+                  class="quiz-validate-next text-morado5 hover:bg-sol col-start-1 row-start-1 justify-self-center rounded-full bg-green-500 px-4 py-3 text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 md:col-start-2 md:row-start-1">
+                  <span class="quiz-validate-mobile">Validar y continuar</span>
+                  <span class="quiz-validate-desktop">Validar y pasar a la siguiente</span>
+                </button>
+                <div
+                  class="quiz-actions col-start-1 row-start-3 flex items-center gap-3 justify-self-center md:col-start-3 md:row-start-1 md:justify-self-end">
+                  <button type="button"
+                    class="quiz-submit bg-morado1 text-morado5 hover:bg-morado2 rounded-sm px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-white/40">
+                    Finalizar
+                  </button>
+                  <button type="button"
+                    class="quiz-restart rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
+                    Reiniciar
+                  </button>
                 </div>
               </div>
-              <div class="quiz-pagination swiper-pagination"></div>
-            </div>
-            <div
-              class="quiz-footer grid grid-cols-1 grid-rows-[auto_auto_auto] items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:grid-rows-1">
-              <div
-                class="quiz-navigation col-start-1 row-start-2 flex items-center gap-2 justify-self-center md:col-start-1 md:row-start-1 md:justify-self-start">
-                <button type="button" aria-label="Pregunta anterior"
-                  class="quiz-prev rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-                  ←
-                </button>
-                <button type="button"
-                  class="quiz-next rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-                  →
-                </button>
-              </div>
-              <button type="button"
-                class="quiz-validate-next text-morado5 hover:bg-sol col-start-1 row-start-1 justify-self-center rounded-full bg-green-500 px-4 py-3 text-sm font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/40 md:col-start-2 md:row-start-1">
-                <span class="quiz-validate-mobile">Validar y continuar</span>
-                <span class="quiz-validate-desktop">Validar y pasar a la siguiente</span>
-              </button>
-              <div
-                class="quiz-actions col-start-1 row-start-3 flex items-center gap-3 justify-self-center md:col-start-3 md:row-start-1 md:justify-self-end">
-                <button type="button"
-                  class="quiz-submit bg-morado1 text-morado5 hover:bg-morado2 rounded-sm px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-white/40">
-                  Finalizar
-                </button>
-                <button type="button"
-                  class="quiz-restart rounded-sm border border-white/20 px-3 py-2 text-sm text-white hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20">
-                  Reiniciar
-                </button>
-              </div>
             </div>
           </div>
-        </div>
-      </section>
-    @endif
+        </section>
+      @endif
+    </div>
 
     @include('partials.videos-realacionados-cde')
 

@@ -178,6 +178,32 @@ class Cde extends Field
                 ],
             ])
 
+            ->addTab('lesson_presentation', [
+                'label' => 'Presentación',
+                'placement' => 'top',
+            ])
+            ->addTrueFalse('lesson_presentation_enabled', [
+                'label' => 'Mostrar presentación',
+                'ui' => 1,
+                'default_value' => 0,
+            ])
+            // Conservar las claves originales mantiene las referencias ACF existentes.
+            ->setCustomKey('field_cde_presentation_lesson_presentation_enabled')
+            ->addRepeater('lesson_presentation_slides', [
+                'label' => 'Diapositivas',
+                'instructions' => 'Arrastra las filas para ordenar. Añade, sustituye o elimina imágenes y guarda la lección para aplicar los cambios.',
+                'layout' => 'table',
+                'button_label' => 'Añadir diapositiva',
+                'max' => 100,
+            ])
+            ->setCustomKey('field_cde_presentation_slides')
+            ->addField('image', 'cde_private_image', [
+                'label' => 'Imagen',
+                'required' => 1,
+            ])
+            ->setCustomKey('field_cde_presentation_image')
+            ->endRepeater()
+
             ->addTab('quiz', [
                 'label' => 'Cuestionario',
                 'placement' => 'top',

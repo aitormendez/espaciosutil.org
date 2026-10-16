@@ -1,4 +1,5 @@
 import initMarkComplete from './courses/mark-complete.js';
+import initPresentations from './lessons/presentation.js';
 import {coloresHover} from './colores.js';
 import {gsap} from 'gsap';
 import {toc} from './toc.js';
@@ -19,6 +20,7 @@ export function transitionScriptsEnter() {
 
 export async function transitionScriptsAfter() {
   initMarkComplete();
+  initPresentations();
   toc();
 
   if (document.body.classList.contains('page-template-series')) {
