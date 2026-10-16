@@ -139,3 +139,10 @@ La integración web en staging fue autorizada y completada el 2026-10-16. No pro
 Esta actualización documental no cambia motor, voz, skills ni configuración operativa. La preparación de inventario y su skill candidata están descritas en [implementación e integración diferida](../practicas-cde-implementacion.md); no se consideran instaladas por existir en una rama.
 
 Antes de promover a otro entorno: revisar divergencias, reconciliar inventario y asociaciones y validar versiones, permisos y cachés del destino. Staging ya dispone del código conjunto, audio privado persistente, reglas de enlaces y navegación; no reutilizar sus IDs automáticamente en producción. Mantener separadas integración web, certificación del motor e instalación de skills. Quedan pendientes la conexión remota NocoDB, la API para apps y la aprobación visual de la adaptación móvil.
+
+
+## Puente de automatización de lecciones
+
+El mu-plugin `espaciosutil-cde-practices-automation.php` incorpora el puerto WP-CLI de Contenidos 3.5.0: preview canónico sin crear fichas, importación por clave, audio privado verificado, relación ACF aditiva y sincronización con la publicación real de la lección. No expone un endpoint HTTP de escritura. La práctica nueva permanece en borrador hasta que el anfitrión sea público; una práctica compartida ya pública no se retira por enlazarla a un borrador. La revisión de contenido y escucha completa se acredita en el motor antes de importar.
+
+Esta copia es preparación local para despliegue, no acredita instalación en staging ni producción. Depende del módulo Prácticas CDE y de Guide/Audio de esta rama. La comprobación autenticada del 16 de octubre encontró que producción aún no tiene el CPT `practica` ni el módulo. No copiar IDs ni relaciones de diseño. El contrato portable y las regresiones están en Contenidos, `docs/cde-practices-automation.md`, release 3.5.0. Al desplegar hay que comprobar que el SHA del puente coincide con el certificado del motor y completar un piloto autenticado antes de declarar la integración operativa.
