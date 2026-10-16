@@ -101,6 +101,7 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 - Conservar el Relationship `cde_practicas` en la pestaña «Prácticas» de «Lección CDE» y un único visor/índice compartido entre guía y lectura. Los bloques opcionales no deben producir secciones vacías ni separadores duplicados.
 - El desarrollo de prácticas está en `/Users/aitor/.codex/worktrees/cde-practicas/espaciosutil.org`, rama `codex/cde-practicas`. No integrar en el checkout compartido, recertificar Contenidos ni instalar/actualizar skills de Paperclip sin coordinación explícita. La copia local de previsualización puede contener trabajo de otros hilos: no sobrescribirla en bloque.
 - Staging recibió la entrega conjunta de prácticas y presentaciones el 2026-10-16 desde `codex/cde-staging-practicas-presentaciones`; consultar [release, pruebas y reversión](docs/infraestructura/staging-practicas-presentaciones-2026-10-16.md). No confundirla con una integración en main, producción o Contenidos.
+- La adaptación móvil web está en la rama conjunta `codex/cde-staging-practicas-presentaciones`: controles compactos por debajo de 1024 px, índice superpuesto y contenido desplazable en pantalla completa. Validar también ficha, catálogo y escritorio al modificar el visor; las apps nativas y la aprobación visual móvil siguen pendientes.
 - Actualizar la referencia vigente al cambiar el comportamiento; conservar las evidencias anteriores como historial. La validación local no equivale a despliegue ni aprobación móvil.
 
 ### Navegación y layout

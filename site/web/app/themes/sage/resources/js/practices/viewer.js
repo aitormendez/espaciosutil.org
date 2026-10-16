@@ -27,6 +27,7 @@ export function initPracticeViewers(scope = document) {
     let fullscreen = false;
     let indexOpen = false;
     const embedded = root.classList.contains('practice-viewer--embedded');
+    const compact = window.matchMedia('(max-width: 1023px)');
     let indexFits = null;
     let embeddedIndexOpen = null;
     const indexToggle = q('.practice-index-toggle');
@@ -63,12 +64,17 @@ export function initPracticeViewers(scope = document) {
         if (fits !== indexFits) { indexFits = fits; embeddedIndexOpen = null; }
         root.dataset.indexFits = String(fits);
         index.hidden = !(embeddedIndexOpen ?? fits);
-      } else { index.hidden = fullscreen ? !indexOpen : false; }
+      } else { index.hidden = fullscreen || compact.matches ? !indexOpen : false; }
       root.classList.toggle('practice-index-open', fullscreen && indexOpen);
       const toggle = indexToggle;
       toggle.setAttribute('aria-expanded', String(!index.hidden));
       toggle.querySelector('span').textContent = index.hidden ? 'Mostrar índice' : 'Ocultar índice';
       if (index.hidden && index.contains(document.activeElement)) toggle.focus({ preventScroll: true });
+    };
+    const syncCounter = () => {
+      const counter = q('[data-practice-counter]');
+      counter.textContent = compact.matches ? `${position + 1} / ${guide.screens.length}` : `${position + 1} de ${guide.screens.length} pantallas`;
+      counter.setAttribute('aria-label', `${position + 1} de ${guide.screens.length} pantallas`);
     };
     const render = () => {
       const current = guide.screens[position];
@@ -83,7 +89,8 @@ export function initPracticeViewers(scope = document) {
         screen.innerHTML = current.html; // Server-sanitized inline editorial markup only.
       }
       screen.dataset.kind = current.type;
-      q('[data-practice-counter]').textContent = `${position + 1} de ${guide.screens.length} pantallas`;
+      syncCounter();
+      screen.scrollTop = 0;
       q('[data-practice-progress]').value = position + 1;
       q('[data-action="previous"]').disabled = position === 0;
       q('[data-action="next"]').disabled = position === guide.screens.length - 1;
@@ -114,7 +121,9 @@ export function initPracticeViewers(scope = document) {
       const button = event.target.closest('button');
       if (!button || !root.contains(button)) return;
       if (button.hasAttribute('data-practice-jump')) {
-        if (embedded && !fullscreen && !indexFits) { embeddedIndexOpen = false; syncIndex(); }
+        if (compact.matches || (embedded && !fullscreen && !indexFits)) {
+          embeddedIndexOpen = false; indexOpen = false; syncIndex();
+        }
         if (mode === 'reading') {
           const target = reading.querySelector(`[data-practice-heading="${button.dataset.practiceSection}"]`);
           if (target) {
@@ -125,7 +134,7 @@ export function initPracticeViewers(scope = document) {
               else item.removeAttribute('aria-current');
             });
           }
-        } else { go(Number(button.dataset.practiceJump)); }
+        } else { go(Number(button.dataset.practiceJump)); screen.focus({ preventScroll: true }); }
         return;
       }
       switch (button.dataset.action) {
@@ -145,6 +154,7 @@ export function initPracticeViewers(scope = document) {
           else indexOpen = !indexOpen;
           syncIndex();
           if (index.hidden) indexToggle.focus({ preventScroll: true });
+          else if (compact.matches) q('.practice-index-close').focus({ preventScroll: true });
           break;
         case 'fullscreen':
           try {
@@ -159,8 +169,8 @@ export function initPracticeViewers(scope = document) {
         document.exitFullscreen().catch(() => {});
         return;
       }
-      if (event.key === 'Escape' && embedded && !fullscreen && !index.hidden) {
-        embeddedIndexOpen = false; syncIndex(); indexToggle.focus({ preventScroll: true });
+      if (event.key === 'Escape' && (embedded || compact.matches) && !fullscreen && !index.hidden) {
+        embeddedIndexOpen = false; indexOpen = false; syncIndex(); indexToggle.focus({ preventScroll: true });
         return;
       }
       if (mode !== 'guide' || event.altKey || event.ctrlKey || event.metaKey || /INPUT|TEXTAREA|SELECT/.test(event.target.tagName)) return;
@@ -194,6 +204,7 @@ export function initPracticeViewers(scope = document) {
     q('[data-practice-controls]').hidden = false;
     screen.hidden = false; reading.hidden = true;
     render(); syncIndex();
+    compact.addEventListener('change', () => { indexOpen = false; syncIndex(); syncCounter(); }, options);
     const resizeObserver = embedded ? new ResizeObserver(syncIndex) : null;
     resizeObserver?.observe(root);
     resizeObserver?.observe(q('.practice-viewer-main'));

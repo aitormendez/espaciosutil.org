@@ -1,6 +1,6 @@
 # Prácticas CDE: referencia de implementación
 
-Actualizado: 2026-10-16. Estado: implementación web de escritorio validada en local y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main, producción y el diseño móvil siguen pendientes de integración o aprobación. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
+Actualizado: 2026-10-16. Estado: implementación web de escritorio validada en local y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main y producción siguen pendientes de integración; la adaptación web móvil se desarrolla por autorización del usuario el 2026-10-16 y queda pendiente de su revisión visual. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
 
 ## Alcance y decisiones
 
@@ -11,7 +11,7 @@ Una práctica es un contenido reutilizable del curso: instrucciones, meditacione
 - Una práctica admite cero, una o varias lecciones relacionadas. Cada lección se muestra como un único enlace con su título, sin controles duplicados.
 - El contexto público son las lecciones relacionadas. No se añade una referencia al texto fuente ni una taxonomía de clasificación de prácticas en esta fase.
 - La práctica exige cualquier membresía PMPro activa; existe acceso editorial de previsualización. Las relaciones expresan contexto, no niveles de acceso. La integración conserva las restricciones existentes de la lección anfitriona: no migra automáticamente sus reglas de membresía.
-- Web primero. La adaptación móvil y las aplicaciones Android/iOS quedan para una fase posterior; no se deduce su aprobación de las pruebas de escritorio.
+- Web primero, con adaptación responsive para móvil autorizada el 2026-10-16. Las aplicaciones nativas Android/iOS siguen pendientes; una prueba en un navegador redimensionado no equivale a QA en un dispositivo físico.
 
 ## Datos y edición en WordPress
 
@@ -75,6 +75,16 @@ La composición de estudio reúne resumen, práctica, presentación opcional y c
 
 Los parciales sin contenido no deben renderizar una sección vacía ni un separador suelto. El CSS excluye además elementos `:empty` y `[hidden]`; un contenedor con espacios o marcado vacío no es una alternativa a la condición Blade. Se suprimen los bordes propios de la práctica dentro del grupo y se conserva su borde inferior sólo si no viene presentación ni cuestionario después. Así, al faltar práctica o presentación, no se apilan filetes. La presentación usa `includeIf`: esta rama admite el parcial, pero no incorpora la implementación de presentaciones desarrollada por otro hilo.
 
+## Adaptación web móvil
+
+Por debajo de 1024 px, el catálogo usa una columna y el visor comparte la misma distribución compacta en la ficha y dentro de la lección. Las pestañas ocupan una primera fila; índice, audio y pantalla completa una segunda. Los botones mantienen al menos 44 px de altura, iconos Tabler de 20 px y nombres accesibles completos, aunque el texto visible sea «Índice», «Audio» o sólo el icono de pantalla completa. El estado de audio conserva el contraste activo y `aria-pressed`.
+
+La guía utiliza encabezados de 27–28 px, contexto de 16 px y párrafos de 20 px; la lectura continua usa 18 px. El contador se abrevia visualmente a `1 / 49`. En pantalla completa se respetan la altura dinámica del viewport y las áreas seguras, con controles y navegación separados del área central desplazable. Cada cambio de pantalla devuelve el texto al principio. En horizontal de poca altura, los controles se reúnen en una sola fila.
+
+El índice empieza oculto en pantallas compactas, tanto en la ficha como en el incrustado. Se abre encima del contenido sin reservar una columna lateral y tiene cierre propio; al abrirlo recibe el foco el botón de cierre. Elegir un bloque cierra el panel y lleva al contenido, también en «Texto completo». Al regresar a escritorio se conserva la lógica de espacio disponible del incrustado. La pantalla completa sigue dependiendo de la API del navegador: el control se oculta cuando no está disponible.
+
+La adaptación no modifica el contenido, la segmentación ni los archivos de voz, los permisos, las relaciones ACF o el motor editorial. Su prueba reutilizable es `site/tests/cde-practicas-mobile-browser.js`; preparar `output/playwright/practicas-mobile/` antes de ejecutarla con una sesión autorizada. Comprueba seis tamaños, recorre todas las pantallas a 320 px y en horizontal, verifica navegación, índice, lectura y audio, y guarda capturas. Las comprobaciones de dispositivo físico y la aprobación visual del usuario siguen pendientes.
+
 ## Mapa de código y pruebas
 
 Las rutas siguientes son relativas a la raíz del repositorio. En las filas del tema, el prefijo es `site/web/app/themes/sage/`.
@@ -95,7 +105,7 @@ Las rutas siguientes son relativas a la raíz del repositorio. En las filas del 
 | Plan y generación de voz | `site/scripts/practice-audio-plan.php`, `scripts/generate-practice-audio.py` |
 | Pruebas PHP | `site/tests/cde-practicas-integration.php`, `site/tests/cde-practicas-viewer.php`, `site/tests/cde-practicas-series.php` |
 | Pruebas de generación | `scripts/test_generate_practice_audio.py` |
-| Recorridos de navegador | `site/tests/cde-practicas-browser.js`, `cde-practicas-adjustments-browser.js`, `cde-practicas-lesson-browser.js` |
+| Recorridos de navegador | `site/tests/cde-practicas-browser.js`, `cde-practicas-adjustments-browser.js`, `cde-practicas-lesson-browser.js`, `cde-practicas-mobile-browser.js` |
 | Combinaciones de secciones | `site/tests/lesson-separators-browser.js` |
 
 ## Validación registrada y cómo continuar
@@ -125,4 +135,4 @@ La integración web en staging fue autorizada y completada el 2026-10-16. No pro
 
 Esta actualización documental no cambia motor, voz, skills ni configuración operativa. La preparación de inventario y su skill candidata están descritas en [implementación e integración diferida](../practicas-cde-implementacion.md); no se consideran instaladas por existir en una rama.
 
-Antes de promover a otro entorno: revisar divergencias, reconciliar inventario y asociaciones y validar versiones, permisos y cachés del destino. Staging ya dispone del código conjunto, audio privado persistente, reglas de enlaces y navegación; no reutilizar sus IDs automáticamente en producción. Mantener separadas integración web, certificación del motor e instalación de skills. Quedan pendientes la conexión remota NocoDB, la API para apps y el diseño móvil.
+Antes de promover a otro entorno: revisar divergencias, reconciliar inventario y asociaciones y validar versiones, permisos y cachés del destino. Staging ya dispone del código conjunto, audio privado persistente, reglas de enlaces y navegación; no reutilizar sus IDs automáticamente en producción. Mantener separadas integración web, certificación del motor e instalación de skills. Quedan pendientes la conexión remota NocoDB, la API para apps y la aprobación visual de la adaptación móvil.
