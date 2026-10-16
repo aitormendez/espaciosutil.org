@@ -1,0 +1,66 @@
+......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................usage: python -m unittest [-h] (--clave-leccion CLAVE_LECCION | --all)
+                          [--apply] [--max-writes MAX_WRITES]
+                          [--series-root SERIES_ROOT] [--json-out JSON_OUT]
+                          [--nocodb-url NOCODB_URL]
+                          [--nocodb-token NOCODB_TOKEN]
+                          [--nocodb-basic-user NOCODB_BASIC_USER]
+                          [--nocodb-basic-pass NOCODB_BASIC_PASS]
+                          [--nocodb-base-id NOCODB_BASE_ID]
+                          [--nocodb-table-id NOCODB_TABLE_ID]
+                          [--bunny-access-key BUNNY_ACCESS_KEY]
+                          [--bunny-library-id BUNNY_LIBRARY_ID]
+                          [--wordpress-base-url WORDPRESS_BASE_URL]
+                          [--wordpress-wp-cli-binary WORDPRESS_WP_CLI_BINARY]
+                          [--wordpress-site-path WORDPRESS_SITE_PATH]
+python -m unittest: error: one of the arguments --clave-leccion --all is required
+usage: python -m unittest [-h] (--clave-leccion CLAVE_LECCION | --all)
+                          [--apply] [--max-writes MAX_WRITES]
+                          [--series-root SERIES_ROOT] [--json-out JSON_OUT]
+                          [--nocodb-url NOCODB_URL]
+                          [--nocodb-token NOCODB_TOKEN]
+                          [--nocodb-basic-user NOCODB_BASIC_USER]
+                          [--nocodb-basic-pass NOCODB_BASIC_PASS]
+                          [--nocodb-base-id NOCODB_BASE_ID]
+                          [--nocodb-table-id NOCODB_TABLE_ID]
+                          [--bunny-access-key BUNNY_ACCESS_KEY]
+                          [--bunny-library-id BUNNY_LIBRARY_ID]
+                          [--wordpress-base-url WORDPRESS_BASE_URL]
+                          [--wordpress-wp-cli-binary WORDPRESS_WP_CLI_BINARY]
+                          [--wordpress-site-path WORDPRESS_SITE_PATH]
+python -m unittest: error: argument --clave-leccion: not allowed with argument --all
+...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 1545 tests in 37.352s
+
+OK
+usage: python -m unittest [-h] --video-guid VIDEO_GUID --audio-guid AUDIO_GUID
+                          --library-id LIBRARY_ID --clave-leccion
+                          CLAVE_LECCION [--snapshot-json SNAPSHOT_JSON]
+                          [--timeout-seconds TIMEOUT_SECONDS]
+                          [--poll-interval-seconds POLL_INTERVAL_SECONDS]
+
+Verifica en solo lectura que vídeo y audio Bunny son reproducibles.
+
+options:
+  -h, --help            show this help message and exit
+  --video-guid VIDEO_GUID
+  --audio-guid AUDIO_GUID
+  --library-id LIBRARY_ID
+  --clave-leccion CLAVE_LECCION
+  --snapshot-json SNAPSHOT_JSON
+  --timeout-seconds TIMEOUT_SECONDS
+  --poll-interval-seconds POLL_INTERVAL_SECONDS
+{
+  "issue_ids": {},
+  "created": 0,
+  "issue_map": "/private/var/folders/by/6ff6_t2d0nj57yj54y8jj16r0000gn/T/tmpds9pvcm1/issue-map.json"
+}
+{
+  "id": "child",
+  "status": "todo"
+}
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK

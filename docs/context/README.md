@@ -18,6 +18,10 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Estado vigente de catálogo, ficha e incrustado; datos ACF, voz, índice adaptable, fondo y separadores opcionales, código, pruebas y aislamiento.
   - Cargar cuando la tarea afecte a prácticas o a su convivencia con presentación y cuestionario; distingue implementación local de integración pendiente.
 
+- [Editor de presentaciones CDE](../cde-presentaciones-editor.md)
+  - Repetidor ACF, imágenes privadas, persistencia y sustitución de importaciones.
+  - Cargar para modificar el visor o la edición de presentaciones junto a prácticas.
+
 - `navegacion-y-layout.md`
   - Contextos ES/CDE, color de fondo por sección, contrato Barba, estado activo del menú y estilos por contexto.
   - Cargar cuando la tarea afecte a cabecera, navegación, transiciones o layout global.

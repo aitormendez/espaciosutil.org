@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-01T18:20:20.441853+00:00",
+  "action": "Sustitución autorizada: tres PDF rasterizados y versión antigua del Círculo Carmesí",
+  "items": [
+    {
+      "clave_leccion": "cde:03:00:0.1",
+      "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/0.1. - Qué es Un curso de milagros.pdf",
+      "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+      "old_sha256": "c3d325e0476d86769799a4bb6b0dc3ddf9046d82459e95dabca41aa7d1364b18",
+      "new_sha256": "76eadbb6a54d7692e6aeab0eeee2697f356efa15685ad9ba7bee969dae367c67",
+      "bytes": 2740506,
+      "status": "completed_source_removed"
+    },
+    {
+      "clave_leccion": "cde:05:00:0.1",
+      "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/05 - Kryon/00 - Presentación/0.1. - Quién es Kryon/0.1. - Quién es Kryon.pdf",
+      "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+      "old_sha256": "a6fa2c0acda281ff691f2e0d046dc83aa69cf875f6abb0f0d5d961827fd42a85",
+      "new_sha256": "985dca4f287dddb66e3abfc784b09e07c3c3dc7e27dd8e59c4597c46fe1d4559",
+      "bytes": 2555287,
+      "status": "completed_source_removed"
+    },
+    {
+      "clave_leccion": "cde:07:00:0.1",
+      "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/0.1. - Qué es Un curso de amor - I.pdf",
+      "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+      "old_sha256": "9c142a244025f18d93b859891bbc8732634fc7e856eca1200d23cb02c147e368",
+      "new_sha256": "cf1a48782fd429815d6687083347836f8913bcb94bce06cc8734399a6aca874c",
+      "bytes": 2811964,
+      "status": "completed_source_removed"
+    },
+    {
+      "clave_leccion": "cde:08:00:0.1",
+      "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/08 - El Círculo Carmesí/00 - Presentación/0.1. - Que es el Circulo Carmesi/0.1. - Qué es el Círculo Carmesí.pdf",
+      "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/08 - El Círculo Carmesí/00 - Presentación/0.1 - Qué es el Circulo Carmesí/Presentación/0.1. - Qué es el Círculo Carmesí.pdf",
+      "old_sha256": "54c610d604788b3171a13447fe947f37fab868667a1b6e9dab3f2e1c342911cd",
+      "new_sha256": "0a77f46bbc20e8d1e7887b8b237e1a7e4182ff9e48516a64fde09fb2c171dc86",
+      "bytes": 2597890,
+      "status": "completed_source_removed"
+    }
+  ],
+  "final_inventory": [
+    {
+      "clave_leccion": "cde:01:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/Presentación/0.1. - Qué es El libro de Urantia.pdf",
+      "sha256": "b3e3f47d45da1820fd22a2bb7a555d1483ccef6bda994252e92601ec57930c01",
+      "embedded_fonts": 4
+    },
+    {
+      "clave_leccion": "cde:02:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/Presentación/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+      "sha256": "a5e355c7be01450c765e94d5030c12709ba4bf878545daf0531c4fb14987cc5f",
+      "embedded_fonts": 6
+    },
+    {
+      "clave_leccion": "cde:03:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+      "sha256": "76eadbb6a54d7692e6aeab0eeee2697f356efa15685ad9ba7bee969dae367c67",
+      "embedded_fonts": 4
+    },
+    {
+      "clave_leccion": "cde:04:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/Presentación/0.1. - Quién es Ramtha.pdf",
+      "sha256": "8585666caccc26be6976d4b7fa0bb40cbba056a63085e19e4171b41c8bb35d85",
+      "embedded_fonts": 7
+    },
+    {
+      "clave_leccion": "cde:05:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+      "sha256": "985dca4f287dddb66e3abfc784b09e07c3c3dc7e27dd8e59c4597c46fe1d4559",
+      "embedded_fonts": 4
+    },
+    {
+      "clave_leccion": "cde:06:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/06 - Conversaciones con Dios/00 - Presentación/0.1 - Quién es Neale Donald Walsch/Presentación/0.1. - Quién es Neale Donald Walsch.pdf",
+      "sha256": "66c7dd6324abff83f490e6f00bf3f15070dbbed4ebb5a51600d157af4df80257",
+      "embedded_fonts": 3
+    },
+    {
+      "clave_leccion": "cde:07:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+      "sha256": "cf1a48782fd429815d6687083347836f8913bcb94bce06cc8734399a6aca874c",
+      "embedded_fonts": 4
+    },
+    {
+      "clave_leccion": "cde:08:00:0.1",
+      "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/08 - El Círculo Carmesí/00 - Presentación/0.1 - Qué es el Circulo Carmesí/Presentación/0.1. - Qué es el Círculo Carmesí.pdf",
+      "sha256": "0a77f46bbc20e8d1e7887b8b237e1a7e4182ff9e48516a64fde09fb2c171dc86",
+      "embedded_fonts": 4
+    }
+  ],
+  "verified": true
+}

@@ -10,6 +10,12 @@ wordpress_sites:
     repo: git@github.com:aitormendez/espaciosutil.org.git
     repo_accepts_https: true
     repo_subtree_path: site
+    project_shared_children:
+      - path: "{{ project_public_path }}/{{ project_upload_path }}"
+        src: uploads
+      - path: private/cde-practicas-audio
+        src: cde-practicas-audio
+        mode: "0750"
     multisite:
       enabled: false
     ssl:

@@ -1,0 +1,57 @@
+[
+  {
+    "path": "scripts/cde_inventory_scan.py",
+    "before_sha256": "b8bde7cafb37aefbb8c0c7aab850a7019657343adce54b12a06499aec4a214dd",
+    "candidate_sha256": "29b714c4c7d893761d6e5e03cbbdef2fa221ec3ac320699b1ac6cc673871d148"
+  },
+  {
+    "path": "scripts/cde_inventory_reconcile.py",
+    "before_sha256": "4fc1842113fd2af8545dd0aa3dcb6e54068a78b9a58c921577ddbefa011f2327",
+    "candidate_sha256": "c8d85b0e76dca0617060193dc2b1b1daa7672692466cf8212148ffffde743bfe"
+  },
+  {
+    "path": "scripts/cde_policy.py",
+    "before_sha256": "e67e7c7dc5b6262a35381c643698d68ad0f1d138eb7398e16f2cc9899a528ec2",
+    "candidate_sha256": "9d0319b4e20ba9d013fbd390b66f2b38bdc7a42502d7ed9f48b1102571565a2a"
+  },
+  {
+    "path": "scripts/cde_full_flow/runtime_trust.py",
+    "before_sha256": "c60d108ad2c8a0238881da0734832320ea56c4c31122bfcde872b02405fa9d3e",
+    "candidate_sha256": "9dfd7894d93f2d949aeb1df052f5b058432fce5fa1a6e7baf286ae604348a3f1"
+  },
+  {
+    "path": "config/cde_publication_policy.yaml",
+    "before_sha256": "48f12f65908401eb9072cdcf11bb92b6598cccbff04d41fb1f474490d059caed",
+    "candidate_sha256": "5db30367b4453ac78e5d6ed7097c1180e33cabbb3fae93c112190c0a5e378992"
+  },
+  {
+    "path": "config/cde_lesson_flow.json",
+    "before_sha256": "430964ab7e1d351dc8ccd98dd07670cb7f3de36239b9f504c361564d92a6eb16",
+    "candidate_sha256": "a787edd71cace461d68dfae9c5e1e9f5c098a635b50e1eeb24f540e79acbcb86"
+  },
+  {
+    "path": "tests/test_cde_policy.py",
+    "before_sha256": "84996848d3d9ff324fab7d2f8c76ae8001cac433cd631bb6000255551f6731dc",
+    "candidate_sha256": "984ac21460b447b7b2ebe7a5307447f09d194cfa94c0d488572907e1d8b62748"
+  },
+  {
+    "path": "tests/test_cde_inventory_sync.py",
+    "before_sha256": "b2ab1aac0056c463082d56fcdd27e89790d4cdcb8fc804cace51241f77dae112",
+    "candidate_sha256": "caadf2b066b19701a467873008b94b4575b3414871ec1f6683d6c273fa948015"
+  },
+  {
+    "path": "tests/test_cde_inventory_presentations.py",
+    "before_sha256": null,
+    "candidate_sha256": "681a78d9c667d3ac19511eb8e36bc301c45eea5a77f24061b22a7f08208fbf67"
+  },
+  {
+    "path": "docs/cde-lecciones-inventario-nocodb.md",
+    "before_sha256": "5f79bf7d99431213da831e5792e20f590f35e143e252d41d4e136685b96e498e",
+    "candidate_sha256": "d2958a7a3797e05b56fb0df048e9c1aed5726dd715f3748c2cfd68532141f506"
+  },
+  {
+    "path": "docs/informes/presentaciones-20261001/impact.json",
+    "before_sha256": null,
+    "candidate_sha256": "8d0d4bb9a0093d7a4afbdb67cfc7d32b667ee42a1730149d0dea125b5bbbea41"
+  }
+]

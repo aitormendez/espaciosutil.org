@@ -1,0 +1,203 @@
+[
+  {
+    "clave_leccion": "cde:03:00:0.1",
+    "versions": {
+      "original": {
+        "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+        "sha256": "c3d325e0476d86769799a4bb6b0dc3ddf9046d82459e95dabca41aa7d1364b18",
+        "bytes": 2430229,
+        "pdfinfo": "Creator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Wed Sep 30 11:45:06 2026 CEST\nModDate:         Wed Sep 30 11:45:06 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       1280.04 x 720 pts\nPage rot:        0\nFile size:       2430229 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1376   768  rgb     3   8  jpeg   yes        6  0    77    77  146K 4.7%\n   2     1 image    1376   768  rgb     3   8  jpeg   yes        9  0    77    77  139K 4.5%\n   2     2 smask    1376   768  gray    1   8  image  no         9  0    77    77 1740B 0.2%\n   3     3 image    1376   768  rgb     3   8  jpeg   yes       13  0    77    77  169K 5.5%\n   3     4 smask    1376   768  gray    1   8  image  no        13  0    77    77 1740B 0.2%\n   4     5 image    1376   768  rgb     3   8  jpeg   yes       17  0    77    77  132K 4.2%\n   4     6 smask    1376   768  gray    1   8  image  no        17  0    77    77 1740B 0.2%\n   5     7 image    1376   768  rgb     3   8  jpeg   yes       21  0    77    77  172K 5.6%\n   5     8 smask    1376   768  gray    1   8  image  no        21  0    77    77 1740B 0.2%\n   6     9 image    1376   768  rgb     3   8  jpeg   yes       25  0    77    77  153K 4.9%\n   6    10 smask    1376   768  gray    1   8  image  no        25  0    77    77 1740B 0.2%\n   7    11 image    1376   768  rgb     3   8  jpeg   yes       29  0    77    77  175K 5.7%\n   8    12 image    1376   768  rgb     3   8  jpeg   yes       32  0    77    77  145K 4.7%\n   9    13 image    1376   768  rgb     3   8  jpeg   yes       35  0    77    77  151K 4.9%\n   9    14 smask    1376   768  gray    1   8  image  no        35  0    77    77 1740B 0.2%\n  10    15 image    1376   768  rgb     3   8  jpeg   yes       39  0    77    77  166K 5.4%\n  10    16 smask    1376   768  gray    1   8  image  no        39  0    77    77 1740B 0.2%\n  11    17 image    1376   768  rgb     3   8  jpeg   yes       43  0    77    77  169K 5.5%\n  12    18 image    1376   768  rgb     3   8  jpeg   yes       46  0    77    77  150K 4.9%\n  13    19 image    1376   768  rgb     3   8  jpeg   yes       49  0    77    77  122K 3.9%\n  14    20 image    1376   768  rgb     3   8  jpeg   yes       52  0    77    77  173K 5.6%\n  15    21 image    1376   768  rgb     3   8  jpeg   yes       55  0    77    77  176K 5.7%\n",
+        "text_chars_by_page": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/03-original-pagina07-4k.png"
+      },
+      "dropbox_actual": {
+        "path": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/0.1. - Qué es Un curso de milagros.pdf",
+        "sha256": "76eadbb6a54d7692e6aeab0eeee2697f356efa15685ad9ba7bee969dae367c67",
+        "bytes": 2740506,
+        "pdfinfo": "Title:           Presentation\nAuthor:          Walnut Exporter\nCreator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Thu Oct  1 13:52:08 2026 CEST\nModDate:         Thu Oct  1 13:52:08 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       960 x 540 pts\nPage rot:        0\nFile size:       2740506 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nBCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0\nBCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0\nBCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0\nBCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1672   940  rgb     3   8  jpeg   yes        6  0   125   125  112K 2.4%\n   2     1 image    1672   940  rgb     3   8  jpeg   yes       19  0   125   125  149K 3.2%\n   3     2 image    1672   940  rgb     3   8  jpeg   yes       28  0   125   125  195K 4.2%\n   4     3 image    1672   940  rgb     3   8  jpeg   yes       33  0   125   125  148K 3.2%\n   5     4 image    1672   940  rgb     3   8  jpeg   yes       39  0   125   125  184K 4.0%\n   6     5 image    1672   940  rgb     3   8  jpeg   yes       45  0   125   125  143K 3.1%\n   7     6 image    1672   940  rgb     3   8  jpeg   yes       51  0   125   125  133K 2.9%\n   8     7 image    1672   940  rgb     3   8  jpeg   yes       55  0   125   125  152K 3.3%\n   9     8 image    1672   940  rgb     3   8  jpeg   yes       59  0   125   125  133K 2.9%\n  10     9 image    1672   940  rgb     3   8  jpeg   yes       64  0   125   125  184K 4.0%\n  11    10 image    1672   940  rgb     3   8  jpeg   yes       70  0   125   125  228K 5.0%\n  12    11 image    1672   940  rgb     3   8  jpeg   yes       75  0   125   125  173K 3.8%\n  13    12 image    1672   940  rgb     3   8  jpeg   yes       78  0   125   125  112K 2.4%\n  14    13 image    1672   940  rgb     3   8  jpeg   yes       82  0   125   125  234K 5.1%\n  15    14 image    1672   940  rgb     3   8  jpeg   yes       86  0   125   125  189K 4.1%\n",
+        "text_chars_by_page": [
+          98,
+          337,
+          231,
+          294,
+          364,
+          347,
+          299,
+          268,
+          298,
+          329,
+          340,
+          279,
+          310,
+          287,
+          273
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/03-dropbox_actual-pagina07-4k.png"
+      }
+    }
+  },
+  {
+    "clave_leccion": "cde:05:00:0.1",
+    "versions": {
+      "original": {
+        "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+        "sha256": "a6fa2c0acda281ff691f2e0d046dc83aa69cf875f6abb0f0d5d961827fd42a85",
+        "bytes": 2180045,
+        "pdfinfo": "Creator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Wed Sep 30 11:45:09 2026 CEST\nModDate:         Wed Sep 30 11:45:09 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       1280.04 x 720 pts\nPage rot:        0\nFile size:       2180045 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1376   768  rgb     3   8  jpeg   yes        6  0    77    77  143K 4.6%\n   1     1 smask    1376   768  gray    1   8  image  no         6  0    77    77 1740B 0.2%\n   2     2 image    1376   768  rgb     3   8  jpeg   yes       10  0    77    77  166K 5.3%\n   2     3 smask    1376   768  gray    1   8  image  no        10  0    77    77 1740B 0.2%\n   3     4 image    1376   768  rgb     3   8  jpeg   yes       14  0    77    77  148K 4.8%\n   3     5 smask    1376   768  gray    1   8  image  no        14  0    77    77 1740B 0.2%\n   4     6 image    1376   768  rgb     3   8  jpeg   yes       18  0    77    77  144K 4.7%\n   4     7 smask    1376   768  gray    1   8  image  no        18  0    77    77 1740B 0.2%\n   5     8 image    1376   768  rgb     3   8  jpeg   yes       22  0    77    77  131K 4.2%\n   6     9 image    1376   768  rgb     3   8  jpeg   yes       25  0    77    77  137K 4.4%\n   7    10 image    1376   768  rgb     3   8  jpeg   yes       28  0    77    77  130K 4.2%\n   7    11 smask    1376   768  gray    1   8  image  no        28  0    77    77 1740B 0.2%\n   8    12 image    1376   768  rgb     3   8  jpeg   yes       32  0    77    77  127K 4.1%\n   8    13 smask    1376   768  gray    1   8  image  no        32  0    77    77 1740B 0.2%\n   9    14 image    1376   768  rgb     3   8  jpeg   yes       36  0    77    77  121K 3.9%\n  10    15 image    1376   768  rgb     3   8  jpeg   yes       39  0    77    77  152K 4.9%\n  10    16 smask    1376   768  gray    1   8  image  no        39  0    77    77 1740B 0.2%\n  11    17 image    1376   768  rgb     3   8  jpeg   yes       43  0    77    77  139K 4.5%\n  12    18 image    1376   768  rgb     3   8  jpeg   yes       46  0    77    77  142K 4.6%\n  13    19 image    1376   768  rgb     3   8  jpeg   yes       49  0    77    77  116K 3.7%\n  14    20 image    1376   768  rgb     3   8  jpeg   yes       52  0    77    77  165K 5.3%\n  15    21 image    1376   768  rgb     3   8  jpeg   yes       55  0    77    77  131K 4.2%\n  15    22 smask    1376   768  gray    1   8  image  no        55  0    77    77 1740B 0.2%\n",
+        "text_chars_by_page": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/05-original-pagina07-4k.png"
+      },
+      "dropbox_actual": {
+        "path": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/05 - Kryon/00 - Presentación/0.1. - Quién es Kryon/0.1. - Quién es Kryon.pdf",
+        "sha256": "985dca4f287dddb66e3abfc784b09e07c3c3dc7e27dd8e59c4597c46fe1d4559",
+        "bytes": 2555287,
+        "pdfinfo": "Title:           Presentation\nAuthor:          Walnut Exporter\nCreator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Thu Oct  1 16:51:57 2026 CEST\nModDate:         Thu Oct  1 16:51:57 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       960 x 540 pts\nPage rot:        0\nFile size:       2555287 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nBCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0\nBCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0\nBCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0\nBCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1672   940  rgb     3   8  jpeg   yes        6  0   125   125  152K 3.3%\n   2     1 image    1672   940  rgb     3   8  jpeg   yes       19  0   125   125  149K 3.2%\n   3     2 image    1672   940  rgb     3   8  jpeg   yes        6  0   125   125  152K 3.3%\n   4     3 image    1672   940  rgb     3   8  jpeg   yes       32  0   125   125  148K 3.2%\n   5     4 image    1672   940  rgb     3   8  jpeg   yes       38  0   125   125  184K 4.0%\n   6     5 image    1672   940  rgb     3   8  jpeg   yes       44  0   125   125  143K 3.1%\n   7     6 image    1672   940  rgb     3   8  jpeg   yes       50  0   125   125  230K 5.0%\n   8     7 image    1672   940  rgb     3   8  jpeg   yes       54  0   125   125  182K 3.9%\n   9     8 image    1672   940  rgb     3   8  jpeg   yes       58  0   125   125  133K 2.9%\n  10     9 image    1672   939  rgb     3   8  jpeg   yes       63  0   125   125  175K 3.8%\n  11    10 image    1672   939  rgb     3   8  jpeg   yes       63  0   125   125  175K 3.8%\n  12    11 image    1672   940  rgb     3   8  jpeg   yes       73  0   125   125  173K 3.8%\n  13    12 image    1672   940  rgb     3   8  jpeg   yes       76  0   125   125  196K 4.3%\n  14    13 image    1672   940  rgb     3   8  jpeg   yes       80  0   125   125  234K 5.1%\n  15    14 image    1672   940  rgb     3   8  jpeg   yes       84  0   125   125  189K 4.1%\n",
+        "text_chars_by_page": [
+          89,
+          281,
+          268,
+          280,
+          300,
+          281,
+          335,
+          261,
+          298,
+          326,
+          269,
+          239,
+          296,
+          257,
+          272
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/05-dropbox_actual-pagina07-4k.png"
+      }
+    }
+  },
+  {
+    "clave_leccion": "cde:07:00:0.1",
+    "versions": {
+      "original": {
+        "path": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+        "sha256": "9c142a244025f18d93b859891bbc8732634fc7e856eca1200d23cb02c147e368",
+        "bytes": 1753008,
+        "pdfinfo": "Creator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Wed Sep 30 11:45:13 2026 CEST\nModDate:         Wed Sep 30 11:45:13 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       1280.04 x 720 pts\nPage rot:        0\nFile size:       1753008 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1376   768  rgb     3   8  jpeg   yes        6  0    77    77 55.1K 1.8%\n   1     1 smask    1376   768  gray    1   8  image  no         6  0    77    77 1740B 0.2%\n   2     2 image    1376   768  rgb     3   8  jpeg   yes       10  0    77    77  165K 5.3%\n   3     3 image    1376   768  rgb     3   8  jpeg   yes       13  0    77    77 82.1K 2.7%\n   3     4 smask    1376   768  gray    1   8  image  no        13  0    77    77 1740B 0.2%\n   4     5 image    1376   768  rgb     3   8  jpeg   yes       17  0    77    77  111K 3.6%\n   4     6 smask    1376   768  gray    1   8  image  no        17  0    77    77 1740B 0.2%\n   5     7 image    1376   768  rgb     3   8  jpeg   yes       21  0    77    77  110K 3.5%\n   6     8 image    1376   768  rgb     3   8  jpeg   yes       24  0    77    77  100K 3.2%\n   6     9 smask    1376   768  gray    1   8  image  no        24  0    77    77 1740B 0.2%\n   7    10 image    1376   768  rgb     3   8  jpeg   yes       28  0    77    77  105K 3.4%\n   7    11 smask    1376   768  gray    1   8  image  no        28  0    77    77 1740B 0.2%\n   8    12 image    1376   768  rgb     3   8  jpeg   yes       32  0    77    77  109K 3.5%\n   9    13 image    1376   768  rgb     3   8  jpeg   yes       35  0    77    77  102K 3.3%\n   9    14 smask    1376   768  gray    1   8  image  no        35  0    77    77 1740B 0.2%\n  10    15 image    1376   768  rgb     3   8  jpeg   yes       39  0    77    77  111K 3.6%\n  10    16 smask    1376   768  gray    1   8  image  no        39  0    77    77 1740B 0.2%\n  11    17 image    1376   768  rgb     3   8  jpeg   yes       43  0    77    77  140K 4.5%\n  11    18 smask    1376   768  gray    1   8  image  no        43  0    77    77 1740B 0.2%\n  12    19 image    1376   768  rgb     3   8  jpeg   yes       47  0    77    77  130K 4.2%\n  12    20 smask    1376   768  gray    1   8  image  no        47  0    77    77 1740B 0.2%\n  13    21 image    1376   768  rgb     3   8  jpeg   yes       51  0    77    77  157K 5.1%\n  13    22 smask    1376   768  gray    1   8  image  no        51  0    77    77 1740B 0.2%\n  14    23 image    1376   768  rgb     3   8  jpeg   yes       55  0    77    77  102K 3.3%\n  14    24 smask    1376   768  gray    1   8  image  no        55  0    77    77 1740B 0.2%\n  15    25 image    1376   768  rgb     3   8  jpeg   yes       59  0    77    77 89.3K 2.9%\n  15    26 smask    1376   768  gray    1   8  image  no        59  0    77    77 1740B 0.2%\n",
+        "text_chars_by_page": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/07-original-pagina07-4k.png"
+      },
+      "dropbox_actual": {
+        "path": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/0.1. - Qué es Un curso de amor - I.pdf",
+        "sha256": "cf1a48782fd429815d6687083347836f8913bcb94bce06cc8734399a6aca874c",
+        "bytes": 2811964,
+        "pdfinfo": "Title:           Presentation\nAuthor:          Walnut Exporter\nCreator:         Microsoft® PowerPoint® para Microsoft 365\nProducer:        Microsoft® PowerPoint® para Microsoft 365\nCreationDate:    Thu Oct  1 14:38:28 2026 CEST\nModDate:         Thu Oct  1 14:38:28 2026 CEST\nCustom Metadata: no\nMetadata Stream: yes\nTagged:          yes\nUserProperties:  no\nSuspects:        no\nForm:            none\nJavaScript:      no\nPages:           15\nEncrypted:       no\nPage size:       960 x 540 pts\nPage rot:        0\nFile size:       2811964 bytes\nOptimized:       no\nPDF version:     1.7\n",
+        "pdffonts": "name                                 type              encoding         emb sub uni object ID\n------------------------------------ ----------------- ---------------- --- --- --- ---------\nBCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0\nBCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0\nBCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0\nBCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0\n",
+        "pdfimages": "page   num  type   width height color comp bpc  enc interp  object ID x-ppi y-ppi size ratio\n--------------------------------------------------------------------------------------------\n   1     0 image    1672   940  rgb     3   8  jpeg   yes        6  0   125   125  179K 3.9%\n   2     1 image    1672   940  rgb     3   8  jpeg   yes       19  0   125   125  149K 3.2%\n   3     2 image    1672   940  rgb     3   8  jpeg   yes       28  0   125   125  160K 3.5%\n   4     3 image    1672   940  rgb     3   8  jpeg   yes       33  0   125   125  148K 3.2%\n   5     4 image    1672   940  rgb     3   8  jpeg   yes       39  0   125   125 82.5K 1.8%\n   6     5 image    1672   940  rgb     3   8  jpeg   yes       45  0   125   125  143K 3.1%\n   7     6 image    1672   940  rgb     3   8  jpeg   yes       51  0   125   125  210K 4.6%\n   8     7 image    1672   940  rgb     3   8  jpeg   yes       55  0   125   125  152K 3.3%\n   9     8 image    1672   940  rgb     3   8  jpeg   yes       59  0   125   125  146K 3.2%\n  10     9 image    1672   940  rgb     3   8  jpeg   yes       64  0   125   125  184K 4.0%\n  11    10 image    1672   940  rgb     3   8  jpeg   yes       70  0   125   125  228K 5.0%\n  12    11 image    1672   940  rgb     3   8  jpeg   yes       75  0   125   125  173K 3.8%\n  13    12 image    1672   940  rgb     3   8  jpeg   yes       78  0   125   125  196K 4.3%\n  14    13 image    1672   940  rgb     3   8  jpeg   yes       82  0   125   125  234K 5.1%\n  15    14 image    1672   940  rgb     3   8  jpeg   yes       86  0   125   125  157K 3.4%\n",
+        "text_chars_by_page": [
+          96,
+          337,
+          247,
+          217,
+          306,
+          362,
+          338,
+          304,
+          332,
+          415,
+          350,
+          328,
+          325,
+          224,
+          277
+        ],
+        "render_page": 7,
+        "render_dimensions": [
+          3840,
+          2160
+        ],
+        "render_path": "tmp/pdfs/resolucion/07-dropbox_actual-pagina07-4k.png"
+      }
+    }
+  }
+]

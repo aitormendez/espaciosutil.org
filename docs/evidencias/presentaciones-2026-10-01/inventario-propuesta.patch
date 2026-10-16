@@ -1,0 +1,401 @@
+--- a/scripts/cde_inventory_scan.py
++++ b/scripts/cde_inventory_scan.py
+@@ -8,6 +8,7 @@
+ import os
+ import re
+ import sys
++import stat
+ import unicodedata
+ from datetime import datetime, timezone
+ from pathlib import Path
+@@ -55,6 +56,7 @@
+     "clave_leccion_padre",
+     "carpeta_local",
+     "carpeta_procesado",
++    "presentacion_pdf_ruta",
+     "tiene_video_exportado",
+     "tiene_poster",
+     "tiene_vtt_es",
+@@ -106,6 +108,12 @@
+     for lesson_dir in find_lesson_dirs(series_root, warnings):
+         row = build_row(series_root=series_root, lesson_dir=lesson_dir, timestamp=timestamp)
+         if row is not None:
++            try:
++                row["presentacion_pdf_ruta"] = find_presentation_pdf(series_root, lesson_dir)
++            except (OSError, ValueError) as error:
++                warnings.append({"kind": "presentation_invalid", "clave_leccion": build_base_key(row),
++                                 "found_path": str(lesson_dir.relative_to(series_root)),
++                                 "reason": str(error)})
+             rows.append(row)
+ 
+     rows.sort(key=lambda item: str(item["carpeta_local"]))
+@@ -137,8 +145,45 @@
+ 
+         code, _title = resolve_lesson_identity(current)
+         has_source_video = any(Path(name).suffix.lower() in SOURCE_VIDEO_EXTENSIONS for name in filenames)
+-        if code and (direct_processed or has_source_video):
++        if code and (direct_processed or has_source_video or presentation_folders(current)):
+             yield current
++
++
++def presentation_folders(lesson_dir: Path) -> list[Path]:
++    """Only the dedicated direct folder identifies slides, never other readings."""
++    return [path for path in lesson_dir.iterdir()
++            if normalize_filesystem_name(path.name) == "Presentación"]
++
++
++def find_presentation_pdf(series_root: Path, lesson_dir: Path) -> str:
++    folders = presentation_folders(lesson_dir)
++    if not folders:
++        return ""
++    if len(folders) != 1:
++        raise ValueError("multiple presentation folders")
++    folder = folders[0]
++    relative = folder.relative_to(series_root)
++    current = series_root
++    for part in relative.parts:
++        current = current / part
++        if current.is_symlink():
++            raise ValueError("presentation path contains a symlink")
++    if not folder.is_dir():
++        raise ValueError("presentation container is not a directory")
++    candidates = [p for p in folder.iterdir() if p.suffix.lower() == ".pdf" and not p.name.startswith(".")]
++    if not candidates:
++        raise ValueError("presentation folder has no PDF")
++    if len(candidates) != 1:
++        raise ValueError("multiple presentation PDFs")
++    pdf = candidates[0]
++    if not stat.S_ISREG(pdf.lstat().st_mode):
++        raise ValueError("presentation PDF is not a regular file")
++    if not pdf.resolve().is_relative_to(series_root.resolve()):
++        raise ValueError("presentation PDF escapes Series CDE")
++    with pdf.open("rb") as stream:
++        if stream.read(5) != b"%PDF-":
++            raise ValueError("presentation file has no PDF signature")
++    return str(pdf.relative_to(series_root))
+ 
+ 
+ def classify_child_directories(
+@@ -305,6 +350,7 @@
+         "clave_leccion_padre": "",
+         "carpeta_local": str(lesson_dir.relative_to(series_root)),
+         "carpeta_procesado": str(processed_dir.relative_to(series_root)) if processed_dir else "",
++        "presentacion_pdf_ruta": "",
+         "tiene_video_exportado": exported_video is not None,
+         "tiene_poster": poster is not None,
+         "tiene_vtt_es": vtt_es is not None,
+--- a/scripts/cde_inventory_reconcile.py
++++ b/scripts/cde_inventory_reconcile.py
+@@ -409,12 +409,20 @@
+             return None, [
+                 {"type": "missing_atomic_local_fact", "clave_leccion": key, "field": name}
+             ]
++    # The scanner verifies a unique candidate in this lesson. Existing references
++    # require explicit repair if different; never erase or silently replace them.
++    presentation = fields.get("presentacion_pdf_ruta")
++    if presentation not in (None, "") and presentation != local["presentacion_pdf_ruta"]:
++        return None, [{"type": "presentation_reference_conflict", "clave_leccion": key,
++                       "field": "presentacion_pdf_ruta"}]
+     inventory_timestamp = "ultima_revision_inventario"
+     material_filesystem_fields = [
+         name for name in filesystem_fields if name != inventory_timestamp
+     ]
+     filesystem_changed = False
+     for name in material_filesystem_fields:
++        if name == "presentacion_pdf_ruta" and fields.get(name) in (None, "") and local[name] == "":
++            continue
+         if name not in fields or not _same_value(fields.get(name), local[name]):
+             proposed[name] = local[name]
+             filesystem_changed = True
+@@ -1000,13 +1008,28 @@
+                 )
+     else:
+         external_evidence = external_provider(selected_records)
++    write_executor = None
++    if args.apply:
++        remote_write = make_nocodb_write_executor(client)
++        local_by_key = {_row_key(row): row for row in scanned_rows}
++
++        def write_executor(plan):
++            local = local_by_key[plan["clave_leccion"]]
++            expected = local.get("presentacion_pdf_ruta", "")
++            if expected:
++                root = Path(args.series_root).resolve()
++                observed = scanner.find_presentation_pdf(root, root / str(local["carpeta_local"]))
++                if observed != expected:
++                    raise ReconcileError("presentation changed after scan")
++            return remote_write(plan)
++
+     return build_reconcile_report(
+         scanned_rows=scanned_rows,
+         existing_records=records,
+         external_evidence=external_evidence,
+         scope=scope,
+         apply=args.apply,
+-        write_executor=make_nocodb_write_executor(client) if args.apply else None,
++        write_executor=write_executor,
+         require_external_evidence=True,
+         scan_warnings=scan_warnings,
+         max_writes=max_writes,
+--- a/scripts/cde_policy.py
++++ b/scripts/cde_policy.py
+@@ -38,6 +38,7 @@
+     "carpeta_local", "carpeta_procesado", "tiene_video_exportado",
+     "tiene_poster", "tiene_vtt_es", "tiene_audio_publicable",
+     "traducciones_vtt_completas", "metacontenidos_completos",
++    "presentacion_pdf_ruta",
+     "ultima_revision_inventario",
+ )
+ CANONICAL_ATOMIC_BUNNY_FIELDS = (
+--- a/scripts/cde_full_flow/runtime_trust.py
++++ b/scripts/cde_full_flow/runtime_trust.py
+@@ -7,7 +7,7 @@
+ 
+ 
+ TRUSTED_PUBLICATION_POLICY_SHA256 = (
+-    "48f12f65908401eb9072cdcf11bb92b6598cccbff04d41fb1f474490d059caed"
++    "5db30367b4453ac78e5d6ed7097c1180e33cabbb3fae93c112190c0a5e378992"
+ )
+ 
+ 
+--- a/config/cde_publication_policy.yaml
++++ b/config/cde_publication_policy.yaml
+@@ -56,6 +56,7 @@
+         - tiene_audio_publicable
+         - traducciones_vtt_completas
+         - metacontenidos_completos
++        - presentacion_pdf_ruta
+         - ultima_revision_inventario
+       bunny_fields: [id_video_bunny, id_audio_bunny, bunny_last_verified_at]
+       wordpress_fields:
+--- a/config/cde_lesson_flow.json
++++ b/config/cde_lesson_flow.json
+@@ -1,6 +1,6 @@
+ {
+   "schema": "cde.lesson_flow",
+-  "version": "2.1.2",
++  "version": "2.1.3",
+   "capabilities": [
+     "lesson-core@1",
+     "caption-translations@1",
+--- a/tests/test_cde_policy.py
++++ b/tests/test_cde_policy.py
+@@ -144,6 +144,7 @@
+                 "tiene_audio_publicable",
+                 "traducciones_vtt_completas",
+                 "metacontenidos_completos",
++                "presentacion_pdf_ruta",
+                 "ultima_revision_inventario",
+             ],
+         )
+--- a/tests/test_cde_inventory_sync.py
++++ b/tests/test_cde_inventory_sync.py
+@@ -31,6 +31,7 @@
+             "01 - Urantia/00 - Presentacion/0.1 - Leccion/"
+             "0.1 - Leccion - PROCESADO"
+         ),
++        "presentacion_pdf_ruta": "",
+         "tiene_video_exportado": True,
+         "tiene_poster": True,
+         "tiene_vtt_es": True,
+--- /dev/null
++++ b/tests/test_cde_inventory_presentations.py
+@@ -0,0 +1,144 @@
++import copy
++import tempfile
++import unittest
++import unicodedata
++from pathlib import Path
++from unittest.mock import patch
++
++from scripts import cde_inventory_scan as scan
++from scripts import cde_inventory_reconcile as reconcile
++from tests.test_cde_inventory_sync import inventory_row
++from tests.test_cde_inventory_reconcile import planning_row, negative_external_evidence
++from tests.test_cde_inventory_reconcile_integration import InMemoryNocoDB
++
++
++class PresentationInventoryTests(unittest.TestCase):
++    def setUp(self):
++        self.temp = tempfile.TemporaryDirectory()
++        self.addCleanup(self.temp.cleanup)
++        self.root = Path(self.temp.name)
++        self.lesson = self.root / '01 - Urantia/00 - Presentacion/0.1 - Leccion'
++        self.lesson.mkdir(parents=True)
++
++    def pdf(self, lesson=None, name='original.pdf'):
++        folder = (lesson or self.lesson) / 'Presentación'
++        folder.mkdir(exist_ok=True, parents=True)
++        path = folder / name
++        path.write_bytes(b'%PDF-1.7\nfixture\n%%EOF\n')
++        return path
++
++    def report(self, local, remote, **kwargs):
++        return reconcile.build_reconcile_report(
++            scanned_rows=[local], existing_records=[{'id': 7, 'fields': remote}],
++            external_evidence=[], scope={'kind': 'focused', 'claves': [local['clave_leccion']]},
++            **kwargs)
++
++    def test_pdf_only_lesson_is_discovered_with_relative_path(self):
++        pdf = self.pdf()
++        result = scan.build_scan_report(self.root)
++        self.assertEqual(result['warnings'], [])
++        self.assertEqual(len(result['rows']), 1)
++        self.assertEqual(result['rows'][0]['presentacion_pdf_ruta'], str(pdf.relative_to(self.root)))
++        self.assertFalse(result['rows'][0]['tiene_video_exportado'])
++
++    def test_reading_pdf_does_not_become_presentation(self):
++        (self.lesson / 'lectura.pdf').write_bytes(b'%PDF-1.7')
++        self.assertEqual(scan.build_scan_report(self.root)['rows'], [])
++
++    def test_no_presentation_is_optional(self):
++        (self.lesson / 'video.mkv').touch()
++        result = scan.build_scan_report(self.root)
++        self.assertEqual(result['warnings'], [])
++        self.assertEqual(result['rows'][0]['presentacion_pdf_ruta'], '')
++
++    def test_unicode_folder_and_uppercase_extension(self):
++        pdf = self.pdf(name='original.PDF')
++        pdf.parent.rename(pdf.parent.with_name(unicodedata.normalize('NFD', 'Presentación')))
++        result = scan.build_scan_report(self.root)
++        self.assertEqual(result['warnings'], [])
++        self.assertTrue(result['rows'][0]['presentacion_pdf_ruta'].endswith('original.PDF'))
++
++    def test_nested_lesson_does_not_supply_parent_presentation(self):
++        (self.lesson / 'video.mkv').touch()
++        child = self.lesson / '0.1.1 - Otra'
++        pdf = self.pdf(child)
++        rows = {r['clave_leccion']: r for r in scan.build_scan_report(self.root)['rows']}
++        self.assertEqual(rows['cde:01:00:0.1']['presentacion_pdf_ruta'], '')
++        self.assertEqual(rows['cde:01:00:0.1.1']['presentacion_pdf_ruta'], str(pdf.relative_to(self.root)))
++
++    def test_ambiguous_pdf_blocks_writes(self):
++        self.pdf(); self.pdf(name='otro.pdf')
++        scanned = scan.build_scan_report(self.root)
++        self.assertEqual(scanned['warnings'][0]['kind'], 'presentation_invalid')
++        result = self.report(scanned['rows'][0], inventory_row(), scan_warnings=scanned['warnings'])
++        self.assertFalse(result['preconditions']['passed'])
++
++    def test_empty_and_corrupt_presentation_folders_report_error(self):
++        pdf = self.pdf()
++        for content in (b'', b'not a PDF'):
++            pdf.write_bytes(content)
++            self.assertEqual(scan.build_scan_report(self.root)['warnings'][0]['kind'], 'presentation_invalid')
++        pdf.unlink()
++        self.assertEqual(scan.build_scan_report(self.root)['warnings'][0]['kind'], 'presentation_invalid')
++
++    def test_unreadable_pdf_blocks_instead_of_clearing(self):
++        pdf = self.pdf()
++        with patch.object(Path, 'open', side_effect=PermissionError('unreadable')):
++            report = scan.build_scan_report(self.root)
++        self.assertEqual(report['warnings'][0]['kind'], 'presentation_invalid')
++
++    def test_symlink_file_and_container_are_rejected(self):
++        pdf = self.pdf()
++        external = self.root / 'external.pdf'; external.write_bytes(pdf.read_bytes())
++        pdf.unlink(); pdf.symlink_to(external)
++        self.assertEqual(scan.build_scan_report(self.root)['warnings'][0]['kind'], 'presentation_invalid')
++        pdf.unlink(); pdf.parent.rmdir()
++        folder = self.root / 'external'; folder.mkdir(); (folder / 'a.pdf').write_bytes(b'%PDF-1.7')
++        (self.lesson / 'Presentación').symlink_to(folder, target_is_directory=True)
++        self.assertEqual(scan.build_scan_report(self.root)['warnings'][0]['kind'], 'presentation_invalid')
++
++    def test_fill_readback_and_repeat_are_idempotent(self):
++        pdf = self.pdf()
++        local = scan.build_scan_report(self.root)['rows'][0]
++        remote = copy.deepcopy(local); remote['presentacion_pdf_ruta'] = None
++        records = [{'id': 7, 'fields': remote}]; store = InMemoryNocoDB(records)
++        first = self.report(local, remote, apply=True, write_executor=store.apply)
++        self.assertTrue(first['preconditions']['passed'])
++        self.assertEqual(first['writes_performed'], 1)
++        self.assertEqual(remote['presentacion_pdf_ruta'], str(pdf.relative_to(self.root)))
++        self.assertEqual(self.report(local, remote)['planned_writes'], [])
++
++    def test_invalid_registered_paths_are_preserved_and_blocked(self):
++        self.pdf();local = scan.build_scan_report(self.root)['rows'][0]
++        for value in ['/Users/aitor/Library/CloudStorage/Dropbox/a.pdf', '../escape.pdf',
++                      'missing.pdf', '02 - Seth/00 - Presentacion/0.1 - Otra/Presentación/a.pdf']:
++            with self.subTest(value=value):
++                remote = copy.deepcopy(local);remote['presentacion_pdf_ruta'] = value
++                result = self.report(local, remote)
++                self.assertFalse(result['preconditions']['passed'])
++                self.assertEqual(result['planned_writes'], [])
++                self.assertEqual(remote['presentacion_pdf_ruta'], value)
++
++    def test_deleted_registered_pdf_never_clears_remote_reference(self):
++        pdf = self.pdf();remote = scan.build_scan_report(self.root)['rows'][0]
++        (self.lesson / 'video.mkv').touch();pdf.unlink();pdf.parent.rmdir()
++        local = scan.build_scan_report(self.root)['rows'][0]
++        result = self.report(local, remote)
++        self.assertFalse(result['preconditions']['passed'])
++        self.assertEqual(result['planned_writes'], [])
++
++    def test_missing_optional_column_does_not_trigger_empty_write(self):
++        local = inventory_row();remote = copy.deepcopy(local);remote.pop('presentacion_pdf_ruta')
++        self.assertEqual(self.report(local, remote)['planned_writes'], [])
++
++    def test_presentation_reference_prevents_planning_only_classification(self):
++        fields = planning_row(presentacion_pdf_ruta='registered.pdf')
++        key = fields['clave_leccion']
++        result = reconcile.build_reconcile_report(scanned_rows=[], existing_records=[{'id':8,'fields':fields}],
++            external_evidence=[negative_external_evidence(key)], scope={'kind':'complete','claves':[]})
++        self.assertEqual(result['planning_only'], [])
++        self.assertFalse(result['preconditions']['passed'])
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- a/docs/cde-lecciones-inventario-nocodb.md
++++ b/docs/cde-lecciones-inventario-nocodb.md
+@@ -72,6 +72,7 @@
+ 
+ - `carpeta_local`
+ - `carpeta_procesado`
++- `presentacion_pdf_ruta`
+ - `tiene_video_exportado`
+ - `tiene_poster`
+ - `tiene_vtt_es`
+@@ -130,7 +131,11 @@
+ - Si cambia la ubicación final, actualizar la referencia; un fallo temporal de lectura no debe borrarla. La conversión local lee el PDF de `Series CDE` y mantiene las imágenes derivadas separadas del documento definitivo.
+ - No añadir páginas, hashes, fechas de verificación ni estados por entorno a NocoDB: esos detalles permanecen en los manifiestos/informes técnicos y en WordPress. El PDF tampoco se adjunta por duplicado a NocoDB ni se sube al servidor web.
+ 
+-El campo existe, pero su integración automática está pendiente. Actualmente no pertenece a la allowlist de `atomic_fact_contract`; el reconciliador debe preservarlo y no se amplía su autorización mediante esta documentación. La skill `cde-lesson-full-flow`, su policy y su runtime permanecen sin cambios hasta la implementación futura prevista.
++El reconciliador descubre el PDF único de la subcarpeta directa `Presentación` de cada lección, conservando su nombre original. No identifica otros PDFs de lectura ni toma los de lecciones hijas. Una lección que solo contenga esa presentación también entra en el escaneo. Comprueba archivo regular, lectura y firma PDF; la inspección completa de páginas corresponde a la recepción y al futuro conversor.
++
++`presentacion_pdf_ruta` pertenece a los hechos de filesystem de `atomic_fact_contract`. El reconciliador puede rellenar una referencia vacía con el PDF comprobado; si una referencia existente difiere del archivo descubierto, bloquea esa reconciliación y conserva el valor para reparación explícita. También bloquea carpetas de presentación vacías, varios PDFs, firmas inválidas y enlaces simbólicos. Una referencia registrada cuenta como evidencia técnica e impide clasificar la fila como mera planificación. La repetición con el mismo PDF no añade escrituras; un campo vacío opcional no obliga a rellenar todas las filas con cadenas vacías.
++
++Esta autorización se limita al reconciliador. Las allowlists de las fases `intake`, `media`, Bunny y WordPress se conservan; la skill `cde-lesson-full-flow` tampoco incorpora conversión ni publicación de presentaciones. Esa integración sigue pendiente de la infraestructura. Los cambios de código, policy y documentación se validan como mantenimiento versionado del flujo mediante pruebas y certificación, sin migrar automáticamente ejecuciones en curso.
+ 
+ Contrato y plan de la infraestructura web: [presentaciones CDE](</Volumes/D/Desarrollo/Sites/espaciosutil.org/docs/cde-presentaciones-contrato.md>) y [implementación en staging](</Volumes/D/Desarrollo/Sites/espaciosutil.org/docs/planes/cde-presentaciones-staging.md>).
+ 
+--- /dev/null
++++ b/docs/informes/presentaciones-20261001/impact.json
+@@ -0,0 +1,28 @@
++{
++  "base_release_sha256": "4e52bead2971e2219d3aa103f65f1eab346f1f09ccdd09f8bcf3250fd0c9cd54",
++  "version": "2.1.3",
++  "reason": "Integrar la referencia única al PDF local en el inventario, con validación y conservación ante conflictos, y validar la documentación previamente modificada.",
++  "components": {
++    "skills": {
++      "changed": false,
++      "rationale": "Las instrucciones de skills y las fases del flujo permanecen intactas; no se incorpora conversión ni publicación."
++    },
++    "runtime": {
++      "changed": true,
++      "rationale": "El escáner descubre PDFs de Presentación y el reconciliador protege referencias existentes. El hash de confianza refleja únicamente la ampliación revisada de hechos de inventario."
++    },
++    "contracts": {
++      "changed": true,
++      "rationale": "Añadir solo presentacion_pdf_ruta a los hechos de filesystem del reconciliador. Las autorizaciones de publicación y escritura desatendida siguen intactas. Versión 2.1.3 de mantenimiento."
++    },
++    "regressions": {
++      "changed": true,
++      "rationale": "Añadir casos positivos, ambigüedad, enlaces, borrado, ruta incorrecta y repetición, y conservar regresiones de publicación."
++    },
++    "documentation": {
++      "changed": true,
++      "rationale": "Documentar ubicación final, reconocimiento del PDF, alcance del reconciliador y automatización futura separada."
++    }
++  },
++  "migration": "No migrar flujos en curso ni añadir una fase de presentaciones. Las ejecuciones existentes conservan su versión y requieren revisión explícita si su control de compatibilidad detecta el cambio; no volver a publicar lecciones como parte del mantenimiento."
++}

@@ -1,0 +1,345 @@
+--- a/site/tmp/cde-practicas-preview/theme/app/View/Composers/SingleCde.php
++++ b/site/tmp/cde-practicas-preview/theme/app/View/Composers/SingleCde.php
+@@ -71,6 +71,7 @@
+         return [
+             'is_completed' => in_array(get_the_ID(), $completed_lessons, true),
+             'has_access' => $has_access,
++            'lesson_presentation' => $has_access && class_exists(\EspacioSutil\Presentations\Service::class) ? \EspacioSutil\Presentations\Service::view((int) get_the_ID()) : null,
+             'related_lessons' => $related_lessons,
+             'lesson_subindex' => $lesson_subindex,
+             'lesson_subindex_root_title' => get_the_title(),
+--- a/site/tmp/cde-practicas-preview/theme/resources/views/partials/content-single-cde.blade.php
++++ b/site/tmp/cde-practicas-preview/theme/resources/views/partials/content-single-cde.blade.php
+@@ -74,6 +74,8 @@
+         class="featured-media-container flex w-full justify-center p-4 md:p-6">
+       </div>
+     @endif
++
++    @include('partials.lesson-presentation')
+ 
+     <div class="prose prose-xl bg-morado5/90 md:prose-2xl w-full p-4 md:p-6 md:px-0">
+       <div class="prose md:prose-2xl mx-auto w-full max-w-4xl md:px-0">
+--- a/site/tmp/cde-practicas-preview/theme/resources/css/app.css
++++ b/site/tmp/cde-practicas-preview/theme/resources/css/app.css
+@@ -26,6 +26,7 @@
+ @import './pmp.css';
+ @import './layouts/niveles-membresia.css';
+ @import './layouts/quiz.css';
++@import './layouts/presentation.css';
+ 
+ .toc {
+   overflow-y: auto;
+--- a/site/tmp/cde-practicas-preview/theme/resources/js/app.js
++++ b/site/tmp/cde-practicas-preview/theme/resources/js/app.js
+@@ -1,3 +1,4 @@
++import initPresentations from './lessons/presentation.js';
+ import { initPracticeViewers } from './practices/viewer.js';
+ import.meta.glob(['../images/**', '../fonts/**']);
+ 
+@@ -39,6 +40,7 @@
+ 
+   initCookieConsent();
+   initPracticeViewers();
++  initPresentations();
+   syncActiveMenuState();
+ 
+   if (!document.getElementById('wpadminbar')) {
+--- a/site/tmp/cde-practicas-preview/theme/resources/js/transitionScripts.js
++++ b/site/tmp/cde-practicas-preview/theme/resources/js/transitionScripts.js
+@@ -1,3 +1,4 @@
++import initPresentations from './lessons/presentation.js';
+ import { initPracticeViewers } from './practices/viewer.js';
+ import {coloresHover} from './colores.js';
+ import {gsap} from 'gsap';
+@@ -19,6 +20,7 @@
+ 
+ export async function transitionScriptsAfter() {
+   initPracticeViewers();
++  initPresentations();
+   toc();
+ 
+   if (document.body.classList.contains('page-template-series')) {
+--- a/site/tmp/cde-practicas-preview/theme/resources/js/barba.js
++++ b/site/tmp/cde-practicas-preview/theme/resources/js/barba.js
+@@ -1,3 +1,4 @@
++import { destroyPresentations } from './lessons/presentation.js';
+ import barba from '@barba/core';
+ import {gsap} from 'gsap';
+ import {transitionScriptsAfter, transitionScriptsEnter} from './transitionScripts.js';
+@@ -99,6 +100,8 @@
+     ],
+   });
+ 
++  barba.hooks.beforeLeave((data) => destroyPresentations(data.current.container));
++
+   barba.hooks.afterLeave(() => {
+     gsap.to(window, {duration: 0.5, scrollTo: 0});
+   });
+--- /dev/null
++++ b/site/tmp/cde-practicas-preview/theme/resources/js/lessons/presentation.js
+@@ -0,0 +1,172 @@
++import Swiper from 'swiper';
++import { A11y, Zoom } from 'swiper/modules';
++import 'swiper/css';
++import 'swiper/css/zoom';
++
++const instances = new Map();
++
++export function destroyPresentations(scope = document) {
++  for (const [root, destroy] of instances) {
++    if (scope.contains(root)) { destroy(); instances.delete(root); }
++  }
++}
++
++export default function initPresentations(scope = document) {
++  scope.querySelectorAll('[data-lesson-presentation]').forEach((root) => {
++    if (instances.has(root)) return;
++    const abort = new AbortController();
++    const options = { signal: abort.signal };
++    const config = JSON.parse(root.dataset.lessonPresentation);
++    const shell = root.querySelector('[data-presentation-shell]');
++    const home = root.querySelector('[data-presentation-home]');
++    const dialog = root.querySelector('dialog');
++    const target = root.querySelector('.swiper');
++    const wrapper = root.querySelector('.swiper-wrapper');
++    const status = root.querySelector('[data-presentation-status]');
++    const indicator = root.querySelector('[data-presentation-loading]');
++    const imageVersions = new WeakMap();
++    const readyImages = new WeakSet();
++    let failed = false;
++    const counter = root.querySelector('[data-presentation-counter]');
++    const previous = root.querySelector('[data-presentation-prev]');
++    const next = root.querySelector('[data-presentation-next]');
++    const expand = root.querySelector('[data-presentation-expand]');
++    const close = root.querySelector('[data-presentation-close]');
++    const retry = root.querySelector('[data-presentation-retry]');
++    const zoom = root.querySelector('[data-presentation-zoom]');
++    let swiper, slides = [], reloaded = false, lastFocus, loading = false, zoomFactor = 1;
++
++    function updateLoading() {
++      if (abort.signal.aborted) return;
++      const img = wrapper.querySelectorAll('img')[swiper?.activeIndex ?? 0];
++      const pending = !failed && (loading || !img || !readyImages.has(img));
++      indicator.hidden = !pending;
++      target.setAttribute('aria-busy', String(pending));
++    }
++    async function imageReady(img) {
++      const version = imageVersions.get(img);
++      const source = img.currentSrc;
++      try { await img.decode(); } catch { return; }
++      if (abort.signal.aborted || !img.isConnected || !img.hasAttribute('src') || imageVersions.get(img) !== version || (source && source !== img.currentSrc)) return;
++      readyImages.add(img);
++      updateLoading();
++    }
++    function updateZoomControl(scale) {
++      const enlarged = scale > 1;
++      const label = enlarged ? 'Restablecer zoom' : 'Acercar';
++      zoom.querySelector('[data-presentation-zoom-in]').hidden = enlarged;
++      zoom.querySelector('[data-presentation-zoom-out]').hidden = !enlarged;
++      zoom.setAttribute('aria-label', label);
++      zoom.title = label;
++    }
++    function controls() {
++      if (!swiper) return;
++      counter.textContent = `${swiper.activeIndex + 1} / ${slides.length}`;
++      previous.disabled = swiper.isBeginning;
++      next.disabled = swiper.isEnd;
++      zoom.disabled = !dialog.open;
++      updateZoomControl(swiper.zoom.scale);
++      wrapper.querySelectorAll('.swiper-slide').forEach((el, i) => el.setAttribute('aria-hidden', String(i !== swiper.activeIndex)));
++      loadNeighbours();
++    }
++    function loadNeighbours() {
++      wrapper.querySelectorAll('img').forEach((img, i) => {
++        if (Math.abs(i - swiper.activeIndex) > 1) {
++          readyImages.delete(img); imageVersions.set(img, (imageVersions.get(img) || 0) + 1);
++          img.removeAttribute('srcset'); img.removeAttribute('src'); delete img.dataset.mode;
++          return;
++        }
++        const factor = dialog.open && i === swiper.activeIndex ? zoomFactor : 1;
++        const mode = dialog.open ? `expanded-${factor}` : 'inline';
++        if (img.dataset.mode === mode) return;
++        readyImages.delete(img); imageVersions.set(img, (imageVersions.get(img) || 0) + 1);
++        img.dataset.mode = mode;
++        const variants = slides[i].sources.filter((v) => v.width <= (dialog.open ? 3840 : 2560));
++        const available = variants.length ? variants : [slides[i].sources[0]];
++        img.sizes = dialog.open ? `${Math.ceil(innerWidth * factor)}px` : '(min-width: 1024px) 896px, calc(100vw - 32px)';
++        img.srcset = available.map((v) => `${v.url} ${v.width}w`).join(', ');
++        img.src = available[0].url;
++        imageReady(img);
++      });
++      updateLoading();
++    }
++    function showError(message) {
++      failed = true;
++      updateLoading();
++      status.textContent = message;
++      retry.hidden = false;
++    }
++    async function load(index = 0) {
++      if (loading || abort.signal.aborted) return;
++      loading = true;
++      retry.hidden = true;
++      failed = false;
++      status.textContent = '';
++      updateLoading();
++      try {
++        const response = await fetch(config.manifestUrl, { credentials: 'same-origin', cache: 'no-store', signal: abort.signal });
++        if (!response.ok) throw new Error([401, 403].includes(response.status) ? 'Tu sesión no permite acceder. Inicia sesión y vuelve a intentarlo.' : 'No se ha podido cargar la presentación.');
++        const model = await response.json();
++        if (!model.available) throw new Error('La presentación no está disponible.');
++        slides = model.presentation.slides;
++        swiper?.destroy(true, true);
++        wrapper.replaceChildren();
++        slides.forEach((slide) => {
++          const el = document.createElement('div'); el.className = 'swiper-slide';
++          const box = document.createElement('div'); box.className = 'swiper-zoom-container';
++          const img = document.createElement('img');
++          img.alt = slide.alt; img.decoding = 'async';
++          img.width = slide.sources[0].width; img.height = slide.sources[0].height;
++          img.addEventListener('load', () => imageReady(img), options);
++          img.addEventListener('error', () => {
++            // Una renovación en curso sustituirá estas imágenes; sus errores ya no son actuales.
++            if (loading || !img.isConnected || !img.hasAttribute('src') || abort.signal.aborted) return;
++            if (!reloaded) { reloaded = true; load(swiper?.activeIndex || 0); }
++            else showError('No se ha podido cargar una diapositiva. Comprueba tu sesión y vuelve a intentarlo.');
++          }, options);
++          box.append(img); el.append(box); wrapper.append(el);
++        });
++        swiper = new Swiper(target, {
++          modules: [A11y, Zoom], speed: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220,
++          initialSlide: Math.min(index, slides.length - 1), zoom: { maxRatio: 3, toggle: false },
++          a11y: { enabled: true, slideLabelMessage: 'Diapositiva {{index}} de {{slidesLength}}' },
++          on: { slideChange() { if (swiper) { swiper.zoom.out(); controls(); } }, zoomChange(_, scale) { zoomFactor = scale; if (swiper) { updateZoomControl(scale); loadNeighbours(); } } },
++        });
++        if (abort.signal.aborted) { swiper.destroy(); return; }
++        status.textContent = ''; expand.disabled = false; controls();
++      } catch (error) {
++        if (error.name !== 'AbortError') showError(error.message);
++      } finally { loading = false; updateLoading(); }
++    }
++    previous.addEventListener('click', () => swiper?.slidePrev(), options);
++    next.addEventListener('click', () => swiper?.slideNext(), options);
++    retry.addEventListener('click', () => { reloaded = false; load(swiper?.activeIndex || 0); }, options);
++    expand.addEventListener('click', () => {
++      lastFocus = document.activeElement;
++      dialog.showModal(); dialog.querySelector('[data-presentation-dialog-content]').append(shell);
++      expand.hidden = true; close.hidden = false; swiper.update(); controls(); close.focus();
++    }, options);
++    close.addEventListener('click', () => dialog.close(), options);
++    dialog.addEventListener('close', () => {
++      swiper?.zoom.out(); home.append(shell); expand.hidden = false; close.hidden = true;
++      swiper?.update(); controls(); if (lastFocus?.isConnected) lastFocus.focus();
++    }, options);
++    zoom.addEventListener('click', () => { if (swiper.zoom.scale > 1) swiper.zoom.out(); else swiper.zoom.in(); controls(); }, options);
++    document.addEventListener('keydown', (event) => {
++      if (!swiper || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
++      const focused = event.target;
++      if (focused.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]')) return;
++      // Al recorrer la página, solo responde el visor visible; respeta otros controles.
++      if (!root.contains(focused) && focused !== document.body && focused !== document.documentElement) return;
++      const bounds = target.getBoundingClientRect();
++      const center = bounds.top + bounds.height / 2;
++      if (!dialog.open && (!bounds.width || !bounds.height || center < 0 || center > innerHeight || bounds.right <= 0 || bounds.left >= innerWidth)) return;
++      event.preventDefault();
++      const button = event.key === 'ArrowLeft' ? previous : next;
++      if (!button.disabled) button.click();
++    }, options);
++    target.addEventListener('dblclick', () => { if (dialog.open) { swiper.zoom.toggle(); controls(); } }, options);
++    instances.set(root, () => { abort.abort(); if (dialog.open) dialog.close(); swiper?.destroy(true, true); });
++    load();
++  });
++}
+--- /dev/null
++++ b/site/tmp/cde-practicas-preview/theme/resources/css/layouts/presentation.css
+@@ -0,0 +1,35 @@
++.lesson-presentation { --presentation-background: #171321; width: calc(100% - 2rem); max-width: var(--container-4xl, 56rem); margin: 2.5rem auto; color: #faf5ff; font-family: var(--font-sans); }
++.lesson-presentation-heading h2 { font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem); margin: 0 0 .35rem; }
++.lesson-presentation-heading p { opacity: .8; font-size: .95rem; margin-bottom: 1.25rem; }
++.lesson-presentation-shell { background: var(--presentation-background); border: 1px solid #ffffff30; border-radius: .3rem; overflow: hidden; }
++.lesson-presentation .swiper { width: 100%; aspect-ratio: 16 / 9; background: var(--presentation-background); }
++.lesson-presentation .swiper-slide { display: flex; align-items: center; justify-content: center; }
++.lesson-presentation .swiper-slide img { display: block; width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
++.lesson-presentation-toolbar { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .75rem; }
++.lesson-presentation-navigation, .lesson-presentation-actions { display: flex; align-items: center; gap: .4rem; }
++.lesson-presentation button { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; background: transparent; min-width: 44px; min-height: 44px; border: 1px solid #ffffff45; border-radius: .25rem; padding: .4rem .7rem; font-size: .875rem; color: inherit; cursor: pointer; }
++.lesson-presentation button:hover:not(:disabled) { background: #ffffff18; }
++.lesson-presentation button:disabled { opacity: .4; cursor: default; }
++.lesson-presentation button:focus-visible, .lesson-presentation .swiper:focus-visible { outline: 2px solid #f8d785; outline-offset: -3px; }
++.lesson-presentation [data-presentation-counter] { min-width: 4rem; text-align: center; font-variant-numeric: tabular-nums; font-size: .9rem; }
++.lesson-presentation [data-presentation-status]:not(:empty) { padding: .5rem 1rem; }
++.lesson-presentation [data-presentation-retry] { margin: .5rem 1rem 1rem; }
++.lesson-presentation [hidden] { display: none !important; }
++.lesson-presentation dialog { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: var(--presentation-background); color: #faf5ff; }
++.lesson-presentation dialog::backdrop { background: #0c0911ee; }
++.lesson-presentation dialog .lesson-presentation-shell { height: 100dvh; border: 0; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); }
++.lesson-presentation dialog .swiper { flex: 1; min-height: 0; aspect-ratio: auto; }
++.lesson-presentation dialog [data-presentation-dialog-content] { height: 100%; }
++@media (max-width: 420px) { .lesson-presentation-toolbar { padding: .5rem; flex-wrap: wrap; } .lesson-presentation-actions { margin-left: auto; } .lesson-presentation [data-presentation-zoom]:disabled { display: none; } }
++
++.lesson-presentation [data-presentation-status]:empty { display: none; }
++
++.lesson-presentation button svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
++
++@media (min-width: 48rem) { .lesson-presentation { width: calc(100% - 3rem); } }
++
++.lesson-presentation-loading { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; background: var(--presentation-background); pointer-events: none; }
++.lesson-presentation-loading-label { display: inline-flex; align-items: center; gap: .65rem; padding: .7rem 1rem; border: 1px solid #ffffff20; border-radius: .35rem; background: #171321ed; color: #faf5ff; font-size: .875rem; }
++.lesson-presentation-loading svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; animation: presentation-loading-spin 1.2s linear infinite; }
++@keyframes presentation-loading-spin { to { transform: rotate(360deg); } }
++@media (prefers-reduced-motion: reduce) { .lesson-presentation-loading svg { animation: none; } }
+--- /dev/null
++++ b/site/tmp/cde-practicas-preview/theme/resources/views/partials/lesson-presentation.blade.php
+@@ -0,0 +1,52 @@
++@if (!empty($lesson_presentation))
++  <section class="lesson-presentation not-prose" aria-label="Presentación de la lección"
++    data-lesson-presentation='@json($lesson_presentation, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP)'>
++    <header class="lesson-presentation-heading">
++      <h2>Presentación de la lección</h2>
++      <p>Recorre las diapositivas a tu ritmo. Amplía para ver los detalles.</p>
++    </header>
++    <div data-presentation-home>
++      <div data-presentation-shell class="lesson-presentation-shell">
++        <div class="swiper" tabindex="0" aria-label="Diapositivas" aria-busy="true">
++          <div class="swiper-wrapper"></div>
++          <div class="lesson-presentation-loading" data-presentation-loading role="status" aria-live="polite">
++            <span class="lesson-presentation-loading-label">
++              <x-dynamic-component component="tabler-loader-2" aria-hidden="true" />
++              <span>Cargando diapositiva…</span>
++            </span>
++          </div>
++        </div>
++        <div class="lesson-presentation-toolbar">
++          <div class="lesson-presentation-navigation">
++            <button type="button" data-presentation-prev aria-label="Diapositiva anterior" aria-keyshortcuts="ArrowLeft" title="Anterior (←)" disabled>
++              <x-dynamic-component component="tabler-chevron-left" aria-hidden="true" />
++            </button>
++            <span data-presentation-counter aria-live="polite" aria-atomic="true">— / —</span>
++            <button type="button" data-presentation-next aria-label="Diapositiva siguiente" aria-keyshortcuts="ArrowRight" title="Siguiente (→)" disabled>
++              <x-dynamic-component component="tabler-chevron-right" aria-hidden="true" />
++            </button>
++          </div>
++          <div class="lesson-presentation-actions">
++            <button type="button" data-presentation-zoom aria-label="Acercar" title="Acercar" disabled>
++              <span data-presentation-zoom-in><x-dynamic-component component="tabler-zoom-in" aria-hidden="true" /></span>
++              <span data-presentation-zoom-out hidden><x-dynamic-component component="tabler-zoom-out" aria-hidden="true" /></span>
++            </button>
++            <button type="button" data-presentation-expand aria-label="Ampliar" title="Ampliar" disabled>
++              <x-dynamic-component component="tabler-arrows-maximize" aria-hidden="true" />
++            </button>
++            <button type="button" data-presentation-close aria-label="Cerrar" title="Cerrar" hidden>
++              <x-dynamic-component component="tabler-x" aria-hidden="true" />
++            </button>
++          </div>
++        </div>
++        <p data-presentation-status role="status"></p>
++        <button type="button" data-presentation-retry hidden>
++          <x-dynamic-component component="tabler-refresh" aria-hidden="true" />
++          <span>Volver a intentar</span>
++        </button>
++      </div>
++    </div>
++    <dialog aria-label="Presentación ampliada"><div data-presentation-dialog-content></div></dialog>
++    <noscript>Activa JavaScript para recorrer esta presentación.</noscript>
++  </section>
++@endif

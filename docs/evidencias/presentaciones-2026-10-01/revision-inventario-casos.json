@@ -1,0 +1,103 @@
+[
+  {
+    "case": "empty",
+    "preconditions": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "unique_identity",
+          "passed": true
+        },
+        {
+          "name": "allowlist",
+          "passed": true
+        },
+        {
+          "name": "fresh_external_evidence",
+          "passed": true
+        },
+        {
+          "name": "filesystem_structure",
+          "passed": true
+        }
+      ]
+    },
+    "planned_writes": 0,
+    "discrepancies": []
+  },
+  {
+    "case": "missing",
+    "preconditions": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "unique_identity",
+          "passed": true
+        },
+        {
+          "name": "allowlist",
+          "passed": true
+        },
+        {
+          "name": "fresh_external_evidence",
+          "passed": true
+        },
+        {
+          "name": "filesystem_structure",
+          "passed": true
+        }
+      ]
+    },
+    "planned_writes": 0,
+    "discrepancies": []
+  },
+  {
+    "case": "dropbox",
+    "preconditions": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "unique_identity",
+          "passed": true
+        },
+        {
+          "name": "allowlist",
+          "passed": true
+        },
+        {
+          "name": "fresh_external_evidence",
+          "passed": true
+        },
+        {
+          "name": "filesystem_structure",
+          "passed": true
+        }
+      ]
+    },
+    "planned_writes": 0,
+    "discrepancies": []
+  },
+  {
+    "case": "in_memory_patch_preserves_presentation",
+    "patched_fields": [
+      "tiene_audio_publicable"
+    ],
+    "presentation_preserved": true,
+    "remote_io": false
+  },
+  {
+    "case": "pdf_filename_without_video_or_processed_folder",
+    "rows_found": 0
+  },
+  {
+    "case": "planning_only_ignores_presentation_path",
+    "planning_only": [
+      {
+        "record_id": "8",
+        "clave_leccion": "cde:02:03:3.4",
+        "reason": "human_planning_without_technical_footprint"
+      }
+    ],
+    "discrepancies": []
+  }
+]

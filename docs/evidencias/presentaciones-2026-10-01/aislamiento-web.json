@@ -1,0 +1,55 @@
+[
+  {
+    "path": "docs/cde-presentaciones-contrato.md",
+    "sha256": "b88284c56735c5ea0da80d8c917b11ad3ea064d1c961d2439e65ae558a1588bc"
+  },
+  {
+    "path": "docs/planes/cde-presentaciones-staging.md",
+    "sha256": "05610b440502985d123c3e3f34379de4049006506035c3396a963307a9b3ddee"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/instalacion-inventario-propuesta.md",
+    "sha256": "77e378567fce06612843fb6acfa9d4061827a99b57dd26d0588b6445a4041ea8"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/inventario-candidato-dry-run.json",
+    "sha256": "659a28bbd14ba1a0b709154aa0941839d361893176958f7c3c352f43cb9511f9"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/inventario-candidato-tests.log",
+    "sha256": "01b6007b6279f9e628aa97086a995d2545e0cf159b86333039d8020bc01cb63c"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/inventario-propuesta-manifest.json",
+    "sha256": "d4082e47ca6ecac26437e27811c92345f583d11b02bf0767e3871221f2a661f4"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/inventario-propuesta.patch",
+    "sha256": "4f2899273536497bc068b23cbc6fb964f4ee83862de453c7b7caab268abd08a6"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/inventario.json",
+    "sha256": "1d8937b9daaaeb6dbfb337c75102b2f900578f624e1dffc43a123750bf6f00ec"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/revision-inventario-casos.json",
+    "sha256": "cb420e8cfd3ba29f8276e16f0d59a702e5229fed00e98f54afb7ea74232417e3"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/revision-inventario-tests.log",
+    "sha256": "c1d30872d611b37b89cc82d0f6f188d2665f6f8dd87dc0e6d459b9ae35763e3e"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/revision-inventario.md",
+    "sha256": "a6580186b4bcaff5456b9419b5dd19ecdeb6d13dc57c22bd09e17c77da1dcfbb"
+  },
+  {
+    "path": "docs/evidencias/presentaciones-2026-10-01/traslado-verificado.json",
+    "sha256": "f022bcc0b43b1ab1b6f5314dc0d005896746ac7bec053959de3e019af78997dd"
+  },
+  {
+    "path": "docs/context/README.md",
+    "sha256": "3c4329ad8c210ed3412e80237fa60a24ff9119cae769d5333cefe2993545bcb8",
+    "restored_head_sha256": "6f7220ae43bee2024fdf1b5a60dcb47b755b115af938b881d7a6419971a349d0"
+  }
+]

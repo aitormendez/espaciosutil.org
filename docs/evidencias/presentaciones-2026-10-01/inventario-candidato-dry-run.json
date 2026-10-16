@@ -1,0 +1,226 @@
+{
+  "schema": "cde.inventory_reconcile_report",
+  "schema_version": 3,
+  "mode": "dry_run",
+  "scope": {
+    "kind": "focused",
+    "claves": [
+      "cde:01:00:0.1",
+      "cde:02:00:0.1",
+      "cde:03:00:0.1",
+      "cde:04:00:0.1",
+      "cde:05:00:0.1",
+      "cde:06:00:0.1",
+      "cde:07:00:0.1",
+      "cde:08:00:0.1"
+    ]
+  },
+  "preconditions": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "unique_identity",
+        "passed": true
+      },
+      {
+        "name": "allowlist",
+        "passed": true
+      },
+      {
+        "name": "fresh_external_evidence",
+        "passed": true
+      },
+      {
+        "name": "filesystem_structure",
+        "passed": true
+      }
+    ]
+  },
+  "discrepancies": [],
+  "planning_only": [],
+  "planned_writes": [
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "1",
+      "clave_leccion": "cde:01:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/Presentación/0.1. - Qué es El libro de Urantia.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "418e6a136e848b90240ab479d595915bfa10aaa34f9070ac5f3f15be95b8402f",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-07-22 17:31:59+00:00"
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "46",
+      "clave_leccion": "cde:02:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/Presentación/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "ec9bbad67bbbd2ebb464035b9007ae765feb3473c35680431642139d89eb08af",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-07-22 19:10:16+00:00"
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "38",
+      "clave_leccion": "cde:03:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "3af534b92c2bc575beb431482e46a9d70e1b1df22e837bbc7ed2089144bddaf2",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-07-22 19:10:16+00:00"
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "67",
+      "clave_leccion": "cde:04:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/Presentación/0.1. - Quién es Ramtha.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "164756cea32d6123d1f7b13e820ea45efe1bce15f2bb222ec20a7146b6ab294a",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-07-22 19:10:16+00:00"
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "137",
+      "clave_leccion": "cde:05:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00",
+        "bunny_last_verified_at": "2026-10-01T11:16:44+00:00"
+      },
+      "human_fields_sha256": "f973a93c874d1a9082e9bf7b69a28df57d27dedf165925b76630c026b02e058c",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-09-25 13:55:23+00:00"
+        },
+        "bunny_last_verified_at": {
+          "present": true,
+          "value": null
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "156",
+      "clave_leccion": "cde:06:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "06 - Conversaciones con Dios/00 - Presentación/0.1 - Quién es Neale Donald Walsch/Presentación/0.1. - Quién es Neale Donald Walsch.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00",
+        "bunny_last_verified_at": "2026-10-01T11:16:45+00:00"
+      },
+      "human_fields_sha256": "a28d712062930a512c10b5a77cccf83c2a796be2a461f2b108ce5dbf9ac2df15",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-09-25 10:05:52+00:00"
+        },
+        "bunny_last_verified_at": {
+          "present": true,
+          "value": null
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "189",
+      "clave_leccion": "cde:07:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "c5093608d347ffd9dbb4c38aba71635d5603b3d6a4ce2e4455e73b338c8fef95",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-09-28 08:42:15+00:00"
+        }
+      }
+    },
+    {
+      "operation": "patch",
+      "table": "cde_lecciones",
+      "record_id": "203",
+      "clave_leccion": "cde:08:00:0.1",
+      "fields": {
+        "presentacion_pdf_ruta": "08 - El Círculo Carmesí/00 - Presentación/0.1 - Qué es el Circulo Carmesí/Presentación/0.1. - Qué es el Círculo Carmesí.pdf",
+        "ultima_revision_inventario": "2026-10-01T11:16:38+00:00"
+      },
+      "human_fields_sha256": "e20a7d860a4cccd96e84ec67ccd1781e8ec8c7f3c252be484ded4d1b4967af50",
+      "expected_before": {
+        "presentacion_pdf_ruta": {
+          "present": true,
+          "value": null
+        },
+        "ultima_revision_inventario": {
+          "present": true,
+          "value": "2026-09-28 08:42:15+00:00"
+        }
+      }
+    }
+  ],
+  "writes_attempted": 0,
+  "writes_performed": 0,
+  "writes_remaining": 8,
+  "apply_limited": false,
+  "readback": []
+}

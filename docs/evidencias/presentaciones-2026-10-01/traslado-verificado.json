@@ -1,0 +1,226 @@
+[
+  {
+    "clave_leccion": "cde:01:00:0.1",
+    "nocodb_id": 1,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/0.1. - Qué es El libro de Urantia.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/Presentación/0.1. - Qué es El libro de Urantia.pdf",
+    "relative_path": "01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/Presentación/0.1. - Qué es El libro de Urantia.pdf",
+    "fingerprint": {
+      "size": 2925277,
+      "sha256": "b3e3f47d45da1820fd22a2bb7a555d1483ccef6bda994252e92601ec57930c01"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "dab28256-4317-4cbd-8a78-4d5cf907571c",
+        "name": "01 - El libro de Urantia"
+      },
+      {
+        "id": "dabeae47-cb14-452e-bb1c-5a298bdbc686",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "024ae7ac-7410-4f98-ada3-c99381a8469e",
+        "name": "<u>0.1. - Qué es El libro de Urantia</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:02:00:0.1",
+    "nocodb_id": 46,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/Presentación/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+    "relative_path": "02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/Presentación/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+    "fingerprint": {
+      "size": 1888651,
+      "sha256": "a5e355c7be01450c765e94d5030c12709ba4bf878545daf0531c4fb14987cc5f"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "a2440eed-8c51-4c67-9ebc-243e5168c775",
+        "name": "02 - Seth"
+      },
+      {
+        "id": "22a5e16c-5964-4369-8d94-ea0c06d628f1",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "f3ea6db6-cdd0-4e0e-bf60-098a48f993d5",
+        "name": "<u>0.1. - Quiénes son Jane Roberts y Robert Butts</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:03:00:0.1",
+    "nocodb_id": 38,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/0.1. - Qué es Un curso de milagros.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+    "relative_path": "03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/Presentación/0.1. - Qué es Un curso de milagros.pdf",
+    "fingerprint": {
+      "size": 2430229,
+      "sha256": "c3d325e0476d86769799a4bb6b0dc3ddf9046d82459e95dabca41aa7d1364b18"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "c1b3fc9f-d281-4824-9e84-c621f44c4123",
+        "name": "03 - Un curso de milagros"
+      },
+      {
+        "id": "75814e8a-ba7d-4f91-ad6a-ca9833dcb333",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "9bcb6ada-e46f-405d-9f04-37f6ca8a734c",
+        "name": "<u>0.1. - Qué es Un curso de milagros</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:04:00:0.1",
+    "nocodb_id": 67,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/0.1. - Quién es Ramtha.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/Presentación/0.1. - Quién es Ramtha.pdf",
+    "relative_path": "04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/Presentación/0.1. - Quién es Ramtha.pdf",
+    "fingerprint": {
+      "size": 3148945,
+      "sha256": "8585666caccc26be6976d4b7fa0bb40cbba056a63085e19e4171b41c8bb35d85"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "c2491c44-07ac-4eb0-aead-d57b6e2dd480",
+        "name": "04 - Ramtha"
+      },
+      {
+        "id": "40626c18-0b0f-4c9e-ad1c-94e257b9edf6",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "4d3faba8-b2b9-4dcd-bfd1-5bc1a92371b5",
+        "name": "<u>0.1. - Quién es “Ramtha”</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:05:00:0.1",
+    "nocodb_id": 137,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/05 - Kryon/00 - Presentación/0.1. - Quién es Kryon/0.1. - Quién es Kryon.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+    "relative_path": "05 - Kryon/00 - Presentación/0.1 - Quién es Kryon/Presentación/0.1. - Quién es Kryon.pdf",
+    "fingerprint": {
+      "size": 2180045,
+      "sha256": "a6fa2c0acda281ff691f2e0d046dc83aa69cf875f6abb0f0d5d961827fd42a85"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "f8a44731-b360-4b1c-b551-1fa6d5bc7a54",
+        "name": "05 - Kryon"
+      },
+      {
+        "id": "095c256c-a5c9-4e12-b4eb-480435b1f5a5",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "d38ff609-37f0-4a02-b8c8-51fe350dafaf",
+        "name": "<u>0.1. - Quién es Kryon</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:06:00:0.1",
+    "nocodb_id": 156,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/06 - Conversaciones con Dios/00 - Presentación/0.1. - Quién es Neale Donald Walsch/0.1. - Quién es Neale Donald Walsch.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/06 - Conversaciones con Dios/00 - Presentación/0.1 - Quién es Neale Donald Walsch/Presentación/0.1. - Quién es Neale Donald Walsch.pdf",
+    "relative_path": "06 - Conversaciones con Dios/00 - Presentación/0.1 - Quién es Neale Donald Walsch/Presentación/0.1. - Quién es Neale Donald Walsch.pdf",
+    "fingerprint": {
+      "size": 4041022,
+      "sha256": "66c7dd6324abff83f490e6f00bf3f15070dbbed4ebb5a51600d157af4df80257"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "637ce521-fb14-4831-aa0d-925ca2119cd7",
+        "name": "06 - Conversaciones con Dios"
+      },
+      {
+        "id": "484c51a1-6147-42b1-91ff-a3c02735b034",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "a5893095-6df1-4988-b11c-55095b652cea",
+        "name": "<u>0.1. - Quién es Neale Donald Walsch</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:07:00:0.1",
+    "nocodb_id": 189,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/07 - Un curso de amor/00 - Presentación/0.1. - Qué es Un curso de amor - I/0.1. - Qué es Un curso de amor - I.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+    "relative_path": "07 - Un curso de amor/00 - Presentación/0.1 - Qué es Un curso de amor - I/Presentación/0.1. - Qué es Un curso de amor - I.pdf",
+    "fingerprint": {
+      "size": 1753008,
+      "sha256": "9c142a244025f18d93b859891bbc8732634fc7e856eca1200d23cb02c147e368"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "ba3388c9-9cd7-4180-8aa6-8e65b61d9d13",
+        "name": "07 - Un curso de amor"
+      },
+      {
+        "id": "c0b7238a-c775-42be-8e81-c7689dd3b944",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "6041655d-e83c-424f-abff-2c05cedb44f8",
+        "name": "<u>0.1. Qué es Un curso de amor - I.</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  },
+  {
+    "clave_leccion": "cde:08:00:0.1",
+    "nocodb_id": 203,
+    "source": "/Users/aitor/Library/CloudStorage/Dropbox/AITOR CDE/08 - El Círculo Carmesí/00 - Presentación/0.1. - Que es el Circulo Carmesi/0.1. - Qué es el Círculo Carmesí.pdf",
+    "destination": "/Volumes/D/Documentos D/Trabajo/Espacio Sutil/CDE (curso desarrollo espiritual)/Contenidos/Series CDE/08 - El Círculo Carmesí/00 - Presentación/0.1 - Qué es el Circulo Carmesí/Presentación/0.1. - Qué es el Círculo Carmesí.pdf",
+    "relative_path": "08 - El Círculo Carmesí/00 - Presentación/0.1 - Qué es el Circulo Carmesí/Presentación/0.1. - Qué es el Círculo Carmesí.pdf",
+    "fingerprint": {
+      "size": 2010839,
+      "sha256": "54c610d604788b3171a13447fe947f37fab868667a1b6e9dab3f2e1c342911cd"
+    },
+    "already_present": false,
+    "workflowy_path": [
+      {
+        "id": "be97281e-0d15-4311-8ee7-e47448af77da",
+        "name": "08 - El Círculo Carmesí"
+      },
+      {
+        "id": "dab5086f-7e2b-4474-8aa0-ce6498b83436",
+        "name": "00 - Presentación"
+      },
+      {
+        "id": "7ce48afd-42bf-4811-a784-b4430af5f97f",
+        "name": "<u>0.1. Qué es el Círculo Carmesí.</u>"
+      }
+    ],
+    "verified": true,
+    "source_removed": true
+  }
+]

@@ -1,0 +1,346 @@
+{
+  "schema": "cde.presentation.audit",
+  "schema_version": 1,
+  "date": "2026-10-01",
+  "source_root_label": "Dropbox/AITOR CDE",
+  "source_notice": "Comunicación a Aitor - Presentaciones depositadas - 20261001.txt",
+  "local_git_commit": "325fb19",
+  "staging_release": "20261001070650",
+  "staging_swiper_version": "12.1.4",
+  "nocodb_base_id": "pl6ycwjk7ewg6af",
+  "nocodb_table_id": "mb5v3xrgf1tcze5",
+  "nocodb_existing_presentation_fields": [],
+  "verification_scope": "Local PDF metadata/hashes; visual samples pages 1,7,11; NocoDB read-only SQL schema and eight identities; staging WP-CLI reads. No production WordPress read and no comparison with author master hashes.",
+  "total_pdf_bytes": 20378016,
+  "total_pages": 120,
+  "files": [
+    {
+      "path": "01 - El libro de Urantia/00 - Presentación/0.1 - Qué es El libro de Urantia/0.1. - Qué es El libro de Urantia.pdf",
+      "bytes": 2925277,
+      "sha256": "b3e3f47d45da1820fd22a2bb7a555d1483ccef6bda994252e92601ec57930c01",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "960 x 540 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 5688,
+      "fonts": [
+        "BCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0",
+        "BCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0",
+        "BCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0",
+        "BCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0"
+      ],
+      "page_text_lengths": [
+        123,
+        430,
+        390,
+        387,
+        395,
+        394,
+        401,
+        360,
+        388,
+        401,
+        413,
+        366,
+        443,
+        363,
+        392
+      ],
+      "clave_leccion": "cde:01:00:0.1",
+      "nocodb_row_id": 1,
+      "wordpress_id_recorded_in_nocodb": 2389,
+      "staging_verified_post_id": 2389,
+      "staging_identity_status": "unique_published_active",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "extracted_unreviewed"
+    },
+    {
+      "path": "02 - Seth/00 - Presentación/0.1 - Quiénes son Jane Roberts y Robert Butts/0.1. - Quiénes son Jane Roberts y Robert Butts.pdf",
+      "bytes": 1888651,
+      "sha256": "a5e355c7be01450c765e94d5030c12709ba4bf878545daf0531c4fb14987cc5f",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "960 x 540 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 5924,
+      "fonts": [
+        "BCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0",
+        "BCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0",
+        "BCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0",
+        "BCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0",
+        "BCDIEE+Georgia-Bold                  CID TrueType      Identity-H       yes yes yes     47  0",
+        "BCDJEE+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     57  0"
+      ],
+      "page_text_lengths": [
+        133,
+        428,
+        318,
+        366,
+        518,
+        409,
+        578,
+        436,
+        357,
+        451,
+        450,
+        336,
+        391,
+        333,
+        378
+      ],
+      "clave_leccion": "cde:02:00:0.1",
+      "nocodb_row_id": 46,
+      "wordpress_id_recorded_in_nocodb": 2586,
+      "staging_verified_post_id": 2586,
+      "staging_identity_status": "unique_published_active",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "extracted_unreviewed"
+    },
+    {
+      "path": "03 - Un curso de milagros/00 - Presentación/0.1 - Qué es Un curso de milagros/0.1. - Qué es Un curso de milagros.pdf",
+      "bytes": 2430229,
+      "sha256": "c3d325e0476d86769799a4bb6b0dc3ddf9046d82459e95dabca41aa7d1364b18",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "1280.04 x 720 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 0,
+      "fonts": [],
+      "page_text_lengths": [],
+      "clave_leccion": "cde:03:00:0.1",
+      "nocodb_row_id": 38,
+      "wordpress_id_recorded_in_nocodb": 2770,
+      "staging_verified_post_id": 2770,
+      "staging_identity_status": "unique_published_active",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "unavailable",
+      "sampled_embedded_page_image_pixels": [
+        1376,
+        768
+      ]
+    },
+    {
+      "path": "04 - Ramtha/00 - Presentación/0.1 - Quién es Ramtha/0.1. - Quién es Ramtha.pdf",
+      "bytes": 3148945,
+      "sha256": "8585666caccc26be6976d4b7fa0bb40cbba056a63085e19e4171b41c8bb35d85",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "960 x 540 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 5720,
+      "fonts": [
+        "BCDEEE+ArialMT                       TrueType          WinAnsi          yes yes no      10  0",
+        "BCDFEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no      13  0",
+        "BCDGEE+Georgia                       TrueType          WinAnsi          yes yes no      15  0",
+        "BCDHEE+Georgia-Bold                  TrueType          WinAnsi          yes yes no      23  0",
+        "BCDIEE+Georgia                       CID TrueType      Identity-H       yes yes yes     66  0",
+        "BCDJEE+Georgia-Bold                  CID TrueType      Identity-H       yes yes yes     81  0",
+        "BCDKEE+Arial-BoldMT                  CID TrueType      Identity-H       yes yes yes     90  0"
+      ],
+      "page_text_lengths": [
+        111,
+        364,
+        361,
+        337,
+        388,
+        414,
+        401,
+        423,
+        439,
+        432,
+        365,
+        389,
+        493,
+        417,
+        344
+      ],
+      "clave_leccion": "cde:04:00:0.1",
+      "nocodb_row_id": 67,
+      "wordpress_id_recorded_in_nocodb": 2814,
+      "staging_verified_post_id": 2814,
+      "staging_identity_status": "unique_published_active",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "extracted_unreviewed"
+    },
+    {
+      "path": "05 - Kryon/00 - Presentación/0.1. - Quién es Kryon/0.1. - Quién es Kryon.pdf",
+      "bytes": 2180045,
+      "sha256": "a6fa2c0acda281ff691f2e0d046dc83aa69cf875f6abb0f0d5d961827fd42a85",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "1280.04 x 720 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 0,
+      "fonts": [],
+      "page_text_lengths": [],
+      "clave_leccion": "cde:05:00:0.1",
+      "nocodb_row_id": 137,
+      "wordpress_id_recorded_in_nocodb": 2962,
+      "staging_verified_post_id": null,
+      "staging_identity_status": "no_match",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "unavailable",
+      "sampled_embedded_page_image_pixels": [
+        1376,
+        768
+      ]
+    },
+    {
+      "path": "06 - Conversaciones con Dios/00 - Presentación/0.1. - Quién es Neale Donald Walsch/0.1. - Quién es Neale Donald Walsch.pdf",
+      "bytes": 4041022,
+      "sha256": "66c7dd6324abff83f490e6f00bf3f15070dbbed4ebb5a51600d157af4df80257",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "960 x 540 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 9166,
+      "fonts": [
+        "BCDEEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no       7  0",
+        "BCDFEE+Georgia                       TrueType          WinAnsi          yes yes no      10  0",
+        "BCDGEE+ArialMT                       TrueType          WinAnsi          yes yes no      12  0"
+      ],
+      "page_text_lengths": [
+        163,
+        510,
+        599,
+        680,
+        679,
+        562,
+        495,
+        682,
+        545,
+        631,
+        910,
+        590,
+        635,
+        754,
+        689
+      ],
+      "clave_leccion": "cde:06:00:0.1",
+      "nocodb_row_id": 156,
+      "wordpress_id_recorded_in_nocodb": 2958,
+      "staging_verified_post_id": null,
+      "staging_identity_status": "no_match",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "extracted_unreviewed"
+    },
+    {
+      "path": "07 - Un curso de amor/00 - Presentación/0.1. - Qué es Un curso de amor - I/0.1. - Qué es Un curso de amor - I.pdf",
+      "bytes": 1753008,
+      "sha256": "9c142a244025f18d93b859891bbc8732634fc7e856eca1200d23cb02c147e368",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "1280.04 x 720 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 0,
+      "fonts": [],
+      "page_text_lengths": [],
+      "clave_leccion": "cde:07:00:0.1",
+      "nocodb_row_id": 189,
+      "wordpress_id_recorded_in_nocodb": 2965,
+      "staging_verified_post_id": null,
+      "staging_identity_status": "no_match",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "unavailable",
+      "sampled_embedded_page_image_pixels": [
+        1376,
+        768
+      ]
+    },
+    {
+      "path": "08 - El Círculo Carmesí/00 - Presentación/0.1. - Que es el Circulo Carmesi/0.1. - Qué es el Círculo Carmesí.pdf",
+      "bytes": 2010839,
+      "sha256": "54c610d604788b3171a13447fe947f37fab868667a1b6e9dab3f2e1c342911cd",
+      "info": {
+        "Producer": "Microsoft® PowerPoint® para Microsoft 365",
+        "Pages": "15",
+        "Encrypted": "no",
+        "Page size": "960 x 540 pts",
+        "PDF version": "1.7"
+      },
+      "text_chars": 4399,
+      "fonts": [
+        "BCDEEE+Arial-BoldMT                  TrueType          WinAnsi          yes yes no       7  0",
+        "BCDFEE+Georgia                       TrueType          WinAnsi          yes yes no      10  0",
+        "BCDGEE+ArialMT                       TrueType          WinAnsi          yes yes no      12  0"
+      ],
+      "page_text_lengths": [
+        151,
+        313,
+        349,
+        395,
+        252,
+        374,
+        340,
+        157,
+        300,
+        267,
+        305,
+        309,
+        241,
+        350,
+        254
+      ],
+      "clave_leccion": "cde:08:00:0.1",
+      "nocodb_row_id": 203,
+      "wordpress_id_recorded_in_nocodb": 2967,
+      "staging_verified_post_id": null,
+      "staging_identity_status": "no_match",
+      "visual_sample_pages": [
+        1,
+        7,
+        11
+      ],
+      "text_status": "extracted_unreviewed"
+    }
+  ]
+}

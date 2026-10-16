@@ -1,0 +1,42 @@
+[
+  {
+    "test": "Miembro obtiene imagen WebP real",
+    "passed": true
+  },
+  {
+    "test": "Bytes y hash coinciden con el paquete privado",
+    "passed": true
+  },
+  {
+    "test": "Respuesta privada no almacenable y no indexable",
+    "passed": true
+  },
+  {
+    "test": "URL copiada denegada None",
+    "passed": true
+  },
+  {
+    "test": "URL copiada denegada 19",
+    "passed": true
+  },
+  {
+    "test": "HEAD autorizado",
+    "passed": true
+  },
+  {
+    "test": "Revision obsoleta rechazada",
+    "passed": true
+  },
+  {
+    "test": "Alumno no puede previsualizar como editor",
+    "passed": true
+  },
+  {
+    "test": "Editor obtiene previsualizacion privada",
+    "passed": true
+  },
+  {
+    "test": "Almacen inaccesible por ruta publica",
+    "passed": true
+  }
+]

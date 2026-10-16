@@ -47,3 +47,6 @@ wp-cli.local.yml
 
 # Derivados privados de presentaciones locales.
 /storage/cde-presentations/
+
+# Narración preparada: almacenamiento privado, nunca Git.
+/private/cde-practicas-audio/

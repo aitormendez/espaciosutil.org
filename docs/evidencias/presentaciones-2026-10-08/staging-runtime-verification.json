@@ -1,0 +1,21 @@
+{
+  "commit": "8044d9fad3b9e3af165f0f59ac0aa98b77667398",
+  "files": [
+    "site/web/app/mu-plugins/cde-presentations/cli.php",
+    "site/web/app/mu-plugins/cde-presentations/package.php",
+    "site/web/app/mu-plugins/cde-presentations/service.php",
+    "site/web/app/mu-plugins/cde-presentations/web.php",
+    "site/web/app/mu-plugins/espaciosutil-cde-presentations.php",
+    "site/web/app/themes/sage/app/Fields/CdePresentation.php",
+    "site/web/app/themes/sage/app/View/Composers/SingleCde.php",
+    "site/web/app/themes/sage/resources/css/app.css",
+    "site/web/app/themes/sage/resources/css/layouts/presentation.css",
+    "site/web/app/themes/sage/resources/js/app.js",
+    "site/web/app/themes/sage/resources/js/barba.js",
+    "site/web/app/themes/sage/resources/js/lessons/presentation.js",
+    "site/web/app/themes/sage/resources/js/transitionScripts.js",
+    "site/web/app/themes/sage/resources/views/partials/content-single-cde.blade.php",
+    "site/web/app/themes/sage/resources/views/partials/lesson-presentation.blade.php"
+  ],
+  "all_match": true
+}
