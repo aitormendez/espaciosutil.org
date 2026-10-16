@@ -62,15 +62,7 @@ final class Catalog
                 $query->set('s', self::search());
                 $series = self::selectedSeries();
                 if ($series) {
-                    $lessons = get_posts(['post_type'=>'cde', 'post_status'=>'publish', 'posts_per_page'=>-1,
-                        'has_password'=>false, 'meta_key'=>'active_lesson', 'meta_value'=>'1',
-                        'tax_query'=>[['taxonomy'=>'serie_cde', 'field'=>'term_id', 'terms'=>$series, 'include_children'=>true]]]);
-                    $ids = [];
-                    foreach ($lessons as $lesson) {
-                        $related = get_post_meta($lesson->ID, self::RELATION, true);
-                        if (is_array($related)) { $ids = array_merge($ids, array_map('intval', $related)); }
-                    }
-                    $query->set('post__in', array_values(array_unique($ids)) ?: [0]);
+                    $query->set('post__in', self::practiceIdsForSeries($series) ?: [0]);
                 }
             }
             if ($query->is_feed()) {
@@ -80,6 +72,31 @@ final class Catalog
                 }
             }
         });
+    }
+
+    /** Lessons inherit their series from parent lessons, as in the course index. */
+    public static function practiceIdsForSeries(int $series): array
+    {
+        $children = get_term_children($series, 'serie_cde');
+        if (is_wp_error($children)) { return []; }
+        $terms = array_merge([$series], array_map('intval', $children));
+        $lessons = get_posts([
+            'post_type'=>'cde', 'post_status'=>'publish', 'posts_per_page'=>-1, 'has_password'=>false,
+            'meta_query'=>[
+                ['key'=>'active_lesson', 'value'=>'1'],
+                ['key'=>self::RELATION, 'compare'=>'EXISTS'],
+            ],
+        ]);
+        $ids = [];
+        foreach ($lessons as $lesson) {
+            foreach (array_merge([$lesson->ID], get_post_ancestors($lesson->ID)) as $context) {
+                if (!has_term($terms, 'serie_cde', $context)) { continue; }
+                $related = get_post_meta($lesson->ID, self::RELATION, true);
+                if (is_array($related)) { $ids = array_merge($ids, array_map('intval', $related)); }
+                break;
+            }
+        }
+        return array_values(array_unique(array_filter($ids, static fn ($id) => $id > 0)));
     }
 
     public static function search(): string
