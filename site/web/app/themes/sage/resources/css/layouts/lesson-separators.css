@@ -1,0 +1,25 @@
+/* A boundary belongs to the following rendered section, never to an empty slot. */
+.lesson-study-content { container-type: inline-size; }
+.lesson-study-content > .practice-lesson-section { border-block: 0; }
+.lesson-study-content > :is(.practice-lesson-section, .lesson-presentation, #lesson-quiz) {
+  position: relative;
+}
+.lesson-study-content > :is(.lesson-summary, .practice-lesson-section, .lesson-presentation, #lesson-quiz):not([hidden]):not(:empty)
+  ~ :is(.practice-lesson-section, .lesson-presentation, #lesson-quiz):not([hidden]):not(:empty) {
+  padding-top: 40px;
+}
+.lesson-study-content > :is(.lesson-summary, .practice-lesson-section, .lesson-presentation, #lesson-quiz):not([hidden]):not(:empty)
+  ~ :is(.practice-lesson-section, .lesson-presentation, #lesson-quiz):not([hidden]):not(:empty)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100cqw;
+  border-top: 1px solid #353535;
+  pointer-events: none;
+}
+/* A practice that ends the study area keeps its lower boundary. */
+.lesson-study-content > .practice-lesson-section:not(:empty):not([hidden]):not(:has(~ :is(.lesson-presentation, #lesson-quiz):not([hidden]):not(:empty))) {
+  border-bottom: 1px solid var(--practice-border);
+}

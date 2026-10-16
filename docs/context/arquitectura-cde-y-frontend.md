@@ -4,6 +4,10 @@
 
 Documento de referencia para el frontend del Curso de Desarrollo Espiritual: reproductor, medios, subíndice, cuestionarios e índice del curso.
 
+## Prácticas y composición de estudio
+
+Consultar [Prácticas CDE](practicas-cde.md) para el CPT, la pestaña ACF, el visor compartido, la voz y el índice. La composición de resumen, práctica, presentación opcional y cuestionario usa `lesson-study-content`: sólo se renderizan bloques con contenido y cada frontera recibe un único separador. La presentación se incluye opcionalmente; su implementación no pertenece a la rama de prácticas. El estado, las pruebas y las restricciones de integración se mantienen en esa referencia especializada.
+
 ## Reproductor y medios
 
 - El reproductor del curso se resuelve con componentes React/JSX, no con JS imperativo en Blade.

@@ -1,0 +1,29 @@
+{
+  "checks": [
+    "voz real reproducida",
+    "siguiente cambia narración",
+    "pantalla completa oculta índice",
+    "pantalla completa no reinicia audio",
+    "mostrar índice",
+    "ocultar índice",
+    "Escape restaura índice y posición",
+    "lectura completa detiene audio",
+    "regreso a guía conserva posición",
+    "desactivar detiene audio",
+    "49 pantallas y límite final",
+    "retroceso funciona",
+    "fin del audio no avanza pantalla",
+    "audio privado disponible para miembro",
+    "revision antigua e índice inválido denegados",
+    "guía no se entrega al anónimo",
+    "audio anónimo denegado"
+  ],
+  "access": {
+    "member": 200,
+    "bytes": 23949,
+    "type": "audio/mpeg",
+    "cache": "private, no-store, max-age=0",
+    "stale": 404,
+    "invalid": 404
+  }
+}

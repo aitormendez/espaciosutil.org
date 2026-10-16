@@ -1,0 +1,160 @@
+{
+  "revision": "302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448",
+  "regenerated_headings": 21,
+  "reused_paragraphs": 28,
+  "php_checks": 47,
+  "asr_model": "mlx-community/whisper-large-v3-turbo (local)",
+  "numbering_matches": 21,
+  "clipping_samples": 0,
+  "total_seconds": 451.04,
+  "headings": [
+    {
+      "screen": 0,
+      "expected": "Uno. De dónde viene esta práctica.",
+      "recognized": " 1. ¿De dónde viene esta práctica?",
+      "visual": "1. De dónde viene esta práctica",
+      "numbering_match": true
+    },
+    {
+      "screen": 1,
+      "expected": "Uno punto uno. En este corpus, canalizar es permitir que la energía pase.",
+      "recognized": " 1.1. En este corpus canalizar es permitir que la energía pase.",
+      "visual": "1.1. En este corpus, canalizar es permitir que la energía pase",
+      "numbering_match": true
+    },
+    {
+      "screen": 4,
+      "expected": "Uno punto dos. Una práctica que Tobías propuso a los asistentes.",
+      "recognized": " 1.2. Una práctica que Tobías propuso a los asistentes.",
+      "visual": "1.2. Una práctica que Tobías propuso a los asistentes",
+      "numbering_match": true
+    },
+    {
+      "screen": 7,
+      "expected": "Dos. Qué se busca con el ejercicio.",
+      "recognized": " 2. ¿Qué se busca con el ejercicio?",
+      "visual": "2. Qué se busca con el ejercicio",
+      "numbering_match": true
+    },
+    {
+      "screen": 8,
+      "expected": "Dos punto uno. Sentir la energía de una cosa concreta: el suelo.",
+      "recognized": " 2.1. Sentir la energía de una cosa concreta, el suelo.",
+      "visual": "2.1. Sentir la energía de una cosa concreta: el suelo",
+      "numbering_match": true
+    },
+    {
+      "screen": 11,
+      "expected": "Dos punto dos. Recibir un sentir antes que buscar una definición.",
+      "recognized": " 2.2. Recibir un sentir antes que buscar una definición.",
+      "visual": "2.2. Recibir un sentir antes que buscar una definición",
+      "numbering_match": true
+    },
+    {
+      "screen": 14,
+      "expected": "Tres. Para qué sirve en el camino del alumno.",
+      "recognized": " 3. ¿Para qué sirve en el camino del alumno?",
+      "visual": "3. Para qué sirve en el camino del alumno",
+      "numbering_match": true
+    },
+    {
+      "screen": 15,
+      "expected": "Tres punto uno. El primer paso para comunicarse con todo.",
+      "recognized": " 3.1. El primer paso para comunicarse con todo.",
+      "visual": "3.1. El primer paso para comunicarse con todo",
+      "numbering_match": true
+    },
+    {
+      "screen": 18,
+      "expected": "Tres punto dos. Una capacidad al alcance de cualquiera.",
+      "recognized": " 3.2. Una capacidad al alcance de cualquiera.",
+      "visual": "3.2. Una capacidad al alcance de cualquiera",
+      "numbering_match": true
+    },
+    {
+      "screen": 21,
+      "expected": "Cuatro. El ritmo y la progresión de la práctica.",
+      "recognized": " 4. El ritmo y la progresión de la práctica.",
+      "visual": "4. El ritmo y la progresión de la práctica",
+      "numbering_match": true
+    },
+    {
+      "screen": 22,
+      "expected": "Cuatro punto uno. Una capa cada vez, sin forzar.",
+      "recognized": " 4.1. Una capa cada vez. Sin forzar.",
+      "visual": "4.1. Una capa cada vez, sin forzar",
+      "numbering_match": true
+    },
+    {
+      "screen": 25,
+      "expected": "Cuatro punto dos. De los objetos a las personas y a lo no físico.",
+      "recognized": " 4.2. De los objetos a las personas y a lo no físico.",
+      "visual": "4.2. De los objetos a las personas y a lo no físico",
+      "numbering_match": true
+    },
+    {
+      "screen": 28,
+      "expected": "Cinco. Los avisos de la fuente.",
+      "recognized": " 5. Los avisos de la fuente.",
+      "visual": "5. Los avisos de la fuente",
+      "numbering_match": true
+    },
+    {
+      "screen": 29,
+      "expected": "Cinco punto uno. No buscar sensación física ni definición.",
+      "recognized": " 5.1. No buscar sensación física ni definición.",
+      "visual": "5.1. No buscar sensación física ni definición",
+      "numbering_match": true
+    },
+    {
+      "screen": 32,
+      "expected": "Cinco punto dos. Confiar en lo que se recibe, aunque sea solo una parte.",
+      "recognized": " 5.2. Confiar en lo que se recibe, aunque sea solo una parte.",
+      "visual": "5.2. Confiar en lo que se recibe, aunque sea solo una parte",
+      "numbering_match": true
+    },
+    {
+      "screen": 35,
+      "expected": "Seis. Cómo se hace, paso a paso.",
+      "recognized": " 6. ¿Cómo se hace paso a paso?",
+      "visual": "6. Cómo se hace, paso a paso",
+      "numbering_match": true
+    },
+    {
+      "screen": 36,
+      "expected": "Seis punto uno. Preparación: notar el suelo que se pisa.",
+      "recognized": " 6.1. Preparación. Notar el suelo que se pisa.",
+      "visual": "6.1. Preparación: notar el suelo que se pisa",
+      "numbering_match": true
+    },
+    {
+      "screen": 38,
+      "expected": "Seis punto dos. Cuando la mente objeta: respirar y expandir la consciencia.",
+      "recognized": " 6.2. Cuando la mente objeta respirar y expandir la conciencia.",
+      "visual": "6.2. Cuando la mente objeta: respirar y expandir la consciencia",
+      "numbering_match": true
+    },
+    {
+      "screen": 41,
+      "expected": "Seis punto tres. Sentir una sola capa de energía.",
+      "recognized": " 6.3. Sentir una sola capa de energía.",
+      "visual": "6.3. Sentir una sola capa de energía",
+      "numbering_match": true
+    },
+    {
+      "screen": 44,
+      "expected": "Seis punto cuatro. Soltar la necesidad de definir y sentir.",
+      "recognized": " 6.4. Soltar la necesidad de definir y sentir.",
+      "visual": "6.4. Soltar la necesidad de definir y sentir",
+      "numbering_match": true
+    },
+    {
+      "screen": 47,
+      "expected": "Seis punto cinco. Cierre: quedarse con lo que se ha sentido.",
+      "recognized": " 6.5. Cierre. Quedarse con lo que se ha sentido.",
+      "visual": "6.5. Cierre: quedarse con lo que se ha sentido",
+      "numbering_match": true
+    }
+  ],
+  "limits": "La transcripción valida la numeración; no constituye una aprobación perceptiva completa. Whisper normaliza puntuación y consciencia/conciencia."
+}

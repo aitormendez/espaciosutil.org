@@ -90,3 +90,6 @@ a.toc-link {
 .is-active-link::before {
   background-color: #fff;
 }
+
+@import './layouts/practices.css';
+@import './layouts/lesson-separators.css';

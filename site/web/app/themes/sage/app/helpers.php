@@ -386,8 +386,8 @@ function current_nav_context(): string
     }
 
     if (
-        is_singular('cde')
-        || is_post_type_archive('cde')
+        is_singular(['cde', 'practica'])
+        || is_post_type_archive(['cde', 'practica'])
         || is_tax(['serie_cde', 'nivel_cde'])
         || is_page_template('template-curso.blade.php')
     ) {
@@ -418,6 +418,7 @@ function nav_context_from_path(string $path): string
         '/suscripcion/',
         '/el-curso-en-profundidad/',
         '/atlas/',
+        '/practicas/',
         '/bases-de-colaboracion/',
         '/login/',
         '/cuenta-de-membresia/',
@@ -444,6 +445,7 @@ function is_barba_sensitive_path(string $path): bool
     $sensitivePrefixes = [
         '/login/',
         '/atlas/',
+        '/practicas/',
         '/cuenta-de-membresia/',
         '/pago-de-membresia/',
         '/confirmacion-de-membresia/',

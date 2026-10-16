@@ -15,8 +15,8 @@
 
 - **Host:** macOS
 - **Máquina virtual:** gestionada por **Trellis** con el proveedor **Lima**.
-- **Directorio raíz del proyecto:** `/Users/aitor/Documents/Sites/espaciosutil.org`
-- **Directorio del sitio WordPress:** `/Users/aitor/Documents/Sites/espaciosutil.org/site`
+- **Directorio raíz del proyecto:** `/Volumes/D/Desarrollo/Sites/espaciosutil.org`
+- **Directorio del sitio WordPress:** `/Volumes/D/Desarrollo/Sites/espaciosutil.org/site`
 
 ## 3. Instrucciones de Trabajo
 
@@ -93,6 +93,14 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 
 - `docs/context/arquitectura-cde-y-frontend.md`
 - Cargar si la tarea afecta a reproductor, medios, subíndice, quiz o índice del curso.
+
+### Prácticas CDE
+
+- [Referencia vigente de prácticas](docs/context/practicas-cde.md).
+- Cargar para catálogo, CPT `practica`, Relationship, pestaña ACF, visor, narración, índice y composición con presentación/cuestionario.
+- Conservar el Relationship `cde_practicas` en la pestaña «Prácticas» de «Lección CDE» y un único visor/índice compartido entre guía y lectura. Los bloques opcionales no deben producir secciones vacías ni separadores duplicados.
+- El desarrollo de prácticas está en `/Users/aitor/.codex/worktrees/cde-practicas/espaciosutil.org`, rama `codex/cde-practicas`. No integrar en el checkout compartido, recertificar Contenidos ni instalar/actualizar skills de Paperclip sin coordinación explícita. La copia local de previsualización puede contener trabajo de otros hilos: no sobrescribirla en bloque.
+- Actualizar la referencia vigente al cambiar el comportamiento; conservar las evidencias anteriores como historial. La validación local no equivale a despliegue ni aprobación móvil.
 
 ### Navegación y layout
 

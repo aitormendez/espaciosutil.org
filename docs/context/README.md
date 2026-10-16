@@ -14,6 +14,10 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Reproductor CDE, selector vídeo/audio, subíndice jerárquico, quiz por lección e índice del curso.
   - Cargar cuando la tarea afecte a lecciones CDE, frontend React/Vidstack o estructura de contenidos del curso.
 
+- [practicas-cde.md](practicas-cde.md)
+  - Estado vigente de catálogo, ficha e incrustado; datos ACF, voz, índice adaptable, fondo y separadores opcionales, código, pruebas y aislamiento.
+  - Cargar cuando la tarea afecte a prácticas o a su convivencia con presentación y cuestionario; distingue implementación local de integración pendiente.
+
 - `navegacion-y-layout.md`
   - Contextos ES/CDE, color de fondo por sección, contrato Barba, estado activo del menú y estilos por contexto.
   - Cargar cuando la tarea afecte a cabecera, navegación, transiciones o layout global.

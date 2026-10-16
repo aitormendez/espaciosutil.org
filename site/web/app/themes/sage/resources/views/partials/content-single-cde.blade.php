@@ -84,7 +84,7 @@
         </div>
       </div>
 
-      @includeIf('partials.lesson-practicas')
+      @include('partials.lesson-practicas')
 
       @include('partials.lesson-presentation')
 

@@ -1,0 +1,89 @@
+[
+  {
+    "clientWidth": 1761,
+    "index": {
+      "right": 255.98959350585935,
+      "width": 255.98959350585935,
+      "x": 0
+    },
+    "indexCount": 1,
+    "indexFits": "true",
+    "indexVisible": true,
+    "lesson": {
+      "right": 1328.55908203125,
+      "width": 895.9896240234375,
+      "x": 432.5694580078125
+    },
+    "main": {
+      "right": 1328.5417175292969,
+      "width": 895.9896240234375,
+      "x": 432.5520935058594
+    },
+    "mode": "guide",
+    "overflow": false,
+    "section": {
+      "right": 1761.1112060546875,
+      "width": 1761.1112060546875,
+      "x": 0
+    },
+    "viewport": 1777
+  },
+  {
+    "clientWidth": 1405,
+    "index": {
+      "right": 0,
+      "width": 0,
+      "x": 0
+    },
+    "indexCount": 1,
+    "indexFits": "false",
+    "indexVisible": false,
+    "lesson": {
+      "right": 1150.7812957763672,
+      "width": 895.9896240234375,
+      "x": 254.7916717529297
+    },
+    "main": {
+      "right": 1150.7639465332031,
+      "width": 895.9896240234375,
+      "x": 254.7743225097656
+    },
+    "mode": "reading",
+    "overflow": false,
+    "section": {
+      "right": 1405.5556640625,
+      "width": 1405.5556640625,
+      "x": 0
+    },
+    "viewport": 1422
+  },
+  {
+    "clientWidth": 1121,
+    "index": {
+      "right": 0,
+      "width": 0,
+      "x": 0
+    },
+    "indexCount": 1,
+    "indexFits": "false",
+    "indexVisible": false,
+    "lesson": {
+      "right": 1008.5590744018556,
+      "width": 895.9896240234375,
+      "x": 112.56945037841795
+    },
+    "main": {
+      "right": 1008.5417098999023,
+      "width": 895.9896240234375,
+      "x": 112.55208587646484
+    },
+    "mode": "guide",
+    "overflow": false,
+    "section": {
+      "right": 1121.1112060546875,
+      "width": 1121.1112060546875,
+      "x": 0
+    },
+    "viewport": 1137
+  }
+]

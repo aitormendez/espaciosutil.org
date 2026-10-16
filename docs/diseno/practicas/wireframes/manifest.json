@@ -1,0 +1,51 @@
+{
+  "file_id": "72ad1239-4f5c-8115-8007-a9586b063e8f",
+  "page_id": "47b82aa6-6600-8061-8008-c7758b303ef1",
+  "page": "Práctica - wireframe",
+  "boards": [
+    {
+      "name": "01-catalogo-escritorio.svg",
+      "id": "47b82aa6-6600-8061-8008-c777c2454f33"
+    },
+    {
+      "name": "02-practica-escritorio.svg",
+      "id": "47b82aa6-6600-8061-8008-c777c2b2be70"
+    },
+    {
+      "name": "03-practica-en-leccion-escritorio.svg",
+      "id": "47b82aa6-6600-8061-8008-c777c333a0e1"
+    },
+    {
+      "name": "04-catalogo-movil.svg",
+      "id": "47b82aa6-6600-8061-8008-c777e3c55754"
+    },
+    {
+      "name": "05-practica-movil.svg",
+      "id": "47b82aa6-6600-8061-8008-c777e427d599"
+    },
+    {
+      "name": "06-practica-en-leccion-movil.svg",
+      "id": "47b82aa6-6600-8061-8008-c777e4718f3b"
+    },
+    {
+      "name": "07-parrafo-1.svg",
+      "id": "47b82aa6-6600-8061-8008-c77820f759cb"
+    },
+    {
+      "name": "08-parrafo-2.svg",
+      "id": "47b82aa6-6600-8061-8008-c778214ebcab"
+    },
+    {
+      "name": "09-cabecera-1-2.svg",
+      "id": "47b82aa6-6600-8061-8008-c77821a5c874"
+    },
+    {
+      "name": "90-componentes.svg",
+      "id": "47b82aa6-6600-8061-8008-c77796c1c895"
+    },
+    {
+      "name": "91-criterios.svg",
+      "id": "47b82aa6-6600-8061-8008-c778475aaf8f"
+    }
+  ]
+}

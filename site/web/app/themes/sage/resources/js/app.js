@@ -1,5 +1,6 @@
 import initMarkComplete from './courses/mark-complete.js';
 import initPresentations from './lessons/presentation.js';
+import { initPracticeViewers } from './practices/viewer.js';
 import.meta.glob(['../images/**', '../fonts/**']);
 
 import { constelaciones, destruirConstelaciones } from './constelaciones.js';
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initPresentations();
   initCookieConsent();
   initMarkComplete();
+  initPracticeViewers();
   syncActiveMenuState();
 
   if (!document.getElementById('wpadminbar')) {
