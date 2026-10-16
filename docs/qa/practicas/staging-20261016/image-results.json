@@ -1,0 +1,14 @@
+[
+  {
+    "role": "anonymous",
+    "status": 401,
+    "private": true,
+    "sha256_verified": false
+  },
+  {
+    "role": "admin",
+    "status": 200,
+    "private": true,
+    "sha256_verified": true
+  }
+]

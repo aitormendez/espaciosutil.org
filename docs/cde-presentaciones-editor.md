@@ -1,6 +1,6 @@
 # Editor de presentaciones CDE
 
-Estado a 2026-10-15: implementado y probado en espaciosutil.test, incluido el tema de vista previa de Prácticas. Esta versión del editor no se ha desplegado en staging ni producción. Desarrollo en la rama `codex/cde-presentaciones-editor`, separada del checkout operativo de Contenidos.
+Estado a 2026-10-16: implementado y probado en espaciosutil.test y desplegado junto a prácticas en staging. [Versión, comprobaciones y reversión](infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-presentaciones-editor` se conserva; la entrega conjunta usa `codex/cde-staging-practicas-presentaciones`. Producción y el checkout operativo de Contenidos no se modifican.
 
 ## Uso
 

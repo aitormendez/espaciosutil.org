@@ -1,0 +1,171 @@
+[
+  {
+    "scenario": "11",
+    "sections": [
+      {
+        "name": "lesson-summary",
+        "empty": false,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "practice-lesson-section",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      },
+      {
+        "name": "lesson-presentation",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      },
+      {
+        "name": "lesson-quiz",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      }
+    ]
+  },
+  {
+    "scenario": "10",
+    "sections": [
+      {
+        "name": "lesson-summary",
+        "empty": false,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "practice-lesson-section",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      },
+      {
+        "name": "lesson-quiz",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      }
+    ]
+  },
+  {
+    "scenario": "01",
+    "sections": [
+      {
+        "name": "lesson-summary",
+        "empty": false,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "lesson-presentation",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      },
+      {
+        "name": "lesson-quiz",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      }
+    ]
+  },
+  {
+    "scenario": "00",
+    "sections": [
+      {
+        "name": "lesson-summary",
+        "empty": false,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "lesson-quiz",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      }
+    ]
+  },
+  {
+    "scenario": "empty",
+    "sections": [
+      {
+        "name": "lesson-summary",
+        "empty": false,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "practice-lesson-section",
+        "empty": true,
+        "hidden": false,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "lesson-presentation",
+        "empty": false,
+        "hidden": true,
+        "separator": false,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "auto"
+      },
+      {
+        "name": "lesson-quiz",
+        "empty": false,
+        "hidden": false,
+        "separator": true,
+        "top": "0px",
+        "bottom": "0px",
+        "width": "1200px"
+      }
+    ]
+  }
+]

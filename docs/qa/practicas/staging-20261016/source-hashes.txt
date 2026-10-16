@@ -1,0 +1,6 @@
+e53bff289668ae390f2dc02c5d509ef0db8f2bf05931aadd4eb4f4aa65c866fb  web/app/mu-plugins/cde-practicas/catalog.php
+1f108b0a4038ca7019659e1ae3d2e3ed3b5bfa92d8e539bb305e346775650976  web/app/mu-plugins/cde-practicas/guide.php
+845935e54e9838608490098f5a59820f5b9a1a8dcc52583bbb85f18061ccfe4c  web/app/mu-plugins/cde-presentations/editor.php
+f4cec35c17176961c7a262d284854d2430318ac439f45866d7dc05bc5c0951e3  web/app/mu-plugins/cde-presentations/service.php
+90079c8b0c81d97a6692a2a2712bf3384b690ec6c3c4bbf20fd25b6cc34c3466  web/app/themes/sage/resources/views/partials/content-single-cde.blade.php
+072f82b095a0123a4bee1ccde3e2aecaa1e7e6dfe64b315b45fd15dfd150b122  web/app/themes/sage/public/build/manifest.json

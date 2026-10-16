@@ -1,12 +1,12 @@
 # Prácticas CDE: referencia de implementación
 
-Actualizado: 2026-10-16. Estado: implementación web de escritorio validada en la previsualización local y considerada funcional por Aitor. Sigue en la rama aislada `codex/cde-practicas`; no implica integración, despliegue ni aprobación del diseño móvil. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
+Actualizado: 2026-10-16. Estado: implementación web de escritorio validada en local y desplegada junto a presentaciones en staging desde `codex/cde-staging-practicas-presentaciones`. Véase [versión, pruebas y reversión](../infraestructura/staging-practicas-presentaciones-2026-10-16.md). La rama original `codex/cde-practicas` se conserva; main, producción y el diseño móvil siguen pendientes de integración o aprobación. Esta es la referencia del comportamiento vigente; los informes anteriores conservan el historial y las evidencias de cada iteración.
 
 ## Alcance y decisiones
 
 Una práctica es un contenido reutilizable del curso: instrucciones, meditaciones u otros procedimientos que el alumno puede consultar desde el catálogo, desde su ficha individual o dentro de las lecciones relacionadas. El nombre público y técnico acordado es «Práctica» / `practica`, aunque una fuente conserve «Ejercicio práctico» y su código editorial.
 
-- Catálogo en `/practicas/`, con búsqueda y filtro por serie de las lecciones asociadas. La serie no clasifica la práctica: una misma práctica puede aparecer en varias series.
+- Catálogo en `/practicas/`, con búsqueda y filtro por serie de las lecciones asociadas. La serie no clasifica la práctica: una misma práctica puede aparecer en varias series. El filtro contempla los términos de la lección y los heredados de sus lecciones padre, incluyendo los bloques descendientes de la serie, igual que el índice del curso.
 - Ficha en `/practicas/<slug>/` e incrustado en la lección, con el mismo parcial Blade y controlador de visor.
 - Una práctica admite cero, una o varias lecciones relacionadas. Cada lección se muestra como un único enlace con su título, sin controles duplicados.
 - El contexto público son las lecciones relacionadas. No se añade una referencia al texto fuente ni una taxonomía de clasificación de prácticas en esta fase.
@@ -93,7 +93,7 @@ Las rutas siguientes son relativas a la raíz del repositorio. En las filas del 
 | Interacción del visor | `resources/js/practices/viewer.js` |
 | Estilos | `resources/css/layouts/practices.css`, `lesson-separators.css` |
 | Plan y generación de voz | `site/scripts/practice-audio-plan.php`, `scripts/generate-practice-audio.py` |
-| Pruebas PHP | `site/tests/cde-practicas-integration.php`, `site/tests/cde-practicas-viewer.php` |
+| Pruebas PHP | `site/tests/cde-practicas-integration.php`, `site/tests/cde-practicas-viewer.php`, `site/tests/cde-practicas-series.php` |
 | Pruebas de generación | `scripts/test_generate_practice_audio.py` |
 | Recorridos de navegador | `site/tests/cde-practicas-browser.js`, `cde-practicas-adjustments-browser.js`, `cde-practicas-lesson-browser.js` |
 | Combinaciones de secciones | `site/tests/lesson-separators-browser.js` |
@@ -119,10 +119,10 @@ La copia de previsualización contiene también trabajo de presentaciones de otr
 
 La última revisión del incrustado usó la práctica local 2998 en «Qué es El libro de Urantia» (2389), relación que ya había asignado el usuario. [Abrir la previsualización de esa lección](http://espaciosutil.test/lecciones-del-cde/urantia/que-es-el-libro-de-urantia/?cde_practicas_preview=1#lesson-practices-2389). Es una ubicación de diseño, no su procedencia definitiva. La relación temporal con 2967 quedó vacía, la entrada incompleta 3000 está en la papelera y la fixture 2999 quedó sin relación; no restaurarlas automáticamente. Verificar el estado vivo antes de una nueva preparación o retirada.
 
-## Integración pendiente y límites operativos
+## Integración en staging y límites pendientes
 
-No integrar esta rama ni modificar el checkout operativo de Contenidos, su certificado, catálogo de skills o configuración de Paperclip sin coordinación posterior. Los documentos `docs/cde-*.md` y otros archivos del flujo forman parte de las huellas certificadas: incluso una edición sin commit puede invalidar una lección en curso. Recertificar el checkout no migra automáticamente las lecciones vinculadas a una versión anterior.
+La integración web en staging fue autorizada y completada el 2026-10-16. No promoverla a producción ni modificar el checkout operativo de Contenidos, su certificado, catálogo de skills o configuración de Paperclip sin coordinación posterior. Los documentos `docs/cde-*.md` y otros archivos del flujo forman parte de las huellas certificadas: incluso una edición sin commit puede invalidar una lección en curso. Recertificar el checkout no migra automáticamente las lecciones vinculadas a una versión anterior.
 
 Esta actualización documental no cambia motor, voz, skills ni configuración operativa. La preparación de inventario y su skill candidata están descritas en [implementación e integración diferida](../practicas-cde-implementacion.md); no se consideran instaladas por existir en una rama.
 
-Antes de instalar: revisar divergencias de ambas ramas, reconciliar inventario y asociaciones, validar en staging con sus versiones de WordPress/ACF/PMPro y permisos reales, excluir prácticas y audio de cachés externas, preparar audio para los IDs del destino, regenerar enlaces permanentes una sola vez y añadir la navegación desde WordPress. Mantener separadas integración web, certificación del motor e instalación de skills. Quedan pendientes la conexión remota NocoDB, la API para apps y el diseño móvil.
+Antes de promover a otro entorno: revisar divergencias, reconciliar inventario y asociaciones y validar versiones, permisos y cachés del destino. Staging ya dispone del código conjunto, audio privado persistente, reglas de enlaces y navegación; no reutilizar sus IDs automáticamente en producción. Mantener separadas integración web, certificación del motor e instalación de skills. Quedan pendientes la conexión remota NocoDB, la API para apps y el diseño móvil.

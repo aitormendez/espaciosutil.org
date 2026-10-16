@@ -1,0 +1,33 @@
+{
+  "slides": 15,
+  "initial": "1 / 15",
+  "slideNavigation": true,
+  "expandZoomClose": true,
+  "audioCurrentAndNext": true,
+  "borders": [
+    {
+      "type": "summary",
+      "before": "0px",
+      "bottom": "0px",
+      "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "type": "practice",
+      "before": "1px",
+      "bottom": "0px",
+      "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "type": "presentation",
+      "before": "1px",
+      "bottom": "0px",
+      "bg": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "type": "lesson-quiz",
+      "before": "1px",
+      "bottom": "0px",
+      "bg": "rgba(0, 0, 0, 0)"
+    }
+  ]
+}

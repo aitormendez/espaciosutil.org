@@ -1,0 +1,50 @@
+[
+  {
+    "path": "/?cde_practica_audio=1&practice=2998&screen=0&revision=302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448",
+    "role": "anonymous",
+    "status": 403,
+    "private": true
+  },
+  {
+    "path": "/?cde_practica_audio=1&practice=2998&screen=0&revision=302831ff6f73eb67fffd841b9f0fe8526f91ead30de5ed2cbbbb6de681887448",
+    "role": "member",
+    "status": 200,
+    "private": true
+  },
+  {
+    "path": "/wp/wp-admin/admin-post.php?action=cde_presentation&lesson=2389&kind=manifest",
+    "role": "anonymous",
+    "status": 401,
+    "private": true
+  },
+  {
+    "path": "/wp/wp-admin/admin-post.php?action=cde_presentation&lesson=2389&kind=manifest",
+    "role": "admin",
+    "status": 200,
+    "private": true
+  },
+  {
+    "path": "/wp-json/wp/v2/practicas",
+    "role": "anonymous",
+    "status": 401,
+    "private": false
+  },
+  {
+    "path": "/practicas/",
+    "role": "member",
+    "status": 200,
+    "private": true
+  },
+  {
+    "path": "/practicas/sentir-el-suelo-prueba-local/",
+    "role": "member",
+    "status": 200,
+    "private": true
+  },
+  {
+    "path": "/",
+    "role": "anonymous",
+    "status": 200,
+    "private": false
+  }
+]

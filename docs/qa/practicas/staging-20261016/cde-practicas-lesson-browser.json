@@ -1,0 +1,164 @@
+{
+  "url": "https://stage.espaciosutil.org/lecciones-del-cde/urantia/que-es-el-libro-de-urantia/",
+  "measurements": [
+    {
+      "width": 1920,
+      "guide": {
+        "section": {
+          "x": 0,
+          "width": 1905,
+          "right": 1905
+        },
+        "main": {
+          "x": 504.5,
+          "width": 896,
+          "right": 1400.5
+        },
+        "lesson": {
+          "x": 504.5,
+          "width": 896,
+          "right": 1400.5
+        },
+        "index": {
+          "x": 0,
+          "width": 256,
+          "right": 256
+        },
+        "visible": true,
+        "viewport": 1905,
+        "overflow": false
+      },
+      "reading": {
+        "section": {
+          "x": 0,
+          "width": 1905,
+          "right": 1905
+        },
+        "main": {
+          "x": 504.5,
+          "width": 896,
+          "right": 1400.5
+        },
+        "lesson": {
+          "x": 504.5,
+          "width": 896,
+          "right": 1400.5
+        },
+        "index": {
+          "x": 0,
+          "width": 256,
+          "right": 256
+        },
+        "visible": true,
+        "viewport": 1905,
+        "overflow": false
+      }
+    },
+    {
+      "width": 1440,
+      "guide": {
+        "section": {
+          "x": 0,
+          "width": 1425,
+          "right": 1425
+        },
+        "main": {
+          "x": 264.5,
+          "width": 896,
+          "right": 1160.5
+        },
+        "lesson": {
+          "x": 264.5,
+          "width": 896,
+          "right": 1160.5
+        },
+        "index": {
+          "x": 0,
+          "width": 0,
+          "right": 0
+        },
+        "visible": false,
+        "viewport": 1425,
+        "overflow": false
+      },
+      "reading": {
+        "section": {
+          "x": 0,
+          "width": 1425,
+          "right": 1425
+        },
+        "main": {
+          "x": 264.5,
+          "width": 896,
+          "right": 1160.5
+        },
+        "lesson": {
+          "x": 264.5,
+          "width": 896,
+          "right": 1160.5
+        },
+        "index": {
+          "x": 0,
+          "width": 0,
+          "right": 0
+        },
+        "visible": false,
+        "viewport": 1425,
+        "overflow": false
+      }
+    },
+    {
+      "width": 1024,
+      "guide": {
+        "section": {
+          "x": 0,
+          "width": 1009,
+          "right": 1009
+        },
+        "main": {
+          "x": 56.5,
+          "width": 896,
+          "right": 952.5
+        },
+        "lesson": {
+          "x": 56.5,
+          "width": 896,
+          "right": 952.5
+        },
+        "index": {
+          "x": 0,
+          "width": 0,
+          "right": 0
+        },
+        "visible": false,
+        "viewport": 1009,
+        "overflow": false
+      },
+      "reading": {
+        "section": {
+          "x": 0,
+          "width": 1009,
+          "right": 1009
+        },
+        "main": {
+          "x": 56.5,
+          "width": 896,
+          "right": 952.5
+        },
+        "lesson": {
+          "x": 56.5,
+          "width": 896,
+          "right": 952.5
+        },
+        "index": {
+          "x": 0,
+          "width": 0,
+          "right": 0
+        },
+        "visible": false,
+        "viewport": 1009,
+        "overflow": false
+      }
+    }
+  ]
+}
