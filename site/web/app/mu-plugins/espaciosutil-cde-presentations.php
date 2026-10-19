@@ -6,8 +6,8 @@
  */
 declare(strict_types=1);
 
-// Piloto aislado. Producción requiere una activación operativa explícita posterior.
-if (! defined('WP_ENV') || ! in_array(WP_ENV, ['staging', 'development'], true)) {
+// Activación de producción autorizada junto a Prácticas; conserva el acceso de la lección.
+if (! defined('WP_ENV') || ! in_array(WP_ENV, ['staging', 'development', 'production'], true)) {
     return;
 }
 require_once __DIR__.'/cde-presentations/package.php';
