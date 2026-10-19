@@ -31,10 +31,10 @@
     - wp_core_is_installed.rc == 0
     - "'sage' in wp_active_themes.stdout_lines"
 
-- name: Create private presentation storage for staging pilot
+- name: Create persistent private presentation storage
   file:
     path: "{{ project_root }}/shared/cde-presentations"
     state: directory
     mode: '0750'
     group: "{{ web_group }}"
-  when: env == 'staging'
+  when: env in ['staging', 'production']
