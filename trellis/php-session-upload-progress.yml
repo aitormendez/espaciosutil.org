@@ -1,0 +1,126 @@
+---
+- name: Desactivar el progreso de subida de sesiones PHP
+  hosts: "{{ env }}"
+  remote_user: admin
+  become: true
+  gather_facts: false
+  vars:
+    ansible_become_pass: "{% for user in vault_users | default([]) if user.name == 'admin' %}{{ user.password | default('') }}{% endfor %}"
+    php_upload_progress_backup: /var/backups/php-upload-progress-20261023
+  tasks:
+    - name: Limitar destino y version
+      ansible.builtin.assert:
+        that:
+          - env in ['production', 'staging']
+          - inventory_hostname in ['134.209.21.17', '138.68.135.185']
+          - php_version == '8.4'
+
+    - name: Validar configuracion inicial
+      ansible.builtin.command: /usr/sbin/php-fpm8.4 -t
+      changed_when: false
+
+    - name: Crear respaldo privado
+      ansible.builtin.file:
+        path: "{{ php_upload_progress_backup }}"
+        state: directory
+        mode: '0700'
+
+    - name: Conservar php.ini inicial sin sobrescribir
+      ansible.builtin.copy:
+        src: /etc/php/8.4/fpm/php.ini
+        dest: "{{ php_upload_progress_backup }}/php.ini.before"
+        remote_src: true
+        force: false
+        mode: '0600'
+
+    - name: Desactivar progreso de subida de sesiones
+      ansible.builtin.lineinfile:
+        path: /etc/php/8.4/fpm/php.ini
+        regexp: '^\s*session\.upload_progress\.enabled\s*='
+        insertafter: '^session\.cookie_secure\s*='
+        line: 'session.upload_progress.enabled = Off'
+      register: php_upload_progress_setting
+
+    - name: Validar configuracion modificada
+      block:
+        - name: Comprobar sintaxis FPM
+          ansible.builtin.command: /usr/sbin/php-fpm8.4 -t
+          changed_when: false
+      rescue:
+        - name: Restaurar php.ini si falla la validacion
+          ansible.builtin.copy:
+            src: "{{ php_upload_progress_backup }}/php.ini.before"
+            dest: /etc/php/8.4/fpm/php.ini
+            remote_src: true
+            mode: '0644'
+        - name: Detener operacion sin reiniciar
+          ansible.builtin.fail:
+            msg: La configuracion inicial ha sido restaurada tras fallar la validacion.
+
+    - name: Reiniciar FPM para reemplazar todos sus procesos
+      ansible.builtin.systemd_service:
+        name: php8.4-fpm
+        state: restarted
+
+    - name: Comprobar servicio activo
+      ansible.builtin.command: systemctl is-active php8.4-fpm
+      register: php_upload_progress_service
+      changed_when: false
+      failed_when: php_upload_progress_service.stdout != 'active'
+
+    - name: Comprobar los pools mediante FastCGI local
+      block:
+        - name: Crear sonda temporal fuera del directorio publico
+          ansible.builtin.tempfile:
+            state: file
+            path: /srv/www
+            prefix: php2shell-check-
+            suffix: .php
+          register: php2shell_probe
+
+        - name: Escribir sonda sin datos sensibles
+          ansible.builtin.copy:
+            dest: "{{ php2shell_probe.path }}"
+            mode: '0644'
+            content: |
+              <?php
+              header('Content-Type: application/json');
+              $required = ['curl', 'mbstring', 'intl', 'mysqli', 'gd', 'imagick', 'memcached', 'zip'];
+              $missing = array_values(array_filter($required, fn($e) => !extension_loaded($e)));
+              echo json_encode(['version' => PHP_VERSION, 'sapi' => PHP_SAPI, 'upload_progress_enabled' => (bool) ini_get('session.upload_progress.enabled'), 'missing_extensions' => $missing]);
+
+        - name: Consultar cada pool activo
+          ansible.builtin.command:
+            argv: [/usr/bin/cgi-fcgi, -bind, -connect, "{{ item }}"]
+          environment:
+            SCRIPT_FILENAME: "{{ php2shell_probe.path }}"
+            SCRIPT_NAME: /php2shell-check.php
+            REQUEST_METHOD: GET
+            SERVER_PROTOCOL: HTTP/1.1
+          loop: "{{ ['/var/run/php-fpm-wordpress.sock'] + (['/var/run/php-fpm-matomo.sock'] if env == 'production' else []) }}"
+          register: php2shell_pools
+          changed_when: false
+
+        - name: Exigir parche y extensiones en cada respuesta real
+          ansible.builtin.assert:
+            that:
+              - "'\"sapi\":\"fpm-fcgi\"' in item.stdout"
+              - "'\"missing_extensions\":[]' in item.stdout"
+              - "'\"upload_progress_enabled\":false' in item.stdout"
+              - "(item.stdout | regex_findall('\"version\":\"([0-9.]+)\"') | first) is ansible.builtin.version('8.4.27', '>=')"
+          loop: "{{ php2shell_pools.results }}"
+          loop_control:
+            label: "{{ item.item }}"
+
+        - name: Mostrar respuestas de los pools
+          ansible.builtin.debug:
+            msg: "{{ item.item }}: {{ item.stdout }}"
+          loop: "{{ php2shell_pools.results }}"
+          loop_control:
+            label: "{{ item.item }}"
+      always:
+        - name: Retirar sonda temporal
+          ansible.builtin.file:
+            path: "{{ php2shell_probe.path }}"
+            state: absent
+          when: php2shell_probe.path is defined

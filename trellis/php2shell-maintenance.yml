@@ -1,0 +1,171 @@
+---
+- name: Actualizar PHP 8.4 frente a PHP2Shell
+  hosts: "{{ env }}"
+  remote_user: admin
+  become: true
+  gather_facts: false
+  vars:
+    ansible_become_pass: "{% for user in vault_users | default([]) if user.name == 'admin' %}{{ user.password | default('') }}{% endfor %}"
+    php2shell_apply: false
+    php2shell_backup: /var/backups/php2shell-20261022
+  tasks:
+    - name: Limitar la operacion a los servidores autorizados
+      ansible.builtin.assert:
+        that:
+          - env in ['production', 'staging']
+          - inventory_hostname in ['134.209.21.17', '138.68.135.185']
+          - php_version == '8.4'
+
+    - name: Comprobar configuracion FPM actual
+      ansible.builtin.command: /usr/sbin/php-fpm8.4 -t
+      changed_when: false
+
+    - name: Crear directorio privado de respaldo
+      ansible.builtin.file:
+        path: "{{ php2shell_backup }}"
+        state: directory
+        mode: '0700'
+
+    - name: Respaldar configuracion sin sobrescribir la copia inicial
+      ansible.builtin.command:
+        argv: [tar, -czf, "{{ php2shell_backup }}/config-before.tar.gz", /etc/php/8.4, /etc/nginx]
+        creates: "{{ php2shell_backup }}/config-before.tar.gz"
+
+    - name: Guardar inventario inicial de paquetes
+      ansible.builtin.shell: "dpkg-query -W > {{ php2shell_backup }}/packages-before.tsv"
+      args:
+        creates: "{{ php2shell_backup }}/packages-before.tsv"
+
+    - name: Actualizar indices de paquetes
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 300
+
+    - name: Consultar candidato de PHP-FPM
+      ansible.builtin.command: apt-cache policy php8.4-fpm
+      register: php2shell_policy
+      changed_when: false
+
+    - name: Mostrar candidato
+      ansible.builtin.debug:
+        var: php2shell_policy.stdout_lines
+
+    - name: Obtener paquetes PHP instalados realmente
+      ansible.builtin.shell: "dpkg-query -W -f='${db:Status-Abbrev} ${binary:Package}\n' 'php8.4*' | awk '$1 == \"ii\" {print $2}'"
+      register: php2shell_packages
+      changed_when: false
+
+    - name: Simular actualizacion acotada
+      ansible.builtin.command:
+        argv: "{{ ['apt-get', '--simulate', '--only-upgrade', '--no-remove', 'install'] + php2shell_packages.stdout_lines }}"
+      register: php2shell_simulation
+      changed_when: false
+
+    - name: Mostrar simulacion
+      ansible.builtin.debug:
+        var: php2shell_simulation.stdout_lines
+
+    - name: Aplicar parche autorizado
+      when: php2shell_apply | bool
+      block:
+        - name: Exigir una version corregida en la rama actual
+          ansible.builtin.assert:
+            that:
+              - "(php2shell_policy.stdout | regex_findall('Candidate: ([0-9.]+)') | first) is ansible.builtin.version('8.4.27', '>=')"
+              - "'Remv ' not in php2shell_simulation.stdout"
+
+        - name: Actualizar solo PHP y sus extensiones instaladas
+          ansible.builtin.apt:
+            name: "{{ php2shell_packages.stdout_lines }}"
+            state: latest
+            only_upgrade: true
+            fail_on_autoremove: true
+            install_recommends: false
+            dpkg_options: force-confdef,force-confold
+
+        - name: Validar configuracion FPM tras actualizar
+          ansible.builtin.command: /usr/sbin/php-fpm8.4 -t
+          changed_when: false
+
+        - name: Reiniciar todos los procesos PHP-FPM
+          ansible.builtin.systemd_service:
+            name: php8.4-fpm
+            state: restarted
+
+        - name: Verificar version del ejecutable FPM
+          ansible.builtin.command: /usr/sbin/php-fpm8.4 -v
+          register: php2shell_version
+          changed_when: false
+
+        - name: Verificar servicio y proceso activo
+          ansible.builtin.command: systemctl show php8.4-fpm --property=ActiveState,MainPID,ExecMainStartTimestamp
+          register: php2shell_service
+          changed_when: false
+
+        - name: Mostrar resultado
+          ansible.builtin.debug:
+            msg:
+              version: "{{ php2shell_version.stdout_lines }}"
+              service: "{{ php2shell_service.stdout_lines }}"
+
+        - name: Exigir servicio activo y version corregida
+          ansible.builtin.assert:
+            that:
+              - "'ActiveState=active' in php2shell_service.stdout"
+              - "(php2shell_version.stdout | regex_findall('PHP ([0-9.]+)') | first) is ansible.builtin.version('8.4.27', '>=')"
+
+        - name: Comprobar los pools mediante FastCGI local
+          block:
+            - name: Crear sonda temporal fuera del directorio publico
+              ansible.builtin.tempfile:
+                state: file
+                path: /srv/www
+                prefix: php2shell-check-
+                suffix: .php
+              register: php2shell_probe
+
+            - name: Escribir sonda sin datos sensibles
+              ansible.builtin.copy:
+                dest: "{{ php2shell_probe.path }}"
+                mode: '0644'
+                content: |
+                  <?php
+                  header('Content-Type: application/json');
+                  $required = ['curl', 'mbstring', 'intl', 'mysqli', 'gd', 'imagick', 'memcached', 'zip'];
+                  $missing = array_values(array_filter($required, fn($e) => !extension_loaded($e)));
+                  echo json_encode(['version' => PHP_VERSION, 'sapi' => PHP_SAPI, 'missing_extensions' => $missing]);
+
+            - name: Consultar cada pool activo
+              ansible.builtin.command:
+                argv: [/usr/bin/cgi-fcgi, -bind, -connect, "{{ item }}"]
+              environment:
+                SCRIPT_FILENAME: "{{ php2shell_probe.path }}"
+                SCRIPT_NAME: /php2shell-check.php
+                REQUEST_METHOD: GET
+                SERVER_PROTOCOL: HTTP/1.1
+              loop: "{{ ['/var/run/php-fpm-wordpress.sock'] + (['/var/run/php-fpm-matomo.sock'] if env == 'production' else []) }}"
+              register: php2shell_pools
+              changed_when: false
+
+            - name: Exigir parche y extensiones en cada respuesta real
+              ansible.builtin.assert:
+                that:
+                  - "'\"sapi\":\"fpm-fcgi\"' in item.stdout"
+                  - "'\"missing_extensions\":[]' in item.stdout"
+                  - "(item.stdout | regex_findall('\"version\":\"([0-9.]+)\"') | first) is ansible.builtin.version('8.4.27', '>=')"
+              loop: "{{ php2shell_pools.results }}"
+              loop_control:
+                label: "{{ item.item }}"
+
+            - name: Mostrar respuestas de los pools
+              ansible.builtin.debug:
+                msg: "{{ item.item }}: {{ item.stdout }}"
+              loop: "{{ php2shell_pools.results }}"
+              loop_control:
+                label: "{{ item.item }}"
+          always:
+            - name: Retirar sonda temporal
+              ansible.builtin.file:
+                path: "{{ php2shell_probe.path }}"
+                state: absent
+              when: php2shell_probe.path is defined
