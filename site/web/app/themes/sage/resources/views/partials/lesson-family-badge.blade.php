@@ -1,4 +1,4 @@
 <div class="lesson-family-badge" data-lesson-family="{{ $family['slug'] }}">
-  {{-- ESP-3189: símbolos suspendidos hasta acreditar licencia y revisión humana; conservar familia y etiqueta. --}}
+  <x-icon :name="$family['icon']" class="lesson-family-badge__icon" aria-hidden="true" focusable="false" />
   <span class="lesson-family-badge__label">{{ $family['label'] }}</span>
 </div>

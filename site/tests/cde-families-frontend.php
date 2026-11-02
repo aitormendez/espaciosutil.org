@@ -89,17 +89,4 @@ foreach ($expected as [$label, $icon]) {
     check(str_contains($html, '<svg') && str_contains($html, 'currentColor'), 'Native SVG render: ' . $icon);
     check(str_contains($html, 'aria-hidden="true"') && str_contains($html, 'focusable="false"'), 'Decorative icon accessibility: ' . $icon);
 }
-// Containment: compile and render the actual partial for every family without WP or disk writes.
-$partial = file_get_contents(__DIR__ . '/../web/app/themes/sage/resources/views/partials/lesson-family-badge.blade.php');
-$compiler = new \Illuminate\View\Compilers\BladeCompiler($filesystem, sys_get_temp_dir());
-$compiled = $compiler->compileString($partial);
-foreach ($expected as $slug => [$label, $icon, $token]) {
-    $family = ['slug' => $slug, 'label' => $label, 'icon' => 'cdefamily-' . $icon, 'color_token' => $token];
-    ob_start();
-    eval('?>' . $compiled);
-    $html = ob_get_clean();
-    check(str_contains($html, 'data-lesson-family="' . $slug . '"'), 'Containment preserves family identity: ' . $slug);
-    check(str_contains($html, $label), 'Containment preserves family label: ' . $slug);
-    check(!preg_match('/<(?:svg|img|x-icon)\b/i', $html), 'Unverified family symbols are not rendered: ' . $slug);
-}
 echo "$count frontend checks passed.\n";

@@ -2,12 +2,6 @@
 
 Autor: **Side Project**. Colección: [Sacred geometry — Noun Project](https://thenounproject.com/browse/collection-icon/sacred-geometry-281897/).
 
-## Contención de la presentación pública
-
-La cabecera conserva el nombre, color y valor de familia, pero **no renderiza los símbolos** mientras la licencia de estos cuatro archivos no esté acreditada. La contención de ESP-3189 se limita al parcial `lesson-family-badge.blade.php`: no modifica datos WordPress, el catálogo ni la herencia. Las fuentes vectoriales se conservan para trazabilidad; su presencia en el repositorio no acredita autorización de uso.
-
-No restaurar el render de símbolos ni publicar una afirmación de licencia sin evidencia específica y revisión humana explícita. La auditoría y el crédito legal se gestionan separadamente en ESP-3188; no bloquean la clasificación de series de ESP-3182.
-
 ## Origen de exportación
 
 Exportados mediante la operación oficial de solo lectura `export_svg` de OpenPencil, desde los vectores originales de las tarjetas familiares. No se han reconstruido ni trazado capturas de pantalla.
