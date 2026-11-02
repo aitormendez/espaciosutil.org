@@ -1,0 +1,6 @@
+# Managed by staging-tailscale.yml: HTTPS from approved CDE devices only.
+interface tailscale0 {
+  saddr ({% for address in staging_cde_tailscale_clients %}{{ address }} {% endfor %}) proto tcp dport 443 ACCEPT;
+  DROP;
+}
+saddr 100.64.0.0/10 DROP;

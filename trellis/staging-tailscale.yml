@@ -1,0 +1,57 @@
+---
+# Tailscale must already be installed and joined by the owner.
+- name: Connect to staging
+  hosts: web:&staging
+  gather_facts: false
+  roles: [connection]
+- name: Configure private CDE HTTPS
+  hosts: web:&staging
+  become: true
+  tasks:
+    - name: Require the dedicated staging and two explicit device addresses
+      assert:
+        that:
+          - env == 'staging'
+          - inventory_hostname == '138.68.135.185'
+          - staging_cde_tailscale_enabled | bool
+          - staging_cde_tailscale_clients == ['100.111.59.54/32', '100.75.180.85/32']
+    - name: Block incoming VPN connections during firewall configuration
+      command: tailscale set --shields-up=true
+      changed_when: false
+    - name: Allow only HTTPS from the approved devices before generic port rules
+      template:
+        src: templates/cde-tailscale-input.conf.j2
+        dest: /etc/ferm/filter-input.d/00_cde_tailscale.conf
+        mode: '0644'
+    - name: Block IPv6 VPN access because the app uses the IPv4 host route
+      copy:
+        dest: /etc/ferm/ferm.d/cde-tailscale-ipv6.conf
+        mode: '0644'
+        content: |
+          # CDE uses only an IPv4 host route.
+          domain ip6 table filter chain INPUT interface tailscale0 DROP;
+    - name: Validate firewall syntax
+      command: ferm --noexec /etc/ferm/ferm.conf
+      changed_when: false
+    - name: Keep firewall ownership in ferm
+      command: tailscale set --netfilter-mode=off
+      changed_when: false
+    - name: Apply the private device firewall
+      service:
+        name: ferm
+        state: reloaded
+    - name: Keep Nginx private and permit the two VPN device addresses
+      template:
+        src: nginx-includes/espaciosutil.org/staging-private.conf.j2
+        dest: /etc/nginx/includes.d/espaciosutil.org/staging-private.conf
+        mode: '0644'
+    - name: Validate Nginx
+      command: nginx -t
+      changed_when: false
+    - name: Reload Nginx
+      service:
+        name: nginx
+        state: reloaded
+    - name: Advertise only the local staging host without DNS or exit-node changes
+      command: tailscale set --advertise-routes=138.68.135.185/32 --accept-dns=false --accept-routes=false --shields-up=false
+      changed_when: false

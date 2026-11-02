@@ -30,5 +30,14 @@ deploy_finalize_before:
   - "{{ playbook_dir }}/roles/deploy/hooks/finalize-before.yml"
   - "{{ playbook_dir }}/deploy-hooks/staging-install.yml"
 
-# Única ruta externa: avisos Google Play autenticados; el sitio conserva su ACL.
+# Avisos Google Play autenticados con su ruta dedicada.
 staging_cde_google_notifications: true
+
+# Acceso privado de CDE independiente de la IP publica del operador.
+staging_cde_tailscale_enabled: true
+staging_cde_tailscale_clients:
+  - 100.111.59.54/32  # Mac Studio de Aitor
+  - 100.75.180.85/32  # POCO X8 Pro
+
+# Web de demostración accesible sin VPN; WordPress conserva login y permisos.
+staging_public_access: true
