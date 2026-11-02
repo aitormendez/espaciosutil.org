@@ -22,6 +22,12 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Repetidor ACF, imágenes privadas, persistencia y sustitución de importaciones.
   - Cargar para modificar el visor o la edición de presentaciones junto a prácticas.
 
+- Familias de series CDE:
+  - [Backend y administración](cde-familias.md): taxonomía, selector humano, herencia, API y pruebas.
+  - [Automatizaciones](cde-familias-automatizaciones.md): contrato de cuatro familias, campo NocoDB `familia_serie` y condiciones de integración/activación.
+  - [Layouts actuales en OpenPencil](cde-familias-openpencil.md): ubicación de las réplicas editables, persistencia y limitación visual del editor tras guardar.
+  - Cargar cuando la tarea afecte a clasificación familiar, inventario, publicación automatizada o preparación de su identidad visual.
+
 - `navegacion-y-layout.md`
   - Contextos ES/CDE, color de fondo por sección, contrato Barba, estado activo del menú y estilos por contexto.
   - Cargar cuando la tarea afecte a cabecera, navegación, transiciones o layout global.

@@ -15,6 +15,12 @@ return [
 
     'sets' => [
 
+        'cde-family' => [
+            'path' => 'resources/images/icons/cde-families',
+            // Blade Icons splits names at the first hyphen; prefixes cannot contain one.
+            'prefix' => 'cdefamily',
+        ],
+
         'es' => [
             'path' => 'resources/images/icons/espaciosutil',
             'prefix' => 'es',

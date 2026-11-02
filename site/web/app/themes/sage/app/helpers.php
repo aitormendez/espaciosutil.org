@@ -298,7 +298,48 @@ function current_navigation_section_context(): array
 {
     $navContextData = nav_context_data();
 
-    return navigation_section_context((string) ($navContextData['primary_menu_name'] ?? 'primary_navigation'));
+    $context = navigation_section_context((string) ($navContextData['primary_menu_name'] ?? 'primary_navigation'));
+
+    // Only lesson backgrounds override the menu's persistent color, never its identity.
+    if (is_singular('cde')) {
+        $family = cde_lesson_family_presentation((int) get_queried_object_id());
+        $context['color'] = 'var(' . ($family['color_token'] ?? '--color-cde') . ')';
+    }
+
+    return $context;
+}
+
+/**
+ * Closed frontend vocabulary; backend catalogue labels intentionally remain untouched.
+ * No taxonomy queries or local inheritance rules: the MU-plugin owns resolution.
+ *
+ * @return array{slug:string,label:string,icon:string,color_token:string}|null
+ */
+function cde_lesson_family_presentation(int $postId): ?array
+{
+    if ($postId < 1 || !class_exists(\EspacioSutil\Cde\Families::class)) {
+        return null;
+    }
+
+    $resolved = \EspacioSutil\Cde\Families::resolveLesson($postId);
+    if (!is_array($resolved) || !is_string($resolved['familia_serie'] ?? null)) {
+        return null;
+    }
+
+    $families = [
+        'espirituales-esenciales' => ['Serie esencial', 'mercaba', '--color-serie-esencial'],
+        'otras-principales' => ['Serie principal', 'torus', '--color-serie-principal'],
+        'otras-espirituales' => ['Serie espiritual', 'triangle-spiral', '--color-serie-espiritual'],
+        'informacion-complementaria' => ['Serie complementaria', 'cubes', '--color-serie-complementaria'],
+    ];
+    $slug = $resolved['familia_serie'];
+    if (!isset($families[$slug])) {
+        return null;
+    }
+
+    [$label, $icon, $colorToken] = $families[$slug];
+
+    return ['slug' => $slug, 'label' => $label, 'icon' => 'cdefamily-' . $icon, 'color_token' => $colorToken];
 }
 
 /**

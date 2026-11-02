@@ -1,4 +1,4 @@
-<header class="post-header flex w-full justify-center text-center">
+<header class="post-header {{ is_singular('cde') && !empty($lesson_family) ? 'post-header--family' : '' }} flex w-full justify-center text-center">
   <div class="w-full pb-4 md:pb-24">
     @if (is_tax('revelador'))
       <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
@@ -30,6 +30,10 @@
           @endforeach
         </ol>
       </nav>
+    @endif
+
+    @if (is_singular('cde') && !empty($lesson_family))
+      @include('partials.lesson-family-badge', ['family' => $lesson_family])
     @endif
 
     <h1 class="px-4 text-center text-3xl font-thin md:mb-9 md:mt-24 md:text-6xl">{!! $title !!}</h1>

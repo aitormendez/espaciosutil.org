@@ -1,3 +1,67 @@
+/* First paint and no-JS fallback; navigation applies these same tokens through GSAP. */
+body.single-cde #tsparticles {
+  background-color: var(--color-cde);
+}
+
+body.single-cde[data-section-color="var(--color-serie-esencial)"] #tsparticles {
+  background-color: var(--color-serie-esencial);
+}
+
+body.single-cde[data-section-color="var(--color-serie-principal)"] #tsparticles {
+  background-color: var(--color-serie-principal);
+}
+
+body.single-cde[data-section-color="var(--color-serie-espiritual)"] #tsparticles {
+  background-color: var(--color-serie-espiritual);
+}
+
+body.single-cde[data-section-color="var(--color-serie-complementaria)"] #tsparticles {
+  background-color: var(--color-serie-complementaria);
+}
+
+.lesson-family-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+  margin-top: 2rem;
+  padding-inline: 1rem;
+  color: var(--color-blanco);
+}
+
+.lesson-family-badge__icon {
+  display: block;
+  width: 3.5rem;
+  height: 3.75rem;
+  flex-shrink: 0;
+}
+
+.lesson-family-badge__label {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.166667;
+}
+
+.post-header .lesson-family-badge + h1 {
+  margin-top: 1.125rem;
+  margin-bottom: 0;
+}
+
+.post-header--family > div {
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .lesson-family-badge {
+    margin-top: 3rem;
+  }
+
+  .post-header--family > div {
+    padding-bottom: 4rem;
+  }
+}
+
 .lesson-study-content .practice-lesson-section,
 .lesson-study-content .practice-viewer--embedded:not(:fullscreen),
 .lesson-study-content .practice-viewer--embedded:not(:fullscreen) .practice-viewer-main {

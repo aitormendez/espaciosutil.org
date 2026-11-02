@@ -18,6 +18,12 @@
   --color-blanco: #ffffff;
   --color-transparent: #ffffff00;
 
+  /* Familias de series CDE */
+  --color-serie-esencial: #670000;
+  --color-serie-principal: #8e0000;
+  --color-serie-espiritual: #775300;
+  --color-serie-complementaria: #6e8c01;
+
   /* Tipografías */
   --font-serif: 'CrimsonPro', serif;
   --font-sans: 'Rubik', sans-serif;

@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import { resolveSectionColor } from './sectionColor.js';
 
 const particlesContainer = document.getElementById('tsparticles');
 
@@ -188,8 +189,15 @@ function changeBgColor(color, immediate = false) {
     return;
   }
 
+  const resolvedColor = resolveSectionColor(color, (token) =>
+    getComputedStyle(document.documentElement).getPropertyValue(token),
+  );
+  if (!resolvedColor) {
+    return;
+  }
+
   const animation = {
-    backgroundColor: color,
+    backgroundColor: resolvedColor,
     overwrite: true,
   };
 

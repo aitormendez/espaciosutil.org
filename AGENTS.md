@@ -106,6 +106,12 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 - La adaptación móvil web está en la rama conjunta `codex/cde-staging-practicas-presentaciones`: controles compactos por debajo de 1024 px, índice superpuesto y contenido desplazable en pantalla completa. Validar también ficha, catálogo y escritorio al modificar el visor; las apps nativas y la aprobación visual móvil siguen pendientes.
 - Actualizar la referencia vigente al cambiar el comportamiento; conservar las evidencias anteriores como historial. La validación local no equivale a despliegue ni aprobación móvil.
 
+### Familias de series CDE
+
+- [Backend y administración de familias](docs/context/cde-familias.md)
+- [Contrato con NocoDB y automatizaciones](docs/context/cde-familias-automatizaciones.md)
+- Cargar si la tarea afecta a la clasificación familiar de series, su herencia en lecciones, reconciliación de inventario o publicación automatizada.
+
 ### Navegación y layout
 
 - `docs/context/navegacion-y-layout.md`

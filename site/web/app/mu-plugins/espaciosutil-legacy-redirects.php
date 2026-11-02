@@ -20,6 +20,8 @@ if (! function_exists('espaciosutil_legacy_redirect_destination')) {
         $redirects = [
             '/areas/un-manual-para-la-ascension' => '/series/un-manual-para-la-ascension/',
             '/noticias/satelite-de-terapia' => '/orientacion-terapeutica/',
+            '/lecciones-del-cde/urantia/la-revelacion-de-urantia/los-reveladores' => '/lecciones-del-cde/urantia/la-revelacion-de-urantia/cde-heading-cde-01-00-0-3-2/los-reveladores/',
+            '/lecciones-del-cde/urantia/la-revelacion-de-urantia/los-colaboradores-humanos' => '/lecciones-del-cde/urantia/la-revelacion-de-urantia/cde-heading-cde-01-00-0-3-3/los-colaboradores-humanos/',
         ];
 
         if (! isset($redirects[$normalizedPath])) {

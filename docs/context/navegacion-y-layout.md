@@ -14,8 +14,9 @@ Documento de referencia para navegación global, contextos ES/CDE, color de secc
 
 ## Color de fondo por sección
 
-- El color de sección se obtiene del ítem top-level activo del menú actual.
-- El color se sigue editando vía ACF en `menu_item_bg_color`.
+- Por defecto, el color de sección se obtiene del ítem top-level activo del menú actual.
+- El color del menú se sigue editando vía ACF en `menu_item_bg_color`.
+- Excepción: las lecciones `single-cde` usan el token de su familia heredada; sin familia válida usan `--color-cde`. La identidad del menú no cambia. Ver [familias CDE](cde-familias.md#presentación-de-las-familias-en-las-lecciones).
 - El helper `current_navigation_section_context()` resuelve:
   - `key`
   - `color`

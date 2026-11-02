@@ -69,6 +69,7 @@ class SingleCde extends Composer
         $lesson_subindex = $this->buildLessonSubindex();
 
         return [
+            'lesson_family' => cde_lesson_family_presentation((int) get_the_ID()),
             'is_completed' => in_array(get_the_ID(), $completed_lessons, true),
             'has_access' => $has_access,
             'lesson_presentation' => $has_access && class_exists(\EspacioSutil\Presentations\Service::class) ? \EspacioSutil\Presentations\Service::view((int) get_the_ID()) : null,
