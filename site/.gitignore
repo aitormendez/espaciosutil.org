@@ -5,6 +5,7 @@ web/app/mu-plugins/*/
 !web/app/mu-plugins/cde-mobile/
 !web/app/mu-plugins/cde-presentations/
 !web/app/mu-plugins/cde-practicas/
+!web/app/mu-plugins/cde-families/
 !web/app/plugins/espacio-sutil-blocks
 !web/app/plugins/paid-memberships-pro
 !web/app/plugins/pmpro-update-manager
@@ -50,3 +51,8 @@ wp-cli.local.yml
 
 # Narración preparada: almacenamiento privado, nunca Git.
 /private/cde-practicas-audio/
+
+# Copias locales de bases de datos y artefactos temporales (no desplegar).
+/*.sql
+/*.sql.gz
+/tmp/

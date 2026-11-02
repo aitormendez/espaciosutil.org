@@ -30,6 +30,10 @@ SKIP_ASSETS=false
 SKIP_MATOMO=false
 POSITIONAL_ARGS=()
 MATOMO_READY=false
+CHECK_ONLY=false
+
+# Share SSH timeouts and optional staging routing with WP-CLI and rsync.
+export PATH="${SCRIPT_DIR}/transport:${PATH}"
 
 WP_BIN="$(command -v wp)"
 ANSIBLE_VAULT_BIN="$(command -v ansible-vault || true)"
@@ -56,7 +60,9 @@ else
 fi
 
 usage() {
-  echo "Usage: $0 [[--skip-db] [--skip-assets] [--skip-matomo] [--local]] [ENV_FROM] [ENV_TO]"
+  echo "Usage: $0 [[--skip-db] [--skip-assets] [--skip-matomo] [--local] [--check] [--staging-interface INTERFACE]] [ENV_FROM] [ENV_TO]"
+  echo "  --check: check both connections without synchronizing data."
+  echo "  --staging-interface en1: connect to staging through a physical macOS interface."
 }
 
 trim_quotes() {
@@ -378,6 +384,18 @@ while [[ $# -gt 0 ]]; do
       SKIP_MATOMO=true
       shift
       ;;
+    --check)
+      CHECK_ONLY=true
+      shift
+      ;;
+    --staging-interface)
+      if [[ ! "${2:-}" =~ ^en[0-9]+$ ]] || [[ "$(uname -s)" != "Darwin" ]]; then
+        echo "❌  --staging-interface requires a macOS physical interface (for example en1)."
+        exit 1
+      fi
+      export SYNC_STAGING_INTERFACE="$2"
+      shift 2
+      ;;
     --local)
       LOCAL=true
       shift
@@ -436,17 +454,21 @@ elif [[ "$SKIP_MATOMO" = false ]]; then
   MATOMO_MESSAGE=" - skip ${bold}Matomo${normal} (not configured for $FROM and/or $TO)"
 fi
 
-if [ "$SKIP_DB" = true ] && [ "$SKIP_ASSETS" = true ] && { [ "$SKIP_MATOMO" = true ] || [ "$MATOMO_READY" = false ]; }; then
+if [ "$CHECK_ONLY" = false ] && [ "$SKIP_DB" = true ] && [ "$SKIP_ASSETS" = true ] && { [ "$SKIP_MATOMO" = true ] || [ "$MATOMO_READY" = false ]; }; then
   echo "Nothing to synchronize."
   exit
 fi
 
-echo
-echo "Would you really like to "
-echo "$DB_MESSAGE"
-echo "$MATOMO_MESSAGE"
-echo "$ASSETS_MESSAGE"
-read -r -p " [y/N] " response
+if [[ "$CHECK_ONLY" == true ]]; then
+  response=y
+else
+  echo
+  echo "Would you really like to "
+  echo "$DB_MESSAGE"
+  echo "$MATOMO_MESSAGE"
+  echo "$ASSETS_MESSAGE"
+  read -r -p " [y/N] " response
+fi
 
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   # Change to site directory
@@ -454,39 +476,33 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
   echo
 
   # Make sure both environments are available before we continue
-  availfrom() {
-    local AVAILFROM
+  check_environment() {
+    local env_name="$1"
+    local output
+    local status
+    local wp_args=()
 
-    if [[ "$LOCAL" = true && $FROM == "development" ]]; then
-      AVAILFROM=$(wp_cmd option get home 2>&1)
-    else
-      AVAILFROM=$(wp_cmd "@$FROM" option get home 2>&1)
+    if [[ "$LOCAL" != true || "$env_name" != "development" ]]; then
+      wp_args+=("@$env_name")
     fi
-    if [[ $AVAILFROM == *"Error"* ]]; then
-      echo "❌  Unable to connect to $FROM"
-      exit 1
+
+    echo "Checking connection to $env_name..."
+    if output=$(wp_cmd "${wp_args[@]}" option get home 2>&1); then
+      echo "✅  Able to connect to $env_name"
     else
-      echo "✅  Able to connect to $FROM"
+      status=$?
+      echo "❌  Unable to connect to $env_name (exit $status)" >&2
+      printf '%s\n' "$output" >&2
+      return "$status"
     fi
   }
-  availfrom
+  check_environment "$FROM" || exit 1
+  check_environment "$TO" || exit 1
 
-  availto() {
-    local AVAILTO
-    if [[ "$LOCAL" = true && $TO == "development" ]]; then
-      AVAILTO=$(wp_cmd option get home 2>&1)
-    else
-      AVAILTO=$(wp_cmd "@$TO" option get home 2>&1)
-    fi
-
-    if [[ $AVAILTO == *"Error"* ]]; then
-      echo "❌  Unable to connect to $TO $AVAILTO"
-      exit 1
-    else
-      echo "✅  Able to connect to $TO"
-    fi
-  }
-  availto
+  if [[ "$CHECK_ONLY" == true ]]; then
+    echo "✅  Connection checks complete. No data synchronized."
+    exit 0
+  fi
 
   if [ "$SKIP_DB" = false ]; then
     echo "Syncing WordPress database..."
@@ -506,7 +522,10 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
       wp_cmd "@$TO" db reset --yes &&
       wp_cmd "@$FROM" db export --default-character-set=utf8mb4 - | wp_cmd "@$TO" db import - &&
       wp_cmd "@$TO" search-replace "$FROMSITE" "$TOSITE" --all-tables-with-prefix
-    fi
+    fi || {
+      echo "❌  WordPress database synchronization failed." >&2
+      exit 1
+    }
   fi
 
   if [[ "$SKIP_MATOMO" = false ]]; then

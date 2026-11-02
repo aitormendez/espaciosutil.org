@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Used by sync.sh, including SSH calls made internally by WP-CLI and rsync.
+options=(-o ConnectTimeout=10 -o ConnectionAttempts=1 -o ServerAliveInterval=15 -o ServerAliveCountMax=3)
+
+if [[ -n "${SYNC_STAGING_INTERFACE:-}" ]]; then
+  if [[ "$(uname -s)" != "Darwin" || ! "$SYNC_STAGING_INTERFACE" =~ ^en[0-9]+$ ]]; then
+    echo "Invalid macOS staging interface: $SYNC_STAGING_INTERFACE" >&2
+    exit 1
+  fi
+
+  for arg in "$@"; do
+    case "$arg" in
+      stage.espaciosutil.org|*@stage.espaciosutil.org|138.68.135.185|*@138.68.135.185)
+        options+=(-o "ProxyCommand=/usr/bin/nc -b $SYNC_STAGING_INTERFACE -G 10 %h %p")
+        break
+        ;;
+    esac
+  done
+fi
+
+exec /usr/bin/ssh "${options[@]}" "$@"
