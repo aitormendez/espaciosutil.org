@@ -9,7 +9,7 @@
       <p class="mb-5 text-[0.95rem] opacity-80">Recorre las diapositivas a tu ritmo. Amplía para ver los detalles.</p>
     </header>
     <div data-presentation-home>
-      <div data-presentation-shell class="lesson-presentation-shell overflow-hidden rounded border border-white/20 bg-transparent">
+      <div data-presentation-shell class="lesson-presentation-shell group/presentation relative overflow-hidden [&:fullscreen]:bg-morado5 rounded border border-white/20 bg-transparent">
         <div class="swiper w-full aspect-video bg-transparent focus-visible:outline-2 focus-visible:outline-sol focus-visible:-outline-offset-3" tabindex="0" aria-label="Diapositivas" aria-busy="true">
           <div class="swiper-wrapper"></div>
           <div class="lesson-presentation-loading pointer-events-none absolute inset-0 z-2 grid place-items-center" data-presentation-loading role="status" aria-live="polite">
@@ -19,7 +19,7 @@
             </span>
           </div>
         </div>
-        <div class="lesson-presentation-toolbar flex items-center justify-between gap-2 p-3 max-[420px]:flex-wrap max-[420px]:p-2">
+        <div class="lesson-presentation-toolbar transition-opacity duration-200 motion-reduce:transition-none group-data-[controls=hidden]/presentation:pointer-events-none group-data-[controls=hidden]/presentation:opacity-0 flex items-center justify-between gap-2 p-3 max-[420px]:flex-wrap max-[420px]:p-2">
           <div class="flex items-center gap-1.5">
             <button type="button" class="{{ $presentationButtonClasses }}" data-presentation-prev aria-label="Diapositiva anterior" aria-keyshortcuts="ArrowLeft" title="Anterior (←)" disabled>
               <x-dynamic-component component="tabler-chevron-left" aria-hidden="true" />
@@ -42,14 +42,14 @@
             </button>
           </div>
         </div>
-        <p class="px-4 py-2 empty:hidden" data-presentation-status role="status"></p>
-        <button type="button" class="{{ $presentationButtonClasses }} mx-4 mt-2 mb-4" data-presentation-retry hidden>
+        <p class="relative z-10 bg-morado5/95 px-4 py-2 empty:hidden" data-presentation-status role="status"></p>
+        <button type="button" class="{{ $presentationButtonClasses }} relative z-10 bg-morado5! mx-4 mt-2 mb-4" data-presentation-retry hidden>
           <x-dynamic-component component="tabler-refresh" aria-hidden="true" />
           <span>Volver a intentar</span>
         </button>
       </div>
     </div>
-    <dialog class="m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-morado5 p-0 text-purple-50 backdrop:bg-morado5/95 [&_.lesson-presentation-shell]:flex [&_.lesson-presentation-shell]:h-dvh [&_.lesson-presentation-shell]:flex-col [&_.lesson-presentation-shell]:border-0 [&_.lesson-presentation-shell]:pb-[env(safe-area-inset-bottom)] [&_.swiper]:min-h-0 [&_.swiper]:flex-1 [&_.swiper]:aspect-auto" aria-label="Presentación ampliada"><div class="h-full" data-presentation-dialog-content></div></dialog>
+    <dialog class="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-morado5 p-0 text-purple-50 backdrop:bg-morado5/95 [&_.lesson-presentation-shell]:h-full [&_.lesson-presentation-shell]:w-full [&_.lesson-presentation-shell]:rounded-none [&_.lesson-presentation-shell]:border-0 [&_.swiper]:absolute! [&_.swiper]:inset-0 [&_.swiper]:h-full [&_.swiper]:w-full [&_.swiper]:aspect-auto [&_.lesson-presentation-toolbar]:absolute [&_.lesson-presentation-toolbar]:inset-x-0 [&_.lesson-presentation-toolbar]:bottom-0 [&_.lesson-presentation-toolbar]:z-10 [&_.lesson-presentation-toolbar]:bg-morado5/85 [&_.lesson-presentation-toolbar]:pb-[max(0.75rem,env(safe-area-inset-bottom))] [&_.lesson-presentation-toolbar]:pl-[max(0.75rem,env(safe-area-inset-left))] [&_.lesson-presentation-toolbar]:pr-[max(0.75rem,env(safe-area-inset-right))]" aria-label="Presentación ampliada"><div class="h-full" data-presentation-dialog-content></div></dialog>
     <noscript>Activa JavaScript para recorrer esta presentación.</noscript>
   </section>
 @endif

@@ -12,7 +12,8 @@ Consultar [Prácticas CDE](practicas-cde.md) para el CPT, la pestaña ACF, el vi
 
 - El reproductor del curso se resuelve con componentes React/JSX, no con JS imperativo en Blade.
 - El vídeo principal usa `@vidstack/react`.
-- La miniatura correcta de Bunny.net sigue el patrón `thumbnail.jpg`, no `poster.jpg`.
+- La miniatura se obtiene de los metadatos de Bunny (`thumbnailUrl` o `thumbnailFileName`): puede llamarse `thumbnail.jpg` o tener un sufijo propio. No asumir que todas las imágenes subidas usan el mismo nombre.
+- La protección local `espaciosutil-development-isolation.php` permite únicamente GET de metadatos en `https://video.bunnycdn.com/library/457097/videos/{UUID}`, sin redirecciones ni parámetros. Mantiene bloqueados el correo, los pagos y el resto de conexiones salientes. Las imágenes se descargan directamente desde el navegador; no se usa la imagen destacada de WordPress como alternativa.
 - El montaje del player se activa sobre cualquier contenedor con `data-media-props`, no solo en `single-cde`.
 - `App\View\Composers\Concerns\InteractsWithCdeMedia` centraliza la preparación de `featured_media` y capítulos para reutilizarla entre vistas.
 

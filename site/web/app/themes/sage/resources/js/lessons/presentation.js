@@ -19,6 +19,7 @@ export default function initPresentations(scope = document) {
     const config = JSON.parse(root.dataset.lessonPresentation);
     const shell = root.querySelector('[data-presentation-shell]');
     const home = root.querySelector('[data-presentation-home]');
+    const toolbar = root.querySelector('.lesson-presentation-toolbar');
     const dialog = root.querySelector('dialog');
     const target = root.querySelector('.swiper');
     const wrapper = root.querySelector('.swiper-wrapper');
@@ -35,6 +36,40 @@ export default function initPresentations(scope = document) {
     const retry = root.querySelector('[data-presentation-retry]');
     const zoom = root.querySelector('[data-presentation-zoom]');
     let swiper, slides = [], reloaded = false, lastFocus, loading = false, zoomFactor = 1;
+
+    let controlsTimer, keyboardControls = false, nativeFullscreen = false;
+
+    function hideControls() {
+      clearTimeout(controlsTimer);
+      if (!dialog.open || failed || (keyboardControls && toolbar.contains(document.activeElement))) return;
+      if (toolbar.contains(document.activeElement)) target.focus({ preventScroll: true });
+      shell.dataset.controls = 'hidden';
+      toolbar.inert = true;
+      toolbar.setAttribute('aria-hidden', 'true');
+    }
+    function showControls() {
+      clearTimeout(controlsTimer);
+      delete shell.dataset.controls;
+      toolbar.inert = false;
+      toolbar.removeAttribute('aria-hidden');
+      if (dialog.open) controlsTimer = setTimeout(hideControls, 3000);
+    }
+    shell.addEventListener('pointerdown', () => { keyboardControls = false; }, options);
+    target.addEventListener('pointermove', (event) => {
+      if (dialog.open && event.pointerType === 'mouse' && event.buttons === 0) showControls();
+    }, options);
+    toolbar.addEventListener('pointerdown', showControls, options);
+    toolbar.addEventListener('click', showControls, options);
+    dialog.addEventListener('keydown', () => { keyboardControls = true; showControls(); }, options);
+    dialog.addEventListener('focusin', () => { if (keyboardControls) showControls(); }, options);
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement === shell) nativeFullscreen = true;
+      else if (nativeFullscreen) {
+        nativeFullscreen = false;
+        if (dialog.open) dialog.close();
+      }
+      swiper?.update();
+    }, options);
 
     function updateLoading() {
       if (abort.signal.aborted) return;
@@ -95,6 +130,7 @@ export default function initPresentations(scope = document) {
       updateLoading();
       status.textContent = message;
       retry.hidden = false;
+      showControls();
     }
     async function load(index = 0) {
       if (loading || abort.signal.aborted) return;
@@ -131,7 +167,7 @@ export default function initPresentations(scope = document) {
           modules: [A11y, Zoom], speed: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220,
           initialSlide: Math.min(index, slides.length - 1), zoom: { maxRatio: 3, toggle: false },
           a11y: { enabled: true, slideLabelMessage: 'Diapositiva {{index}} de {{slidesLength}}' },
-          on: { slideChange() { if (swiper) { swiper.zoom.out(); controls(); } }, zoomChange(_, scale) { zoomFactor = scale; if (swiper) { updateZoomControl(scale); loadNeighbours(); } } },
+          on: { tap() { if (dialog.open) showControls(); }, sliderFirstMove() { if (dialog.open) hideControls(); }, slideChange() { if (swiper) { swiper.zoom.out(); controls(); } }, zoomChange(_, scale) { zoomFactor = scale; if (swiper) { updateZoomControl(scale); loadNeighbours(); } } },
         });
         if (abort.signal.aborted) { swiper.destroy(); return; }
         status.textContent = ''; expand.disabled = false; controls();
@@ -145,10 +181,25 @@ export default function initPresentations(scope = document) {
     expand.addEventListener('click', () => {
       lastFocus = document.activeElement;
       dialog.showModal(); dialog.querySelector('[data-presentation-dialog-content]').append(shell);
-      expand.hidden = true; close.hidden = false; swiper.update(); controls(); close.focus();
+      expand.hidden = true; close.hidden = false; swiper.update(); controls();
+      keyboardControls = false;
+      target.focus({ preventScroll: true });
+      showControls();
+      // Android puede ocultar también las barras del navegador. El diálogo cubre el viewport si no se admite.
+      if (shell.requestFullscreen && !document.fullscreenElement) {
+        shell.requestFullscreen({ navigationUI: 'hide' }).then(() => {
+          if (!dialog.open || abort.signal.aborted) {
+            if (document.fullscreenElement === shell) document.exitFullscreen().catch(() => {});
+          } else { nativeFullscreen = true; swiper?.update(); }
+        }).catch(() => {});
+      }
     }, options);
     close.addEventListener('click', () => dialog.close(), options);
     dialog.addEventListener('close', () => {
+      clearTimeout(controlsTimer);
+      nativeFullscreen = false;
+      if (document.fullscreenElement === shell) document.exitFullscreen().catch(() => {});
+      showControls();
       swiper?.zoom.out(); home.append(shell); expand.hidden = false; close.hidden = true;
       swiper?.update(); controls(); if (lastFocus?.isConnected) lastFocus.focus();
     }, options);
@@ -167,7 +218,7 @@ export default function initPresentations(scope = document) {
       if (!button.disabled) button.click();
     }, options);
     target.addEventListener('dblclick', () => { if (dialog.open) { swiper.zoom.toggle(); controls(); } }, options);
-    instances.set(root, () => { abort.abort(); if (dialog.open) dialog.close(); swiper?.destroy(true, true); });
+    instances.set(root, () => { clearTimeout(controlsTimer); abort.abort(); if (document.fullscreenElement === shell) document.exitFullscreen().catch(() => {}); if (dialog.open) dialog.close(); swiper?.destroy(true, true); });
     load();
   });
 }
