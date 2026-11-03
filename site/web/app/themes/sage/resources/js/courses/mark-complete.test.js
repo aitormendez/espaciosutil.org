@@ -32,6 +32,35 @@ async function fixture() {
 const reply = (completed) => ({ ok: true, json: async () => ({ success: true, completed_lessons: completed }) });
 const tick = () => new Promise((resolve) => setImmediate(resolve));
 
+test('el índice usa estado semántico CSS y conserva las utilidades de otros botones', async () => {
+  const { buttons, module } = await fixture();
+  const [header, index] = buttons;
+  index.classList.toggle('course-index-completion', true);
+  // Old cached markup is normalized too, without competing color/display rules.
+  index.classList.toggle('text-morado1', true);
+  index.querySelector('.icon-show').classList.toggle('hidden', true);
+  globalThis.fetch = async (_url, options) => reply(JSON.parse(options.body).action === 'complete' ? [7] : []);
+  module.default();
+  const checkIndexPresentation = (completed) => {
+    assert.equal(index.classList.contains('completed'), completed);
+    assert.equal(index.attributes['aria-pressed'], String(completed));
+    for (const name of ['text-sol', 'text-morado1', 'text-gris2']) assert.equal(index.classList.contains(name), false);
+    assert.equal(index.querySelector('.icon-show').classList.contains('hidden'), false);
+    assert.equal(index.querySelector('.icon-hide').classList.contains('hidden'), false);
+  };
+  checkIndexPresentation(false);
+  assert.equal(header.classList.contains('text-gris2'), true);
+  assert.equal(header.querySelector('.icon-show').classList.contains('hidden'), true);
+  assert.equal(await module.setLessonCompleted(7, true), true);
+  checkIndexPresentation(true);
+  assert.equal(header.classList.contains('text-sol'), true);
+  assert.equal(header.querySelector('.icon-hide').classList.contains('hidden'), true);
+  assert.equal(await module.setLessonCompleted(7, false), true);
+  checkIndexPresentation(false);
+  assert.equal(header.classList.contains('text-gris2'), true);
+  assert.equal(header.classList.contains('text-sol'), false);
+});
+
 test('el botón alterna, sincroniza todas las apariciones y respeta el desmarcado manual', async () => {
   const { buttons, module } = await fixture();
   const actions = [];

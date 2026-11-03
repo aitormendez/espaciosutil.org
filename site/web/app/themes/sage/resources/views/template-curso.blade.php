@@ -10,71 +10,29 @@
       the_post();
       $hasEditorContent = trim((string) get_the_content()) !== '';
     @endphp
-    @include('partials.page-header')
-
-    @if ($hasEditorContent)
-      <div class="border-blanco bg-morado5/90 prose-cde flex justify-center border-t pb-12 pt-44">
-        <div class="mx-auto w-full max-w-4xl px-6 md:px-0">
-          <div class="">
-            @php
-              the_content();
-            @endphp
+    <div class="course-family-index font-sans text-blanco">
+      {{-- The existing constellation canvas remains visible through the hero;
+           the family sections below paint opaque backgrounds. --}}
+      <header class="course-index-hero pt-[4.75rem] pb-16 md:pb-0">
+        <h1 class="m-0 px-5 text-center text-[clamp(2rem,3.3vw,3.25rem)] leading-[1.2] font-light">{{ wp_strip_all_tags(wp_specialchars_decode((string) get_the_title(), ENT_QUOTES)) }}</h1>
+        @if ($hasEditorContent)
+          <div class="course-index-introduction prose-cde mx-auto my-12 max-w-4xl bg-cde p-6">
+            @php the_content(); @endphp
           </div>
+        @endif
+        <div class="course-family-grid course-index-columns mx-auto hidden w-full max-w-[100rem] grid-cols-1 gap-7 px-[clamp(1.25rem,3.5vw,3.5rem)] md:mt-40 md:grid md:grid-cols-[minmax(10rem,0.85fr)_minmax(12rem,1fr)_minmax(0,3fr)] md:gap-x-[clamp(1.5rem,3vw,3rem)] md:pb-3 md:text-[1.375rem] md:leading-normal" aria-hidden="true">
+          <span></span>
+          <span>Series</span>
+          <span>Temas</span>
         </div>
-      </div>
-    @endif
+      </header>
 
-    <div id="contenido" class="bg-morado5/90 flex justify-center border-t border-white/30 pb-20 pt-20 font-sans">
-      <div class="mx-auto w-full max-w-4xl px-6 md:flex md:space-x-12 md:px-0">
-        <aside class="md:w-1/3">
-          <h2 class="mb-6 font-sans text-2xl">Series</h2>
-          <ul class="space-y-3">
-            @foreach ($series_cde_lessons as $series)
-              @php
-                $seriesTermId = $series['term_id'] ?? null;
-                $seriesBlocks = $series['blocks'] ?? [];
-                $seriesSlug = sanitize_title($series['name']);
-                $seriesButtonId = $seriesTermId ? 'serie-toggle-' . $seriesTermId : 'serie-toggle-' . $seriesSlug;
-                $seriesPanelId = $seriesTermId ? 'serie-panel-' . $seriesTermId : $seriesButtonId . '-panel';
-              @endphp
-              <li class="serie-accordion-item">
-                <button type="button"
-                  class="serie-accordion-toggle bg-morado2 rounded-xs text-gris5 hover:bg-blanco flex w-full items-center justify-between px-3 py-2 text-left font-semibold transition-colors"
-                  data-series-term="{{ $seriesTermId }}" aria-expanded="false" aria-controls="{{ $seriesPanelId }}"
-                  id="{{ $seriesButtonId }}">
-                  <span>{{ $series['name'] }}</span>
-                  <span class="serie-accordion-icon transition-transform duration-200">+</span>
-                </button>
-
-                <div id="{{ $seriesPanelId }}" class="serie-accordion-panel hidden" role="region"
-                  aria-labelledby="{{ $seriesButtonId }}">
-                  @if (!empty($seriesBlocks))
-                    <ul class="mt-2 space-y-2">
-                      @foreach ($seriesBlocks as $block)
-                        <li>
-                          <button type="button"
-                            class="serie-cde-button bg-morado4/80 hover:bg-morado1/80 rounded-xs text-blanco flex w-full cursor-pointer px-3 py-2 text-left transition-colors"
-                            data-post-id="{{ $block['post_id'] }}" data-block-term="{{ $block['term_id'] }}">
-                            <span>{{ $block['name'] }}</span>
-                          </button>
-                        </li>
-                      @endforeach
-                    </ul>
-                  @else
-                    <p class="rounded-xs bg-morado4/50 text-gris5 mt-2 p-3 text-sm">No hay bloques
-                      disponibles.</p>
-                  @endif
-                </div>
-              </li>
-            @endforeach
-          </ul>
-        </aside>
-        <main class="mt-12 md:mt-0 md:w-2/3">
-          <h2 id="course-topics-heading" class="mb-6 font-sans text-2xl">Temas</h2>
-          <div id="indice-ajax-container" class="course-index prose-cde">
-            <p>Selecciona un bloque de la serie para ver sus temas.</p>
-          </div>
-        </main>
+      <div id="contenido">
+        @forelse ($course_family_groups as $group)
+          @include('partials.course-family-section', ['group' => $group])
+        @empty
+          <p class="course-index-empty bg-cde px-5 py-12 text-center">No hay series disponibles.</p>
+        @endforelse
       </div>
     </div>
   @endwhile

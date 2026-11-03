@@ -2,23 +2,19 @@
   @php
     $currentLevel = isset($level) ? $level : 0;
     $isActive = property_exists($item, 'active') ? (bool) $item->active : true;
-    $rowClasses = 'course-index-row bg-blanco/5 rounded-xs flex items-start gap-2 pl-2 pr-1 py-1 text-lg/[1.4]';
-    $linkClasses = 'course-index-link flex-1 text-left';
-    $inactiveRowClasses =
-        'course-index-inactive bg-blanco/5 rounded-xs flex items-start gap-2 pl-2 pr-1 py-1 text-bg-blanco text-lg/[1.4]';
     $hasChildren = !empty($item->children);
   @endphp
-  <ul class="!mb-0 !pl-0">
-    <li class="course-index-item list-none" data-has-children="{{ $hasChildren ? 'true' : 'false' }}">
+  <ul class="course-index-list">
+    <li class="course-index-item" data-has-children="{{ $hasChildren ? 'true' : 'false' }}">
       @php
         $showCompletionIcon = is_user_logged_in();
         $isCompleted = $showCompletionIcon && in_array($item->id, $completed_lessons ?? []);
       @endphp
 
       @if ($isActive)
-        <div class="{{ $rowClasses }}">
-          <a href="{{ $item->permalink }}" class="{{ $linkClasses }}">
-            <span class="course-index-label block">{{ $item->title }}</span>
+        <div class="course-index-row">
+          <a href="{{ $item->permalink }}" class="course-index-link">
+            <span class="course-index-label">{{ $item->title }}</span>
           </a>
 
           @if ($showCompletionIcon)
@@ -27,31 +23,31 @@
               aria-pressed="{{ $isCompleted ? 'true' : 'false' }}"
               aria-label="{{ $isCompleted ? 'Marcar como no vista' : 'Marcar como vista' }}: {{ $item->title }}"
               title="{{ $isCompleted ? 'Marcar como no vista' : 'Marcar como vista' }}"
-              class="course-index-completion {{ $isCompleted ? 'completed text-sol' : 'text-morado1' }} inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-sm transition-colors hover:bg-blanco/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sol disabled:cursor-wait disabled:opacity-50">
-              <x-coolicon-show aria-hidden="true" class="icon-show {{ $isCompleted ? '' : 'hidden' }} h-6 w-6" />
-              <x-coolicon-hide aria-hidden="true" class="icon-hide {{ $isCompleted ? 'hidden' : '' }} h-6 w-6" />
+              class="course-index-completion {{ $isCompleted ? 'completed' : '' }}">
+              <x-coolicon-show aria-hidden="true" class="icon-show" />
+              <x-coolicon-hide aria-hidden="true" class="icon-hide" />
             </button>
           @else
-            <span class="course-index-placeholder-icon block h-6 w-6"></span>
+            <span class="course-index-placeholder-icon"></span>
           @endif
 
           @if ($hasChildren)
-            <button type="button" class="course-index-toggle rounded-xs bg-blanco/10 h-7 w-7 text-sm"
+            <button type="button" class="course-index-toggle"
               data-toggle-children="true" aria-expanded="true" aria-label="Mostrar u ocultar sublecciones">
-              <span class="course-index-chevron font-bold leading-none">-</span>
+              <span class="course-index-chevron">-</span>
             </button>
           @else
-            <span class="course-index-placeholder-icon block h-7 w-7" aria-hidden="true"></span>
+            <span class="course-index-placeholder-icon course-index-placeholder-icon--toggle" aria-hidden="true"></span>
           @endif
         </div>
       @else
-        <div class="{{ $inactiveRowClasses }}">
-          <span class="course-index-label flex-1">{{ $item->title }}</span>
-          <span class="course-index-placeholder-icon block h-6 w-6"></span>
+        <div class="course-index-inactive">
+          <span class="course-index-label">{{ $item->title }}</span>
+          <span class="course-index-placeholder-icon"></span>
           @if ($hasChildren)
-            <button type="button" class="course-index-toggle rounded-xs bg-blanco/10 h-7 w-7 text-sm"
+            <button type="button" class="course-index-toggle"
               data-toggle-children="true" aria-expanded="true" aria-label="Mostrar u ocultar sublecciones">
-              <span class="course-index-chevron font-bold leading-none">-</span>
+              <span class="course-index-chevron">-</span>
             </button>
           @endif
         </div>
@@ -59,7 +55,7 @@
 
       @if ($hasChildren)
         <div class="course-index-children-wrapper" data-children-wrapper>
-          <ul class="course-index-children !mb-0 space-y-2 border-l border-gray-200 pl-6">
+          <ul class="course-index-children">
             @include('partials.course-index-item', [
                 'items' => $item->children,
                 'level' => $currentLevel + 1,

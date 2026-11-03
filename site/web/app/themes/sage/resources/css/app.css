@@ -28,6 +28,7 @@
 @import './layouts/niveles-membresia.css';
 @import './layouts/quiz.css';
 @import './layouts/lesson.css';
+@import './layouts/course-index.css';
 
 .toc {
   overflow-y: auto;

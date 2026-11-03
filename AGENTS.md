@@ -20,6 +20,18 @@
 
 ## 3. Instrucciones de Trabajo
 
+### Estilos de interfaz: Tailwind por defecto
+
+**Regla obligatoria para todo trabajo de UI del proyecto, no sólo CDE:** priorizar utilidades Tailwind directamente en las plantillas y componentes para layout, espaciado, tipografía, adaptación responsive y estados. No crear hojas CSS paralelas para lo que puede expresarse con utilidades por mera preferencia del agente.
+
+- Usar nombres de clases completos y detectables por la compilación; no construirlos concatenando fragmentos dinámicos. Se permiten propiedades CSS personalizadas para valores procedentes de datos, consumidas por utilidades completas.
+- No duplicar la misma propiedad entre utilidades y CSS separado. No usar `@apply` simplemente para ocultar las utilidades fuera del HTML y eludir esta regla.
+- **Excepción aprobada del índice CDE:** mantener CSS separado y centralizado para el contenido de **Temas cargado mediante AJAX**: árbol de lecciones, filas, niveles anidados, controles y estados. Es una decisión de mantenimiento, no una incapacidad técnica de Tailwind.
+- Esa excepción **no incluye la estructura estática** del índice: hero, bandas familiares, listas de series/bloques, encabezados ni layout de los contenedores de paneles; todo ello usa utilidades Tailwind.
+- Conservar los estilos globales, tokens y estilos de terceros existentes: esta norma no ordena una migración masiva ajena al encargo. Cualquier otra excepción requiere justificación y documentación explícitas.
+
+Leer [las convenciones de estilos y el alcance de la excepción AJAX](docs/context/arquitectura-cde-y-frontend.md#convenciones-de-estilos-para-todo-trabajo-de-interfaz) antes de crear o modificar una interfaz.
+
 ### Idioma de respuesta
 
 Siempre debes responder en español.
@@ -89,10 +101,10 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 
 - `docs/context/README.md`
 
-### Arquitectura CDE y frontend
+### Convenciones de UI y arquitectura CDE
 
-- `docs/context/arquitectura-cde-y-frontend.md`
-- Cargar si la tarea afecta a reproductor, medios, subíndice, quiz o índice del curso.
+- [Convenciones de estilos para todo trabajo de interfaz](docs/context/arquitectura-cde-y-frontend.md#convenciones-de-estilos-para-todo-trabajo-de-interfaz): cargar para **cualquier trabajo de UI**, también fuera del CDE.
+- El mismo documento contiene la arquitectura especializada de reproductor, medios, subíndice, quiz e índice del curso; cargar esas secciones cuando corresponda.
 
 ### Prácticas CDE
 
