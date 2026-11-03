@@ -1,0 +1,150 @@
+/* Approved exception: only the lesson tree loaded inside the AJAX Topics panel.
+   Static index layout, family bands and series/block controls use Tailwind in Blade. */
+.course-index-list {
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.course-index-item {
+  list-style-type: none;
+}
+
+.course-index-row,
+.course-index-inactive {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  border-radius: var(--radius-xs, 0.125rem);
+  background-color: color-mix(in oklab, var(--color-blanco) 5%, transparent);
+  font-size: 1.125rem;
+  line-height: 1.4;
+}
+
+.course-index-link {
+  flex: 1;
+  text-align: left;
+}
+
+.course-index-label {
+  display: block;
+}
+
+.course-index-inactive > .course-index-label {
+  flex: 1;
+}
+
+.course-index-placeholder-icon {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.course-index-placeholder-icon--toggle {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.course-index-toggle {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-xs, 0.125rem);
+  background-color: color-mix(in oklab, var(--color-blanco) 10%, transparent);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.course-index-chevron {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.course-index-children {
+  margin-bottom: 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--color-gray-200, #e5e7eb);
+}
+
+/* Keep the existing prose cascade: its list indentation is 1.25em, not pl-6.
+   Per-item list wrappers have zero bottom margin, including inside nested lists. */
+.prose-cde .course-index-children {
+  padding-left: 1.25em;
+}
+
+.course-index-completion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-sm, 0.25rem);
+  color: var(--color-morado1);
+  cursor: pointer;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-duration: var(--default-transition-duration, 150ms);
+  transition-timing-function: var(--default-transition-timing-function, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.course-index-completion.completed {
+  color: var(--color-sol);
+}
+
+.course-index-completion .icon-show,
+.course-index-completion .icon-hide {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.course-index-completion:not(.completed) .icon-show,
+.course-index-completion.completed .icon-hide {
+  display: none;
+}
+
+@media (hover: hover) {
+  .course-index-completion:hover {
+    background-color: color-mix(in oklab, var(--color-blanco) 10%, transparent);
+  }
+}
+
+.course-index-completion:focus-visible {
+  outline: 2px solid var(--color-sol);
+  outline-offset: 2px;
+}
+
+.course-index-completion:disabled {
+  cursor: wait;
+  opacity: 0.5;
+}
+
+/* Family-aware overrides affect AJAX descendants only; variables live on the
+   static section's Tailwind classes, including the complementary green band. */
+.course-family .course-index-link,
+.course-family .course-index-label,
+.course-family .course-index-inactive,
+.course-family .course-index-completion {
+  color: inherit;
+}
+
+.course-family .course-index-completion.completed {
+  color: var(--color-sol);
+}
+
+.course-family--informacion-complementaria .course-index-completion.completed {
+  color: var(--color-negro);
+}
+
+.course-family .course-index-row,
+.course-family .course-index-inactive {
+  font-size: 1rem;
+}
+
+.course-family .course-index-children {
+  border-color: var(--course-rule);
+}
+
+.course-family .course-index button:focus-visible,
+.course-family .course-index a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}

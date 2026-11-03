@@ -2,6 +2,7 @@
 
 namespace App\View\Composers;
 
+use App\Support\CdeLessonMetadata;
 use App\View\Composers\Concerns\InteractsWithCdeMedia;
 use Roots\Acorn\View\Composer;
 
@@ -67,9 +68,11 @@ class SingleCde extends Composer
         }
 
         $lesson_subindex = $this->buildLessonSubindex();
+        $lesson_metadata = CdeLessonMetadata::forLesson((int) get_the_ID());
 
         return [
-            'lesson_family' => cde_lesson_family_presentation((int) get_the_ID()),
+            'lesson_family' => $lesson_metadata['family'],
+            'lesson_metadata' => $lesson_metadata,
             'is_completed' => in_array(get_the_ID(), $completed_lessons, true),
             'has_access' => $has_access,
             'lesson_presentation' => $has_access && class_exists(\EspacioSutil\Presentations\Service::class) ? \EspacioSutil\Presentations\Service::view((int) get_the_ID()) : null,

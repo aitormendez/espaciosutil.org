@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\CdeProductionType;
 use Roots\Acorn\Sage\SageServiceProvider;
 
 class ThemeServiceProvider extends SageServiceProvider
@@ -24,6 +25,8 @@ class ThemeServiceProvider extends SageServiceProvider
     public function boot()
     {
         parent::boot();
+
+        CdeProductionType::register();
 
         // Asignar rol "estudiante" si el pedido completado incluye un curso
         add_action('woocommerce_order_status_completed', [$this, 'asignarRolEstudiantePorCategoria']);

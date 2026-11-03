@@ -5,14 +5,15 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
 ## Cómo usarlo
 
 - Leer primero `AGENTS.md` para obtener el marco general del proyecto.
+- Para **todo trabajo de UI**, leer las [convenciones de estilos: Tailwind por defecto y excepción AJAX del índice CDE](arquitectura-cde-y-frontend.md#convenciones-de-estilos-para-todo-trabajo-de-interfaz), aunque la tarea no afecte al CDE ni a un visor.
 - Abrir después solo los documentos especializados que apliquen al trabajo en curso.
 - Tratar estos archivos como contexto operativo vivo: si una implementación cambia, actualizar el documento temático correspondiente.
 
 ## Mapa de documentos
 
-- `arquitectura-cde-y-frontend.md`
-  - Reproductor CDE, selector vídeo/audio, subíndice jerárquico, quiz por lección e índice del curso.
-  - Cargar cuando la tarea afecte a lecciones CDE, frontend React/Vidstack o estructura de contenidos del curso.
+- [Convenciones de UI y arquitectura CDE](arquitectura-cde-y-frontend.md)
+  - **Para cualquier interfaz del proyecto:** prioridad de utilidades Tailwind en plantillas/componentes, clases detectables al compilar, separación de responsabilidades y excepción de CSS centralizado para Temas AJAX del índice CDE.
+  - Además: reproductor CDE, selector vídeo/audio, subíndice jerárquico, quiz por lección e índice del curso. Cargar las secciones de arquitectura cuando la tarea afecte a esos sistemas.
 
 - [practicas-cde.md](practicas-cde.md)
   - Estado vigente de catálogo, ficha e incrustado; datos ACF, voz, índice adaptable, fondo y separadores opcionales, código, pruebas y aislamiento.
@@ -21,6 +22,10 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
 - [Editor de presentaciones CDE](../cde-presentaciones-editor.md)
   - Repetidor ACF, imágenes privadas, persistencia y sustitución de importaciones.
   - Cargar para modificar el visor o la edición de presentaciones junto a prácticas.
+
+- [Modalidad de producción CDE](cde-tipo-produccion.md)
+  - Campo ACF obligatorio Voz humana/Voz sintética, contrato con NocoDB, transporte al publicador y límites de activación.
+  - Cargar para `tipo_produccion`, validación del editor y su sincronización; el frontend requiere diseño previo.
 
 - Familias de series CDE:
   - [Backend y administración](cde-familias.md): taxonomía, selector humano, herencia, API y pruebas.

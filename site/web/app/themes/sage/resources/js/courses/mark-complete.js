@@ -13,16 +13,19 @@ const buttonsFor = (postId) =>
 function renderButton(button, completed) {
   button.dataset.completed = String(completed);
   button.classList.toggle('completed', completed);
-  button.classList.toggle('text-sol', completed);
-  const inactiveColor = button.classList.contains('course-index-completion') ? 'text-morado1' : 'text-gris2';
-  button.classList.toggle(inactiveColor, !completed);
+  // AJAX index presentation is centralized in CSS; other completion buttons
+  // retain their existing Tailwind states.
+  const isCourseIndex = button.classList.contains('course-index-completion');
+  button.classList.toggle('text-sol', !isCourseIndex && completed);
+  button.classList.toggle('text-gris2', !isCourseIndex && !completed);
+  if (isCourseIndex) button.classList.toggle('text-morado1', false);
   button.setAttribute('aria-pressed', String(completed));
   const action = completed ? 'Marcar como no vista' : 'Marcar como vista';
   const title = button.dataset.lessonTitle;
   button.setAttribute('aria-label', title ? `${action}: ${title}` : action);
   button.title = action;
-  button.querySelector('.icon-show')?.classList.toggle('hidden', !completed);
-  button.querySelector('.icon-hide')?.classList.toggle('hidden', completed);
+  button.querySelector('.icon-show')?.classList.toggle('hidden', !isCourseIndex && !completed);
+  button.querySelector('.icon-hide')?.classList.toggle('hidden', !isCourseIndex && completed);
   const text = button.querySelector('.btn-text');
   if (text) text.textContent = completed ? 'Vista' : 'Marcar como vista';
 }

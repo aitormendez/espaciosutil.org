@@ -1,4 +1,9 @@
-<header class="post-header {{ is_singular('cde') && !empty($lesson_family) ? 'post-header--family' : '' }} flex w-full justify-center text-center">
+@php
+  $has_lesson_metadata = is_singular('cde') && (
+      !empty($lesson_metadata['family']) || !empty($lesson_metadata['series_name']) || !empty($lesson_metadata['production'])
+  );
+@endphp
+<header class="post-header {{ $has_lesson_metadata ? 'post-header--metadata' : '' }} flex w-full justify-center text-center">
   <div class="w-full pb-4 md:pb-24">
     @if (is_tax('revelador'))
       <div class="text-gris3 border-gris3 bg-negro/80 mb-6 inline-block border-y px-4 py-2 text-2xl italic">
@@ -14,7 +19,7 @@
 
     @if (!empty($cde_breadcrumb))
       <nav aria-label="Miga de pan"
-        class="bg-negro/80 mb-6 flex w-full border-y px-6 py-4 text-left font-sans text-sm/4 font-light uppercase tracking-wide">
+        class="cde-breadcrumb bg-negro/80 mb-6 flex w-full border-y px-6 py-4 text-left font-sans text-sm/4 font-light uppercase tracking-wide">
         <ol class="flex w-full flex-col items-start gap-2 md:flex-row md:flex-wrap md:gap-1">
           @foreach ($cde_breadcrumb as $index => $crumb)
             <li class="{{ $loop->last ? 'current' : '' }} flex gap-2">
@@ -32,11 +37,11 @@
       </nav>
     @endif
 
-    @if (is_singular('cde') && !empty($lesson_family))
-      @include('partials.lesson-family-badge', ['family' => $lesson_family])
+    @if ($has_lesson_metadata)
+      @include('partials.lesson-metadata', ['metadata' => $lesson_metadata])
     @endif
 
-    <h1 class="px-4 text-center text-3xl font-thin md:mb-9 md:mt-24 md:text-6xl">{!! $title !!}</h1>
+    <h1 class="post-header__title px-4 text-center text-3xl font-thin md:mb-9 md:mt-24 md:text-6xl">{!! $title !!}</h1>
 
     @if (is_singular('cde') && is_user_logged_in())
       <button type="button"

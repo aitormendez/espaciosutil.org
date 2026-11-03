@@ -2,6 +2,7 @@
 
 namespace App\View\Composers;
 
+use App\Support\CdeCourseFamilies;
 use App\View\Composers\Concerns\InteractsWithCdeMedia;
 use Roots\Acorn\View\Composer;
 
@@ -27,8 +28,11 @@ class TemplateCurso extends Composer
      */
     public function with()
     {
+        $series = $this->getSeriesWithBlocks();
+
         return [
-            'series_cde_lessons' => $this->getSeriesWithBlocks(),
+            'series_cde_lessons' => $series,
+            'course_family_groups' => CdeCourseFamilies::group($series),
             'program_guide_lesson' => $this->getProgramGuideLesson(),
         ];
     }

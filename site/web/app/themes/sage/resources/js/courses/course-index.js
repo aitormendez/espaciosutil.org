@@ -1,291 +1,244 @@
 import initMarkComplete, { syncCompletionButtons } from './mark-complete.js';
 import { gsap } from 'gsap';
+import barba from '@barba/core';
 import {
   MOBILE_COURSE_INDEX_QUERY,
   shouldScrollToCourseTopics,
 } from './courseIndexScroll.js';
 
-export default function initCourseIndex() {
-  initMarkComplete();
-  const container = document.getElementById('indice-ajax-container');
-  const topicsHeading = document.getElementById('course-topics-heading');
-  const seriesToggles = document.querySelectorAll('.serie-accordion-toggle');
-  const blockButtons = document.querySelectorAll('.serie-cde-button');
+const instances = new WeakMap();
+let lifecycleRegistered = false;
+let regionId = 0;
+const reducedMotion = () =>
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-  if (!container || (!seriesToggles.length && !blockButtons.length)) {
-    return;
-  }
+/** Cancel pending reads and release only this module's handlers when Barba leaves. */
+export function destroyCourseIndex(root = document) {
+  const panels = [...root.querySelectorAll('[data-course-topics], #indice-ajax-container')];
+  if (root.matches?.('[data-course-topics], #indice-ajax-container')) panels.push(root);
+  panels.forEach((panel) => instances.get(panel)?.());
+}
 
-  if (container.dataset.courseIndexInitialized === 'true') {
-    return;
-  }
-
-  container.dataset.courseIndexInitialized = 'true';
+function initializeFamily(root, container, topicsHeading) {
+  if (instances.has(container)) return;
+  const seriesToggles = [...root.querySelectorAll('.serie-accordion-toggle')];
+  const blockButtons = [...root.querySelectorAll('.serie-cde-button')];
+  if (!seriesToggles.length && !blockButtons.length) return;
 
   const panelMap = new Map();
   let activeBlockButton = null;
+  let requestNumber = 0;
+  let controller = null;
+  let disposed = false;
+  const isCurrent = (number) =>
+    !disposed && container.isConnected && number === requestNumber;
 
-  const scrollToTopicsOnMobile = () => {
-    const isMobile =
-      typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia(MOBILE_COURSE_INDEX_QUERY).matches;
-
-    if (!shouldScrollToCourseTopics(isMobile, Boolean(topicsHeading))) {
-      return;
-    }
-
-    topicsHeading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const updateToggleIcon = (toggle, symbol) => {
-    const icon = toggle.querySelector('.serie-accordion-icon');
-    if (icon) {
-      icon.textContent = symbol;
-    }
-  };
-
-  const expandPanel = (toggle) => {
-    const panel = panelMap.get(toggle);
-    if (!panel) {
-      return;
-    }
-
+  const setExpanded = (toggle, panel, expanded, isSeries = false, animate = true) => {
     gsap.killTweensOf(panel);
-    toggle.setAttribute('aria-expanded', 'true');
-    toggle.classList.add('is-open');
-    updateToggleIcon(toggle, '-');
+    toggle.setAttribute('aria-expanded', String(expanded));
+    panel.setAttribute('aria-hidden', String(!expanded));
+    panel.inert = !expanded;
+    if (isSeries) toggle.classList.toggle('is-open', expanded);
+    else panel.dataset.expanded = String(expanded);
+    const icon = toggle.querySelector(isSeries ? '.serie-accordion-icon' : '.course-index-chevron');
+    if (icon) icon.textContent = expanded ? '-' : '+';
 
-    panel.classList.remove('hidden');
-    gsap.fromTo(
-      panel,
-      { height: 0, opacity: 0 },
-      {
-        height: 'auto',
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power2.out',
-        onComplete: () => {
-          panel.style.height = 'auto';
-        },
-      }
-    );
+    const finish = () => {
+      if (isSeries) panel.classList.toggle('hidden', !expanded);
+      panel.style.height = expanded ? 'auto' : isSeries ? '' : '0px';
+      panel.style.opacity = expanded || isSeries ? '' : '0';
+    };
+    if (expanded) {
+      panel.classList.remove('hidden', 'is-collapsed');
+    }
+    if (!animate || reducedMotion()) {
+      finish();
+    } else if (expanded) {
+      gsap.fromTo(panel, { height: 0, opacity: 0 }, {
+        height: 'auto', opacity: 1, duration: 0.3, ease: 'power2.out', onComplete: finish,
+      });
+    } else {
+      gsap.to(panel, {
+        height: 0, opacity: 0, duration: 0.25, ease: 'power2.inOut', onComplete: finish,
+      });
+    }
   };
 
-  const collapsePanel = (toggle) => {
-    const panel = panelMap.get(toggle);
-    if (!panel) {
-      return;
-    }
-
-    gsap.killTweensOf(panel);
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.classList.remove('is-open');
-    updateToggleIcon(toggle, '+');
-
-    gsap.to(panel, {
-      height: 0,
-      opacity: 0,
-      duration: 0.25,
-      ease: 'power2.inOut',
-      onComplete: () => {
-        panel.classList.add('hidden');
-        panel.style.height = '';
-        panel.style.opacity = '';
-      },
-    });
+  const childrenPanel = (toggle) => {
+    const item = toggle.closest('.course-index-item');
+    const panel = item?.querySelector('[data-children-wrapper]');
+    return panel?.closest('.course-index-item') === item ? panel : null;
   };
-
-  const initializeCourseIndexChildren = (root) => {
-    if (!root) {
-      return;
-    }
-
-    const toggles = root.querySelectorAll('[data-toggle-children="true"]');
-    toggles.forEach((toggle) => {
-      if (toggle.dataset.toggleChildrenInitialized === 'true') {
-        return;
-      }
-
-      const item = toggle.closest('.course-index-item');
-      const panel = item?.querySelector('[data-children-wrapper]');
-      if (!panel) {
-        return;
-      }
-
-      toggle.dataset.toggleChildrenInitialized = 'true';
+  const initializeChildren = () => {
+    container.querySelectorAll('[data-toggle-children="true"]').forEach((toggle) => {
+      const panel = childrenPanel(toggle);
+      if (!panel) return;
       panel.style.overflow = 'hidden';
-      panel.dataset.expanded = panel.dataset.expanded ?? 'true';
-      panel.style.height = 'auto';
-
-      const icon = toggle.querySelector('.course-index-chevron');
-
-      const setIcon = (isOpen) => {
-        if (icon) {
-          icon.textContent = isOpen ? '-' : '+';
-        }
-      };
-
-      setIcon(panel.dataset.expanded !== 'false');
-
-      const openPanel = () => {
-        gsap.killTweensOf(panel);
-        toggle.setAttribute('aria-expanded', 'true');
-        panel.dataset.expanded = 'true';
-        panel.classList.remove('is-collapsed');
-        gsap.fromTo(
-          panel,
-          { height: 0, opacity: 0 },
-          {
-            height: 'auto',
-            opacity: 1,
-            duration: 0.3,
-            ease: 'power2.out',
-            onComplete: () => {
-              panel.style.height = 'auto';
-            },
-          }
-        );
-        setIcon(true);
-      };
-
-      const closePanel = () => {
-        gsap.killTweensOf(panel);
-        toggle.setAttribute('aria-expanded', 'false');
-        panel.dataset.expanded = 'false';
-        gsap.to(panel, {
-          height: 0,
-          opacity: 0,
-          duration: 0.25,
-          ease: 'power2.inOut',
-        });
-        setIcon(false);
-      };
-
-      const handleToggle = () => {
-        const isExpanded = panel.dataset.expanded !== 'false';
-        if (isExpanded) {
-          closePanel();
-        } else {
-          openPanel();
-        }
-      };
-
-      toggle.addEventListener('click', () => {
-        handleToggle();
-      });
-      toggle.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          handleToggle();
-        }
-      });
+      setExpanded(toggle, panel, panel.dataset.expanded !== 'false', false, false);
     });
   };
-
-  seriesToggles.forEach((toggle) => {
-    const panelId = toggle.getAttribute('aria-controls');
-    if (!panelId) {
-      return;
+  const clearButton = (button) => {
+    if (!button) return;
+    button.classList.remove('is-active');
+    button.removeAttribute('aria-current');
+    button.removeAttribute('aria-busy');
+    button.disabled = false;
+  };
+  const scrollToTopicsOnMobile = () => {
+    const mobile = window.matchMedia?.(MOBILE_COURSE_INDEX_QUERY).matches ?? false;
+    if (shouldScrollToCourseTopics(mobile, Boolean(topicsHeading))) {
+      topicsHeading.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
     }
+  };
 
-    const panel = document.getElementById(panelId);
-    if (!panel) {
-      return;
-    }
+  const loadBlock = async (button) => {
+    const postId = button.dataset.postId;
+    if (!/^[1-9]\d*$/.test(postId ?? '') || activeBlockButton === button) return;
+    const number = ++requestNumber;
+    controller?.abort();
+    controller = new AbortController();
+    const { signal } = controller;
+    clearButton(activeBlockButton);
+    activeBlockButton = button;
+    button.classList.add('is-active');
+    button.setAttribute('aria-current', 'true');
+    button.setAttribute('aria-busy', 'true');
+    button.disabled = true;
+    container.setAttribute('aria-busy', 'true');
+    // Stop animations on descendants before their DOM is replaced.
+    container.querySelectorAll('[data-children-wrapper]').forEach((panel) => gsap.killTweensOf(panel));
+    container.innerHTML = '<p>Cargando...</p>';
 
-    panel.style.overflow = 'hidden';
-    panel.classList.add('hidden');
-
-    panelMap.set(toggle, panel);
-
-    toggle.addEventListener('click', () => {
-      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-      if (isExpanded) {
-        collapsePanel(toggle);
-        return;
-      }
-
-      seriesToggles.forEach((otherToggle) => {
-        if (
-          otherToggle !== toggle &&
-          otherToggle.getAttribute('aria-expanded') === 'true'
-        ) {
-          collapsePanel(otherToggle);
-        }
-      });
-
-      expandPanel(toggle);
-    });
-  });
-
-  blockButtons.forEach((button) => {
-    button.addEventListener('click', async () => {
-      if (!button.dataset.postId) {
-        return;
-      }
-
-      if (activeBlockButton === button) {
-        return;
-      }
-
-      if (activeBlockButton) {
-        activeBlockButton.classList.remove('is-active');
-        activeBlockButton.removeAttribute('aria-current');
-        activeBlockButton.removeAttribute('aria-busy');
-        activeBlockButton.disabled = false;
-      }
-
-      activeBlockButton = button;
-      activeBlockButton.classList.add('is-active');
-      activeBlockButton.setAttribute('aria-current', 'true');
-      activeBlockButton.setAttribute('aria-busy', 'true');
-      activeBlockButton.disabled = true;
-
-      const postId = button.dataset.postId;
-      const seriesTitle =
-        button
-          .closest('.serie-accordion-item')
-          ?.querySelector('.serie-accordion-toggle span')?.textContent ?? '';
-      const serieName = encodeURIComponent(seriesTitle.trim());
-
-      container.innerHTML = '<p>Cargando...</p>';
-
-      try {
-        const response = await fetch(
-          `/espaciosutil/v1/indice-revelador/${postId}?serie_name=${serieName}`
-        );
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-        const data = await response.json();
-        container.innerHTML = data.html;
-        syncCompletionButtons(container);
-        initializeCourseIndexChildren(container);
-        scrollToTopicsOnMobile();
-      } catch (error) {
-        container.innerHTML = '<p>Ha ocurrido un error al cargar el índice.</p>';
-        console.error('Error fetching course index:', error);
-        button.classList.remove('is-active');
-        button.removeAttribute('aria-current');
-      } finally {
+    const toggle = button.closest('.serie-accordion-item')?.querySelector('.serie-accordion-toggle');
+    const title = button.dataset.serieName ?? toggle?.dataset.serieName ??
+      toggle?.querySelector('[data-series-title]')?.textContent ?? toggle?.querySelector('span')?.textContent ?? '';
+    try {
+      const response = await fetch(
+        `/espaciosutil/v1/indice-revelador/${postId}?serie_name=${encodeURIComponent(title.trim())}`,
+        { signal }
+      );
+      if (!response.ok) throw new Error('No se pudo cargar el índice.');
+      const data = await response.json();
+      if (!isCurrent(number) || signal.aborted) return;
+      if (typeof data?.html !== 'string') throw new Error('Respuesta de índice no válida.');
+      container.innerHTML = data.html;
+      syncCompletionButtons(container);
+      initializeChildren();
+      scrollToTopicsOnMobile();
+    } catch (error) {
+      if (!isCurrent(number) || signal.aborted) return;
+      container.innerHTML = '<p>Ha ocurrido un error al cargar el índice. Selecciona de nuevo el bloque para reintentar.</p>';
+      clearButton(button);
+      activeBlockButton = null; // The same block must remain retryable after failure.
+      console.error('Error fetching course index:', error);
+    } finally {
+      // A late request must not clear the busy state of a newer selection.
+      if (isCurrent(number)) {
+        container.setAttribute('aria-busy', 'false');
         button.removeAttribute('aria-busy');
         button.disabled = false;
       }
-    });
-  });
-
-  blockButtons.forEach((button) => {
-    if (button.classList.contains('is-active')) {
-      return;
     }
+  };
 
-    button.setAttribute('role', 'tab');
-    button.setAttribute('aria-selected', 'false');
+  seriesToggles.forEach((toggle) => {
+    const id = toggle.getAttribute('aria-controls');
+    // Resolve only inside this family, never a global panel with a matching ID.
+    const panel = id && [...root.querySelectorAll('[id]')].find((node) => node.id === id);
+    if (!panel) return;
+    panelMap.set(toggle, panel);
+    panel.style.overflow = 'hidden';
+    setExpanded(toggle, panel, false, true, false);
   });
 
+  if (!container.id) container.id = `course-topics-${++regionId}`;
   container.setAttribute('role', 'region');
   container.setAttribute('aria-live', 'polite');
+  container.setAttribute('aria-busy', 'false');
+  if (topicsHeading) {
+    if (!topicsHeading.id) topicsHeading.id = `${container.id}-heading`;
+    container.setAttribute('aria-labelledby', topicsHeading.id);
+  } else if (!container.hasAttribute('aria-label')) {
+    container.setAttribute('aria-label', 'Temas del curso');
+  }
+  blockButtons.forEach((button) => {
+    // These are ordinary action buttons, not an incomplete tab widget.
+    if (button.getAttribute('role') === 'tab') button.removeAttribute('role');
+    button.removeAttribute('aria-selected');
+    button.setAttribute('aria-controls', container.id);
+  });
 
-  initializeCourseIndexChildren(container);
+  const onClick = (event) => {
+    const toggle = event.target.closest?.('.serie-accordion-toggle');
+    if (toggle && panelMap.has(toggle)) {
+      const expanded = toggle.getAttribute('aria-expanded') !== 'true';
+      if (expanded) {
+        panelMap.forEach((panel, other) => {
+          if (other !== toggle && other.getAttribute('aria-expanded') === 'true') {
+            setExpanded(other, panel, false, true);
+          }
+        });
+      }
+      setExpanded(toggle, panelMap.get(toggle), expanded, true);
+      return;
+    }
+    const block = event.target.closest?.('.serie-cde-button');
+    if (block && blockButtons.includes(block)) {
+      void loadBlock(block);
+      return;
+    }
+    const childToggle = event.target.closest?.('[data-toggle-children="true"]');
+    if (childToggle && container.contains(childToggle)) {
+      const panel = childrenPanel(childToggle);
+      if (panel) setExpanded(childToggle, panel, panel.dataset.expanded === 'false');
+    }
+  };
+  // Native buttons already synthesize click for Enter/Space; do not toggle twice.
+  const onKeydown = (event) => {
+    const toggle = event.target.closest?.('[data-toggle-children="true"]');
+    if (!toggle || !container.contains(toggle) || toggle.tagName === 'BUTTON' ||
+        (toggle.tagName === 'A' && toggle.hasAttribute('href'))) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick({ target: toggle });
+    }
+  };
+  root.addEventListener('click', onClick);
+  root.addEventListener('keydown', onKeydown);
+  container.dataset.courseIndexInitialized = 'true';
+  initializeChildren();
+  instances.set(container, () => {
+    disposed = true;
+    requestNumber++;
+    controller?.abort();
+    clearButton(activeBlockButton);
+    panelMap.forEach((panel) => gsap.killTweensOf(panel));
+    container.querySelectorAll('[data-children-wrapper]').forEach((panel) => gsap.killTweensOf(panel));
+    root.removeEventListener('click', onClick);
+    root.removeEventListener('keydown', onKeydown);
+    container.setAttribute('aria-busy', 'false');
+    delete container.dataset.courseIndexInitialized;
+    instances.delete(container);
+  });
+}
+
+export default function initCourseIndex() {
+  initMarkComplete();
+  if (!lifecycleRegistered) {
+    barba.hooks.beforeLeave(({ current }) => {
+      if (current?.container) destroyCourseIndex(current.container);
+    });
+    lifecycleRegistered = true;
+  }
+  const families = document.querySelectorAll('section[data-course-family]');
+  if (families.length) {
+    families.forEach((family) => {
+      const container = family.querySelector('[data-course-topics]');
+      if (container) initializeFamily(family, container, family.querySelector('[data-course-topics-heading]'));
+    });
+  } else {
+    // Transitional compatibility for a cached/older template, not the new layout.
+    const container = document.getElementById('indice-ajax-container');
+    if (container) initializeFamily(document, container, document.getElementById('course-topics-heading'));
+  }
 }

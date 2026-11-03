@@ -2,6 +2,7 @@
 
 namespace App\Fields;
 
+use App\Support\CdeProductionType;
 use Log1x\AcfComposer\Field;
 use StoutLogic\AcfBuilder\FieldsBuilder;
 
@@ -43,6 +44,20 @@ class Cde extends Field
                 'ui' => 1,
                 'ui_on_text' => 'Activa',
                 'ui_off_text' => 'Inactiva',
+            ])
+            ->addRadio(CdeProductionType::FIELD_NAME, [
+                'label' => 'Tipo de producción',
+                'instructions' => 'Selecciona el origen de la voz. Debe coincidir con tipo_produccion de NocoDB; no se deduce de la serie ni del formato del archivo.',
+                'choices' => CdeProductionType::CHOICES,
+                'required' => 1,
+                // ACF selecciona la primera opción si allow_null es 0, incluso
+                // con default_value vacío. El guardado sigue siendo obligatorio.
+                'allow_null' => 1,
+                'default_value' => '',
+                'other_choice' => 0,
+                'save_other_choice' => 0,
+                'layout' => 'horizontal',
+                'return_format' => 'value',
             ])
             ->addWysiwyg('rich_excerpt', [
                 'label' => 'Extracto Enriquecido',
