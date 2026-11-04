@@ -217,6 +217,35 @@ add_filter('pmpro_restrictable_post_types', function ($postTypes) {
 // los listados/índices del curso muestren todas las lecciones.
 
 /**
+ * Exclude structural CDE headings from public search results.
+ *
+ * The CDE hierarchy stores non-linkable headings in the same post type as
+ * lessons. Keeping this condition in SQL preserves correct pagination totals
+ * while allowing every other searchable post type through unchanged.
+ */
+add_filter('posts_where', function (string $where, \WP_Query $query): string {
+    if (is_admin() || !$query->is_main_query() || !$query->is_search()) {
+        return $where;
+    }
+
+    global $wpdb;
+
+    $where .= $wpdb->prepare(
+        " AND ({$wpdb->posts}.post_type <> %s OR EXISTS (
+            SELECT 1 FROM {$wpdb->postmeta} AS cde_search_meta
+            WHERE cde_search_meta.post_id = {$wpdb->posts}.ID
+              AND cde_search_meta.meta_key = %s
+              AND cde_search_meta.meta_value = %s
+        ))",
+        'cde',
+        'active_lesson',
+        '1',
+    );
+
+    return $where;
+}, 10, 2);
+
+/**
  * HTML Forms: captcha simple para el formulario de contacto.
  */
 add_filter('hf_validate_form', function ($error, $form, $data) {
