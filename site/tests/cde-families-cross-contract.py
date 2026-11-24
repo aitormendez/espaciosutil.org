@@ -1,71 +1,49 @@
 #!/usr/bin/env python3
-"""Read-only conformance between local WordPress and an explicit CDE candidate.
+"""Diagnóstico previo al despliegue: --runtime-root RUTA a una candidata de Contenidos.
 
-Run from site, e.g. python3 tests/cde-families-cross-contract.py --runtime-root PATH.
-No NocoDB access, no WP content writes, no runtime activation or bytecode files.
+Inspección estática, sin importar ni ejecutar el publicador, WordPress o NocoDB.
+El MU-plugin acepta códigos configurados en ACF, no los cuatro slugs históricos.
+No certifica planes, publicación ni readback. Sale 1 si hay incompatibilidad
+conocida y 2 si el contrato no se puede verificar; ninguno autoriza el apply.
 """
 from __future__ import annotations
 
 import argparse
-import json
+import ast
 from pathlib import Path
-import runpy
-import subprocess
 import sys
 
-sys.dont_write_bytecode = True
+LEGACY = frozenset(("espirituales-esenciales", "otras-principales", "otras-espirituales", "informacion-complementaria"))
 
-parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument("--runtime-root", type=Path, required=True)
-args = parser.parse_args()
-root = args.runtime_root.resolve(strict=True)
-module_path = root / "scripts" / "cde_families.py"
-if not module_path.is_file():
-    parser.error("The selected runtime has no scripts/cde_families.py")
-site = Path(__file__).resolve().parents[1]
-php = """if (!defined('WP_ENV') || WP_ENV !== 'development') { WP_CLI::error('Development only'); }
-echo wp_json_encode(\\EspacioSutil\\Cde\\Families::CATALOG, JSON_UNESCAPED_UNICODE);"""
-process = subprocess.run(["wp", "eval", php], cwd=site, text=True, capture_output=True, timeout=60)
-if process.returncode:
-    raise SystemExit("Could not read the local WordPress family catalog; no writes attempted.")
-try:
-    wordpress = json.loads(process.stdout)
-except json.JSONDecodeError:
-    raise SystemExit("Local WordPress catalog response was not JSON.") from None
-candidate = runpy.run_path(str(module_path))
-expected = {
-    "espirituales-esenciales": "Enseñanzas espirituales esenciales",
-    "otras-principales": "Otras enseñanzas del grupo principal",
-    "otras-espirituales": "Otras enseñanzas espirituales",
-    "informacion-complementaria": "Información complementaria",
-}
-assert wordpress == expected, "WordPress labels or stable slugs differ from the approved contract"
-assert tuple(wordpress) == candidate["FAMILIES"], "Python and WordPress family catalogs differ"
-normalize = candidate["normalize_selector"]
-error_type = candidate["FamilyError"]
-checks = 2
-for slug in expected:
-    for value in (slug, [slug], {"value": slug}):
-        assert normalize(value) == slug
-        checks += 1
-for value in (None, "", [], list(expected)[:2], "01", "audio_sintético", "video_grabado", "unknown", {"value": "unknown"}):
+
+def check(root: Path) -> int:
+    path = root / "scripts" / "cde_families.py"
     try:
-        normalize(value)
-    except error_type:
-        checks += 1
-    else:
-        raise AssertionError(f"Candidate accepted an invalid or inferred family: {value!r}")
-records = [
-    {"id": 1, "fields": {"codigo_serie": "01", "serie": "Urantia", "clave_leccion": "test:a", "familia_serie": "espirituales-esenciales"}},
-    {"id": 2, "fields": {"codigo_serie": "01", "serie": "Urantia", "clave_leccion": "test:b", "familia_serie": "otras-principales"}},
-    {"id": 3, "fields": {"codigo_serie": "00", "serie": "Guía de estudio", "clave_leccion": "test:c"}},
-]
-before = json.dumps(records, sort_keys=True)
-audit = candidate["audit_inventory"](records)
-assert audit["writes_performed"] == 0 and len(audit["rows"]) == 3
-assert all("series_family_conflict" in row["diagnostics"] for row in audit["rows"][:2])
-assert "field_absent_from_row" in audit["rows"][2]["diagnostics"]
-assert before == json.dumps(records, sort_keys=True), "Audit mutated human input"
-checks += 4
-print(f"OK {checks} cross-contract checks; WordPress catalog and candidate agree. Read-only, no remote access.")
-print(f"Candidate inspected: {root}")
+        module = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        print(f"NO VERIFICADO: no se puede inspeccionar {path}: {exc}", file=sys.stderr)
+        return 2
+    for node in module.body:
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+        if not any(isinstance(t, ast.Name) and t.id == "FAMILIES" for t in targets):
+            continue
+        try:
+            values = ast.literal_eval(node.value)
+        except (TypeError, ValueError):
+            continue
+        if isinstance(values, (tuple, list, set, dict)) and all(isinstance(v, str) for v in values):
+            if set(values) == LEGACY:
+                print(f"INCOMPATIBLE: {path} declara el contrato histórico de cuatro slugs; "
+                      "la asignación ACF requiere un código del catálogo editable. No aplicar.", file=sys.stderr)
+                return 1
+    print(f"NO VERIFICADO: {path} no declara el catálogo histórico reconocido. "
+          "Su ausencia no demuestra que consuma los códigos dinámicos, los selle ni los revalide.", file=sys.stderr)
+    return 2
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--runtime-root", type=Path, required=True)
+    sys.exit(check(parser.parse_args().runtime_root.resolve()))

@@ -210,6 +210,8 @@ function changeBgColor(color, immediate = false) {
 }
 
 function previewMenuColor(menu) {
+  // Don't put a menu preview behind a lesson whose foreground was chosen for its own background.
+  if (document.body.hasAttribute('data-family-palette')) return;
   const link = menu?.querySelector('a');
   const color = link?.dataset?.color;
 

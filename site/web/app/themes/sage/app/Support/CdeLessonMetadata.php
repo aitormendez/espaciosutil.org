@@ -16,7 +16,7 @@ final class CdeLessonMetadata
 
     /**
      * @return array{
-     *   family: array{slug:string,label:string,icon:string,color_token:string}|null,
+     *   family: array{slug:string,label:string,icon:?string,icon_id:int,legacy:bool,color_token:string,background_color:?string,text_color:string}|null,
      *   series_name: string|null,
      *   production: array{value:string,label:string,icon:string}|null
      * }
@@ -34,7 +34,6 @@ final class CdeLessonMetadata
         }
 
         if (function_exists('cde_lesson_family_presentation')) {
-            // Preserve the existing vocabulary, symbols and color tokens verbatim.
             $data['family'] = \cde_lesson_family_presentation($postId);
         }
         $data['series_name'] = self::seriesName($postId);
@@ -50,6 +49,10 @@ final class CdeLessonMetadata
         }
 
         $resolved = Families::resolveLesson($postId);
+        // Only the explicit legacy result certifies a unique root despite a retired code.
+        if ($resolved instanceof \WP_Error && $resolved->get_error_code() === 'cde_family_legacy') {
+            $resolved = $resolved->get_error_data();
+        }
         // An unassigned error may identify the first root before checking other
         // roots. Never reuse error data as a supposedly unambiguous series.
         if (!is_array($resolved) || !is_int($resolved['series_id'] ?? null) || $resolved['series_id'] < 1) {

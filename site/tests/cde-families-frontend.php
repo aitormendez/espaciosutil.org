@@ -2,9 +2,11 @@
 
 // Isolated frontend contract: no WordPress bootstrap, database or writes.
 require __DIR__ . '/../web/app/themes/sage/app/helpers.php';
+require __DIR__ . '/../web/app/themes/sage/app/Support/CdeFamilyPresentation.php';
+require_once __DIR__ . '/fixtures/wp-error.php';
 
 $count = 0;
-function check($condition, string $message): void
+function check(bool $condition, string $message): void
 {
     global $count;
     if (!$condition) {
@@ -16,14 +18,17 @@ function check($condition, string $message): void
 check(cde_lesson_family_presentation(2389) === null, 'Missing plugin has no badge');
 
 // Defined after the missing-plugin assertion, without autoloading WordPress.
-eval('namespace EspacioSutil\\Cde; class Families {
+final class FixtureFamilyResolver
+{
     public static mixed $result = null;
     public static array $calls = [];
-    public static function resolveLesson(...$args) {
+    public static function resolveLesson(mixed ...$args): mixed
+    {
         self::$calls[] = $args;
         return self::$result;
     }
-}');
+}
+class_alias(FixtureFamilyResolver::class, \EspacioSutil\Cde\Families::class);
 
 $expected = [
     'espirituales-esenciales' => ['Serie esencial', 'mercaba', '--color-serie-esencial'],
@@ -32,41 +37,47 @@ $expected = [
     'informacion-complementaria' => ['Serie complementaria', 'cubes', '--color-serie-complementaria'],
 ];
 foreach ($expected as $slug => [$label, $icon, $token]) {
-    \EspacioSutil\Cde\Families::$result = [
-        'familia_serie' => $slug, 'label' => 'Backend label is not frontend copy',
-        'source_post_id' => 2387, 'inherited' => true,
-    ];
-    check(cde_lesson_family_presentation(2389) === [
-        'slug' => $slug, 'label' => $label, 'icon' => 'cdefamily-' . $icon, 'color_token' => $token,
-    ], 'Exact frontend mapping for ' . $slug);
-    check(end(\EspacioSutil\Cde\Families::$calls) === [2389], 'Delegate saved lesson inheritance without proposed data');
+    FixtureFamilyResolver::$result = new WP_Error('cde_family_legacy', '', ['legacy_value' => $slug]);
+    $badge = cde_lesson_family_presentation(2389);
+    check($badge['legacy'] && $badge['label'] === $label && $badge['icon'] === 'cdefamily-' . $icon && $badge['color_token'] === $token, 'Legacy presentation only: ' . $slug);
+    check(end(FixtureFamilyResolver::$calls) === [2389], 'Delegate saved lesson inheritance without proposed data');
 }
-foreach ([null, new stdClass(), [], ['familia_serie' => null], ['familia_serie' => []], ['familia_serie' => 'unknown']] as $invalid) {
-    \EspacioSutil\Cde\Families::$result = $invalid;
+FixtureFamilyResolver::$result = ['familia_serie' => '43', 'label' => 'Familia editable', 'icon_id' => 97];
+$badge = cde_lesson_family_presentation(2389);
+check(!$badge['legacy'] && $badge['icon'] === null && $badge['icon_id'] === 97 && $badge['label'] === 'Familia editable', 'New attachment and label are not mapped in code');
+check(current_navigation_section_context()['color'] === '#660000', 'Family assignment does not repaint the lesson canvas');
+foreach ([['#27abdf','black','#27abdf','black'], [null,'white','var(--color-cde)','white'], ['red; color:green','pink','var(--color-cde)','white']] as [$bg,$ink,$css,$text]) {
+    FixtureFamilyResolver::$result = ['familia_serie'=>'12','label'=>'Futura','background_color'=>$bg,'text_color'=>$ink];
+    $display = cde_lesson_family_presentation(2389);
+    check($display['text_color'] === $text && ($display['background_color'] ?? 'var(' . $display['color_token'] . ')') === $css, 'Drawer palette: validated colors only, neutral fallback otherwise');
+    check(current_navigation_section_context()['color'] === '#660000', 'Lesson canvas stays fixed with any drawer palette');
+}
+foreach ([new WP_Error('cde_family_legacy', '', ['legacy_value' => 'unknown']), new WP_Error('cde_family_mismatch', '', ['legacy_value' => 'otras-principales']), null, new stdClass(), [], ['familia_serie' => null], ['familia_serie' => []], ['familia_serie' => 'unknown']] as $invalid) {
+    FixtureFamilyResolver::$result = $invalid;
     check(cde_lesson_family_presentation(2389) === null, 'Invalid resolution has no badge');
 }
 check(cde_lesson_family_presentation(0) === null, 'No inferred lesson');
 
 // Minimal menu fixture intentionally has a different color from the CDE fallback.
-function is_singular($type) { return $GLOBALS['lesson'] ?? true; }
-function home_url($path) { return 'https://example.test' . $path; }
-function get_page_by_path($path) { return null; }
-function __($value, $domain) { return $value; }
+function is_singular(string|array|null $type) { return $GLOBALS['lesson'] ?? true; }
+function home_url(string $path) { return 'https://example.test' . $path; }
+function get_page_by_path(string $path) { return null; }
+function __(string $value, string $domain) { return $value; }
 function get_queried_object_id() { return 2389; }
 function is_front_page() { return false; }
-function is_page($page = null) { return false; }
+function is_page(mixed $page = null) { return false; }
 function get_nav_menu_locations() { return ['cde_navigation' => 1]; }
-function wp_get_nav_menu_items($id, $args) { return [(object) ['ID' => 7, 'url' => home_url('/'), 'menu_item_parent' => 0, 'title' => 'Menu', 'menu_order' => 0]]; }
-function wp_parse_url($url, $part) { return parse_url($url, $part); }
-function wp_unslash($value) { return $value; }
-function get_field($key, $id) { return '#123456'; }
+function wp_get_nav_menu_items(int $id, array $args) { return [(object) ['ID' => 7, 'url' => home_url('/'), 'menu_item_parent' => 0, 'title' => 'Menu', 'menu_order' => 0]]; }
+function wp_parse_url(string $url, int $part) { return parse_url($url, $part); }
+function wp_unslash(mixed $value) { return $value; }
+function get_field(string $key, mixed $id) { return '#123456'; }
 
 $context = current_navigation_section_context();
-check($context['color'] === 'var(--color-cde)', 'Unknown family overrides unrelated menu color with CDE fallback');
+check($context['color'] === '#660000', 'Unknown family keeps the lesson canvas');
 check($context['menu_item_id'] === 7, 'Menu identity remains unchanged');
 foreach ($expected as $slug => [$label, $icon, $token]) {
-    \EspacioSutil\Cde\Families::$result = ['familia_serie' => $slug];
-    check(current_navigation_section_context()['color'] === "var($token)", 'Persistent token for ' . $slug);
+    FixtureFamilyResolver::$result = new WP_Error('cde_family_legacy', '', ['legacy_value' => $slug]);
+    check(current_navigation_section_context()['color'] === '#660000', 'Historical family also keeps the common canvas: ' . $slug);
 }
 $GLOBALS['lesson'] = false;
 check(current_navigation_section_context()['color'] === '#123456', 'Non-lesson page retains menu color');

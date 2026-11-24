@@ -61,18 +61,24 @@ class RouteServiceProvider extends ServiceProvider
                         ];
                     }
 
-                    $tree = [];
-                    foreach ($post_map as $id => &$node) {
-                        if ($node->parent && isset($post_map[$node->parent])) {
-                            $post_map[$node->parent]->children[] = &$node;
-                        } else {
-                            $tree[] = &$node;
+                    foreach ($post_map as $node) {
+                        if (isset($post_map[$node->parent])) {
+                            $post_map[$node->parent]->children[] = $node;
                         }
                     }
 
-                    $course_tree = array_filter($tree, function ($item) use ($post_id) {
-                        return $item->id == $post_id;
-                    });
+                    // A block may start at a nested lesson. Include that lesson itself,
+                    // but do not render a malformed cyclic branch recursively.
+                    $start = $post_map[$post_id] ?? null;
+                    $seen = [];
+                    for ($ancestor = $start; $ancestor; $ancestor = $post_map[$ancestor->parent] ?? null) {
+                        if (isset($seen[$ancestor->id])) {
+                            $start = null;
+                            break;
+                        }
+                        $seen[$ancestor->id] = true;
+                    }
+                    $course_tree = $start ? [$start] : [];
 
                     if (empty($course_tree)) {
                         return response()->json(['html' => '<p>No se encontraron lecciones para este revelador.</p>']);

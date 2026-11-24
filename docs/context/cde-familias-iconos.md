@@ -1,6 +1,8 @@
 # Símbolos de familias CDE
 
-Autor: **Side Project**. Colección: [Sacred geometry — Noun Project](https://thenounproject.com/browse/collection-icon/sacred-geometry-281897/).
+Este inventario se refiere sólo a los cuatro símbolos históricos. Para las [familias de series actuales](cde-familias-modelo-editorial.md), Aitor elige el icono en la fila del catálogo editable; estos SVG no se asignan por correspondencia automática.
+
+Autor de los símbolos históricos: **Side Project**. Colección: [Sacred geometry — Noun Project](https://thenounproject.com/browse/collection-icon/sacred-geometry-281897/).
 
 ## Origen de exportación
 

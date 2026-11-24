@@ -17,26 +17,26 @@ function check(bool $condition, string $message): void
     if (!$condition) { throw new RuntimeException($message); }
     $count++;
 }
-class WP_Error
-{
-    public function __construct(private string $code, private string $message, private array $data = []) {}
-    public function get_error_code(): string { return $this->code; }
-}
-function is_wp_error($value): bool { return $value instanceof WP_Error; }
-function get_term($id, $taxonomy)
+require_once __DIR__ . '/fixtures/wp-error.php';
+function is_wp_error(mixed $value): bool { return $value instanceof WP_Error; }
+function get_term(int $id, string $taxonomy)
 {
     check($taxonomy === 'serie_cde', 'Only canonical series taxonomy queried');
     $GLOBALS['term_reads'][] = $id;
     return $GLOBALS['terms'][$id] ?? null;
 }
-function get_term_meta($id, $key, $single)
+function get_term_meta(int $id, string $key, bool $single)
 {
     check($key === 'familia_serie' && $single === false, 'Canonical raw family rows only');
     return $GLOBALS['term_meta'][$id] ?? [];
 }
-function get_post($id) { return $GLOBALS['posts'][$id] ?? null; }
-function wp_get_object_terms($id, $taxonomy, $args) { return $GLOBALS['post_terms'][$id] ?? []; }
-function get_field(...$args) { throw new RuntimeException('No ACF inference'); }
+function get_post(int $id) { return $GLOBALS['posts'][$id] ?? null; }
+function wp_get_object_terms(int $id, string $taxonomy, array $args) { if ($taxonomy !== 'serie_cde' || ($args['fields'] ?? '') !== 'ids') { throw new LogicException('Expected series term IDs'); } return $GLOBALS['post_terms'][$id] ?? []; }
+function get_field(string $key, mixed $post, bool $format) {
+    if ($key !== 'cde_familias_series' || $post !== 'option' || $format !== false) { throw new RuntimeException('Only raw catalog options allowed'); }
+    return $GLOBALS['catalog_rows'] ?? [];
+}
+function wp_attachment_is_image(mixed $id): bool { return $id === 97; }
 function row(mixed $id, string $name = 'Nombre no autoritativo'): array
 {
     return [
@@ -57,13 +57,13 @@ function fixtures(): void
         30 => ['otras-espirituales'], 40 => ['informacion-complementaria'],
         50 => ['espirituales-esenciales'], 70 => ['espirituales-esenciales'],
         71 => ['otras-principales'], 100 => ['espirituales-esenciales', 'espirituales-esenciales'],
-        110 => ['unknown'], 120 => [['espirituales-esenciales']],
+        110 => ['98'], 120 => [['espirituales-esenciales']],
     ];
     foreach ([10,20,30,40,50,60,70,100,110,120] as $id) {
-        $GLOBALS['terms'][$id] = (object) ['term_id' => $id, 'taxonomy' => 'serie_cde', 'parent' => 0, 'slug' => 'root-' . $id];
+        $GLOBALS['terms'][$id] = (object) ['term_id' => $id, 'taxonomy' => 'serie_cde', 'parent' => 0, 'slug' => "root-$id"];
     }
     foreach ([11 => 10, 12 => 11, 71 => 70, 80 => 81, 81 => 80, 90 => 999] as $id => $parent) {
-        $GLOBALS['terms'][$id] = (object) ['term_id' => $id, 'taxonomy' => 'serie_cde', 'parent' => $parent, 'slug' => 'child-' . $id];
+        $GLOBALS['terms'][$id] = (object) ['term_id' => $id, 'taxonomy' => 'serie_cde', 'parent' => $parent, 'slug' => "child-$id"];
     }
     $GLOBALS['posts'] = [1 => (object) ['ID' => 1, 'post_type' => 'cde', 'post_parent' => 0]];
     $GLOBALS['post_terms'] = [1 => [10]];
@@ -72,8 +72,8 @@ fixtures();
 $missingBackend = [row(10, 'Guía de estudio'), row(20)];
 check(Course::group([]) === [], 'No empty groups');
 check(Course::group($missingBackend) === [[
-    'key' => 'unassigned', 'label' => 'Sin familia asignada', 'icon' => null,
-    'color_token' => '--color-cde', 'series' => $missingBackend,
+    'key' => 'unassigned', 'label' => 'Otras series', 'icon' => null,
+    'icon_id' => 0, 'legacy' => false, 'color_token' => '--color-cde', 'background_color' => null, 'text_color' => 'white', 'series' => $missingBackend,
 ]], 'Missing backend preserves everything in one neutral group');
 check($GLOBALS['term_reads'] === [], 'Missing backend triggers no taxonomy calls');
 
@@ -86,7 +86,7 @@ check($groups[0]['series'] === [$source[3], $source[5]], 'Series relative order 
 check($groups[1]['series'] === [$source[2]] && $groups[2]['series'] === [$source[4]] && $groups[3]['series'] === [$source[0]], 'Other families retain original records');
 check($groups[4]['series'] === [$source[1]], 'Unassigned guide moved only to neutral final group');
 check(serialize($source) === $original, 'No mutation of original records or blocks');
-check(array_keys($groups[0]) === ['key', 'label', 'icon', 'color_token', 'series'], 'Stable public group contract');
+check($groups[0]['legacy'] && !$groups[4]['legacy'], 'Only the explicit legacy error opts into historical art');
 foreach ($groups as $group) {
     check($group['series'] !== [], 'No empty group emitted');
     foreach ($group['series'] as $series) {
@@ -95,6 +95,20 @@ foreach ($groups as $group) {
     }
 }
 
+// The editor, not source-code order or the first series, determines the new groups.
+$GLOBALS['catalog_rows'] = [
+    ['codigo' => '20', 'nombre' => 'Primera en el editor', 'icono' => 97],
+    ['codigo' => '01', 'nombre' => 'Segunda, sin símbolo', 'icono' => false],
+    ['codigo' => '11', 'nombre' => 'Vacía', 'icono' => false],
+];
+$GLOBALS['term_meta'][10] = ['01'];
+$GLOBALS['term_meta'][40] = ['20'];
+$ordered = Course::group([row(10),row(20),row(60),row(40)]);
+check(array_column($ordered,'key') === ['20','01','otras-principales','unassigned'], 'Editable order; omit empty groups, then explicit legacy, then unresolved');
+check($ordered[0]['label'] === 'Primera en el editor' && $ordered[0]['icon_id'] === 97 && !$ordered[0]['legacy'], 'Dynamic image and label from catalog');
+check($ordered[1]['icon_id'] === 0 && $ordered[1]['icon'] === null && $ordered[1]['label'] === 'Segunda, sin símbolo', 'Iconless family stays classified, with no invented art');
+check($ordered[2]['legacy'] && $ordered[2]['icon'] === 'cdefamily-torus', 'Legacy artwork is preserved, without inserting a catalog entry');
+fixtures();
 $expected = [
     10 => ['espirituales-esenciales', 'Series esenciales', 'Serie esencial'],
     20 => ['otras-principales', 'Series principales', 'Serie principal'],
@@ -164,7 +178,8 @@ class CountingTemplateCurso extends \App\View\Composers\TemplateCurso
     public function getSeriesWithBlocks() { $this->seriesCalls++; return $this->fixtureSeries; }
     protected function getProgramGuideLesson(): ?array { $this->guideCalls++; return ['post_id' => 44, 'untouched' => true]; }
 }
-$composer = (new ReflectionClass(CountingTemplateCurso::class))->newInstanceWithoutConstructor();
+$composerClass = new ReflectionClass(CountingTemplateCurso::class);
+$composer = $composerClass->newInstanceWithoutConstructor();
 $composer->fixtureSeries = $source;
 $data = $composer->with();
 check($composer->seriesCalls === 1, 'Composer calls getSeriesWithBlocks exactly once');

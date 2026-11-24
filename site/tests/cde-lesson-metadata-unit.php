@@ -7,6 +7,7 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../web/app/themes/sage/app/Support/CdeProductionType.php';
 require __DIR__ . '/../web/app/themes/sage/app/Support/CdeLessonMetadata.php';
+require __DIR__ . '/../web/app/themes/sage/app/Support/CdeFamilyPresentation.php';
 require __DIR__ . '/../web/app/themes/sage/app/helpers.php';
 
 use App\Support\CdeLessonMetadata as Metadata;
@@ -21,18 +22,13 @@ function check(bool $condition, string $message): void
     $count++;
 }
 
-class WP_Error
-{
-    public function __construct(private string $code, private string $message, private array $data = []) {}
-    public function get_error_code(): string { return $this->code; }
-    public function get_error_data(): array { return $this->data; }
-}
-function is_wp_error($value): bool { return $value instanceof WP_Error; }
-function get_post($id) { return $GLOBALS['posts'][$id] ?? null; }
-function get_term($id, $taxonomy) { return $GLOBALS['terms'][$id] ?? null; }
-function wp_get_object_terms($id, $taxonomy, $args) { return $GLOBALS['post_terms'][$id] ?? []; }
-function get_term_meta($id, $key, $single) { return $GLOBALS['term_meta'][$id][$key] ?? []; }
-function get_post_meta($id, $key, $single = false)
+require_once __DIR__ . '/fixtures/wp-error.php';
+function is_wp_error(mixed $value): bool { return $value instanceof WP_Error; }
+function get_post(int $id) { return $GLOBALS['posts'][$id] ?? null; }
+function get_term(int $id, string $taxonomy) { return $GLOBALS['terms'][$id] ?? null; }
+function wp_get_object_terms(int $id, string $taxonomy, array $args) { return $GLOBALS['post_terms'][$id] ?? []; }
+function get_term_meta(int $id, string $key, bool $single) { return $GLOBALS['term_meta'][$id][$key] ?? []; }
+function get_post_meta(int $id, string $key, bool $single = false)
 {
     $GLOBALS['meta_reads'][] = [$id, $key, $single];
     if ($key !== 'tipo_produccion' || $single !== false) {
@@ -40,7 +36,10 @@ function get_post_meta($id, $key, $single = false)
     }
     return $GLOBALS['post_meta'][$id][$key] ?? [];
 }
-function get_field(...$args) { throw new RuntimeException('Must not use ACF defaults or formatting'); }
+function get_field(string $key, mixed $post, bool $format) {
+    if ($key !== 'cde_familias_series' || $post !== 'option' || $format !== false) { throw new RuntimeException('Only editor catalog is read from ACF'); }
+    return [];
+}
 
 function fixtures(): void
 {
@@ -83,6 +82,8 @@ check(end($GLOBALS['meta_reads']) === [1, 'tipo_produccion', false], 'Only own r
 
 $GLOBALS['post_meta'][1]['tipo_produccion'] = ['video_grabado'];
 check(Metadata::forLesson(1)['production'] === ['value' => 'video_grabado', 'label' => 'Voz humana', 'icon' => 'tabler-robot-off'], 'Exact human mapping');
+$GLOBALS['post_meta'][1]['tipo_produccion'] = ['sin_voz'];
+check(Metadata::forLesson(1)['production'] === null, 'Sin voz: no se muestra un robot ni se infiere voz humana');
 foreach ([[], [null], [''], [false], [true], [0], [1], [['audio_sintético']], ['audio_sintetico'], ["audio_sinte\u{0301}tico"], ['Voz sintética'], [' video_grabado'], ['video_grabado '], ['VIDEO_GRABADO'], ['no_aplica'], ['<img src=x onerror=alert(1)>'], ['video_grabado', 'audio_sintético'], ['video_grabado', 'video_grabado']] as $rows) {
     $GLOBALS['post_meta'][1]['tipo_produccion'] = $rows;
     check(Metadata::forLesson(1)['production'] === null, 'Missing/invalid/duplicate modality does not infer human voice');

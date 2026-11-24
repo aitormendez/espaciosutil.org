@@ -14,8 +14,9 @@ La autoridad es `cde_lecciones.tipo_produccion` en NocoDB. Es una **propiedad de
 | --- | --- |
 | `video_grabado` | Voz humana |
 | `audio_sintético` | Voz sintética |
+| `sin_voz` | Sin voz (epígrafe o lección inactiva sin locución; extensión del editor WordPress local) |
 
-`audio_sintético` lleva tilde; no se convierten silenciosamente variantes, etiquetas, mayúsculas o espacios. La API de NocoDB puede presentar la selección como texto o lista de una opción; el validador de Contenidos resuelve esa representación. **WordPress recibe y guarda un escalar exacto**, no una lista ni un booleano. No existe modalidad «no aplicable» en este contrato.
+`audio_sintético` lleva tilde; no se convierten silenciosamente variantes, etiquetas, mayúsculas o espacios. La API de NocoDB puede presentar la selección como texto o lista de una opción; el validador de Contenidos resuelve esa representación. **WordPress recibe y guarda un escalar exacto**, no una lista ni un booleano. La tercera opción del editor no amplía por sí sola el contrato del publicador ni el esquema de NocoDB. No enviar `sin_voz` desde automatizaciones sin adaptar y validar ambos extremos.
 
 ## Editor WordPress
 
@@ -23,7 +24,7 @@ En [el grupo ACF Lección CDE](../../site/web/app/themes/sage/app/Fields/Cde.php
 
 - Nombre: `tipo_produccion`.
 - Clave estable: `field_cde_fields_tipo_produccion`.
-- Radio horizontal con dos opciones, obligatorio y sin selección inicial.
+- Radio horizontal obligatorio y sin selección inicial. En local (24/11/2026), tercera opción explícita «Sin voz» para poder guardar lecciones inactivas sin inventar una locución. Una lección activa sigue requiriendo voz humana o sintética.
 - `default_value=''`, `allow_null=1`, `required=1`, sin opción libre «Otro» y `return_format=value`.
 
 **Importante:** ACF preselecciona la primera opción si `allow_null=0`, aunque `default_value` esté vacío. `allow_null=1` permite representar el estado inicial sin marcar; **no autoriza guardar vacío**. El validador y el schema REST mantienen la obligatoriedad.
@@ -32,22 +33,28 @@ En [el grupo ACF Lección CDE](../../site/web/app/themes/sage/app/Fields/Cde.php
 
 - Conserva errores previos de otros validadores.
 - Rechaza vacío, `null`, booleanos, números, arrays y variantes no canónicas.
-- En entradas REST, el campo es escalar obligatorio, enum de dos valores, sin default ni `null` permitido. No se confunde la posibilidad de representar «sin dato» en el editor con permiso para borrarlo por API.
+- En entradas REST, el campo es escalar obligatorio, enum de valores canónicos, sin default ni `null` permitido. No se confunde la posibilidad de representar «sin dato» en el editor con permiso para borrarlo por API.
 
 Las lecciones antiguas sin metadato **no se convierten a Voz humana**: siguen sin dato hasta su clasificación explícita. Al editarlas en el formulario ACF será necesario elegir la modalidad. No se ejecuta una migración masiva ni se usan datos de la BD local desactualizada.
 
 Los filtros ACF no son una barrera universal frente a PHP/SQL directo. Las escrituras automáticas deben validar antes de aplicar y comprobar después lo persistido; no asumir que `update_field()` ejecuta la validación del formulario.
 
+### Revisión de lecciones antiguas
+
+- Separar el estado de publicación (publicada, borrador, etc.) de **Lección activa**. Sólo `active_lesson` explícitamente desactivado permite «Sin voz»; un campo de actividad ausente no acredita que sea un epígrafe.
+- Para las activas, cruzar por `clave_leccion` con la modalidad editorial de la misma lección en NocoDB. No deducir Voz humana por tener un MP4 ni por no encontrar el aviso de voz sintética. Mantener los casos sin evidencia, duplicados o contradictorios para revisión.
+- El inventario local no representa producción. Antes de corregir contenidos definitivos, leer el destino vigente, preservar valores ya clasificados y verificar de nuevo cada valor escrito. No copiar registros completos ni IDs locales entre entornos.
+
 ## Cabecera aprobada en OpenPencil
 
 Referencia: documento abierto **Espacio Sutil**, página **Curso Desarrollo Espiritual**, frame «Rediseño series · Qué es El libro de Urantia · Vista pública 1585». Lectura del 03/11/2026; no se editó ni guardó el diseño. Los IDs de OpenPencil se remapean: localizar por nombre, no asumir IDs históricos.
 
-- Franja bajo las migas de pan y antes del título, con separadores blancos verticales; texto Rubik de 12 px, iconos de modalidad de 24 px y símbolo familiar existente de 56 × 60 px (caja SVG).
-- Dos líneas para serie y familia; la modalidad comparte fila en escritorio. En móvil los grupos se apilan sin cortar nombres ni desbordar.
+- Franja bajo las migas de pan y antes del título, con separadores verticales en escritorio; texto de 12 px, iconos de modalidad de 24 px y símbolo familiar de 48 px. El texto y el símbolo heredan la tinta elegida para la familia.
+- Revisión del diseño (24/11/2026): serie y familia son celdas independientes del cajón. El orden es serie → símbolo y nombre de familia → modalidad → botón de progreso. El cajón usa el fondo opaco y la tinta de la familia; las partículas corresponden a la zona del título, no a los metadatos.
 - [Datos de cabecera](../../site/web/app/themes/sage/app/Support/CdeLessonMetadata.php): reutilizan la resolución familiar y el nombre de la serie raíz canónica. La modalidad procede exclusivamente de una única fila de metadato propio, válida y exacta. Ausencia, duplicado o valor inválido no se convierte en Voz humana ni se hereda del padre.
 - [Parcial de metadatos](../../site/web/app/themes/sage/resources/views/partials/lesson-metadata.blade.php), [cabecera](../../site/web/app/themes/sage/resources/views/partials/post-header.blade.php) y [estilos](../../site/web/app/themes/sage/resources/css/layouts/lesson.css). Los textos de metadatos se escapan; los iconos son decorativos y se acompañan de texto visible.
-- Sin modalidad válida se mantiene la serie/familia disponible sin inventar el indicador; sin ningún metadato no se renderizan franja ni separadores vacíos. No hay relleno de datos histórico por esta entrega.
-- No se cambian navegación global, partículas, tokens de color familiar, acceso PMPro, botón de lección vista, contenido ni índice.
+- Sin modalidad válida se mantiene la serie/familia disponible sin inventar el indicador. Se omiten las celdas vacías; el usuario identificado conserva su botón aunque no haya metadatos. Un visitante sin metadatos ni botón no recibe una franja vacía.
+- La acción de marcar o desmarcar se traslada al cajón; no se duplica bajo el título ni cambia las reglas de progreso o acceso. El rediseño no rellena contenidos ni modifica el índice.
 
 Pruebas adicionales, aisladas de WordPress/BD:
 

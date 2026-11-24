@@ -2,6 +2,8 @@
 
 Fecha: 2 de noviembre de 2026. Aitor confirma **cuatro familias**, una por grupo de Iván. La identidad visual queda a cargo de Aitor después de replicar las pantallas actuales en OpenPencil; este contrato no cambia el aspecto público.
 
+> **Contrato histórico del publicador externo, no especificación del WordPress local.** El [modelo editorial actual](cde-familias-modelo-editorial.md) y el [catálogo editable ACF](cde-familias.md) usan códigos de familia como cadenas (`01`, no `1`). No reinterpretar los cuatro slugs en planes sellados ni asumir compatibilidad. Antes de desplegar el cambio en un destino con automatizaciones activas: adaptar y certificar por separado la lectura del catálogo, el preflight, el readback y los valores del selector NocoDB. No se han cambiado NocoDB, releases ni publicadores en esta implementación local.
+
 ## Catálogo y campo NocoDB
 
 Campo propuesto en `cde_lecciones`: **`familia_serie`**, tipo **SingleSelect** (una sola opción), sin valor predeterminado. Aitor crea y mantiene el campo; la automatización no modifica su esquema ni sus valores editoriales.

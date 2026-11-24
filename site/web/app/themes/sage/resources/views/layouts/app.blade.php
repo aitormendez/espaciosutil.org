@@ -24,7 +24,9 @@
 
 <body class="{{ implode(' ', get_body_class()) }}" data-barba="wrapper"
   data-nav-context="{{ $navContextData['nav_context'] }}" data-primary-menu="{{ $navContextData['primary_menu_name'] }}"
-  data-section="{{ $sectionContext['key'] }}" data-section-color="{{ $sectionContext['color'] }}">
+  data-section="{{ $sectionContext['key'] }}" data-section-color="{{ $sectionContext['color'] }}"
+  @if (is_singular('cde')) style="--lesson-bg: {{ $sectionContext['color'] }}" @endif
+  @if (!empty($sectionContext['family_palette'])) data-family-palette @endif>
   @php
     wp_body_open();
   @endphp

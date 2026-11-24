@@ -119,6 +119,10 @@ export function barbaInit() {
     body.dataset.navContext = nextBody.dataset.navContext || 'es';
     body.dataset.section = nextBody.dataset.section || '';
     body.dataset.sectionColor = nextBody.dataset.sectionColor || '#000000';
+    body.toggleAttribute('data-family-palette', nextBody.hasAttribute('data-family-palette'));
+    const lessonBg = nextBody.style.getPropertyValue('--lesson-bg');
+    if (lessonBg) body.style.setProperty('--lesson-bg', lessonBg);
+    else body.style.removeProperty('--lesson-bg');
     if (nextTitle?.textContent) {
       document.title = nextTitle.textContent.trim();
     }

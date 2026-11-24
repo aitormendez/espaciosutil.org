@@ -47,7 +47,7 @@ class Cde extends Field
             ])
             ->addRadio(CdeProductionType::FIELD_NAME, [
                 'label' => 'Tipo de producción',
-                'instructions' => 'Selecciona el origen de la voz. Debe coincidir con tipo_produccion de NocoDB; no se deduce de la serie ni del formato del archivo.',
+                'instructions' => 'Selecciona el origen de la voz. Si la lección está inactiva y no tiene locución, selecciona «Sin voz». Las lecciones activas requieren voz humana o sintética.',
                 'choices' => CdeProductionType::CHOICES,
                 'required' => 1,
                 // ACF selecciona la primera opción si allow_null es 0, incluso
