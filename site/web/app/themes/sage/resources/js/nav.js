@@ -57,7 +57,26 @@ function topLevelMenuItems() {
 }
 
 function topLevelLink(menuItem) {
-  return menuItem.querySelector(':scope > a');
+  return menuItem.querySelector(':scope > a, :scope > button');
+}
+
+function setMenuExpandedState(menuItem, expanded) {
+  const trigger = menuItem?.querySelector(':scope > [aria-controls]');
+  const panel = menuItem?.querySelector(':scope > [data-header-search-panel]');
+
+  trigger?.setAttribute('aria-expanded', String(expanded));
+  panel?.setAttribute('aria-hidden', String(!expanded));
+  panel?.toggleAttribute('inert', !expanded);
+}
+
+function focusSearchField(menuItem) {
+  if (!menuItem?.classList?.contains('header-search-menu')) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    menuItem.querySelector('input[type="search"]')?.focus();
+  });
 }
 
 function childMenuItems(menuItem) {
@@ -296,8 +315,13 @@ export function navegacion() {
       timers.push(timer);
     }
 
-    const handleMenuClick = () =>
+    const handleMenuClick = (event) => {
+      if (event.target.closest('[data-header-search-panel]')) {
+        return;
+      }
+
       menu === openMenu ? menuClose(menu) : menuOpen(menu);
+    };
 
     addListener(cleanups, menu, 'click', handleMenuClick);
   });
@@ -318,6 +342,7 @@ export function navegacion() {
         childMenu.classList.remove('xl:hidden');
         openMenu && menuClose(openMenu, { restoreColor: false });
         openMenu = menu;
+        setMenuExpandedState(menu, true);
         previewMenuColor(menu);
         gsap.to(items, {
           opacity: 1,
@@ -325,6 +350,7 @@ export function navegacion() {
           duration: 1,
           stagger: 0.2,
         });
+        focusSearchField(menu);
       }
     } else {
       openMenu && menuClose(openMenu);
@@ -341,6 +367,7 @@ export function navegacion() {
     const childMenu = menu.querySelector('.my-child-menu');
 
     openMenu = undefined;
+    setMenuExpandedState(menu, false);
 
     if (!childMenu) {
       if (restoreColor) {
@@ -393,7 +420,7 @@ export function navegacion() {
   }
 
   function moverLinea(menu) {
-    const enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
+    const enlacePrincipalRect = topLevelLink(menu).getBoundingClientRect();
     const navPos = document.querySelector('#nav').getBoundingClientRect().left;
 
     gsap.to(linea, {
@@ -403,7 +430,7 @@ export function navegacion() {
   }
 
   function setLinea(menu) {
-    const enlacePrincipalRect = menu.querySelector('a').getBoundingClientRect();
+    const enlacePrincipalRect = topLevelLink(menu).getBoundingClientRect();
     const navPos = document.querySelector('#nav').getBoundingClientRect().left;
 
     gsap.set(linea, {
@@ -430,6 +457,18 @@ export function navegacion() {
   };
 
   addListener(cleanups, document, 'click', handleDocumentClick);
+
+  const handleEscape = (event) => {
+    if (event.key !== 'Escape' || !openMenu) {
+      return;
+    }
+
+    const trigger = topLevelLink(openMenu);
+    menuClose(openMenu);
+    trigger?.focus();
+  };
+
+  addListener(cleanups, document, 'keydown', handleEscape);
 
   // scroll
 
@@ -467,6 +506,7 @@ export function navegacion() {
 
     openMenu = undefined;
     desktopMenus.forEach((menu) => {
+      setMenuExpandedState(menu, false);
       const childMenu = menu.querySelector('.my-child-menu');
       if (childMenu) {
         childMenu.classList.add('xl:hidden');
@@ -545,6 +585,7 @@ export function navegacionMovil() {
           }
 
           openMenu = menu;
+          setMenuExpandedState(menu, true);
           previewMenuColor(menu);
 
           gsap.to(box, {
@@ -560,12 +601,14 @@ export function navegacionMovil() {
             stagger: 0.1,
             ease: 'elastic',
           });
+          focusSearchField(menu);
         }
       };
 
       menu.close = ({ restoreColor = true } = {}) => {
         if (isOpen) {
           isOpen = false;
+          setMenuExpandedState(menu, false);
 
           if (openMenu === menu) {
             openMenu = null;
@@ -583,21 +626,49 @@ export function navegacionMovil() {
         }
       };
 
-      const handleMenuClick = () =>
+      const handleMenuClick = (event) => {
+        if (event.target.closest('[data-header-search-panel]')) {
+          return;
+        }
+
         isOpen ? menu.close() : menu.open();
+      };
 
       addListener(cleanups, menu, 'click', handleMenuClick);
 
-      // cerrar nav en movil cuando clicas submenús
-      items.forEach((item) => {
-        const handleItemClick = () => cerrarNav();
-        addListener(cleanups, item, 'click', handleItemClick);
-      });
+      // cerrar nav en móvil al navegar desde un submenú; el formulario de
+      // búsqueda debe seguir siendo interactivo mientras el panel está abierto.
+      if (!menu.classList.contains('header-search-menu')) {
+        items.forEach((item) => {
+          const handleItemClick = () => cerrarNav();
+          addListener(cleanups, item, 'click', handleItemClick);
+        });
+      }
     } else {
       const handleMenuWithoutChildrenClick = () => cerrarNav();
       addListener(cleanups, menu, 'click', handleMenuWithoutChildrenClick);
     }
   });
+
+  const handleEscape = (event) => {
+    if (event.key !== 'Escape') {
+      return;
+    }
+
+    if (openMenu) {
+      const trigger = topLevelLink(openMenu);
+      openMenu.close();
+      trigger?.focus();
+      return;
+    }
+
+    if (navOpen) {
+      cerrarNav();
+      burguer.focus();
+    }
+  };
+
+  addListener(cleanups, document, 'keydown', handleEscape);
 
   return () => {
     cleanups.forEach((cleanup) => cleanup());
@@ -609,6 +680,7 @@ export function navegacionMovil() {
 
     openMenu = null;
     mobileMenus.forEach((menu) => {
+      setMenuExpandedState(menu, false);
       const box = menu.querySelector('.my-child-menu');
       if (!box) {
         return;

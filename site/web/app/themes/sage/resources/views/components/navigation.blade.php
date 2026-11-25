@@ -2,6 +2,7 @@
     $menu = \Log1x\Navi\Navi::make()->build($name);
     $logoutUrl = htmlspecialchars_decode(wp_logout_url(home_url('/login/')), ENT_QUOTES);
     $isPrimaryNavigation = in_array((string) $name, ['primary_navigation', 'cde_navigation'], true);
+    $searchRendered = false;
 @endphp
 
 @if ($menu->isNotEmpty())
@@ -17,6 +18,11 @@
         @endphp
 
         @if ($show)
+            @if ($isPrimaryNavigation && !$searchRendered && in_array('switch', $itemClassList, true))
+                @include('partials.header-search-item')
+                @php $searchRendered = true; @endphp
+            @endif
+
             <li
                 class="my-menu-item {{ $attributes->get('class') }} {{ $itemClassNames }} {{ $item->activeAncestor ? 'active-ancestor' : '' }} {{ $item->active ? 'active' : '' }} my-2 inline-block w-full xl:w-auto xl:px-6">
                 <a class="my-menu-link" href="{{ $itemUrl }}" data-section="section-{{ $item->id }}"
@@ -47,4 +53,8 @@
             </li>
         @endif
     @endforeach
+@endif
+
+@if ($isPrimaryNavigation && !$searchRendered)
+    @include('partials.header-search-item')
 @endif

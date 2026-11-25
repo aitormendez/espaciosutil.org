@@ -1,4 +1,6 @@
-@php($search_input_id = $search_input_id ?? 'site-search')
+@php
+  $search_input_id ??= 'site-search';
+@endphp
 
 <form role="search" method="get" action="{{ home_url('/') }}" class="font-sans">
   <label for="{{ $search_input_id }}" class="text-gris1 mb-3 block text-sm">
