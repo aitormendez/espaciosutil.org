@@ -32,7 +32,7 @@
           @endphp
           <li class="serie-accordion-item">
             <button type="button"
-              class="serie-accordion-toggle focus-visible:outline-offset-3 wrap-anywhere hover:bg-(--course-active) md:min-h-7.5 flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 px-2 py-1 text-left font-[inherit] text-[0.9375rem] font-semibold leading-normal text-inherit focus-visible:outline-2 focus-visible:outline-current md:px-0 md:text-sm"
+              class="serie-accordion-toggle focus-visible:outline-offset-3 wrap-anywhere hover:bg-(--course-active) md:min-h-7.5 flex min-h-11 w-full cursor-pointer items-center justify-between gap-3 px-2 py-1 text-left font-[inherit] text-[0.9375rem] font-semibold leading-normal text-inherit focus-visible:outline-2 focus-visible:outline-current md:px-0 md:text-base"
               data-series-term="{{ $seriesTermId }}" aria-expanded="false" aria-controls="{{ $seriesPanelId }}"
               id="{{ $seriesButtonId }}">
               <span class="md:pl-2" data-series-title>{{ $series['name'] }}</span>
