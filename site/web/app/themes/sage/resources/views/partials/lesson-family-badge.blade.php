@@ -1,9 +1,4 @@
-<div class="lesson-metadata__item lesson-metadata__series lesson-family-badge" data-lesson-family="{{ $family['slug'] }}">
-  <x-icon :name="$family['icon']" class="lesson-family-badge__icon" aria-hidden="true" focusable="false" />
-  <div class="lesson-metadata__series-copy">
-    @if (!empty($series_name))
-      <span class="lesson-metadata__series-name">{{ $series_name }}</span>
-    @endif
-    <span class="lesson-family-badge__label">{{ $family['label'] }}</span>
-  </div>
+<div class="lesson-metadata__item lesson-family-badge flex min-w-0 items-center gap-2 px-3 sm:items-start sm:px-4 sm:pt-4 sm:pb-2" data-lesson-family="{{ $family['slug'] }}">
+  @include('partials.cde-family-icon', ['family' => $family, 'iconClass' => 'lesson-family-badge__icon block size-12 shrink-0 sm:-mt-2'])
+  <span class="lesson-family-badge__label max-w-32 min-w-0 wrap-anywhere whitespace-normal">{{ $family['label'] }}</span>
 </div>

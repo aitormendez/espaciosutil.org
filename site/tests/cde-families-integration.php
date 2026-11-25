@@ -9,6 +9,12 @@ if (! defined('WP_ENV') || WP_ENV !== 'development' || getenv('CDE_FAMILIES_TEST
     WP_CLI::error('Sólo development, con CDE_FAMILIES_TEST_WRITE=1. Crea y elimina exclusivamente fixtures propios.');
 }
 
+// No se edita ni se siembra el catálogo del entorno para fabricar esta precondición.
+$codes = array_column(Families::catalog(), 'code');
+if (count($codes) < 2) {
+    WP_CLI::error('Se necesitan dos familias configuradas en ACF. No se crean fixtures ni se cambia el catálogo.');
+}
+[$first, $second] = $codes;
 $token = 'cde-family-test-' . wp_generate_uuid4();
 $terms = [];
 $posts = [];
@@ -47,33 +53,36 @@ try {
     $otherRoot = $term('series-b');
     $block = $term('block-a', $root);
     $otherBlock = $term('block-b', $otherRoot);
-    $assert(Families::assignSeries($root, 'espirituales-esenciales') === true, 'asignación real a raíz de prueba');
-    $assert(Families::assignSeries($root, 'espirituales-esenciales') === true, 'asignación repetida sin duplicar metadatos');
+    add_term_meta($root, 'familia_serie', 'otras-principales', true); // Sólo en nuestra nueva raíz.
+    $assert($errorIs(Families::resolveSeries($root), 'legacy'), 'slug histórico diagnosticado, no convertido');
+    $assert($errorIs(Families::assignSeries($root, $first), 'reclassification_required') && get_term_meta($root, 'familia_serie', true) === 'otras-principales', 'escritura ordinaria conserva metadato legacy');
+    $assert(Families::assignSeries($root, $first, true) === true, 'reclasificación autorizada sólo del fixture');
+    $assert(Families::assignSeries($root, $first) === true, 'asignación repetida sin duplicar metadatos');
     $assert(count(get_term_meta($root, 'familia_serie', false)) === 1, 'un único metadato canónico');
-    $assert(Families::assignSeries($otherRoot, 'otras-principales') === true, 'segunda raíz de prueba independiente');
-    $assert($errorIs(Families::assignSeries($block, 'otras-principales'), 'root_required'), 'no se escribe familia en bloque');
+    $assert(Families::assignSeries($otherRoot, $second) === true, 'segunda raíz de prueba independiente');
+    $assert($errorIs(Families::assignSeries($block, $second), 'root_required'), 'no se escribe familia en bloque');
     $assert(get_term_meta($block, 'familia_serie', false) === [], 'bloque conserva ausencia de asignación propia');
 
     $index = $post('index');
     $assigned = wp_set_object_terms($index, [$block], 'serie_cde');
     $assert(! is_wp_error($assigned), 'índice temporal vinculado a bloque real');
-    $assert(! is_wp_error(Families::validatePublication(0, ['post_parent' => $index], 'espirituales-esenciales')), 'preflight de alta válido antes de crear lección');
+    $assert(! is_wp_error(Families::validatePublication(0, ['post_parent' => $index], $first)), 'preflight de alta válido antes de crear lección');
     $lesson = $post('lesson', $index);
     $nested = $post('nested', $lesson);
     $resolved = Families::resolveLesson($nested);
     $assert(! is_wp_error($resolved) && $resolved['series_id'] === $root && $resolved['source_post_id'] === $index, 'lección anidada hereda raíz e índice reales');
-    $assert(wp_get_object_terms($nested, 'familia_serie', ['fields' => 'ids']) === [], 'no hay copia taxonómica familiar en lección');
+    $assert(! taxonomy_exists('familia_serie'), 'no hay copia taxonómica familiar en lección');
     $assert(get_post_meta($nested, 'familia_serie', true) === '', 'no hay copia de metadato familiar en lección');
-    $assert($errorIs(Families::validatePublication($nested, [], 'otras-principales'), 'mismatch'), 'preflight rechaza familia NocoDB discordante');
-    $assert($errorIs(Families::assignSeries($root, 'otras-espirituales'), 'reclassification_required'), 'setter conserva familia sin permiso de reclasificación');
-    $assert(Families::assignSeries($root, 'otras-espirituales', true) === true, 'reclasificación explícita de fixture');
-    $assert($errorIs(Families::validatePublication($nested, [], 'espirituales-esenciales'), 'mismatch'), 'readback detecta deriva respecto al plan anterior');
-    $assert(Families::resolveLesson($nested)['familia_serie'] === 'otras-espirituales', 'herencia cambia sin actualizar lecciones');
+    $assert($errorIs(Families::validatePublication($nested, [], $second), 'mismatch'), 'preflight rechaza familia NocoDB discordante');
+    $assert($errorIs(Families::assignSeries($root, $second), 'reclassification_required'), 'setter conserva familia sin permiso de reclasificación');
+    $assert(Families::assignSeries($root, $second, true) === true, 'reclasificación explícita de fixture');
+    $assert($errorIs(Families::validatePublication($nested, [], $first), 'mismatch'), 'readback detecta deriva respecto al plan anterior');
+    $assert(Families::resolveLesson($nested)['familia_serie'] === $second, 'herencia cambia sin actualizar lecciones');
 
     wp_set_object_terms($nested, [$otherBlock], 'serie_cde');
     $assert($errorIs(Families::resolveLesson($nested), 'ambiguous_series'), 'conflicto real entre término propio y ancestros');
-    $assert(! is_wp_error(Families::validatePublication($nested, ['post_parent' => $index, 'serie_cde' => []], 'otras-espirituales')), 'preflight valida sólo la propuesta de corrección, no el estado persistido');
-    $assert($errorIs(Families::validatePublication($nested, [], 'otras-espirituales'), 'ambiguous_series'), 'readback con propuesta vacía detecta conflicto real oculto por una propuesta');
+    $assert(! is_wp_error(Families::validatePublication($nested, ['post_parent' => $index, 'serie_cde' => []], $second)), 'preflight valida sólo la propuesta de corrección, no el estado persistido');
+    $assert($errorIs(Families::validatePublication($nested, [], $second), 'ambiguous_series'), 'readback con propuesta vacía detecta conflicto real oculto por una propuesta');
     wp_set_object_terms($nested, [], 'serie_cde');
     $assert(! is_wp_error(Families::resolveLesson($nested)), 'resolución recuperada tras retirar sólo conflicto del fixture');
     $assert(get_post_status($index) === 'draft' && get_post_status($lesson) === 'draft' && get_post_status($nested) === 'draft', 'ningún fixture publicado o programado');

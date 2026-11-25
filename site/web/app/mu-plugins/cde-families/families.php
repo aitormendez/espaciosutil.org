@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace EspacioSutil\Cde;
 
+require_once __DIR__ . '/family-catalog.php';
+
 /** The root serie_cde owns the family; neither blocks nor lessons own a copy. */
 final class Families
 {
-    public const TAXONOMY = 'familia_serie';
-    public const CATALOG = [
-        'espirituales-esenciales' => 'Enseñanzas espirituales esenciales',
-        'otras-principales' => 'Otras enseñanzas del grupo principal',
-        'otras-espirituales' => 'Otras enseñanzas espirituales',
-        'informacion-complementaria' => 'Información complementaria',
-    ];
+    public const META_KEY = 'familia_serie';
 
     public static function boot(): void
     {
@@ -27,28 +23,14 @@ final class Families
         add_action('edited_serie_cde', [self::class, 'adminSave']);
         add_action('admin_notices', [self::class, 'adminNotice']);
         add_filter('wp_update_term_parent', [self::class, 'protectRootParent'], 10, 3);
-        if (defined('WP_CLI') && WP_CLI) {
-            \WP_CLI::add_command('cde families seed', static function (): void {
-                $result = self::seedCatalog();
-                if (is_wp_error($result)) {
-                    \WP_CLI::error($result->get_error_message());
-                }
-                \WP_CLI::line(wp_json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-            });
-        }
+        FamilyCatalog::boot();
     }
 
     public static function register(): void
     {
-        // No object types: WP term IDs must never be used as post IDs to fake term-to-term relationships.
-        register_taxonomy(self::TAXONOMY, [], [
-            'label' => 'Familias del CDE', 'public' => false, 'show_ui' => false,
-            'show_in_rest' => false, 'rewrite' => false, 'query_var' => false,
-            'meta_box_cb' => false,
-        ]);
-        register_term_meta('serie_cde', self::TAXONOMY, [
+        register_term_meta('serie_cde', self::META_KEY, [
             'type' => 'string', 'single' => true, 'show_in_rest' => false,
-            'description' => 'Slug familiar canónico, sólo en la raíz. Escribir mediante Families::assignSeries().',
+            'description' => 'Código editorial de la familia; sólo en la serie raíz.',
         ]);
     }
 
@@ -59,38 +41,26 @@ final class Families
 
     public static function catalog(): array
     {
-        $items = [];
-        foreach (self::CATALOG as $slug => $label) {
-            $term = get_term_by('slug', $slug, self::TAXONOMY);
-            $items[] = ['slug' => $slug, 'label' => $label, 'term_id' => $term ? (int) $term->term_id : null];
-        }
-        return $items;
+        return FamilyCatalog::items();
     }
 
-    /** Explicit opt-in only. Does not classify any existing series, blocks or lessons. */
-    public static function seedCatalog(): array|\WP_Error
+    /** Only an explicit, confirmed human operation may clear an assignment, including a legacy one. */
+    public static function unassignSeries(int $seriesId, bool $confirm = false): bool|\WP_Error
     {
-        foreach (self::CATALOG as $slug => $label) {
-            $term = get_term_by('slug', $slug, self::TAXONOMY);
-            if ($term && ($term->name !== $label || (int) $term->parent !== 0)) {
-                return self::error('catalog_conflict', 'El catálogo existente no coincide; revisar manualmente.', ['slug' => $slug]);
-            }
-        }
-        foreach (self::CATALOG as $slug => $label) {
-            if (! get_term_by('slug', $slug, self::TAXONOMY)) {
-                $created = wp_insert_term($label, self::TAXONOMY, ['slug' => $slug]);
-                if (is_wp_error($created)) {
-                    return $created;
-                }
-            }
-        }
-        return self::catalog();
+        if (!$confirm) { return self::error('reclassification_required', 'Confirma la retirada de la familia.'); }
+        $term = get_term($seriesId, 'serie_cde');
+        if (!$term || is_wp_error($term)) { return self::error('series_missing', 'La serie no existe.'); }
+        if ((int)$term->parent !== 0) { return self::error('root_required', 'Sólo una serie raíz puede quitar su familia.'); }
+        $values = get_term_meta($seriesId, self::META_KEY, false);
+        if (count($values) > 1) { return self::error('duplicate_meta', 'Existen asignaciones duplicadas; revisar antes de quitar la familia.'); }
+        if (!$values) { return true; }
+        return delete_term_meta($seriesId, self::META_KEY, $values[0]) ?: self::error('write_failed', 'No se pudo retirar la asignación.');
     }
 
     /** Structural operation. Reclassification requires replace=true, never inferred from lesson codes. */
     public static function assignSeries(int $seriesId, string $slug, bool $replace = false): bool|\WP_Error
     {
-        if (! isset(self::CATALOG[$slug])) {
+        if (! FamilyCatalog::find($slug)) {
             return self::error('unknown', 'Familia desconocida.', ['familia_serie' => $slug]);
         }
         $term = get_term($seriesId, 'serie_cde');
@@ -100,7 +70,7 @@ final class Families
         if ((int) $term->parent !== 0) {
             return self::error('root_required', 'Asignar familia sólo a una serie raíz.');
         }
-        $values = get_term_meta($seriesId, self::TAXONOMY, false);
+        $values = get_term_meta($seriesId, self::META_KEY, false);
         if (count($values) > 1) {
             return self::error('duplicate_meta', 'Hay múltiples asignaciones familiares; reparar antes de continuar.');
         }
@@ -111,7 +81,9 @@ final class Families
         if ($current === $slug) {
             return true;
         }
-        $saved = update_term_meta($seriesId, self::TAXONOMY, $slug);
+        // Do not knowingly replace a value that changed since the explicit decision above.
+        $saved = $values === [] ? add_term_meta($seriesId, self::META_KEY, $slug, true)
+            : update_term_meta($seriesId, self::META_KEY, $slug, $current);
         return is_wp_error($saved) ? $saved : ($saved !== false ? true : self::error('write_failed', 'No se pudo guardar la familia.'));
     }
 
@@ -128,7 +100,7 @@ final class Families
             if (! $term || is_wp_error($term)) {
                 return self::error('series_missing', 'Término serie_cde inexistente.', ['term_id' => $termId]);
             }
-            $values = get_term_meta($termId, self::TAXONOMY, false);
+            $values = get_term_meta($termId, self::META_KEY, false);
             if ((int) $term->parent !== 0) {
                 if ($values !== []) {
                     return self::error('child_assignment', 'Un bloque contiene familia propia; sólo la raíz puede asignarla.', ['term_id' => $termId]);
@@ -143,10 +115,12 @@ final class Families
             if ($slug === '') {
                 return self::error('unassigned', 'Serie pendiente de clasificación humana.', ['series_id' => $termId]);
             }
-            if (! is_string($slug) || ! isset(self::CATALOG[$slug])) {
-                return self::error('unknown', 'La familia guardada no pertenece al catálogo.', ['series_id' => $termId]);
+            if (is_string($slug) && preg_match('/^[a-z][a-z0-9-]*$/D', $slug)) {
+                return self::error('legacy', 'Asignación anterior conservada: ' . $slug . '. Requiere revisión explícita.', ['series_id' => $termId, 'legacy_value' => $slug]);
             }
-            return ['familia_serie' => $slug, 'label' => self::CATALOG[$slug], 'series_id' => $termId,
+            $row = is_string($slug) ? FamilyCatalog::find($slug) : null;
+            if (!$row) { return self::error('unknown', 'La familia guardada no pertenece al catálogo.', ['series_id' => $termId]); }
+            return $row + ['familia_serie' => $slug, 'series_id' => $termId,
                 'series_slug' => $term->slug, 'source_term_id' => $source];
         }
         return self::error('series_missing', 'Se necesita un identificador serie_cde válido.');
@@ -188,7 +162,7 @@ final class Families
             $sets[] = ['post_id' => $parent, 'terms' => $ids];
             $parent = (int) $ancestor->post_parent;
         }
-        $resolved = null;
+        $resolved = $legacy = $root = null;
         foreach ($sets as $set) {
             foreach ($set['terms'] as $id) {
                 if (! is_int($id) || $id <= 0) {
@@ -196,24 +170,29 @@ final class Families
                 }
                 $family = self::resolveSeries($id);
                 if (is_wp_error($family)) {
-                    return $family;
+                    if ($family->get_error_code() !== 'cde_family_legacy') { return $family; }
+                    $legacy = $family;
+                    $seriesId = $family->get_error_data()['series_id'];
+                } else {
+                    $seriesId = $family['series_id'];
                 }
-                if ($resolved && $resolved['series_id'] !== $family['series_id']) {
-                    return self::error('ambiguous_series', 'La lección o sus ancestros pertenecen a más de una serie.', ['series_ids' => [$resolved['series_id'], $family['series_id']]]);
+                if ($root !== null && $root !== $seriesId) {
+                    return self::error('ambiguous_series', 'La lección o sus ancestros pertenecen a más de una serie.', ['series_ids' => [$root, $seriesId]]);
                 }
-                if (! $resolved) {
+                $root = $seriesId;
+                if (!$resolved && !is_wp_error($family)) {
                     $resolved = $family + ['source_post_id' => $set['post_id'], 'inherited' => $set['post_id'] !== $postId];
                 }
             }
         }
-        return $resolved ?? self::error('no_series', 'La lección y sus ancestros no tienen serie_cde.');
+        return $legacy ?? $resolved ?? self::error('no_series', 'La lección y sus ancestros no tienen serie_cde.');
     }
 
     /** CLI/publication contract: validate before wp_insert_post/wp_update_post or other writes. */
     public static function validatePublication(int $postId, array $proposed, string $expectedFamily): array|\WP_Error
     {
-        if (! isset(self::CATALOG[$expectedFamily])) {
-            return self::error('unknown', 'El publicador necesita un slug familiar explícito del catálogo.');
+        if (! FamilyCatalog::find($expectedFamily)) {
+            return self::error('unknown', 'El publicador necesita un código familiar explícito del catálogo.');
         }
         $resolved = self::resolveLesson($postId, $proposed);
         if (is_wp_error($resolved)) {
@@ -242,15 +221,25 @@ final class Families
         }
         register_rest_route('cde/v1', '/familias', [
             'methods' => 'GET', 'permission_callback' => '__return_true',
-            'callback' => static fn(): array => ['version' => 1, 'items' => self::catalog()],
+            'callback' => static fn(): array => ['version' => 2, 'items' => self::catalog()],
         ]);
         register_rest_route('cde/v1', '/familias/series/(?P<id>\d+)', [
-            'methods' => 'PUT', 'permission_callback' => static fn(): bool => current_user_can('manage_categories'),
-            'args' => ['familia_serie' => ['required' => true, 'type' => 'string', 'enum' => array_keys(self::CATALOG)], 'replace' => ['type' => 'boolean', 'default' => false]],
-            'callback' => static function (\WP_REST_Request $request): array|\WP_Error {
-                $result = self::assignSeries((int) $request['id'], $request['familia_serie'], $request['replace']);
-                return is_wp_error($result) ? $result : self::resolveSeries((int) $request['id']);
-            },
+            [
+                'methods' => 'PUT', 'permission_callback' => static fn(): bool => current_user_can('manage_categories'),
+                'args' => ['familia_serie' => ['required' => true, 'type' => 'string', 'pattern' => '^(?:0[1-9]|[1-9][0-9])$'], 'replace' => ['type' => 'boolean', 'default' => false]],
+                'callback' => static function (\WP_REST_Request $request): array|\WP_Error {
+                    $result = self::assignSeries((int) $request['id'], $request['familia_serie'], $request['replace']);
+                    return is_wp_error($result) ? $result : self::resolveSeries((int) $request['id']);
+                },
+            ],
+            [
+                'methods' => 'DELETE', 'permission_callback' => static fn(): bool => current_user_can('manage_categories'),
+                'args' => ['replace' => ['required' => true, 'type' => 'boolean']],
+                'callback' => static function (\WP_REST_Request $request): array|\WP_Error {
+                    $result = self::unassignSeries((int)$request['id'], $request['replace'] === true);
+                    return is_wp_error($result) ? $result : ['series_id' => (int)$request['id'], 'familia_serie' => null];
+                },
+            ],
         ]);
         register_rest_route('cde/v1', '/familias/inventario', [
             'methods' => 'GET', 'permission_callback' => static fn(): bool => current_user_can('manage_categories') && current_user_can('edit_posts'),
@@ -286,7 +275,7 @@ final class Families
                     'family' => self::view(self::resolveLesson((int) $post->ID))];
             }
         }
-        $response = new \WP_REST_Response(['version' => 1, 'site_url' => home_url(), 'page' => $page, 'per_page' => $limit,
+        $response = new \WP_REST_Response(['version' => 2, 'site_url' => home_url(), 'page' => $page, 'per_page' => $limit,
             'total' => (int) $total, 'total_pages' => (int) ceil((int) $total / $limit), 'items' => $items]);
         $response->header('Cache-Control', 'private, no-store');
         return $response;
@@ -313,12 +302,12 @@ final class Families
             $resolved = self::resolveSeries((int) $term->term_id);
             echo '<p>' . esc_html(is_wp_error($resolved) ? $resolved->get_error_message() : $resolved['label']) . '</p><p>Heredada de la serie raíz; no editable en este bloque.</p>';
         } else {
-            $values = get_term_meta($term->term_id, self::TAXONOMY, false);
+            $values = get_term_meta($term->term_id, self::META_KEY, false);
             $current = $values[0] ?? '';
             self::adminSelect(is_string($current) ? $current : '');
             echo '<p>No se infiere por código ni título. Dejar sin seleccionar conserva la asignación actual.</p>';
             if ($values !== []) {
-                echo '<p><label><input type="checkbox" name="cde_family_replace" value="1"> Confirmo la reclasificación estructural de toda esta serie y sus lecciones.</label></p>';
+                echo '<p><label><input type="checkbox" name="cde_family_replace" value="1"> Confirmo el cambio o la retirada de la familia de toda esta serie y sus lecciones.</label></p>';
                 $resolved = self::resolveSeries((int) $term->term_id);
                 if (is_wp_error($resolved)) {
                     echo '<p>' . esc_html($resolved->get_error_message()) . '</p>';
@@ -332,7 +321,8 @@ final class Families
     {
         wp_nonce_field('cde_family_assignment', 'cde_family_nonce');
         echo '<select name="cde_family_slug" id="cde-family"><option value="">Sin asignar / conservar</option>';
-        foreach (self::CATALOG as $slug => $label) {
+        if ($current !== '') { echo '<option value="__clear__">Quitar la familia (requiere confirmación)</option>'; }
+        foreach (self::catalog() as ['code' => $slug, 'label' => $label]) {
             echo '<option value="' . esc_attr($slug) . '"' . selected($current, $slug, false) . '>' . esc_html($label) . '</option>';
         }
         echo '</select>';
@@ -351,9 +341,10 @@ final class Families
         if ($slug === '') {
             return; // Clearing via an accidental blank select is deliberately not supported.
         }
-        $result = is_string($slug)
-            ? self::assignSeries($termId, $slug, ($_POST['cde_family_replace'] ?? '') === '1')
-            : self::error('unknown', 'Formato de familia inválido.');
+        $confirmed = ($_POST['cde_family_replace'] ?? '') === '1';
+        $result = $slug === '__clear__' ? self::unassignSeries($termId, $confirmed) : (is_string($slug)
+            ? self::assignSeries($termId, $slug, $confirmed)
+            : self::error('unknown', 'Formato de familia inválido.'));
         if (is_wp_error($result)) {
             self::notice($result->get_error_message());
         }
@@ -376,7 +367,7 @@ final class Families
 
     public static function protectRootParent(int $parent, int $termId, string $taxonomy): int
     {
-        if ($taxonomy === 'serie_cde' && $parent > 0 && get_term_meta($termId, self::TAXONOMY, false) !== []) {
+        if ($taxonomy === 'serie_cde' && $parent > 0 && get_term_meta($termId, self::META_KEY, false) !== []) {
             $term = get_term($termId, 'serie_cde');
             if ($term && ! is_wp_error($term) && (int) $term->parent === 0) {
                 self::notice('La serie tiene una familia asignada y no puede convertirse en bloque. Se conserva como raíz.');
@@ -386,17 +377,23 @@ final class Families
         return $parent;
     }
 
+    /**
+     * @param object $prepared Term data or a WP_Error from an earlier filter.
+     */
     public static function validateRestSeries($prepared, \WP_REST_Request $request)
     {
         if (is_wp_error($prepared)) {
             return $prepared;
         }
-        if ($request->has_param('parent') && (int) $request['parent'] > 0 && $request['id'] && get_term_meta((int) $request['id'], self::TAXONOMY, false) !== []) {
+        if ($request->has_param('parent') && (int) $request['parent'] > 0 && $request['id'] && get_term_meta((int) $request['id'], self::META_KEY, false) !== []) {
             return self::error('root_required', 'Una serie con familia asignada no puede convertirse en bloque por REST.');
         }
         return $prepared;
     }
 
+    /**
+     * @param object $prepared Post data or a WP_Error from an earlier filter.
+     */
     public static function validateRestPublication($prepared, \WP_REST_Request $request)
     {
         if (is_wp_error($prepared)) {
@@ -417,7 +414,7 @@ final class Families
         }
         $result = is_string($request['familia_serie'])
             ? self::validatePublication($id, $proposed, $request['familia_serie'])
-            : self::error('unknown', 'familia_serie debe ser un slug.');
+            : self::error('unknown', 'familia_serie debe ser un código de texto.');
         return is_wp_error($result) ? $result : $prepared;
     }
 }

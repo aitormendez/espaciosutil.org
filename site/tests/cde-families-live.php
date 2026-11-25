@@ -13,19 +13,29 @@ $check = static function (bool $ok, string $message): void {
     }
     WP_CLI::line('OK ' . $message);
 };
-$before = (int) wp_count_terms(['taxonomy' => Families::TAXONOMY, 'hide_empty' => false]);
+$before = Families::catalog();
+$check(! taxonomy_exists('familia_serie') && ! method_exists(Families::class, 'seedCatalog'), 'sin taxonomía ni API de siembra');
+$field = acf_get_field('field_cde_familias_series');
+$check($field && $field['type'] === 'repeater' && $field['name'] === 'cde_familias_series', 'repetidor ACF registrado');
+$fields = array_column(acf_get_fields($field), 'type', 'name');
+$check(($fields['codigo'] ?? null) === 'text' && ($fields['nombre'] ?? null) === 'text' && ($fields['icono'] ?? null) === 'image', 'campos editables código, nombre e imagen');
+$textField = acf_get_field('field_cde_familia_color_texto');
+$check(($fields['color_fondo'] ?? null) === 'color_picker' && ($fields['color_texto'] ?? null) === 'radio' && $textField['default_value'] === 'white' && array_keys($textField['choices']) === ['white', 'black'], 'selector de fondo y texto blanco o negro');
+$checkColors = static function (array $row) use ($check): void {
+    $check(array_key_exists('background_color', $row) && ($row['background_color'] === null || preg_match('/^#[0-9a-f]{6}$/D', $row['background_color']) === 1) && in_array($row['text_color'] ?? null, ['white', 'black'], true), 'colores canónicos o por defecto');
+};
 $originalUser = get_current_user_id();
 try {
     wp_set_current_user(0);
     $response = rest_do_request(new WP_REST_Request('GET', '/cde/v1/familias'));
-    $check($response->get_status() === 200 && count($response->get_data()['items']) === 4, 'catálogo público exacto sin escrituras implícitas');
-    $taxonomy = get_taxonomy(Families::TAXONOMY);
-    $check($taxonomy && $taxonomy->object_type === [] && ! $taxonomy->show_in_rest, 'taxonomía sin asignación manual por lección');
+    $body = $response->get_data();
+    $check($response->get_status() === 200 && $body['version'] === 2 && $body['items'] === $before, 'REST devuelve catálogo editable v2, incluso si está vacío');
+    foreach ($body['items'] as $row) {
+        $checkColors($row);
+        $check(is_string($row['code']) && preg_match('/^(?!00)[0-9]{2}$/D', $row['code']) === 1 && $row['slug'] === $row['code'] && trim($row['label']) !== '' && is_int($row['icon_id']), 'forma pública con código estable y adjunto opcional');
+    }
     $response = rest_do_request(new WP_REST_Request('GET', '/cde/v1/familias/inventario'));
     $check($response->get_status() === 401, 'inventario privado para anónimos');
-    $request = new WP_REST_Request('PUT', '/cde/v1/familias/series/1');
-    $request->set_body_params(['familia_serie' => 'espirituales-esenciales']);
-    $check(rest_do_request($request)->get_status() === 401, 'asignación estructural requiere autorización');
     $users = get_users(['role' => 'administrator', 'number' => 1, 'fields' => 'ID']);
     $check(count($users) === 1, 'administrador local disponible para pruebas sólo lectura');
     wp_set_current_user((int) $users[0]);
@@ -37,6 +47,7 @@ try {
         $check($response->get_status() === 200 && count($body['items']) <= 2 && $body['total'] >= count($body['items']), 'inventario ' . $kind . ' paginado con errores por fila');
         $check(($response->get_headers()['Cache-Control'] ?? '') === 'private, no-store', 'inventario ' . $kind . ' no cacheable');
         foreach ($body['items'] as $row) {
+            if (!empty($row['family']['ok'])) { $checkColors($row['family']); }
             $check(isset($row['family']['ok']) && ($row['family']['ok'] || isset($row['family']['error']['code'])), 'estado familiar explícito ' . $kind);
         }
     }
@@ -46,7 +57,7 @@ try {
     ob_start();
     do_action('serie_cde_add_form_fields', 'serie_cde');
     $markup = ob_get_clean();
-    $check(str_contains($markup, 'cde_family_nonce') && str_contains($markup, 'Información complementaria'), 'selector administrativo registrado con nonce');
+    $check(str_contains($markup, 'cde_family_nonce') && str_contains($markup, '<select'), 'selector administrativo registrado con nonce');
     $roots = get_terms(['taxonomy' => 'serie_cde', 'hide_empty' => false, 'parent' => 0, 'number' => 1]);
     if ($roots) {
         ob_start();
@@ -71,7 +82,7 @@ try {
         $response = rest_do_request(new WP_REST_Request('GET', '/wp/v2/cde/' . $lessons[0]->ID));
         $check($response->get_status() === 200 && isset($response->get_data()['familia_resuelta']['ok']), 'REST lección expone resolución derivada');
     }
-    $check((int) wp_count_terms(['taxonomy' => Families::TAXONOMY, 'hide_empty' => false]) === $before, 'lecturas no crean términos ni clasificaciones');
+    $check(Families::catalog() === $before && ! taxonomy_exists('familia_serie'), 'catálogo inalterado después de lecturas');
 } finally {
     wp_set_current_user($originalUser);
 }

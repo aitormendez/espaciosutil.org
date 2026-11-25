@@ -28,7 +28,8 @@ Este directorio separa el contexto operativo del proyecto en documentos temátic
   - Cargar para `tipo_produccion`, validación del editor y su sincronización; el frontend requiere diseño previo.
 
 - Familias de series CDE:
-  - [Backend y administración](cde-familias.md): taxonomía, selector humano, herencia, API y pruebas.
+  - [Modelo editorial: Familias de series](cde-familias-modelo-editorial.md). Once familias, 15 enseñanzas, excepción de la Guía e iconos a cargo de Aitor.
+  - [Backend y administración](cde-familias.md): catálogo editable en opciones ACF, selector de la serie, herencia y transición del sistema anterior.
   - [Automatizaciones](cde-familias-automatizaciones.md): contrato de cuatro familias, campo NocoDB `familia_serie` y condiciones de integración/activación.
   - [Layouts actuales en OpenPencil](cde-familias-openpencil.md): ubicación de las réplicas editables, persistencia y limitación visual del editor tras guardar.
   - Cargar cuando la tarea afecte a clasificación familiar, inventario, publicación automatizada o preparación de su identidad visual.

@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: Espacio Sutil — Familias CDE
- * Description: Catálogo explícito y familia heredada de la serie, sin migraciones automáticas.
+ * Description: Familias de series del CDE: catálogo editable en Opciones (ACF), asignación a la serie raíz y herencia sin migraciones automáticas.
  */
 declare(strict_types=1);
 

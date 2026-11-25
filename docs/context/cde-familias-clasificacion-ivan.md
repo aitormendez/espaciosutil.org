@@ -2,6 +2,8 @@
 
 Fuente: mensaje de Iván reproducido íntegramente por Aitor en la conversación DSH el 02/11/2026. Los nombres cortos de las familias están confirmados por Aitor en las capturas de OpenPencil. Esta fuente sustituye la falta de correspondencias individuales señalada en [ESP-3182](https://mac-studio-de-aitor.tail1fa965.ts.net:8443/ESP/issues/ESP-3182).
 
+> **Fuente histórica del 02/11/2026.** Para clasificar series, usar el [modelo editorial del 23/11/2026](cde-familias-modelo-editorial.md). Las correspondencias y los límites siguientes se conservan para interpretar el sistema de cuatro familias; no son instrucciones de reclasificación actuales.
+
 ## Correspondencia explícita
 
 | Código de referencia | Enseñanza en el mensaje de Iván | Familia visible de Aitor | Slug estable |

@@ -6,40 +6,20 @@ namespace App\Support;
 
 use EspacioSutil\Cde\Families;
 
+use function is_array;
+use function is_int;
+use function is_string;
+
 /** Read-only grouping; the backend, never names or course codes, owns classification. */
 final class CdeCourseFamilies
 {
-    /** Collection vocabulary; symbols and colors match lesson presentation. */
-    private const PRESENTATION = [
-        'espirituales-esenciales' => [
-            'label' => 'Series esenciales',
-            'icon' => 'cdefamily-mercaba',
-            'color_token' => '--color-serie-esencial',
-        ],
-        'otras-principales' => [
-            'label' => 'Series principales',
-            'icon' => 'cdefamily-torus',
-            'color_token' => '--color-serie-principal',
-        ],
-        'otras-espirituales' => [
-            'label' => 'Series espirituales',
-            'icon' => 'cdefamily-triangle-spiral',
-            'color_token' => '--color-serie-espiritual',
-        ],
-        'informacion-complementaria' => [
-            'label' => 'Series complementarias',
-            'icon' => 'cdefamily-cubes',
-            'color_token' => '--color-serie-complementaria',
-        ],
-    ];
-
     /**
-     * Families follow the collection order above; series retain their relative order.
+     * Families follow the editable catalog order; series retain their relative order.
      * Every input record (including its blocks and unknown properties) is kept
      * verbatim. Unresolvable records share one neutral group, always at the end.
      * Strings remain data: escape them at render time.
      *
-     * @return list<array{key:string,label:string,icon:?string,color_token:string,series:array}>
+     * @return list<array{key:string,label:string,icon:?string,icon_id:int,legacy:bool,color_token:string,background_color:?string,text_color:string,series:array}>
      */
     public static function group(array $series): array
     {
@@ -59,21 +39,22 @@ final class CdeCourseFamilies
                 $id = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
             }
             $resolved = $canResolve && is_int($id) && $id > 0 ? Families::resolveSeries($id) : null;
-            $slug = is_array($resolved) ? ($resolved['familia_serie'] ?? null) : null;
-
-            if (!is_string($slug) || !isset(self::PRESENTATION[$slug])) {
+            $display = CdeFamilyPresentation::fromResolution($resolved, true);
+            if ($display === null) {
                 $unassigned[] = $entry;
                 continue;
             }
-
+            $slug = $display['slug'];
             if (!isset($groups[$slug])) {
-                $groups[$slug] = ['key' => $slug] + self::PRESENTATION[$slug] + ['series' => []];
+                unset($display['slug']);
+                $groups[$slug] = ['key' => $slug] + $display + ['series' => []];
             }
             $groups[$slug]['series'][] = $entry;
         }
 
         $ordered = [];
-        foreach (self::PRESENTATION as $slug => $_presentation) {
+        $order = $canResolve ? array_column(Families::catalog(), 'slug') : [];
+        foreach (array_merge($order, CdeFamilyPresentation::legacyOrder()) as $slug) {
             if (isset($groups[$slug])) {
                 $ordered[] = $groups[$slug];
             }
@@ -82,9 +63,9 @@ final class CdeCourseFamilies
         if ($unassigned !== []) {
             $ordered[] = [
                 'key' => 'unassigned',
-                'label' => 'Sin familia asignada',
-                'icon' => null,
-                'color_token' => '--color-cde',
+                'label' => 'Otras series',
+                'icon' => null, 'icon_id' => 0, 'legacy' => false,
+                'color_token' => '--color-cde', 'background_color' => null, 'text_color' => 'white',
                 'series' => $unassigned,
             ];
         }

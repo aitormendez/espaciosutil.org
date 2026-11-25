@@ -12,18 +12,31 @@
 .course-index-row,
 .course-index-inactive {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  --course-control-size: 1.75rem;
   gap: 0.5rem;
   padding: 0.25rem 0.25rem 0.25rem 0.5rem;
   border-radius: var(--radius-xs, 0.125rem);
-  background-color: color-mix(in oklab, var(--color-blanco) 5%, transparent);
   font-size: 1.125rem;
   line-height: 1.4;
 }
 
-.course-index-link {
+/* Only linked lesson rows have a surface; headings show the family background. */
+.course-index-row {
+  --course-surface-opacity: 0.14;
+  background-color: rgb(from currentColor calc(255 - r) calc(255 - g) calc(255 - b) / var(--course-surface-opacity));
+}
+
+.course-index-row:has(> .course-index-link:is(:hover, :focus-visible)) {
+  --course-surface-opacity: 0.26;
+}
+
+.course-index-row > .course-index-link {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   text-align: left;
+  text-decoration: none;
 }
 
 .course-index-label {
@@ -34,20 +47,17 @@
   flex: 1;
 }
 
-.course-index-placeholder-icon {
-  display: block;
-  width: 1.5rem;
-  height: 1.5rem;
-}
-
-.course-index-placeholder-icon--toggle {
-  width: 1.75rem;
-  height: 1.75rem;
+.course-index-placeholder-icon,
+.course-index-completion,
+.course-index-toggle {
+  flex: 0 0 var(--course-control-size);
+  width: var(--course-control-size);
+  height: var(--course-control-size);
 }
 
 .course-index-toggle {
-  width: 1.75rem;
-  height: 1.75rem;
+  display: inline-grid;
+  place-items: center;
   border-radius: var(--radius-xs, 0.125rem);
   background-color: color-mix(in oklab, var(--color-blanco) 10%, transparent);
   font-size: 0.875rem;
@@ -75,9 +85,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 2.75rem;
-  height: 2.75rem;
   border-radius: var(--radius-sm, 0.25rem);
   color: var(--color-morado1);
   cursor: pointer;
@@ -141,6 +148,16 @@
 
 .course-family .course-index-children {
   border-color: var(--course-rule);
+}
+
+/* Keep links and completion glyphs in the family's selected ink. */
+.course-family[data-family-palette] .course-index-completion.completed,
+.course-family[data-family-palette] .course-index-link:hover {
+  color: inherit;
+}
+.course-family[data-family-palette] .course-index-toggle,
+.course-family[data-family-palette] .course-index-completion:hover {
+  background-color: var(--course-active);
 }
 
 .course-family .course-index button:focus-visible,
