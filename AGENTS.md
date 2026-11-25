@@ -81,7 +81,8 @@ Existe además un hook `pre-commit` que bloquea el commit si algún `trellis/gro
 
 ## 5. Despliegue
 
-- Los workflows `deploy-staging.yml` y `deploy-production.yml` usan entornos de GitHub Actions.
+- `main` es la única rama de entrega. Integra y sube los cambios aprobados antes de desplegar. Los workflows manuales `deploy-staging.yml` y `deploy-production.yml` se lanzan desde `main` y usan sus respectivos entornos de GitHub Actions.
+- Desde el Mac, usa Trellis desde una copia limpia del SHA de `origin/main`, incluidos los archivos que compila Sage. Prueba primero en staging; antes de producción comprueba que `origin/main` sigue apuntando al mismo SHA verificado. Si ha avanzado, vuelve a probarlo en staging. No compiles desde una carpeta que contenga cambios locales pendientes.
 - En `production` hay que configurar el secreto `TRELLIS_DEPLOY_SSH_KNOWN_HOSTS`.
 
 ## 6. Resumen Funcional Actual
