@@ -55,7 +55,7 @@
         enabled: true
 
     - name: Set root user password
-      mysql_user:
+      ansible.mysql.mysql_user:
         name: root
         host: "{{ item }}"
         password: "{{ mysql_root_password }}"
@@ -82,18 +82,18 @@
         mode: "0600"
 
     - name: Delete anonymous MySQL server users
-      mysql_user:
-        user: ""
+      ansible.mysql.mysql_user:
+        name: ""
         host: "{{ item }}"
         state: absent
       no_log: true
       loop:
         - localhost
         - "{{ inventory_hostname }}"
-        - "{{ ansible_hostname }}"
+        - "{{ ansible_facts['hostname'] }}"
 
     - name: Remove the test database
-      mysql_db:
+      ansible.mysql.mysql_db:
         name: test
         state: absent
       no_log: true

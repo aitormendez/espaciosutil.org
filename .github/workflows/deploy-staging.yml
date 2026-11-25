@@ -29,12 +29,24 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
           ssh-keygen -F 138.68.135.185 -f ~/.ssh/known_hosts >/dev/null
 
+      - name: Prepare Python for Ansible
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: 🚧 Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
         with:
           version: v1.19.0
+          cache-virtualenv: false
           ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify Trellis dependencies
+        working-directory: trellis
+        run: |
+          trellis exec ansible-playbook --version
+          trellis exec python -m pip check
 
       - name: 🚀 Deploy to staging
         run: trellis deploy staging espaciosutil.org

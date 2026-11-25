@@ -6,7 +6,7 @@
       ansible-playbook server.yml -e env={{ env | default('production') }} -u root --ask-pass
   when: dynamic_user | default(true) and ansible_user is not defined and cli_ask_pass | default(false)
 
-- name: Check whether Ansible can connect as {{ dynamic_user | default(true) | ternary('root', web_user) }}
+- name: Determine remote user by probing connection as {{ dynamic_user | default(true) | ternary('root', web_user) }}
   command: |
     ansible {{ inventory_hostname }} -m raw -a whoami
     -u {{ dynamic_user | default(true) | ternary('root', web_user) }} {{ cli_options | default('') }} -vvvv
@@ -15,35 +15,66 @@
   changed_when: false
   check_mode: no
   register: connection_status
+  when:
+    - ansible_user is not defined
+    - not (dynamic_user | default(true)) or sshd_permit_root_login | default(true) | bool
   tags: [connection-tests]
 
 - name: Warn about change in host keys
+  vars:
+    # With strict host key checking, ssh names the known_hosts entry itself
+    # (after ~/.ssh/config is applied). Otherwise build it from the inventory:
+    # known_hosts names hosts on a non-standard port as [host]:port.
+    inventory_host: "{{ ansible_host | default(inventory_hostname) }}"
+    inventory_known_host: "{{ inventory_host if (ansible_port | default(22) | int) == 22 else '[' ~ inventory_host ~ ']:' ~ ansible_port }}"
+    known_host: >-
+      {{ connection_status.stdout | regex_search('[Hh]ost key for \S+ has changed') | default('', true)
+         | regex_replace('^[Hh]ost key for (\S+) has changed$', '\1') or inventory_known_host }}
+    # The file holding the old key, from ssh's "Offending ED25519 key in FILE:LINE".
+    known_hosts_file: >-
+      {{ connection_status.stdout | regex_search('Offending [A-Z0-9]+ key in [^ ]+?:[0-9]+') | default('', true)
+         | regex_replace('^Offending [A-Z0-9]+ key in (.+):[0-9]+$', '\1') }}
+    # The -vvvv output also has fingerprints of the user's own keys, so match
+    # the one ssh reports for the server.
+    new_host_key: >-
+      {{ connection_status.stdout
+         | regex_search('The fingerprint for the [A-Z0-9]+ key sent by the remote host is[^S]*SHA256:[A-Za-z0-9+/=]+')
+         | default('', true) }}
+    new_host_key_type: >-
+      {{ new_host_key | regex_replace('^The fingerprint for the ([A-Z0-9]+) key(?s:.*)$', '\1') }}
+    new_host_key_fingerprint: "{{ new_host_key | regex_search('SHA256:[A-Za-z0-9+/=]+') | default('', true) }}"
   fail:
     msg: |
       WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
+      {% if new_host_key_fingerprint %}
+
+      The server sent a new {{ new_host_key_type }} host key with the fingerprint:
+
+        {{ new_host_key_fingerprint }}
+
+      To check it's your server's key, compare it with the output of
+      `ssh-keygen -lf /etc/ssh/ssh_host_{{ new_host_key_type | lower }}_key.pub` run on the
+      server (e.g., from your hosting provider's console).
+      {% endif %}
 
       If this change in host keys is expected (e.g., if you rebuilt the server
       or if the Trellis sshd role made changes recently), then run the following
       command to clear the old host key from your known_hosts.
 
-        ssh-keygen -R {{ connection_status.stdout | regex_replace('(.|\n)*host key for (.*) has changed(.|\n)*', '\2') }}
+        ssh-keygen {% if known_hosts_file %}-f '{{ known_hosts_file }}' {% endif %}-R '{{ known_host }}'
 
       Then try your Trellis playbook or SSH connection again.
 
       If the change is unexpected, cautiously consider why the host identification
       may have changed and whether you may be victim to a man-in-the-middle attack.
-
-      ---------------------------------------------------
-      {{ (connection_status.stdout.replace('Please contact your system administrator.\r\n', '') |
-          regex_replace ('(.|\n)*(The fingerprint for the(.|\n)*Host key verification failed.)(.|\n)*', '\2') |
-          regex_replace('(\\r\\n|\\n)', '\n\n')).replace('\"', '"') }}
-  when: "'REMOTE HOST IDENTIFICATION HAS CHANGED' in connection_status.stdout"
+  when: "'REMOTE HOST IDENTIFICATION HAS CHANGED' in (connection_status.stdout | default(''))"
   tags: [connection-tests]
 
 - block:
   - name: Set remote user for each host
     set_fact:
-      ansible_user: "{{ ansible_user | default((connection_status.stdout_lines | intersect(['root', '\e[0;32mroot', '\e[0;33mroot']) | count) | ternary('root', admin_user)) }}"
+      ansible_user: "{{ ('| CHANGED |' in (connection_status.stdout | default(''))) | ternary('root', admin_user) }}"
+    when: ansible_user is not defined
     check_mode: no
 
   - name: Announce which user was selected
@@ -53,7 +84,7 @@
 
   - name: Load become password
     set_fact:
-      ansible_become_pass: "{% raw %}{% for user in vault_users | default([]) if user.name == ansible_user %}{{ user.password | default('') }}{% endfor %}{% endraw %}"
+      ansible_become_pass: "{% for user in vault_users | default([]) if user.name == ansible_user %}{{ user.password | default('') }}{% endfor %}"
     when: ansible_user != 'root' and not cli_ask_become_pass | default(false) and ansible_become_pass is not defined
     no_log: true
 

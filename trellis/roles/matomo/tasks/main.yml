@@ -151,7 +151,7 @@
   tags: [matomo]
 
 - name: Ensure Matomo database exists
-  mysql_db:
+  ansible.mysql.mysql_db:
     name: "{{ matomo_db_name }}"
     encoding: "{{ matomo_db_charset }}"
     collation: "{{ matomo_db_charset }}_unicode_ci"
@@ -161,7 +161,7 @@
   tags: [matomo]
 
 - name: Ensure Matomo database user exists
-  mysql_user:
+  ansible.mysql.mysql_user:
     name: "{{ matomo_db_user }}"
     password: "{{ matomo_db_password }}"
     host: "{{ matomo_db_host }}"

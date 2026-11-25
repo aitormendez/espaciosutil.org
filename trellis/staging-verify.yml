@@ -13,7 +13,7 @@
       assert:
         that:
           - inventory_hostname == '138.68.135.185'
-          - ansible_hostname == 'espacio-sutil-staging'
+          - ansible_facts['hostname'] == 'espacio-sutil-staging'
         quiet: true
     - name: Check services
       command: "systemctl is-active {{ item }}"

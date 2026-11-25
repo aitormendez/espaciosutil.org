@@ -23,12 +23,24 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.TRELLIS_DEPLOY_SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
 
+      - name: Prepare Python for Ansible
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Setup Trellis CLI
         uses: roots/setup-trellis-cli@v1
         with:
           version: v1.19.0
+          cache-virtualenv: false
           ansible-vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify Trellis dependencies
+        working-directory: trellis
+        run: |
+          trellis exec ansible-playbook --version
+          trellis exec python -m pip check
 
       - name: Deploy to production
         run: trellis deploy production espaciosutil.org

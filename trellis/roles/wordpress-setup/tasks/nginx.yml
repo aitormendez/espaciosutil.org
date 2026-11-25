@@ -64,12 +64,13 @@
   template:
     src: "{{ item.value.nginx_wordpress_site_conf | default(nginx_wordpress_site_conf) }}"
     dest: "{{ nginx_path }}/sites-available/{{ item.key }}.conf"
+    backup: true
     mode: '0644'
   loop: "{{ wordpress_sites | dict2items }}"
   loop_control:
     label: "{{ item.key }}"
   notify: reload nginx
-  tags: nginx-includes
+  tags: [nginx-includes, wordpress-site-conf]
 
 - name: Enable WordPress site
   file:

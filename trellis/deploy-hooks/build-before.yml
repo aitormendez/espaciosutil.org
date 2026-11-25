@@ -56,7 +56,10 @@
     dest: "{{ deploy_helper.new_release_path }}/web/app/themes/sage"
     group: no
     owner: no
-    rsync_opts: --chmod=Du=rwx,--chmod=Dg=rx,--chmod=Do=rx,--chmod=Fu=rw,--chmod=Fg=r,--chmod=Fo=r
+    use_ssh_args: true
+    verify_host: true
+    rsync_opts:
+      - --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r
 
 - name: Install Espacio Sutil blocks dependencies
   command: npm ci
@@ -76,4 +79,7 @@
     dest: "{{ deploy_helper.new_release_path }}/web/app/plugins/espacio-sutil-blocks/build/"
     group: no
     owner: no
-    rsync_opts: --chmod=Du=rwx,--chmod=Dg=rx,--chmod=Do=rx,--chmod=Fu=rw,--chmod=Fg=r,--chmod=Fo=r
+    use_ssh_args: true
+    verify_host: true
+    rsync_opts:
+      - --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r

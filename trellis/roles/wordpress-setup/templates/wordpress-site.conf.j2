@@ -86,7 +86,7 @@ server {
   add_header Strict-Transport-Security "max-age={{ [hsts_max_age, hsts_include_subdomains, hsts_preload] | reject('none') | join('; ') | trim }}";
   {% endif -%}
 
-  {% if item.value.ssl.client_cert_url is defined -%}
+  {% if 'client_cert_url' in item.value.ssl -%}
   ssl_verify_client       on;
   ssl_client_certificate  {{ nginx_ssl_path }}/client-{{ (item.value.ssl.client_cert_url | hash('md5'))[:7] }}.crt;
   {% endif -%}
@@ -122,6 +122,13 @@ server {
   {% block location_uploads_php -%}
   # Prevent PHP scripts from being executed inside the uploads folder.
   location ~* /{{ item.value.upload_path | default('app/uploads') }}/.*\.php$ {
+    deny all;
+  }
+  {% endblock %}
+
+  {% block location_cache_php -%}
+  # Prevent PHP scripts from being executed inside the cache folder.
+  location ~* /{{ item.value.cache_path | default('app/cache') }}/.*\.php$ {
     deny all;
   }
   {% endblock %}
